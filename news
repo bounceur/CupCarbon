@@ -1,0 +1,34 @@
+--------------------------------------------------
+June 2015: V 1.6
+- Add Arduino generation code (basic version)
+- Draw buildings with markers
+- Add ATPL command
+- Add CTRL-Z (add objetcs and moving objects)
+- Add CTRL-Z (for markers)
+- Modify the functions: plus, minus, mult, div, mod
+- Modify the function getpos
+- Add the function getpos2
+- Add the function angle2
+- Bug fixing (simulation)
+--------------------------------------------------
+August 2015: V 1.7
+- New Wisen simulator (improved version)
+- Energy consumption calculation (improved version)
+- Fix a Bug in the led function
+- The log file is more detailed and more clear
+- Save/Open project bug: reading the marker file (config directory)
+--------------------------------------------------
+August 2015: V 1.8
+- Bug in the simulator
+- Improved log report
+- IF/FOR improved
+- SensorNode display (improved)
+- Becarful: if we use for and if commands we need to declare the variables in the begining of the script.
+- Modify the command println to display many messages in the same line
+--------------------------------------------------
+August 2015: V 1.8.6
+- SenScript: new Version 1.6
+--------------------------------------------------
+September 2015: V 1.9
+- SenScript: new Version 1.8
+- CupCarbon new version
