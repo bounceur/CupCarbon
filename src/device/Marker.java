@@ -170,4 +170,22 @@ public class Marker extends Device {
 	}
 	
 	public void loadScript() {}
+
+	@Override
+	public void execute() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void gotoTheNextInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void gotoTheNextEvent(int min) {
+		// TODO Auto-generated method stub
+		
+	}
 }

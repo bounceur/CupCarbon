@@ -1589,6 +1589,10 @@ public abstract class Device implements Runnable, MouseListener,
 		return drawArrows ;
 	}
 	
+	public abstract void execute();
+	public abstract void gotoTheNextInstruction(); 
+	public abstract void gotoTheNextEvent(int min);
+	
 	public boolean radioDetect(Device device) {return false; }
 	public void drawRadioLinks(Graphics g) {}
 	public double getAttenuation(double d) {return 0.0;}

@@ -161,20 +161,7 @@ public class WisenSimulation extends Thread {
 					if(!device.isDead()) {
 						if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {
 							consolPrint(device + " [" +device.getScript().getCurrent().toString()+"] - ");
-							if ((device.getEvent() == 0)) {																	
-								boolean cont = true;
-								while (cont) {
-									device.getScript().executeCommand();
-									if (device.getScript().getEvent() == 0) {
-										device.getScript().next();
-									}
-									else 
-										cont = false;
-								}
-								consolPrint(device.getEvent()+" : ");
-								device.setEvent(device.getScript().getEvent());
-								consolPrint(device.getEvent()+" | ");								
-							}
+							device.execute();
 						}
 					}
 				}
@@ -256,13 +243,11 @@ public class WisenSimulation extends Thread {
 							consolPrint(device.getEvent()+" : "); 
 							
 							if(device.getEvent() != Integer.MAX_VALUE)
-								device.setEvent(device.getEvent()-min);
+								device.gotoTheNextEvent(min);								
 							
 							if(device.getEvent()==0) {
-								fMessage += device.getScript().getCurrent().finishMessage() + "\n";						
-								if(device.getScript().getCurrent().isSent()) {
-									device.getScript().next();
-								}
+								fMessage += device.getScript().getCurrent().finishMessage() + "\n";
+								device.gotoTheNextInstruction() ;								
 							}
 							consolPrint(device.getEvent()+" | ");
 							if (!device.isDead())

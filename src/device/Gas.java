@@ -210,4 +210,22 @@ public class Gas extends DeviceWithoutRadio {
 		double s = 4.0;
 		value = m+s*random.nextGaussian();
 	}
+
+	@Override
+	public void execute() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void gotoTheNextInstruction() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void gotoTheNextEvent(int min) {
+		// TODO Auto-generated method stub
+		
+	}
 }

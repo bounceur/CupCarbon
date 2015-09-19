@@ -26,7 +26,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -65,7 +64,7 @@ public class SensorNode extends DeviceWithRadio {
 	protected Color radioRangeColor1 = UColor.MAUVE_TRANSPARENT;
 	protected Color radioRangeColor2 = UColor.MAUVEF_TRANSPARENT;
 	
-	protected List<Packet> receivedMessages = new LinkedList<Packet>();
+	//protected List<Packet> receivedMessages = new LinkedList<Packet>();
 			
 	/**
 	 * Constructor 1 Instanciate the sensor unit 
@@ -273,16 +272,10 @@ public class SensorNode extends DeviceWithRadio {
 		if (visible) {
 			calculateRadioSpace();
 			initDraw(g);
-			// Layer.getMapViewer().setAlpha(100);
 			int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
 			int x = coord[0];
 			int y = coord[1];
-			// int x = MapCalc.geoToIntPixelMapX(this.x, this.y);
-			// int y = MapCalc.geoToIntPixelMapY(this.x, this.y);
 			int rayon = MapCalc.radiusInPixels(radioRangeRadius) ; 
-			//rayon = (int)((rayon * ((getBatteryLevel() / 100000000.)*100.))/100.) ;
-			//int rayon2 = MapCalc.radiusInPixels(this.radius);
-			//int sensingRadius = MapCalc.radiusInPixels(sensorUnit.getRadius());
 	
 			if (inside || selected) {
 				g.setColor(UColor.NOIR_TRANSPARENT);
@@ -314,13 +307,6 @@ public class SensorNode extends DeviceWithRadio {
 					}				
 					for (int i=0; i<nZone; i++) 
 						g.fillPolygon(polyX1[i], polyY1[i], nPoint);
-//					g.fillPolygon(polyX2, polyY2, n);
-//					g.fillPolygon(polyX3, polyY3, n);
-//					g.fillPolygon(polyX4, polyY4, n);
-					//g.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
-					
-					//g.fillOval(x - rayon2, y - rayon2, rayon2 * 2, rayon2 * 2);
-					
 					drawSendingReceiving(g, x, y);								
 				}
 			}
@@ -517,7 +503,6 @@ public class SensorNode extends DeviceWithRadio {
 //		}
 		
 		if (!bufferReady) {
-			//if(!this.getScript().getCurrent().isDelay()) {
 			if(this.getScript().getCurrent().isWait()) {
 				nextEvent = 0;
 				receivedEvent = true;
@@ -764,6 +749,36 @@ public class SensorNode extends DeviceWithRadio {
 
 	public int getBufferIndex() {
 		return this.bufferIndex ;
+	}
+
+	@Override
+	public void execute() {
+		if (event == 0) {																	
+			boolean cont = true;
+			while (cont) {
+				script.executeCommand();
+				if (script.getEvent() == 0) {
+					script.next();
+				}
+				else 
+					cont = false;
+			}
+			//consolPrint(event+" : ");
+			event = script.getEvent();
+			//consolPrint(event+" | ");								
+		}
+	}
+
+	@Override
+	public void gotoTheNextInstruction() {
+		if(script.getCurrent().isSent()) {
+			script.next();
+		}		
+	}
+
+	@Override
+	public void gotoTheNextEvent(int min) {
+		event = event - min;
 	}
 	
 }

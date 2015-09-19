@@ -36,7 +36,8 @@ public abstract class Command {
 	protected Command_WHILE currentWhile = null;
 	protected Command_FOR currentFor = null;
 	
-	protected boolean written = false ;
+	protected boolean writing = false ;
+	protected boolean sent = false ;
 	
 	public Command() {
 		currentIf = null;
@@ -120,7 +121,4 @@ public abstract class Command {
 		return "----";
 	}
 	
-	public boolean isWritten() {
-		return written ;
-	}
 }
