@@ -29,9 +29,7 @@ import sensorunit.SensorUnit;
 public class Battery implements Cloneable {
 
 	public static int eMax = 100000000;
-	
-	//private UControl uProc = new UControl();
-	//private RadioModule radioModule = new RadioModule(0);
+
 	private SensorUnit sensorUnit;
 	private int level = eMax;
 
@@ -48,7 +46,6 @@ public class Battery implements Cloneable {
 	 * @return the initial capacity of the battery
 	 */
 	public long getInitialLevel() {
-		// return (int)(capacite/capaciteDeBase*100.) ;
 		return (int) (eMax);
 	}
 	
@@ -56,7 +53,6 @@ public class Battery implements Cloneable {
 	 * @return the capacity of the battery
 	 */
 	public int getLevel() {
-		// return (int)(capacite/capaciteDeBase*100.) ;
 		return level;
 	}
 	
@@ -65,7 +61,6 @@ public class Battery implements Cloneable {
 	 */
 	public int getLevelInPercent() {
 		return (int) (level * 1.0 / eMax * 100.);
-		//return (int) (capacity);
 	}
 
 	/**
@@ -94,30 +89,6 @@ public class Battery implements Cloneable {
 		level = eMax;
 	}
 
-	
-	/**
-	 * Consume 1 unit of the battery
-	 */
-	/*
-	public void consume() {
-		double vUp = 0;
-		double vA = 0;
-		double vUc = 0;
-
-		if (uProc != null)
-			vUp = uProc.getConsumedUnit();
-		if (radioModule != null)
-			vA = radioModule.getConsumedUnit();
-		if (sensorUnit != null)
-			vUc = sensorUnit.getConsumedUnit();
-
-		double v = vUp + vA + vUc;
-		if (level >= v)
-			level -= v;
-		else if (level > 0)
-			level = 0;
-	}*/
-
 	/**
 	 * Consume v units of the battery
 	 * 
@@ -131,40 +102,9 @@ public class Battery implements Cloneable {
 	}
 
 	/**
-	 * Consume the battery by taking into account the consumptions of the
-	 * elements that are connected to the battery: - Microcontroller - RadioModule -
-	 * Capture unit
-	 * 
-	 * @param unit1
-	 * @param unit2
-	 * @param unit3
-	 */
-	/*
-	public void consume(double unit1, double unit2, double unit3) {
-		double vUp = 0;
-		double vA = 0;
-		double vUc = 0;
-
-		if (uProc != null)
-			vUp = uProc.getConsumedUnit(unit1);
-		if (radioModule != null)
-			vA = radioModule.getConsumedUnit(unit2);
-		if (sensorUnit != null)
-			vUc = sensorUnit.getConsumedUnit(unit3);
-
-		double v = vUp + vA + vUc;
-		if (level >= v)
-			level -= v;
-		else if (level > 0)
-			level = 0;
-	}
-	 */
-
-	/**
 	 * @return if the battery is empty
 	 */
 	public boolean empty() {
-		//return (capacity <= (30. * eMax / 100.));
 		return (level <= 0);
 	}
 
@@ -177,38 +117,10 @@ public class Battery implements Cloneable {
 		this.sensorUnit = unitCapture;
 	}
 
-	/**
-	 * Connect to a Microcontroller
-	 * 
-	 * @param uProc
-	 */
-	/*
-	public void setUControl(UControl uProc) {
-		this.uProc = uProc;
-	}
-	 */
-	
-	/**
-	 * Connect to a Antanna
-	 * 
-	 * @param radioModule
-	 */	
-	/*
-	public void setAntenna(RadioModule radioModule) {
-		this.radioModule = radioModule;
-	}
-	 */
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#clone()
-	 */
 	@Override
 	public Battery clone() throws CloneNotSupportedException {
 		Battery newBattery = (Battery) super.clone();
 		newBattery.setSensorUnit(sensorUnit.clone());
-		//newBattery.setUControl((UControl) uProc.clone());
-		//newBattery.setAntenna((RadioModule) radioModule.clone());
 		return newBattery;
 	}
 }

@@ -485,8 +485,9 @@ public class SensorNode extends DeviceWithRadio {
 
 		SimLog.add("S" + getId() + " is receiving the message : \"" + message + "\" in its buffer.");
 		
-		//double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
-		//int duration =  (int)(Math.round(message.length()*8.*ratio));
+		double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
+		int duration =  ((int)(Math.round(message.length()*8.*ratio))) + (message.length()*8);
+		mrEvent = duration;
 		
 		//Packet packet = new Packet(message, 0, duration);
 		//receivedMessages.add(packet);
@@ -771,7 +772,7 @@ public class SensorNode extends DeviceWithRadio {
 
 	@Override
 	public void gotoTheNextInstruction() {
-		if(script.getCurrent().isSent()) {
+		if(!script.getCurrent().isExecuting()) {
 			script.next();
 		}		
 	}

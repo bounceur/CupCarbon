@@ -157,14 +157,16 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	public void mouseMoved(MouseEvent e) {
 		super.mouseMoved(e);
 		if (augmenterRadio) {			
-			radioRangeRadius += 30;
-			radioRangeRadiusOri += 30 ;
+			radioRangeRadius += 1;
+			radioRangeRadiusOri += 1 ;
+			requiredQuality += 0.1;
 			Layer.getMapViewer().repaint();
 		}
 		if (reduireRadio) {
 			if(radioRangeRadius>0) { 
-				radioRangeRadius -= 30 ;
-				radioRangeRadiusOri -= 30 ;
+				radioRangeRadius -= 1 ;
+				radioRangeRadiusOri -= 1 ;
+				requiredQuality += 0.1;
 			}
 			Layer.getMapViewer().repaint();
 		}
@@ -184,7 +186,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				augmenterRadio = !augmenterRadio ;
 				radioRangeRadius+=1 ;
 				radioRangeRadiusOri+=1 ;
-				requiredQuality -= 1;
+				requiredQuality -= 0.1;
 				Layer.getMapViewer().repaint();
 			}
 			if(key.getKeyChar()=='-') {
@@ -195,7 +197,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 					radioRangeRadius-=1 ;
 					radioRangeRadiusOri-=1 ;
 				}
-				requiredQuality += 1;
+				requiredQuality += 0.1;
 				Layer.getMapViewer().repaint();
 			}			
 		}
@@ -239,7 +241,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			g.setColor(UColor.WHITE_TRANSPARENT);
 			int lr1 = (int) (r * Math.cos(Math.PI / 4.));
 			g.drawLine(x, y, (int) (x + lr1), (int) (y - lr1));
-			g.drawString("" +requiredQuality, x + (lr1 / 2), (int) (y - (lr1 / 4.)));
+			g.drawString("" +requiredQuality+" dB", x + (lr1 / 2), (int) (y - (lr1 / 4.)));
 		}		
 	}
 	
@@ -388,7 +390,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setStroke(new BasicStroke(1));
 			if(isSending() && device.isReceiving()) {
-				g.setColor(UColor.RED);
+				g.setColor(radioLinkColor);
 				g2.setStroke(new BasicStroke(3));
 				
 			    if(Layer.getMapViewer().getZoom() < 2) {

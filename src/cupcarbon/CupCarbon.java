@@ -89,6 +89,7 @@ import device.MarkerList;
 
 /**
  * @author Ahcene Bounceur
+ * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
  * @version 1.9
  */

@@ -14,10 +14,6 @@ public class Command_READ extends Command {
 
 	@Override
 	public int execute() {
-		//int lEvent = sensor.readMessage(arg);
-		//double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
-		//return (int)(Math.round(lEvent*8.*ratio));
-		
 		sensor.readMessage(arg);
 		return 0;
 	}

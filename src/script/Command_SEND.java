@@ -1,5 +1,6 @@
 package script;
 
+import utilities.UColor;
 import wisen_simulation.SimLog;
 import arduino.XBeeFrameGenerator;
 import device.DataInfo;
@@ -13,6 +14,7 @@ public class Command_SEND extends Command {
 	protected String arg2 = "";
 	protected String arg3 = "";
 	protected String arg4 = "";	
+	protected String arg5 = "";	
 	
 	
 	public Command_SEND(SensorNode sensor, String arg1, String arg2) {
@@ -112,6 +114,10 @@ public class Command_SEND extends Command {
 	
 	@Override
 	public int execute() {		
+		if (arg1.equals("!color")) {
+			sensor.setRadioLinkColor(UColor.colorTab2[Integer.parseInt(arg2)]);
+			return 0;
+		}
 		String message = arg1;
 		message = sensor.getScript().getVariableValue(message);
 		int messageLength = message.length();
@@ -124,14 +130,14 @@ public class Command_SEND extends Command {
 			sensor.setTxConsumption(1);
 			sensor.consumeTx(messageLength*8);
 			sensor.initTxConsumption(); 
-			sent=true;
+			executing=false;
 			return 0;
 		}
 		
 		if(!writing) {
 			SimLog.add("S" + sensor.getId() + " is writing the message : \"" + message + "\" in its buffer.");
 			writing = true ;
-			sent = false;
+			executing = true;
 			// Considerer la mise en buffer du message (coute UartDataRate baud)			
 			double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
 			return (int)(Math.round(messageLength*8.*ratio));
@@ -163,8 +169,8 @@ public class Command_SEND extends Command {
 	}
 	
 	@Override
-	public boolean isSent() {
-		return sent;
+	public boolean isExecuting() {
+		return executing;
 	}
 	
 	@Override

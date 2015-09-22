@@ -228,4 +228,16 @@ public class Gas extends DeviceWithoutRadio {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void drawRadioLinks(Graphics g) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public double getAttenuation(double d) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

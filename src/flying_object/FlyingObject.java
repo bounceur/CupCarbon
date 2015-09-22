@@ -366,6 +366,18 @@ public class FlyingObject extends MobileG {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void drawRadioLinks(Graphics g) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public double getAttenuation(double d) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 //	public double getRadius() {
 //		this.radius = 100;

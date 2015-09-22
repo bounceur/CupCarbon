@@ -37,7 +37,7 @@ public abstract class Command {
 	protected Command_FOR currentFor = null;
 	
 	protected boolean writing = false ;
-	protected boolean sent = false ;
+	protected boolean executing = false ;
 	
 	public Command() {
 		currentIf = null;
@@ -100,8 +100,8 @@ public abstract class Command {
 		return false;
 	}
 	
-	public boolean isSent() {
-		return true;
+	public boolean isExecuting() {
+		return false;
 	}
 	
 	public String getArduinoForm() {

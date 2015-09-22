@@ -127,6 +127,8 @@ public abstract class Device implements Runnable, MouseListener,
 	protected double eS = 1;
 	protected double beta = 1;
 	
+	protected Color radioLinkColor = UColor.RED;
+	
 	protected boolean receiving = false;
 	protected boolean sending = false;
 	protected boolean writing = false;
@@ -143,7 +145,8 @@ public abstract class Device implements Runnable, MouseListener,
 	
 	protected int event = Integer.MAX_VALUE;		// Event relied to actions = sending/receiving
 	protected int event2 = Integer.MAX_VALUE;		// Event relied to mobility
-	protected int nextEvent = Integer.MAX_VALUE;		// Event relied to mobility
+	protected int nextEvent = Integer.MAX_VALUE;		// Calculate the next Event
+	protected int mrEvent = Integer.MAX_VALUE;		// Event relied to the message reception
 	
 	protected Thread thread;	
 	
@@ -1587,13 +1590,21 @@ public abstract class Device implements Runnable, MouseListener,
 	
 	public boolean getDrawArrows() {
 		return drawArrows ;
-	}
+	}	
 	
+	public Color getRadioLinkColor() {
+		return radioLinkColor;
+	}
+
+	public void setRadioLinkColor(Color radioLinkColor) {
+		this.radioLinkColor = radioLinkColor;
+	}
+
 	public abstract void execute();
 	public abstract void gotoTheNextInstruction(); 
 	public abstract void gotoTheNextEvent(int min);
+	public abstract void drawRadioLinks(Graphics g) ;
+	public abstract double getAttenuation(double d);
 	
-	public boolean radioDetect(Device device) {return false; }
-	public void drawRadioLinks(Graphics g) {}
-	public double getAttenuation(double d) {return 0.0;}
+	public boolean radioDetect(Device device) {return false; }	
 }

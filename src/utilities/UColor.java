@@ -66,4 +66,20 @@ public final class UColor {
 		new Color(255,255,255,transpa)
 	};
 	
+	public static final Color [] colorTab2 = {
+		new Color(221,0,0),
+		new Color(37,105,219),
+		new Color(0,143,3),
+		new Color(197,120,0),
+		new Color(238,224,0),
+		new Color(26,191,185),
+		new Color(101,48,174),
+		new Color(50,50,50),
+		new Color(199,199,199),
+		new Color(226,50,104),
+		new Color(141,67,26),
+		new Color(200,127,203),
+		new Color(255,255,255)
+	};
+	
 }
