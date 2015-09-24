@@ -1526,8 +1526,6 @@ public abstract class Device implements Runnable, MouseListener,
 	public void setIdm() {
 		idm = MarkerList.size();
 	}
-	
-	public void nEventVerif() {}
 
 	public double getTxConsumption() {
 		return consumptionTx;
@@ -1539,7 +1537,6 @@ public abstract class Device implements Runnable, MouseListener,
 
 	public void setTxConsumption(int v) {
 		consumptionTx += v;
-		//System.out.println(id+" Tx : "+consumptionTx);
 	}
 	
 	public void setRxConsumption(int v) {
@@ -1596,6 +1593,16 @@ public abstract class Device implements Runnable, MouseListener,
 
 	public void setRadioLinkColor(Color radioLinkColor) {
 		this.radioLinkColor = radioLinkColor;
+	}
+
+	
+	
+	public double getRequiredQuality() {
+		return requiredQuality;
+	}
+
+	public void setRequiredQuality(double requiredQuality) {
+		this.requiredQuality = requiredQuality;
 	}
 
 	public abstract void execute();

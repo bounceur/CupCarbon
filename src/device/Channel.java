@@ -28,19 +28,14 @@ public class Channel {
 		Packet packet = new Packet(sensor, message, lastTime+duration);
 		
 		receivedMessages.add(packet);
-		
-		//System.out.println(receivedMessages.size());
 	}
 	
 	public static void messageReceived() {
-		//if(receivedMessages.size()>0)
-		//	if(receivedMessages.get(0).getTime()==0) {
-				SensorNode sensor = receivedMessages.get(0).getSensor();				
-				sensor.addMessageToBuffer(receivedMessages.get(0).getMessage().length()*8, receivedMessages.get(0).getMessage());
-				if(sensor.getScript().getCurrent().isWait())
-					sensor.setEvent(0);
-				receivedMessages.remove(0);
-		//	}
+		SensorNode sensor = receivedMessages.get(0).getSensor();				
+		sensor.addMessageToBuffer(receivedMessages.get(0).getMessage().length()*8, receivedMessages.get(0).getMessage());
+		if(sensor.getScript().getCurrent().isWait())
+			sensor.setEvent(0);
+		receivedMessages.remove(0);
 	}
 	
 	public static void goToTheNextTime(int nt) {

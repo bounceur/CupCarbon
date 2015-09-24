@@ -120,7 +120,8 @@ public class WisenSimulation extends Thread {
 			ttime = 0;
 			int min = 0;
 			boolean allDeadSensors = false;
-			for (iter = 0; iter < iterNumber; iter++) {				
+			for (iter = 0; iter < iterNumber; iter++) {
+				
 				if (min == Integer.MAX_VALUE && Channel.size()==0) {
 					System.out.println(Channel.size());
 					System.out.println("Infinite WAITs!");
@@ -166,58 +167,55 @@ public class WisenSimulation extends Thread {
 				
 				Channel.goToTheNextTime(min);
 				if (Channel.getMin()==0) {
-					consolPrintln(">> "+Channel.getPackets());
-					consolPrintln(">> Message \""+Channel.getMessage()+"\" recu par : "+Channel.getSensor()+ " ["+Channel.getTime()+"]");
 					Channel.messageReceived();
 				}
 				
+				min = Integer.MAX_VALUE;
 				for (Device device : devices) {
 					if(!device.isDead()) {
 						if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {
 							consolPrint(device + " [" +device.getScript().getCurrent().toString()+"] - ");
 							device.execute();
+							if ((min > device.getEvent()))
+								min = device.getEvent();
 						}						
 					}
 				}
 				
-				
-
 				consolPrintln("");
 				
-				for (Device device : devices) {
-					if(!device.isDead()) {
-						if (mobility)
+				int minmv = Integer.MAX_VALUE;
+				if (mobility)
+					for (Device device : devices) {
+						if(!device.isDead()) {						
 							if (device.getEvent2() == 0) {
 								SimLog.add(device.getIdFL()+device.getId()+" DEPLACEMENT");
 								if (device.canMove()) {
 									device.moveToNext(true, 0);
 									device.setEvent2(device.getNextTime());
+									if ((minmv > device.getEvent2()))
+										minmv = device.getEvent2();	
 								}
 							}
+						}
 					}
-				}
 				
 				consolPrintln("");
 				
-				
-				min = Integer.MAX_VALUE;
-				int minmv = Integer.MAX_VALUE;
-				for (Device device : devices) {					
-					if(!device.isDead()) {
-						if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {
-							consolPrint(device.getEvent()+" : ");
-							device.nEventVerif();
-							consolPrint(device.getEvent()+" | ");
-							if ((min > device.getEvent()))
-								min = device.getEvent();
-							if ((minmv > device.getEvent2()))
-								minmv = device.getEvent2();							
-						}
-					}
-				}
-				
 				if (min>Channel.getMin())
-					min = Channel.getMin();				
+					min = Channel.getMin();		
+				
+//				min = Channel.getMin();//Integer.MAX_VALUE;
+//				
+////				for (Device device : devices) {					
+////					if(!device.isDead()) {
+////						if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {
+////							if ((min > device.getEvent()))
+////								min = device.getEvent();
+////													
+////						}
+////					}
+////				}				
 				
 				if (mobility) {
 					moving = false;

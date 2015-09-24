@@ -480,90 +480,38 @@ public class SensorNode extends DeviceWithRadio {
 
 	protected boolean receivedEvent = false;		
 	
-	public void setMessage(String message) {
+	//public void setMessage(String message) {
+	//	Channel.addPacket(message, this);
+	//}
 
-		Channel.addPacket(message, this);
-		
-//		SimLog.add("S" + getId() + " is receiving the message : \"" + message + "\" in its buffer.");
-//		
-//		double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
-//		int duration =  ((int)(Math.round(message.length()*8.*ratio))) + (message.length()*8);
-//		//mrEvent = duration;
-//		
-//		int end = 0;
-//		
-//		if (receivedMessages.size()>0)
-//			end = receivedMessages.get(0).getEndTime();
-//		
-//		Packet packet = new Packet(message, 0, end + duration);
-//		System.out.println(packet);
-//		receivedMessages.add(packet);
-//		Collections.sort(receivedMessages);
-		
-		//System.out.println(id+" "+receivedMessages);
-		
-		//nextEvent = 0;
-		//receivedEvent = false;
-		
-//		if (receivedMessages.size()>0) {
-//			nextEvent = receivedMessages.get(0).getEndTime();			
-//			receivedEvent = true;
-//		}
-		
-//		if (!bufferReady) {
-//			if(this.getScript().getCurrent().isWait()) {
-//				nextEvent = 0;
-//				receivedEvent = true;
-//			}
-//		}		
-//		
-//		setRxConsumption(1);
-//		consumeRx(message.length()*8);
-//		initRxConsumption(); 
-//		
-//		try {
-//			for(int i=0; i<message.length(); i++) {
-//				buffer[bufferIndex] = (byte) message.charAt(i);
-//				bufferIndex++;
-//				if(bufferIndex >= bufferSize)
-//					System.err.println("S"+getId()+": ERROR FULL BUFFER!");
-//			}		
-//			buffer[bufferIndex] = '\r';
-//			bufferIndex++;
-//			}
-//		catch(Exception e) {
-//			System.err.println("S"+getId()+" [EMPTY MESSAGE]");
-//		}
-	}
-
-	@Override
-	public void nEventVerif() {
-//		if(receivedEvent) {
-//			event = nextEvent;
-//			receivedEvent = false;
-//		}
-//		if(receivedMessages.size()>0)
-//			if(receivedMessages.get(0).getEndTime()==0) {
-//				setRxConsumption(1);
-//				consumeRx(receivedMessages.get(0).getMessage().length()*8);
-//				initRxConsumption(); 
-//				
-//				try {
-//					for(int i=0; i<receivedMessages.get(0).getMessage().length(); i++) {
-//						buffer[bufferIndex] = (byte) receivedMessages.get(0).getMessage().charAt(i);
-//						bufferIndex++;
-//						if(bufferIndex >= bufferSize)
-//							System.err.println("S"+getId()+": ERROR FULL BUFFER!");
-//					}		
-//					buffer[bufferIndex] = '\r';
-//					bufferIndex++;
-//					}
-//				catch(Exception e) {
-//					System.err.println("S"+getId()+" [EMPTY MESSAGE]");
-//				}	
-//				receivedMessages.remove(0);
-//			}
-	}
+//	@Override
+//	public void nEventVerif() {
+////		if(receivedEvent) {
+////			event = nextEvent;
+////			receivedEvent = false;
+////		}
+////		if(receivedMessages.size()>0)
+////			if(receivedMessages.get(0).getEndTime()==0) {
+////				setRxConsumption(1);
+////				consumeRx(receivedMessages.get(0).getMessage().length()*8);
+////				initRxConsumption(); 
+////				
+////				try {
+////					for(int i=0; i<receivedMessages.get(0).getMessage().length(); i++) {
+////						buffer[bufferIndex] = (byte) receivedMessages.get(0).getMessage().charAt(i);
+////						bufferIndex++;
+////						if(bufferIndex >= bufferSize)
+////							System.err.println("S"+getId()+": ERROR FULL BUFFER!");
+////					}		
+////					buffer[bufferIndex] = '\r';
+////					bufferIndex++;
+////					}
+////				catch(Exception e) {
+////					System.err.println("S"+getId()+" [EMPTY MESSAGE]");
+////				}	
+////				receivedMessages.remove(0);
+////			}
+//	}
 	
 	public void addMessageToBuffer(int v, String message) {
 		//System.out.println(id+" "+message);
@@ -828,19 +776,11 @@ public class SensorNode extends DeviceWithRadio {
 
 	@Override
 	public void gotoTheNextEvent(int min) {
-		//System.out.println("("+id+" "+script.getCurrent().isExecuting()+" "+receivedMessages+")");
 		event = event - min;
-//		for(Packet packet : receivedMessages) {
-//			packet.setEndTime(packet.getEndTime()-min);
-//		}		
 	}
 	
 	@Override
 	public int getEvent() {
-//		if(receivedMessages.size()>0)
-//			if(receivedMessages.get(0).getEndTime()<=event) {				
-//				return receivedMessages.get(0).getEndTime();
-//			}		
 		return event;
 	}
 	

@@ -3,6 +3,7 @@ package script;
 import utilities.UColor;
 import wisen_simulation.SimLog;
 import arduino.XBeeFrameGenerator;
+import device.Channel;
 import device.DataInfo;
 import device.DeviceList;
 import device.SensorNode;
@@ -50,8 +51,9 @@ public class Command_SEND extends Command {
 			}
 			for (SensorNode snode : sensor.getSensorNodeNeighbors()) {
 				if (sensor.radioDetect(snode) && !snode.isDead() && sensor.sameCh(snode) && sensor.sameNId(snode) && snode.getId()!=v) {
-					snode.setReceiving(true);	
-					snode.setMessage(message);
+					snode.setReceiving(true);
+					Channel.addPacket(message, snode);
+					//snode.setMessage(message);
 				}
 			}
 		}
@@ -65,8 +67,9 @@ public class Command_SEND extends Command {
 				if (snode != null) {
 					SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
 					if (sensor.radioDetect(snode) && !snode.isDead() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
-						snode.setReceiving(true);	
-						snode.setMessage(message);
+						snode.setReceiving(true);
+						Channel.addPacket(message, snode);
+						//snode.setMessage(message);
 					}
 				}
 				else 
@@ -82,8 +85,9 @@ public class Command_SEND extends Command {
 					for(SensorNode snode : DeviceList.getSensorNodes()) {
 						if ((sensor.radioDetect(snode)) && (!snode.isDead()) && (snode.getMy()==destNodeId) && sensor.sameCh(snode) && sensor.sameNId(snode)) {
 							SimLog.add("  -> S" + snode.getId() + " ");							
-							snode.setReceiving(true);	
-							snode.setMessage(message);
+							snode.setReceiving(true);
+							Channel.addPacket(message, snode);
+							//snode.setMessage(message);
 						}						
 					}
 				}
@@ -96,8 +100,9 @@ public class Command_SEND extends Command {
 						if (snode != null) {
 							SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
 							if (!snode.isDead() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
-								snode.setReceiving(true);	
-								snode.setMessage(message);
+								snode.setReceiving(true);
+								Channel.addPacket(message, snode);
+								//snode.setMessage(message);								
 							}
 						}
 						else 
