@@ -10,13 +10,14 @@ public class Command_DELAY extends Command {
 	
 	public Command_DELAY(SensorNode sensor, String arg) {
 		this.sensor = sensor ;		
-		this.arg = ""+ ((int) (Integer.parseInt(sensor.getScript().getVariableValue(arg)) * DataInfo.ChDataRate / 1000.)) ;
+		this.arg = arg;
 	}
 
 	@Override
-	public int execute() {		
-		SimLog.add("S" + sensor.getId() + " starts delaying for " + (Integer.valueOf(arg)/DataInfo.ChDataRate*1000.) + " milliseconds");
-		return Integer.parseInt(sensor.getScript().getVariableValue(arg));
+	public int execute() {				
+		String carg = ""+ ((int) (Integer.parseInt(sensor.getScript().getVariableValue(arg)) * DataInfo.ChDataRate / 1000.)) ;
+		SimLog.add("S" + sensor.getId() + " starts delaying for " + (Integer.valueOf(carg)/DataInfo.ChDataRate*1000.) + " milliseconds");
+		return Integer.parseInt(carg);
 	}
 	
 	public boolean isDelay() {

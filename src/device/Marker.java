@@ -200,4 +200,10 @@ public class Marker extends Device {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public void initForSimulation() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -2,15 +2,15 @@ package device;
 
 public class Packet implements Comparable<Packet> {
 
+	protected SensorNode sensor = null;
 	protected String message = "";
-	protected int startTime = 0;
-	protected int endTime = 0;
+	protected int time = 0;
 	
-	public Packet(String message, int startTime, int endTime) {
+	public Packet(SensorNode sensor, String message, int time) {
 		super();
+		this.sensor = sensor ;
 		this.message = message;
-		this.startTime = startTime;
-		this.endTime = endTime;
+		this.time = time;
 	}
 
 	public String getMessage() {
@@ -21,32 +21,26 @@ public class Packet implements Comparable<Packet> {
 		this.message = message;
 	}
 
-	public int getStartTime() {
-		return startTime;
+	public int getTime() {
+		return time;
 	}
 
-	public void setStartTime(int startTime) {
-		this.startTime = startTime;
+	public void setTime(int time) {
+		this.time = time;
 	}
-
-	public int getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(int endTime) {
-		this.endTime = endTime;
+	
+	public SensorNode getSensor() {
+		return sensor;
 	}
 
 	@Override
 	public int compareTo(Packet packet) {
-		if (endTime == packet.getEndTime())
-			return (startTime>packet.getEndTime())?1:(startTime<packet.getEndTime())?-1:0;
-		return (endTime>packet.getEndTime())?1:(endTime<packet.getEndTime())?-1:0;
+		return (time>packet.getTime())?1:(time<packet.getTime())?-1:0;
 	}
 	
 	@Override
 	public String toString() {
-		return message+" ["+startTime+", "+endTime+"]";
+		return message+" ["+sensor.getId()+":"+time+"]";
 	}
 	
 }

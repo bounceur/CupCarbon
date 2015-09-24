@@ -11,6 +11,7 @@ import map.Layer;
 import project.Project;
 import cupcarbon.CupCarbon;
 import cupcarbon.WsnSimulationWindow;
+import device.Channel;
 import device.DataInfo;
 import device.Device;
 import device.DeviceList;
@@ -25,11 +26,13 @@ public class WisenSimulation extends Thread {
 	private int visualDelay;
 	
 	// Change to true if you want do display some simulation info on the console 
-	private boolean showInConsole = false;
+	public static boolean showInConsole = false;
 
 	private boolean generateResults = true ;
 
 	public static boolean stepByStep = false;
+	
+	public static int ttime = 0;
 	
 	public WisenSimulation() {
 
@@ -52,6 +55,9 @@ public class WisenSimulation extends Thread {
 		List<Device> devices = DeviceList.getNodes();
 		SimLog.add("===========================");
 		SimLog.add("Initialization");
+		
+		Channel.init();
+		
 		for (Device device : devices) {
 			if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {
 				device.initForSimulation();
@@ -111,11 +117,12 @@ public class WisenSimulation extends Thread {
 			// ------------------------------------------------------
 			// ------------------------------------------------------			
 			stopCondition = false;
-			int ttime = 0;
+			ttime = 0;
 			int min = 0;
 			boolean allDeadSensors = false;
 			for (iter = 0; iter < iterNumber; iter++) {				
-				if (min == Integer.MAX_VALUE) {
+				if (min == Integer.MAX_VALUE && Channel.size()==0) {
+					System.out.println(Channel.size());
 					System.out.println("Infinite WAITs!");
 					JOptionPane.showMessageDialog(null, "Infinite WAITs! [iter: "+iter+"]", "Simulation Stopped", JOptionPane.INFORMATION_MESSAGE);
 					break;
@@ -157,14 +164,23 @@ public class WisenSimulation extends Thread {
 				
 				consolPrintln(" + "+min+" = "+ttime);
 				
+				Channel.goToTheNextTime(min);
+				if (Channel.getMin()==0) {
+					consolPrintln(">> "+Channel.getPackets());
+					consolPrintln(">> Message \""+Channel.getMessage()+"\" recu par : "+Channel.getSensor()+ " ["+Channel.getTime()+"]");
+					Channel.messageReceived();
+				}
+				
 				for (Device device : devices) {
 					if(!device.isDead()) {
 						if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {
 							consolPrint(device + " [" +device.getScript().getCurrent().toString()+"] - ");
 							device.execute();
-						}
+						}						
 					}
 				}
+				
+				
 
 				consolPrintln("");
 				
@@ -199,7 +215,10 @@ public class WisenSimulation extends Thread {
 						}
 					}
 				}
-								
+				
+				if (min>Channel.getMin())
+					min = Channel.getMin();				
+				
 				if (mobility) {
 					moving = false;
 					if (minmv < min) {
@@ -208,9 +227,7 @@ public class WisenSimulation extends Thread {
 					}
 				}	
 				
-				Layer.getMapViewer().repaint();
-				
-				consolPrintln("");					
+				consolPrintln("");
 				
 				if((min!=0) || (moving)) {
 					if (generateResults) ps.print(time + ";");
@@ -233,8 +250,10 @@ public class WisenSimulation extends Thread {
 					}
 					consolPrintln("");
 					
-					if (generateResults) ps.println();
+					if (generateResults) ps.println();										
 				}
+				
+				Layer.getMapViewer().repaint();
 				
 				allDeadSensors = true; 
 				for (Device device : devices) {
@@ -253,15 +272,17 @@ public class WisenSimulation extends Thread {
 							if (!device.isDead())
 								allDeadSensors = false;
 						}
-					}
+					}					
 					if (mobility) {						
 						device.setEvent2(device.getEvent2()-min);
 					}
-				}
+				}				
+
 				consolPrintln("");
 				consolPrintln("------------------------------------------");				
 				WsnSimulationWindow.setProgress((int) (1000 * iter / iterNumber));
 				CupCarbon.lblSimulation.setText(" | Simulation: "+((int) (100 * iter / iterNumber))+"%");
+				Layer.getMapViewer().repaint();
 			}
 			SimLog.close();
 			ps.close();
@@ -295,12 +316,12 @@ public class WisenSimulation extends Thread {
 		simulate();
 	}
 	
-	public void consolPrint(String txt) {
+	public static void consolPrint(String txt) {
 		if(showInConsole)
 			System.out.print(txt);
 	}
 	
-	public void consolPrintln(String txt) {
+	public static void consolPrintln(String txt) {
 		if(showInConsole)
 			System.out.println(txt);
 	}

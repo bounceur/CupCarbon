@@ -146,7 +146,7 @@ public abstract class Device implements Runnable, MouseListener,
 	protected int event = Integer.MAX_VALUE;		// Event relied to actions = sending/receiving
 	protected int event2 = Integer.MAX_VALUE;		// Event relied to mobility
 	protected int nextEvent = Integer.MAX_VALUE;		// Calculate the next Event
-	protected int mrEvent = Integer.MAX_VALUE;		// Event relied to the message reception
+	//protected int mrEvent = Integer.MAX_VALUE;		// Event relied to the message reception	
 	
 	protected Thread thread;	
 	
@@ -1452,9 +1452,7 @@ public abstract class Device implements Runnable, MouseListener,
 	
 	public void initBuffer() {}
 	
-	public void initForSimulation() {
-		
-	}
+	public abstract void initForSimulation();
 	
 	public void deviceMoveAction(String s) {
 		try {

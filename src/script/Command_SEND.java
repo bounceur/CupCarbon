@@ -169,11 +169,6 @@ public class Command_SEND extends Command {
 	}
 	
 	@Override
-	public boolean isExecuting() {
-		return executing;
-	}
-	
-	@Override
 	public String getMessage() {
 		String message = arg1;
 		message = sensor.getScript().getVariableValue(message);

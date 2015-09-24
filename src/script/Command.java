@@ -45,7 +45,7 @@ public abstract class Command {
 		currentFor = null;
 	}
 	
-	public abstract int execute() ;	
+	public abstract int execute() ;
 	
 	public boolean isIf() {
 		return false ;
@@ -101,7 +101,11 @@ public abstract class Command {
 	}
 	
 	public boolean isExecuting() {
-		return false;
+		return executing;
+	}
+	
+	public void setExecuting(boolean b) {		
+		this.executing = b; 
 	}
 	
 	public String getArduinoForm() {
