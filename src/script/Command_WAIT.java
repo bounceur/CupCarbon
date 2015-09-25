@@ -15,7 +15,7 @@ public class Command_WAIT extends Command {
 	
 	public Command_WAIT(SensorNode sensor, String arg) {
 		this.sensor = sensor ;
-		this.arg = ""+ ((Long.parseLong(sensor.getScript().getVariableValue(arg)) * DataInfo.ChDataRate / 1000.)) ;
+		this.arg = ""+ ((long)(Long.parseLong(sensor.getScript().getVariableValue(arg)) * DataInfo.ChDataRate / 1000.)) ;
 	}
 
 	@Override

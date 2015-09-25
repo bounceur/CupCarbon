@@ -15,7 +15,7 @@ public class Command_DELAY extends Command {
 
 	@Override
 	public long execute() {				
-		String carg = ""+ ((Long.parseLong(sensor.getScript().getVariableValue(arg)) * DataInfo.ChDataRate / 1000.)) ;
+		String carg = ""+ ((long)(Long.parseLong(sensor.getScript().getVariableValue(arg)) * DataInfo.ChDataRate / 1000.)) ;
 		SimLog.add("S" + sensor.getId() + " starts delaying for " + (Integer.valueOf(carg)/DataInfo.ChDataRate*1000.) + " milliseconds");
 		return Long.parseLong(carg);
 	}
