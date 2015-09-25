@@ -108,6 +108,7 @@ public abstract class Device implements Runnable, MouseListener,
 	protected boolean visited = false;
 	protected boolean visible = true;
 	protected boolean drawRadioLinks = true;
+	protected int drawRadioLinksColor = 0;
 	protected boolean drawBatteryLevel = false;
 	protected boolean drawTxRx = false;
 
@@ -933,7 +934,13 @@ public abstract class Device implements Runnable, MouseListener,
 		}
 		
 		if (key == 'v') {
-			drawRadioLinks = !drawRadioLinks;
+			drawRadioLinks = true;
+			drawRadioLinksColor++;
+			if(drawRadioLinksColor>4)
+				drawRadioLinksColor = 0;
+			if (drawRadioLinksColor==1)
+				drawRadioLinks = false;
+			//drawRadioLinks = !drawRadioLinks;
 		}
 		
 		if (key == 'g') {

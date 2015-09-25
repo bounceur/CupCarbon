@@ -91,7 +91,7 @@ import device.MarkerList;
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
- * @version 1.9
+ * @version 2.0 (U-ONE)
  */
 
 public class CupCarbon {

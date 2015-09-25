@@ -386,7 +386,14 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		if((drawRadioLinks && !(device.isSending() && isReceiving())) ||
 				(isSending() && device.isReceiving())
 				) {
-			g.setColor(Color.DARK_GRAY);
+			switch(drawRadioLinksColor) {
+			case 0 : g.setColor(Color.DARK_GRAY); break;
+			case 1 : g.setColor(Color.DARK_GRAY); break;
+			case 2 : g.setColor(Color.LIGHT_GRAY); break;
+			case 3 : g.setColor(Color.RED); break;
+			case 4 : g.setColor(Color.BLUE); break;
+			}
+			
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setStroke(new BasicStroke(1));
 			if(isSending() && device.isReceiving()) {
