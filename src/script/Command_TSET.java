@@ -19,7 +19,7 @@ public class Command_TSET extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		String tabName = arg1;
 		String x_str = sensor.getScript().getVariableValue(arg2);
 		String y_str = sensor.getScript().getVariableValue(arg3);

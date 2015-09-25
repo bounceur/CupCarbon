@@ -171,7 +171,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	// Duration to the Next Time
 	// ------------------------------------------------------------------------
 	@Override
-	public int getNextTime() {
+	public long getNextTime() {
 		if (routeTime.size() > 0) {
 			int diff = 0;
 			if (routeIndex <= 0)

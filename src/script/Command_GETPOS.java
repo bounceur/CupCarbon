@@ -13,7 +13,7 @@ public class Command_GETPOS extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		String v = "" ;
 		SimLog.add("S" + sensor.getId() + " GET POSITION.");
 		v = sensor.getLatitude()+"#"+sensor.getLongitude();		

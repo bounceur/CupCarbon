@@ -21,7 +21,7 @@ public class Command_LED extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		SimLog.add("S" + sensor.getId() + " LED "+arg1+" -> Color = "+arg2);
 		int ledColor = Double.valueOf(sensor.getScript().getVariableValue(arg2)).intValue();
 		if(ledColor>UColor.colorTab.length) ledColor= ledColor % UColor.colorTab.length;

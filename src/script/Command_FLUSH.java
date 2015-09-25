@@ -10,7 +10,7 @@ public class Command_FLUSH extends Command {
 	}
 
 	@Override
-	public int execute() {	
+	public long execute() {	
 		SimLog.add("S" + sensor.getId() + " FLUSH.");
 		sensor.initBuffer();
 		return 0;

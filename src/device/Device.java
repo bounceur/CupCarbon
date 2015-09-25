@@ -143,9 +143,9 @@ public abstract class Device implements Runnable, MouseListener,
 	protected LinkedList<Double> valueList;
 	//----------------------------------
 	
-	protected int event = Integer.MAX_VALUE;		// Event relied to actions = sending/receiving
-	protected int event2 = Integer.MAX_VALUE;		// Event relied to mobility
-	protected int nextEvent = Integer.MAX_VALUE;		// Calculate the next Event
+	protected long event = Long.MAX_VALUE;		// Event relied to actions = sending/receiving
+	protected long event2 = Long.MAX_VALUE;		// Event relied to mobility
+	//protected int nextEvent = Integer.MAX_VALUE;		// Calculate the next Event
 	//protected int mrEvent = Integer.MAX_VALUE;		// Event relied to the message reception	
 	
 	protected Thread thread;	
@@ -1327,7 +1327,7 @@ public abstract class Device implements Runnable, MouseListener,
 		return this.hide;
 	}
 
-	public abstract int getNextTime();
+	public abstract long getNextTime();
 	public abstract void loadRouteFromFile();
 	public abstract void moveToNext(boolean visual, int visualDelay);
 	public abstract boolean hasNext() ;
@@ -1425,10 +1425,10 @@ public abstract class Device implements Runnable, MouseListener,
 	}
 	
 	public void setEvent(String event) {
-		this.event = Integer.parseInt(event) ;
+		this.event = Long.parseLong(event) ;
 	}
 	
-	public int getEvent() {
+	public long getEvent() {
 		/*if(event>nEvent) {
 			nEvent = Integer.MAX_VALUE;
 			return event ;
@@ -1440,11 +1440,11 @@ public abstract class Device implements Runnable, MouseListener,
 		return event;
 	}
 	
-	public void setEvent2(int event) {
+	public void setEvent2(long event) {
 		this.event2 = event ;
 	}
 	
-	public int getEvent2() {
+	public long getEvent2() {
 		return event2;
 	}
 
@@ -1605,9 +1605,17 @@ public abstract class Device implements Runnable, MouseListener,
 		this.requiredQuality = requiredQuality;
 	}
 
+	public void gotoTheNextInstruction() {
+		if(!script.getCurrent().isExecuting()) {			
+			script.next();
+		}		
+	}
+
+	public void gotoTheNextEvent(long min) {
+		event = event - min;
+	}
+	
 	public abstract void execute();
-	public abstract void gotoTheNextInstruction(); 
-	public abstract void gotoTheNextEvent(int min);
 	public abstract void drawRadioLinks(Graphics g) ;
 	public abstract double getAttenuation(double d);
 	

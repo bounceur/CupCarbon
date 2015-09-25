@@ -118,7 +118,7 @@ public class Command_SEND extends Command {
 	}
 	
 	@Override
-	public int execute() {		
+	public long execute() {		
 		if (arg1.equals("!color")) {
 			sensor.setRadioLinkColor(UColor.colorTab2[Integer.parseInt(arg2)]);
 			return 0;
@@ -145,7 +145,7 @@ public class Command_SEND extends Command {
 			executing = true;
 			// Considerer la mise en buffer du message (coute UartDataRate baud)			
 			double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
-			return (int)(Math.round(messageLength*8.*ratio));
+			return (long)(Math.round(messageLength*8.*ratio));
 		}
 		return 0;
 	}

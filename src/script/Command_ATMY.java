@@ -15,14 +15,14 @@ public class Command_ATMY extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		SimLog.add("S" + sensor.getId() + " ATMY "+arg);
 		String args = sensor.getScript().getVariableValue(arg);
 		sensor.setMy(Integer.valueOf(args));
 		
 		double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
 		String message = "ATMY "+args;
-		return (int)(Math.round(message.length()*8.*ratio));
+		return (long)(Math.round(message.length()*8.*ratio));
 		
 		//return 0;
 	}

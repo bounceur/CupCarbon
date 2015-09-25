@@ -334,7 +334,7 @@ public class FlyingObject extends MobileG {
 	}
 
 	@Override
-	public int getNextTime() {
+	public long getNextTime() {
 		return 0;
 	}
 
@@ -351,18 +351,6 @@ public class FlyingObject extends MobileG {
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void gotoTheNextInstruction() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void gotoTheNextEvent(int min) {
 		// TODO Auto-generated method stub
 		
 	}

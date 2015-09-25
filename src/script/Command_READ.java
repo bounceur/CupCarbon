@@ -13,7 +13,7 @@ public class Command_READ extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		sensor.readMessage(arg);
 		return 0;
 	}

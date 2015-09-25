@@ -14,7 +14,7 @@ public class Command_RPACKET extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		packet = sensor.getScript().getVariableValue(args[1]);
 		SimLog.add("S" + sensor.getId() + " Read Packet: "+packet);
 		String [] tab = packet.split("#");

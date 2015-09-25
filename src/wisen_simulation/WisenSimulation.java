@@ -21,7 +21,7 @@ import flying_object.FlyingGroup;
 public class WisenSimulation extends Thread {
 
 	private boolean mobility = false;
-	private int iterNumber = 0;
+	private long iterNumber = 0;
 
 	private int visualDelay;
 	
@@ -32,7 +32,7 @@ public class WisenSimulation extends Thread {
 
 	public static boolean stepByStep = false;
 	
-	public static int ttime = 0;
+	public static long ttime = 0;
 	
 	public WisenSimulation() {
 
@@ -67,7 +67,7 @@ public class WisenSimulation extends Thread {
 				if (device.canMove())
 					device.setEvent2(device.getNextTime());
 				else
-					device.setEvent2(Integer.MAX_VALUE);
+					device.setEvent2(Long.MAX_VALUE);
 				if(device.getType()==Device.GAS) {
 					((Gas)device).init();
 				}
@@ -118,11 +118,11 @@ public class WisenSimulation extends Thread {
 			// ------------------------------------------------------			
 			stopCondition = false;
 			ttime = 0;
-			int min = 0;
+			long min = 0;
 			boolean allDeadSensors = false;
 			for (iter = 0; iter < iterNumber; iter++) {
-				
-				if (min == Integer.MAX_VALUE && Channel.size()==0) {
+				System.out.println(min+" "+Long.MAX_VALUE+" "+Integer.MAX_VALUE+" "+Channel.size());
+				if (min == Long.MAX_VALUE) {
 					System.out.println(Channel.size());
 					System.out.println("Infinite WAITs!");
 					JOptionPane.showMessageDialog(null, "Infinite WAITs! [iter: "+iter+"]", "Simulation Stopped", JOptionPane.INFORMATION_MESSAGE);
@@ -170,7 +170,7 @@ public class WisenSimulation extends Thread {
 					Channel.messageReceived();
 				}
 				
-				min = Integer.MAX_VALUE;
+				min = Long.MAX_VALUE;
 				for (Device device : devices) {
 					if(!device.isDead()) {
 						if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {
@@ -184,7 +184,7 @@ public class WisenSimulation extends Thread {
 				
 				consolPrintln("");
 				
-				int minmv = Integer.MAX_VALUE;
+				long minmv = Long.MAX_VALUE;
 				if (mobility)
 					for (Device device : devices) {
 						if(!device.isDead()) {						
@@ -259,7 +259,7 @@ public class WisenSimulation extends Thread {
 						if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {
 							consolPrint(device.getEvent()+" : "); 
 							
-							if(device.getEvent() != Integer.MAX_VALUE)
+							if(device.getEvent() != Long.MAX_VALUE)
 								device.gotoTheNextEvent(min);								
 							
 							if(device.getEvent()==0) {

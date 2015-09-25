@@ -125,18 +125,6 @@ public class Mobile extends MobileG {
 	}
 
 	@Override
-	public void gotoTheNextInstruction() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void gotoTheNextEvent(int min) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void drawRadioLinks(Graphics g) {
 		// TODO Auto-generated method stub
 		

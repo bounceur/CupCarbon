@@ -17,7 +17,7 @@ public class Command_TAB extends Command {
 	}
 
 	@Override
-	public int execute() {		
+	public long execute() {		
 		String name = arg1;
 		String heigth_str = sensor.getScript().getVariableValue(arg2);			
 		String width_str = sensor.getScript().getVariableValue(arg3);

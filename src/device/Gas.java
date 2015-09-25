@@ -182,7 +182,7 @@ public class Gas extends DeviceWithoutRadio {
 	}
 	
 	@Override
-	public int getNextTime() { return 0 ;}
+	public long getNextTime() { return 0 ;}
 	
 	@Override
 	public void loadRouteFromFile() {}
@@ -213,18 +213,6 @@ public class Gas extends DeviceWithoutRadio {
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void gotoTheNextInstruction() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void gotoTheNextEvent(int min) {
 		// TODO Auto-generated method stub
 		
 	}

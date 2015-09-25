@@ -775,13 +775,8 @@ public class SensorNode extends DeviceWithRadio {
 	}
 
 	@Override
-	public void gotoTheNextEvent(int min) {
+	public void gotoTheNextEvent(long min) {
 		event = event - min;
-	}
-	
-	@Override
-	public int getEvent() {
-		return event;
 	}
 	
 }

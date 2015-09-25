@@ -15,14 +15,14 @@ public class Command_ATID extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		SimLog.add("S" + sensor.getId() + " ATNI "+arg);
 		String args = sensor.getScript().getVariableValue(arg);
 		sensor.setId(Integer.valueOf(args));
 
 		double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
 		String message = "ATNI "+args;
-		return (int)(Math.round(message.length()*8.*ratio));
+		return (long)(Math.round(message.length()*8.*ratio));
 		
 		//return 0;
 	}

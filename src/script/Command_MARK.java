@@ -15,7 +15,7 @@ public class Command_MARK extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		String args = sensor.getScript().getVariableValue(arg);
 		int n = Integer.valueOf(args);
 		if(n==0) {

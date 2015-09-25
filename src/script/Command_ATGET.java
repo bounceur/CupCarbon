@@ -15,7 +15,7 @@ public class Command_ATGET extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		String v = "" ;
 		
 		if(arg1.equals("id")) {

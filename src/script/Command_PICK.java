@@ -1,6 +1,5 @@
 package script;
 
-import device.DataInfo;
 import device.SensorNode;
 
 public class Command_PICK extends Command {
@@ -13,10 +12,12 @@ public class Command_PICK extends Command {
 	}
 
 	@Override
-	public int execute() {
-		int lEvent = sensor.pickMessage(arg);
-		double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
-		return (int)(Math.round(lEvent*8.*ratio));
+	public long execute() {
+//		int lEvent = sensor.pickMessage(arg);
+//		double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
+//		return (int)(Math.round(lEvent*8.*ratio));
+		sensor.pickMessage(arg);
+		return 0;
 	}
 
 	@Override

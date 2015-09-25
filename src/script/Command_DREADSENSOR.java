@@ -13,7 +13,7 @@ public class Command_DREADSENSOR extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		String value = sensor.isSensorDetecting()?"1":"0";
 		SimLog.add("S" + sensor.getId() + " READ SENSOR: "+value);
 		sensor.getScript().addVariable(arg, value);

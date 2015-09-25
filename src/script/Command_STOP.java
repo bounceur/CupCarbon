@@ -10,10 +10,10 @@ public class Command_STOP extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		SimLog.add("S" + sensor.getId() + " STOP !");
 		sensor.getScript().setBreaked(true);		
-		return Integer.MAX_VALUE;
+		return Long.MAX_VALUE;
 	}
 	
 	@Override

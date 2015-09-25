@@ -4,9 +4,9 @@ public class Packet implements Comparable<Packet> {
 
 	protected SensorNode sensor = null;
 	protected String message = "";
-	protected int time = 0;
+	protected long time = 0;
 	
-	public Packet(SensorNode sensor, String message, int time) {
+	public Packet(SensorNode sensor, String message, long time) {
 		super();
 		this.sensor = sensor ;
 		this.message = message;
@@ -21,11 +21,11 @@ public class Packet implements Comparable<Packet> {
 		this.message = message;
 	}
 
-	public int getTime() {
+	public long getTime() {
 		return time;
 	}
 
-	public void setTime(int time) {
+	public void setTime(long time) {
 		this.time = time;
 	}
 	

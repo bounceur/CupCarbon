@@ -18,11 +18,11 @@ public class Command_ATND extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		String args = arg1;
 		int n = sensor.getSensorNodeNeighbors().size();
 		sensor.getScript().addVariable(args, ""+n);
-		return Integer.parseInt(sensor.getScript().getVariableValue(arg2));
+		return Long.parseLong(sensor.getScript().getVariableValue(arg2));
 	}
 	
 	@Override

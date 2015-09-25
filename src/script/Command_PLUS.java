@@ -17,7 +17,7 @@ public class Command_PLUS extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		String v1 = sensor.getScript().getVariableValue(arg2);
 		String v2 = sensor.getScript().getVariableValue(arg3);
 		double z = 0;

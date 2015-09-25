@@ -15,12 +15,12 @@ public class Command_WAIT extends Command {
 	
 	public Command_WAIT(SensorNode sensor, String arg) {
 		this.sensor = sensor ;
-		this.arg = ""+ ((int) (Integer.parseInt(sensor.getScript().getVariableValue(arg)) * DataInfo.ChDataRate / 1000.)) ;
+		this.arg = ""+ ((Long.parseLong(sensor.getScript().getVariableValue(arg)) * DataInfo.ChDataRate / 1000.)) ;
 	}
 
 	@Override
-	public int execute() {		
-		int event = 0 ;
+	public long execute() {		
+		long event = 0 ;
 
 		if (sensor.dataAvailable()) {			
 			SimLog.add("S" + sensor.getId() + " Buffer available, exit waiting.");
@@ -33,9 +33,9 @@ public class Command_WAIT extends Command {
 			sensor.getScript().setWiting(true);
 			
 			if (arg.equals(""))
-				event = Integer.MAX_VALUE;
+				event = Long.MAX_VALUE;
 			else
-				event = Integer.parseInt(sensor.getScript().getVariableValue(arg));
+				event = Long.parseLong(sensor.getScript().getVariableValue(arg));
 		}
 		
 		return event;

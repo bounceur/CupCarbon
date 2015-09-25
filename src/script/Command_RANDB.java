@@ -19,7 +19,7 @@ public class Command_RANDB extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		String arg = arg1 ;
 		int a =  Integer.valueOf(sensor.getScript().getVariableValue(arg2));
 		int b =  Integer.valueOf(sensor.getScript().getVariableValue(arg3))+1;

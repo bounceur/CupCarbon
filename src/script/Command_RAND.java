@@ -13,7 +13,7 @@ public class Command_RAND extends Command {
 	}
 
 	@Override
-	public int execute() {	
+	public long execute() {	
 		double rand = Math.random();
 		SimLog.add("S" + sensor.getId() + " RAND: "+rand);
 		sensor.getScript().addVariable(arg, ""+rand);

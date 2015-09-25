@@ -13,7 +13,7 @@ public class Command_AREADSENSOR extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		String value = sensor.getSensorValues();
 		SimLog.add("S" + sensor.getId() + " READ SENSOR: "+value);
 		sensor.getScript().addVariable(arg, value);

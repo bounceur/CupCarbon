@@ -15,7 +15,7 @@ public class Command_PACKET extends Command {
 	}
 
 	@Override
-	public int execute() {		
+	public long execute() {		
 		String packet= "";
 		for(int i=2; i<args.length-1; i++) {
 			packet += sensor.getScript().getVariableValue(args[i])+"#";

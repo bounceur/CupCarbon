@@ -22,7 +22,7 @@ public class Command_IF extends Command {
 	}
 	
 	@Override
-	public int execute() {		
+	public long execute() {		
 		String condition = arg.replaceFirst("if", "");		
 		EvalCondition evalCondtion = new EvalCondition(sensor);
 		

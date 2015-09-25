@@ -14,10 +14,10 @@ public class Command_DELAY extends Command {
 	}
 
 	@Override
-	public int execute() {				
-		String carg = ""+ ((int) (Integer.parseInt(sensor.getScript().getVariableValue(arg)) * DataInfo.ChDataRate / 1000.)) ;
+	public long execute() {				
+		String carg = ""+ ((Long.parseLong(sensor.getScript().getVariableValue(arg)) * DataInfo.ChDataRate / 1000.)) ;
 		SimLog.add("S" + sensor.getId() + " starts delaying for " + (Integer.valueOf(carg)/DataInfo.ChDataRate*1000.) + " milliseconds");
-		return Integer.parseInt(carg);
+		return Long.parseLong(carg);
 	}
 	
 	public boolean isDelay() {

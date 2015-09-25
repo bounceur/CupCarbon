@@ -14,7 +14,7 @@ public class Command_ENDIF extends Command {
 	}
 
 	@Override
-	public int execute() {
+	public long execute() {
 		return 0;
 	}
 	

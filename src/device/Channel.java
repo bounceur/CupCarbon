@@ -21,8 +21,8 @@ public class Channel {
 		SimLog.add("S" + sensor.getId() + " is receiving the message : \"" + message + "\" in its buffer.");
 		
 		double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
-		int duration =  ((int)(Math.round(message.length()*8.*ratio))) + (message.length()*8);
-		int lastTime = 0;
+		long duration =  ((int)(Math.round(message.length()*8.*ratio))) + (message.length()*8);
+		long lastTime = 0;
 		if (receivedMessages.size()>0) 
 			lastTime = receivedMessages.get(receivedMessages.size()-1).getTime();
 		Packet packet = new Packet(sensor, message, lastTime+duration);
@@ -38,17 +38,17 @@ public class Channel {
 		receivedMessages.remove(0);
 	}
 	
-	public static void goToTheNextTime(int nt) {
+	public static void goToTheNextTime(long nt) {
 		for (Packet packet : receivedMessages) {
 			packet.setTime(packet.getTime()-nt);
 		}
 	}
 	
-	public static int getMin() {
+	public static long getMin() {
 		if(receivedMessages.size()>0)
 			return receivedMessages.get(0).getTime();
 		else
-			return Integer.MAX_VALUE;
+			return Long.MAX_VALUE;
 	}
 	
 	public static String getMessage() {
@@ -69,11 +69,11 @@ public class Channel {
 		return receivedMessages;
 	}
 	
-	public static int getTime() {
+	public static long getTime() {
 		if(receivedMessages.size()>0)
 			return receivedMessages.get(0).getTime();
 		else
-			return -1;
+			return Long.MAX_VALUE;
 	}
 	
 	public static int size() {

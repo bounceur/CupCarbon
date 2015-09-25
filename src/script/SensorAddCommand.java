@@ -101,9 +101,6 @@ public final class SensorAddCommand {
 		if (inst[0].toLowerCase().equals("atget")) {
 			command = new Command_ATGET(sensorNode, inst[1], inst[2]);
 		}
-		if (inst[0].toLowerCase().equals("initprec")) {
-			command = new Command_INITPREC(sensorNode, inst[1]);
-		}
 		if (inst[0].toLowerCase().equals("rand")) {
 			command = new Command_RAND(sensorNode, inst[1]);
 		}
