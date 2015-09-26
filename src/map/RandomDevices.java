@@ -1,8 +1,8 @@
 package map;
 
+import markers.Marker;
+import markers.MarkerList;
 import device.DeviceList;
-import device.Marker;
-import device.MarkerList;
 import device.SensorNode;
 
 public class RandomDevices {

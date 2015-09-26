@@ -24,9 +24,9 @@ import java.util.Collections;
 import java.util.List;
 
 import map.Layer;
+import markers.Marker;
+import markers.MarkerList;
 import device.Device;
-import device.Marker;
-import device.MarkerList;
 
 /**
  * @author Ahcene Bounceur

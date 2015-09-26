@@ -1,4 +1,4 @@
-package device;
+package buildings;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -14,6 +14,7 @@ import map.Layer;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
+import device.Device;
 import utilities.MapCalc;
 import utilities.UColor;
 

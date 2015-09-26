@@ -17,12 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *----------------------------------------------------------------------------------------------------------------*/
 
-package device;
+package markers;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
+import device.Device;
+import device.DeviceList;
+import device.SensorNode;
 import map.Layer;
 import utilities.MapCalc;
 import utilities.UColor;

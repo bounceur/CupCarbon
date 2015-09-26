@@ -25,7 +25,7 @@ public class Command_WAIT extends Command {
 		if (sensor.dataAvailable()) {			
 			SimLog.add("S" + sensor.getId() + " Buffer available, exit waiting.");
 			sensor.getScript().setWiting(false);
-			event = 0; //sensor.getDataSize()*8;
+			event = 0;
 		} 
 		else {
 			SimLog.add("S" + sensor.getId() + " is waiting for data ...");

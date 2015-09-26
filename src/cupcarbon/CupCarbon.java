@@ -59,9 +59,12 @@ import javax.swing.filechooser.FileFilter;
 import map.Layer;
 import map.RandomDevices;
 import map.WorldMap;
+import markers.Marker;
+import markers.MarkerList;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
+import buildings.BuildingList;
 import osm.City;
 import perso.ExampleClass;
 import perso.MonAlgoClass;
@@ -81,11 +84,8 @@ import solver.SensorTargetCoverageRun;
 import solver.SolverProxyParams;
 import actions_ui.Historic;
 import arduino.Arduino;
-import device.BuildingList;
 import device.Device;
 import device.DeviceList;
-import device.Marker;
-import device.MarkerList;
 
 /**
  * @author Ahcene Bounceur

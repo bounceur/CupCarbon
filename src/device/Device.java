@@ -34,6 +34,8 @@ import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 import map.Layer;
+import markers.Marker;
+import markers.MarkerList;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
@@ -1436,14 +1438,6 @@ public abstract class Device implements Runnable, MouseListener,
 	}
 	
 	public long getEvent() {
-		/*if(event>nEvent) {
-			nEvent = Integer.MAX_VALUE;
-			return event ;
-		}
-		else {
-			nEvent -= event;
-			return event;
-		}*/
 		return event;
 	}
 	

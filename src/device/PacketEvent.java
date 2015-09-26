@@ -1,24 +1,24 @@
 package device;
 
-public class Packet implements Comparable<Packet> {
+public class PacketEvent implements Comparable<PacketEvent> {
 
 	protected SensorNode sensor = null;
-	protected String message = "";
+	protected String packet = "";
 	protected long time = 0;
 	
-	public Packet(SensorNode sensor, String message, long time) {
+	public PacketEvent(SensorNode sensor, String packet, long time) {
 		super();
 		this.sensor = sensor ;
-		this.message = message;
+		this.packet = packet;
 		this.time = time;
 	}
 
-	public String getMessage() {
-		return message;
+	public String getPacket() {
+		return packet;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setPacket(String packet) {
+		this.packet = packet;
 	}
 
 	public long getTime() {
@@ -34,13 +34,13 @@ public class Packet implements Comparable<Packet> {
 	}
 
 	@Override
-	public int compareTo(Packet packet) {
+	public int compareTo(PacketEvent packet) {
 		return (time>packet.getTime())?1:(time<packet.getTime())?-1:0;
 	}
 	
 	@Override
 	public String toString() {
-		return message+" ["+sensor.getId()+":"+time+"]";
+		return packet+" ["+sensor.getId()+":"+time+"]";
 	}
 	
 }

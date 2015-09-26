@@ -30,14 +30,14 @@ import java.io.PrintStream;
 import javax.swing.JOptionPane;
 
 import map.Layer;
+import markers.MarkerList;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
+import buildings.BuildingList;
 import cupcarbon.CupCarbon;
 import cupcarbon.Version;
-import device.BuildingList;
 import device.DeviceList;
-import device.MarkerList;
 
 public final class Project {
 

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *----------------------------------------------------------------------------------------------------------------*/
 
-package device;
+package markers;
 
 import java.awt.Graphics;
 import java.io.BufferedReader;

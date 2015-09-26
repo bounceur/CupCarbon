@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import NaturalEvents.Gas;
 import map.Layer;
 import project.Project;
 import cupcarbon.CupCarbon;
@@ -15,7 +16,6 @@ import device.Channel;
 import device.DataInfo;
 import device.Device;
 import device.DeviceList;
-import device.Gas;
 import flying_object.FlyingGroup;
 
 public class WisenSimulation extends Thread {
@@ -184,37 +184,26 @@ public class WisenSimulation extends Thread {
 				consolPrintln("");
 				
 				long minmv = Long.MAX_VALUE;
-				if (mobility)
+				if (mobility) {
 					for (Device device : devices) {
 						if(!device.isDead()) {						
 							if (device.getEvent2() == 0) {
 								SimLog.add(device.getIdFL()+device.getId()+" DEPLACEMENT");
 								if (device.canMove()) {
 									device.moveToNext(true, 0);
-									device.setEvent2(device.getNextTime());
-									if ((minmv > device.getEvent2()))
-										minmv = device.getEvent2();	
+									device.setEvent2(device.getNextTime());									
 								}
 							}
+							if ((minmv > device.getEvent2()))
+								minmv = device.getEvent2();	
 						}
 					}
+				}
 				
 				consolPrintln("");
 				
 				if (min>Channel.getMin())
-					min = Channel.getMin();		
-				
-//				min = Channel.getMin();//Integer.MAX_VALUE;
-//				
-////				for (Device device : devices) {					
-////					if(!device.isDead()) {
-////						if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {
-////							if ((min > device.getEvent()))
-////								min = device.getEvent();
-////													
-////						}
-////					}
-////				}				
+					min = Channel.getMin();
 				
 				if (mobility) {
 					moving = false;

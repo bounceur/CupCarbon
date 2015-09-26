@@ -7,14 +7,14 @@ import wisen_simulation.SimLog;
 
 public class Channel {
 
-	protected static List<Packet> receivedMessages = new LinkedList<Packet>();
+	protected static List<PacketEvent> receivedMessages = new LinkedList<PacketEvent>();
 	
 	public Channel() {
-		receivedMessages = new LinkedList<Packet>();
+		receivedMessages = new LinkedList<PacketEvent>();
 	}
 	
 	public static void init() {
-		receivedMessages = new LinkedList<Packet>();
+		receivedMessages = new LinkedList<PacketEvent>();
 	}
 	
 	public static void addPacket(String message, SensorNode sensor) {
@@ -25,21 +25,21 @@ public class Channel {
 		long lastTime = 0;
 		if (receivedMessages.size()>0) 
 			lastTime = receivedMessages.get(receivedMessages.size()-1).getTime();
-		Packet packet = new Packet(sensor, message, lastTime+duration);
+		PacketEvent packet = new PacketEvent(sensor, message, lastTime+duration);
 		
 		receivedMessages.add(packet);
 	}
 	
 	public static void messageReceived() {
 		SensorNode sensor = receivedMessages.get(0).getSensor();				
-		sensor.addMessageToBuffer(receivedMessages.get(0).getMessage().length()*8, receivedMessages.get(0).getMessage());
+		sensor.addMessageToBuffer(receivedMessages.get(0).getPacket().length()*8, receivedMessages.get(0).getPacket());
 		if(sensor.getScript().getCurrent().isWait())
 			sensor.setEvent(0);
 		receivedMessages.remove(0);
 	}
 	
 	public static void goToTheNextTime(long nt) {
-		for (Packet packet : receivedMessages) {
+		for (PacketEvent packet : receivedMessages) {
 			packet.setTime(packet.getTime()-nt);
 		}
 	}
@@ -53,7 +53,7 @@ public class Channel {
 	
 	public static String getMessage() {
 		if(receivedMessages.size()>0)
-			return receivedMessages.get(0).getMessage();
+			return receivedMessages.get(0).getPacket();
 		else
 			return "";
 	}
@@ -65,7 +65,7 @@ public class Channel {
 			return 0;
 	}
 	
-	public static List<Packet> getPackets() {
+	public static List<PacketEvent> getPackets() {
 		return receivedMessages;
 	}
 	

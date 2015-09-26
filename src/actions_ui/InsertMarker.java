@@ -20,8 +20,8 @@
 package actions_ui;
 
 import map.Layer;
-import device.Marker;
-import device.MarkerList;
+import markers.Marker;
+import markers.MarkerList;
 
 /**
  * @author Ahcene Bounceur

@@ -17,12 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *----------------------------------------------------------------------------------------------------------------*/
 
-package device;
+package NaturalEvents;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 
+import device.Device;
+import device.DeviceWithoutRadio;
 import map.Layer;
 import utilities.MapCalc;
 import utilities.UColor;

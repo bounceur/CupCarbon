@@ -42,8 +42,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.filechooser.FileFilter;
 
+import markers.MarkerList;
 import project.Project;
-import device.MarkerList;
 
 /**
  * @author Ahcene Bounceur

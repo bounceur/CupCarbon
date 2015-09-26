@@ -26,9 +26,9 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
+import buildings.Building;
+import buildings.BuildingList;
 import map.Layer;
-import device.Building;
-import device.BuildingList;
 
 /**
  * @author BOYER Yoann

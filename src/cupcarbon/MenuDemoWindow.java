@@ -13,7 +13,7 @@ import javax.swing.JInternalFrame;
 
 import map.Layer;
 import map.WorldMap;
-import device.MarkerList;
+import markers.MarkerList;
 
 public class MenuDemoWindow extends JInternalFrame {
 
