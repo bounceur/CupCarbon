@@ -36,6 +36,7 @@ import java.io.InputStreamReader;
 
 import markers.Marker;
 import markers.MarkerList;
+import natural_events.Gas;
 
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
@@ -46,7 +47,6 @@ import buildings.BuildingList;
 import overpass.OsmOverpass;
 import utilities.MapCalc;
 import utilities.UColor;
-import NaturalEvents.Gas;
 import actions_ui.AddDevice;
 import actions_ui.AddMarker;
 import cupcarbon.CupCarbon;

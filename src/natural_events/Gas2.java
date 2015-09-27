@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *----------------------------------------------------------------------------------------------------------------*/
 
-package NaturalEvents;
+package natural_events;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -31,25 +31,23 @@ import utilities.UColor;
 
 /**
  * @author Ahcene Bounceur
- * @author Massinissa Saoudi
+ * @author Kamal Mehdi
+ * @author Lounis Massinissa
  * @version 1.0
  */
-public class Gas extends DeviceWithoutRadio {
+public class Gas2 extends DeviceWithoutRadio {
 
-	public static String idFL = "A" ; // ID First Letter
+	public static String idFL = "G" ; // ID First Letter
 	protected int [] polyX = new int[62];
 	protected int [] polyY = new int[62];
 	protected double value = 0.0f ;
-	protected Random random ;
 	
-	public Gas(double x, double y, double radius, int id) {
+	public Gas2(double x, double y, double radius, int id) {
 		super(x, y, radius, id);
-		random = new Random();
 	}
 	
-	public Gas(String x, String y, String radius, int id) {
+	public Gas2(String x, String y, String radius, int id) {
 		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(radius), id);
-		random = new Random();
 	}
 
 	public void draw(Graphics g) {
@@ -72,6 +70,19 @@ public class Gas extends DeviceWithoutRadio {
 				g.drawLine(x+rayon+3, y+rayon+3, x+rayon-2, y+rayon+3);
 				g.drawLine(x+rayon+3, y+rayon+3, x+rayon+3, y+rayon-2);
 			}
+			
+			/*
+			if(inside) {			
+				g.setColor(Couleur.ROUGEF_TRANSPARENT);			
+			}
+			else
+				g.setColor(Couleur.ROUGE_TRANSPARENT);
+	
+			switch(hide) {
+			case 0 : g.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
+			case 1 : g.drawOval(x - rayon, y - rayon, rayon * 2, rayon * 2); 
+			}
+			*/
 					
 			if (selected) {
 				g.setColor(Color.gray);
@@ -135,13 +146,15 @@ public class Gas extends DeviceWithoutRadio {
 		underSimulation = true ;
 		fixori();
 		value = 0.0f;
+		radius = 0;
 		for(int i=0;i<1000; i++) {
 			simNext();
 			Layer.getMapViewer().repaint();
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {e.printStackTrace();}
-		}		
+		}
+		toOri();
 		underSimulation = false ;
 		thread = null ;
 		Layer.getMapViewer().repaint();
@@ -204,13 +217,14 @@ public class Gas extends DeviceWithoutRadio {
 	public void init() {
 		selected = false ;
 		underSimulation = true ;
+		fixori();
 		value = 0.0f;
+		radius = 0;
 	}
 	
 	public void simNext() {
-		double m = 22.0;
-		double s = 4.0;
-		value = m+s*random.nextGaussian();
+		radius+=0.2 ;
+		value+=0.2;
 	}
 
 	@Override

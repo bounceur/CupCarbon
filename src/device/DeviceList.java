@@ -34,11 +34,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import natural_events.Gas;
 import map.Layer;
 import markers.Marker;
 import solver.SensorGraph;
 import utilities.MapCalc;
-import NaturalEvents.Gas;
 import actions_ui.DeleteDevice;
 import flying_object.FlyingGroup;
 

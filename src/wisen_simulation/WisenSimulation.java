@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import NaturalEvents.Gas;
+import natural_events.Gas;
 import map.Layer;
 import project.Project;
 import cupcarbon.CupCarbon;
