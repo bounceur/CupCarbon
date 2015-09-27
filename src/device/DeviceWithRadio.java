@@ -488,7 +488,10 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 	public boolean radioDetect(Device device) {	
 		if (withRadio && device.withRadio()) {
-			if (getPowerReception(device) > requiredQuality) return true;
+			if ( (getPowerReception(device) > requiredQuality) ||
+					(isDistanceMode() && device.isDistanceMode())  
+					)
+				return true;
 		}
 		return false;
 	}

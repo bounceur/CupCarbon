@@ -229,6 +229,7 @@ public class WisenSimulation extends Thread {
 									sleep(visualDelay);
 									device.setSending(false);
 									device.setReceiving(false);
+									device.setDistanceMode(false);
 								}
 							}
 							if(device.getType()==Device.GAS && mobility) ((Gas) device).simNext();

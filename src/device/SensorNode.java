@@ -480,41 +480,7 @@ public class SensorNode extends DeviceWithRadio {
 
 	protected boolean receivedEvent = false;		
 	
-	//public void setMessage(String message) {
-	//	Channel.addPacket(message, this);
-	//}
-
-//	@Override
-//	public void nEventVerif() {
-////		if(receivedEvent) {
-////			event = nextEvent;
-////			receivedEvent = false;
-////		}
-////		if(receivedMessages.size()>0)
-////			if(receivedMessages.get(0).getEndTime()==0) {
-////				setRxConsumption(1);
-////				consumeRx(receivedMessages.get(0).getMessage().length()*8);
-////				initRxConsumption(); 
-////				
-////				try {
-////					for(int i=0; i<receivedMessages.get(0).getMessage().length(); i++) {
-////						buffer[bufferIndex] = (byte) receivedMessages.get(0).getMessage().charAt(i);
-////						bufferIndex++;
-////						if(bufferIndex >= bufferSize)
-////							System.err.println("S"+getId()+": ERROR FULL BUFFER!");
-////					}		
-////					buffer[bufferIndex] = '\r';
-////					bufferIndex++;
-////					}
-////				catch(Exception e) {
-////					System.err.println("S"+getId()+" [EMPTY MESSAGE]");
-////				}	
-////				receivedMessages.remove(0);
-////			}
-//	}
-	
 	public void addMessageToBuffer(int v, String message) {
-		//System.out.println(id+" "+message);
 		setRxConsumption(1);
 		consumeRx(v);
 		initRxConsumption(); 
@@ -534,10 +500,7 @@ public class SensorNode extends DeviceWithRadio {
 		}		
 	}
 	
-	public int readMessage(String var) {
-		
-		//receivedMessages.remove(0);
-		
+	public int readMessage(String var) {		
 		int i=0;
 		String s ="";
 		while(buffer[i]!='\r') {

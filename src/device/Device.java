@@ -135,6 +135,8 @@ public abstract class Device implements Runnable, MouseListener,
 	protected boolean receiving = false;
 	protected boolean sending = false;
 	protected boolean writing = false;
+	protected boolean distanceMode = false ;
+	protected long distanceModeDelay = 2000 ;
 
 	protected boolean state = ALIVE;
 	
@@ -1616,6 +1618,22 @@ public abstract class Device implements Runnable, MouseListener,
 		event = event - min;
 	}
 	
+	public boolean isDistanceMode() {
+		return distanceMode;
+	}
+
+	public void setDistanceMode(boolean distanceMode) {
+		this.distanceMode = distanceMode;
+	}
+
+	public long getDistanceModeDelay() {
+		return distanceModeDelay;
+	}
+
+	public void setDistanceModeDelay(long distanceModeDelay) {
+		this.distanceModeDelay = distanceModeDelay;
+	}
+
 	public abstract void execute();
 	public abstract void drawRadioLinks(Graphics g) ;
 	public abstract double getAttenuation(double d);

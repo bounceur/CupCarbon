@@ -52,8 +52,7 @@ public class Command_SEND extends Command {
 			for (SensorNode snode : sensor.getSensorNodeNeighbors()) {
 				if (sensor.radioDetect(snode) && !snode.isDead() && sensor.sameCh(snode) && sensor.sameNId(snode) && snode.getId()!=v) {
 					snode.setReceiving(true);
-					Channel.addPacket(message, snode);
-					//snode.setMessage(message);
+					Channel.addPacket(message, sensor, snode);
 				}
 			}
 		}
@@ -68,8 +67,7 @@ public class Command_SEND extends Command {
 					SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
 					if (sensor.radioDetect(snode) && !snode.isDead() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
 						snode.setReceiving(true);
-						Channel.addPacket(message, snode);
-						//snode.setMessage(message);
+						Channel.addPacket(message, sensor, snode);
 					}
 				}
 				else 
@@ -86,8 +84,7 @@ public class Command_SEND extends Command {
 						if ((sensor.radioDetect(snode)) && (!snode.isDead()) && (snode.getMy()==destNodeId) && sensor.sameCh(snode) && sensor.sameNId(snode)) {
 							SimLog.add("  -> S" + snode.getId() + " ");							
 							snode.setReceiving(true);
-							Channel.addPacket(message, snode);
-							//snode.setMessage(message);
+							Channel.addPacket(message, sensor, snode);
 						}						
 					}
 				}
@@ -101,8 +98,9 @@ public class Command_SEND extends Command {
 							SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
 							if (!snode.isDead() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
 								snode.setReceiving(true);
-								Channel.addPacket(message, snode);
-								//snode.setMessage(message);								
+								Channel.addPacket(message, sensor, snode);
+								sensor.setDistanceMode(true);
+								snode.setDistanceMode(true);
 							}
 						}
 						else 
