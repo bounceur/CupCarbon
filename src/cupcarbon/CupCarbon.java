@@ -204,7 +204,7 @@ public class CupCarbon {
 						"Would you like to quit ?", "Quit",
 						JOptionPane.YES_NO_OPTION);
 				if (n == 0) {
-					Project.saveProject();
+					//Project.saveProject();
 					System.exit(0);
 				}
 			}

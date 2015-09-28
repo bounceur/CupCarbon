@@ -27,5 +27,5 @@ public class SimLog {
 	public static void close() {
 		logFile.close();
 	}
-
+	
 }

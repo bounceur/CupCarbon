@@ -215,11 +215,13 @@ public class ScriptWindow extends JInternalFrame {
 			public void actionPerformed(ActionEvent action) {
 				if(!txtFileName.getText().equals("")) {
 					try {
+						String fileName = txtFileName.getText();
+						fileName = fileName.trim();
+						fileName = fileName.replaceAll(" ", "");
 						PrintStream ps;
 						ps = new PrintStream(new FileOutputStream(Project
 								.getScriptFileFromName(Project
-										.getScriptFileExtension(txtFileName
-												.getText()))));
+										.getScriptFileExtension(fileName))));
 						ps.print(txtArea.getText());
 						ps.close();
 						txtArea.setText("");
@@ -244,6 +246,6 @@ public class ScriptWindow extends JInternalFrame {
 		save.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "Enregistrer.png"));
 
 		setVisible(false);
-	}
+	}	
 
 }
