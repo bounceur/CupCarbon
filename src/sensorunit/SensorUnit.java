@@ -20,10 +20,16 @@
 package sensorunit;
 
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Point2D;
+
+import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import device.Device;
+import flying_object.FlyingGroup;
+import flying_object.FlyingObject;
 import map.Layer;
 import utilities.MapCalc;
 import utilities.UColor;
@@ -113,13 +119,28 @@ public class SensorUnit implements KeyListener, Cloneable {
 		this.latitude = latitude;
 	}
 
-	/*public void drawDetectionRadius(int x, int y, int r1, Graphics g) {
-		if(r1>0 && displayRadius) {
-			g.setColor(UColor.WHITE_TRANSPARENT);
-			g.drawLine(x,y,(int)(x-r1),(int)(y));
-			g.drawString(""+radius,x-(r1/2),(int)(y-3));
+	
+	public boolean detect(Device device) {
+		if(device.getRadius()>0) {
+			Polygon poly = new Polygon(polyX1, polyY1, n);
+			if(device.getType()==Device.FLYING_OBJECT) {
+				for(FlyingObject d : ((FlyingGroup)device).getFlyingObjects()) {
+					GeoPosition gp = new GeoPosition(d.getLongitude(),d.getLatitude());
+					Point2D p1 = Layer.getMapViewer().getTileFactory().geoToPixel(gp, Layer.getMapViewer().getZoom());
+					if(poly.contains(p1))
+						return true;
+				}
+				return false;
+			}
+			else {
+				GeoPosition gp = new GeoPosition(device.getLongitude(),device.getLatitude());
+				Point2D p1 = Layer.getMapViewer().getTileFactory().geoToPixel(gp, Layer.getMapViewer().getZoom());		
+				return (poly.contains(p1));
+			}
 		}
-	}*/
+		else
+			return false;
+	}
 	
 	/**
 	 * Draw the sensor unit
@@ -133,16 +154,8 @@ public class SensorUnit implements KeyListener, Cloneable {
 	
 		if (mode == 0)
 			g.fillPolygon(polyX1, polyY1, n);
-//			g.fillOval((int) longitude - MapCalc.radiusInPixels(radius), (int) latitude
-//					- MapCalc.radiusInPixels(radius),
-//					MapCalc.radiusInPixels(radius) * 2,
-//					MapCalc.radiusInPixels(radius) * 2);
 		g.setColor(UColor.NOIRF_TTTRANSPARENT);
 		g.drawPolygon(polyX1, polyY1, n);
-//		g.drawOval((int) longitude - MapCalc.radiusInPixels(radius),
-//				(int) latitude - MapCalc.radiusInPixels(radius),
-//				MapCalc.radiusInPixels(radius) * 2,
-//				MapCalc.radiusInPixels(radius) * 2);
 	}
 
 	@Override

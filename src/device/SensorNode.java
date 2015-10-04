@@ -39,8 +39,6 @@ import wisen_simulation.SimLog;
 import wisen_simulation.SimulationInputs;
 import wisen_simulation.WisenSimulation;
 import battery.Battery;
-import flying_object.FlyingGroup;
-import flying_object.FlyingObject;
 
 /**
  * @author Ahcene Bounceur
@@ -230,8 +228,8 @@ public class SensorNode extends DeviceWithRadio {
 			r2 = (rayon+variation)*Math.cos(i);
 			r3 = (rayon+variation)*Math.sin(i);
 			for (int j=0; j<nZone; j++) {
-				polyX1[j][k]=(int)(x+r2*(nZone-j)/nZone);
-				polyY1[j][k]=(int)(y+r3*(nZone-j)/nZone);
+				polyX[j][k]=(int)(x+r2*(nZone-j)/nZone);
+				polyY[j][k]=(int)(y+r3*(nZone-j)/nZone);
 			}	
 			i+=deg;
 		}
@@ -296,6 +294,13 @@ public class SensorNode extends DeviceWithRadio {
 						+ rayon - 2);
 			}
 			if(!isDead()) {
+				if(hide == 0 || hide == 3) {
+					if (!isDead()) {
+						g.setColor(UColor.NOIR_TTRANSPARENT);
+						g.drawPolygon(polyX[0], polyY[0], nPoint);
+					}
+				}
+				
 				g.setColor(Color.DARK_GRAY);
 				if(hide == 0 || hide==4) {	
 					if (inside) {
@@ -305,8 +310,8 @@ public class SensorNode extends DeviceWithRadio {
 						g.setColor(radioRangeColor1);
 					}				
 					for (int i=0; i<nZone; i++) 
-						g.fillPolygon(polyX1[i], polyY1[i], nPoint);
-					drawSendingReceiving(g, x, y);								
+						g.fillPolygon(polyX[i], polyY[i], nPoint);
+					//drawSendingReceiving(g, x, y);								
 				}
 			}
 		}
@@ -357,7 +362,6 @@ public class SensorNode extends DeviceWithRadio {
 			drawMoveArrows(x, y, g);
 			
 			drawId(x, y, g);
-
 		}
 	}
 	
@@ -385,11 +389,6 @@ public class SensorNode extends DeviceWithRadio {
 			sensorUnit.draw(g, 0, isSensorDetecting());
 		}
 
-		if(hide == 0 || hide == 3) {
-			//g.drawOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
-			if (!isDead())
-				g.drawPolygon(polyX1[0], polyY1[0], nPoint);
-		}
 		if(hide == 2) {
 			sensorUnit.setPosition(x, y);
 			sensorUnit.draw(g, 1, isSensorDetecting());
@@ -645,29 +644,13 @@ public class SensorNode extends DeviceWithRadio {
 	 * @return if a device is in the sensor unit area of the current device
 	 */
 	public boolean detect(Device device) {		
-		if(device.getType()==Device.FLYING_OBJECT) {
-			for(FlyingObject d : ((FlyingGroup)device).getFlyingObjects()) {
-				double dMax = getSensorUnitRadius() + d.getRadius() ;
-				if ((distance(d) < dMax)) {
-					return true;
-				}
-			}
-			return false;
-		}
-		else {
-			double dMax = getSensorUnitRadius() + device.getRadius() ;
-			if ((distance(device) < dMax ) && device.getRadius()>0) {
-				return true;
-			} else {
-				return false;
-			}
-		}
+		return (sensorUnit.detect(device));
 	}
 	
 	public void drawSendingReceiving(Graphics g, int x, int y) {
 		if(drawTxRx) {
 			for(int i=0; i<nPoint; i++) {
-				g.drawLine(x, y, polyX1[0][i], polyY1[0][i]);
+				g.drawLine(x, y, polyX[0][i], polyY[0][i]);
 			}
 			if (sending || receiving) {
 				double alpha = 0.0;
@@ -678,17 +661,17 @@ public class SensorNode extends DeviceWithRadio {
 					if (sending) {
 						g.setColor(Color.BLUE);
 						as = 10;
-						g.fillArc(polyX1[0][i] - as, polyY1[0][i] - as, as*2, as*2,180 - (int) alpha - as, as*2);
+						g.fillArc(polyX[0][i] - as, polyY[0][i] - as, as*2, as*2,180 - (int) alpha - as, as*2);
 						as = 1;					
-						g.fillArc(polyX1[0][i] - as*sz, polyY1[0][i] - as*sz, as*sz*2, as*sz*2,180 - (int) alpha - as, as*2);
+						g.fillArc(polyX[0][i] - as*sz, polyY[0][i] - as*sz, as*sz*2, as*sz*2,180 - (int) alpha - as, as*2);
 						alpha += Math.toDegrees(deg);
 					}
 					if(sending) {
 						g.setColor(Color.RED);
 						as = 10;
-						g.fillArc(polyX1[0][i] - as, polyY1[0][i] - as, as*2, as*2,180 + (int) alpha2 - as, as*2);
+						g.fillArc(polyX[0][i] - as, polyY[0][i] - as, as*2, as*2,180 + (int) alpha2 - as, as*2);
 						as = 1;
-						g.fillArc(polyX1[0][i] - as*sz, polyY1[0][i] - as*sz, as*sz*2, as*sz*2,180 + (int) alpha2 - as, as*2);
+						g.fillArc(polyX[0][i] - as*sz, polyY[0][i] - as*sz, as*sz*2, as*sz*2,180 + (int) alpha2 - as, as*2);
 						alpha2 -= Math.toDegrees(deg);
 					}
 				}

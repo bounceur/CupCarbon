@@ -42,7 +42,6 @@ import battery.Battery;
 
 /**
  * @author Ahcene Bounceur
- * @author Kamal Mehdi
  * @author Lounis Massinissa
  * @version 1.0
  */
@@ -61,8 +60,8 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	protected double deg = 0.209333;
 	protected int nZone = 1;
 	
-	protected int [][] polyX1 = new int[nZone][nPoint];
-	protected int [][] polyY1 = new int[nZone][nPoint];
+	protected int [][] polyX = new int[nZone][nPoint];
+	protected int [][] polyY = new int[nZone][nPoint];
 	
 	//protected LinkedList<Device> neighbors = new LinkedList<Device> () ;	
 	
@@ -207,28 +206,12 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		}				
 	}
 	
-	/* (non-Javadoc)
-	 * @see device.Device#selectInit()
-	 */
 	@Override
 	public void initSelection() {		
 		super.initSelection() ;
 		augmenterRadio = false ;
 		reduireRadio = false ;
 	}
-	
-//	/* (non-Javadoc)
-//	 * @see device.Device#drawRadius(int, int, int, java.awt.Graphics)
-//	 */
-//	public void drawRadius(int x, int y, int r1, Graphics g) {
-//		if(r1>0 && displayRadius) {
-//			g.setColor(UColor.WHITE_TRANSPARENT);
-//			int lr1 = (int) (r1*Math.cos(Math.PI/4.));
-//			g.drawLine(x,y,(int)(x+lr1),(int)(y-lr1));
-//			//g.drawString(""+getRadioRadius(),x+(lr1/2),(int)(y-(lr1/4.)));
-//			g.drawString(""+getRadioRadius(),x+(lr1/2),(int)(y-(lr1/4.)));
-//		}
-//	}	
 	
 	/**
 	 * @param x
@@ -248,19 +231,11 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	@Override 
 	public void consumeTx(double v) {
 		battery.consume(v*eTx);
-		//if(battery.empty()) {
-		//	this.setEvent(99999999);
-		//	setDead(true);
-		//}
 	}
 	
 	@Override 
 	public void consumeRx(double v) {
 		battery.consume(v*eRx);
-		//if(battery.empty()) {
-		//	this.setEvent(99999999);
-		//	setDead(true);
-		//}
 	}
 	
 	@Override
@@ -480,7 +455,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		if (withRadio && device.withRadio()) {
 			GeoPosition gp = new GeoPosition(device.getLongitude(),device.getLatitude());
 			Point2D p1 = Layer.getMapViewer().getTileFactory().geoToPixel(gp, Layer.getMapViewer().getZoom());
-			Polygon poly = new Polygon(polyX1[0],polyY1[0],nPoint);
+			Polygon poly = new Polygon(polyX[0],polyY[0],nPoint);
 			return (poly.contains(p1));
 		}
 		return false;

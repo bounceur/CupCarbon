@@ -917,9 +917,9 @@ public abstract class Device implements Runnable, MouseListener,
 			}			
 		}
 
-		if (key == 'l') {
-			move = false;
-		}		
+		//if (key == 'l') {
+		//	move = false;
+		//}	
 
 		if (key == 'z') {
 			selected = false;

@@ -42,13 +42,13 @@ import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.painter.Painter;
 
-import buildings.Building;
-import buildings.BuildingList;
 import overpass.OsmOverpass;
 import utilities.MapCalc;
 import utilities.UColor;
 import actions_ui.AddDevice;
 import actions_ui.AddMarker;
+import buildings.Building;
+import buildings.BuildingList;
 import cupcarbon.CupCarbon;
 import cupcarbon.CupCarbonMap;
 import device.BaseStation;
