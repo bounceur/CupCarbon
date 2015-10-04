@@ -120,6 +120,18 @@ public class WisenSimulation extends Thread {
 			ttime = 0;
 			long min = 0;
 			boolean allDeadSensors = false;
+			
+			if (mobility) {
+				for (Device device : devices) {
+					if(!device.isDead()) {
+						if (device.canMove()) {
+							device.moveToNext(true, 0);
+							device.setEvent2(device.getNextTime());									
+						}
+					}
+				}
+			}
+			
 			for (iter = 0; iter < iterNumber; iter++) {
 				if (min == Long.MAX_VALUE) {
 					System.out.println(Channel.size());
