@@ -1576,6 +1576,15 @@ public class CupCarbon {
 				WorldMap.addNodeInMap('5');
 			}
 		});
+		
+		JButton button_1 = new JButton("4 Media Sensor");
+		button_1.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "blank_badge_cam.png"));
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WorldMap.addNodeInMap('4');
+			}
+		});
+		toolBar.add(button_1);
 		toolBar.add(btnBaseStation);
 		toolBar.add(btnMobile);
 
