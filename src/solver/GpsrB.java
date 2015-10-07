@@ -27,7 +27,7 @@ import java.util.StringTokenizer;
 import map.Layer;
 import device.Device;
 import device.DeviceList;
-import device.SensorNode;
+import device.StdSensorNode;
 
 
 /**
@@ -61,7 +61,7 @@ public class GpsrB extends Thread {
 							x = (Double.parseDouble(ss[i+3].split(":")[0])/9000.)-4.44945216178894;
 							y = (Double.parseDouble(ss[i+3].split(":")[1])/9000.)+48.389923740704795;
 							//System.out.println("("+x+", "+y+")");
-							DeviceList.add(new SensorNode(y,x,20,50,-1));
+							DeviceList.add(new StdSensorNode(y,x,20,50,-1));
 							Layer.getMapViewer().repaint();
 						}
 					}

@@ -32,7 +32,6 @@ import java.util.Random;
 import project.Project;
 import script.Script;
 import script.SensorAddCommand;
-import sensorunit.SensorUnit;
 import utilities.MapCalc;
 import utilities.UColor;
 import wisen_simulation.SimLog;
@@ -46,14 +45,12 @@ import battery.Battery;
  * @version 1.0
  */
 
-public class SensorNode extends DeviceWithRadio {
-
-	protected SensorUnit sensorUnit;
-	protected int type = Device.SENSOR;
+public abstract class SensorNode extends DeviceWithRadio {
+	
 	protected boolean comEdgeDrawn = false;
 	protected Random rnd = new Random();
-	protected double variation = rnd.nextGaussian();	
-	
+	protected double variation = rnd.nextGaussian();
+
 	//
 	protected int bufferSize = 1024;
 	protected int bufferIndex = 0 ;
@@ -69,8 +66,8 @@ public class SensorNode extends DeviceWithRadio {
 	 */
 	public SensorNode() {
 		super();
-		sensorUnit = new SensorUnit(this.longitude, this.latitude, this);
-		battery = new Battery(sensorUnit);
+		//sensorUnit = new SensorUnit(this.longitude, this.latitude, this);
+		battery = new Battery();
 		withRadio = true;
 		withSensor = true;
 		calculateRadioSpace();
@@ -91,8 +88,8 @@ public class SensorNode extends DeviceWithRadio {
 	 */
 	public SensorNode(double x, double y, double radius, double radioRadius, int id) {
 		super(x, y, radius, radioRadius, id);
-		sensorUnit = new SensorUnit(this.longitude, this.latitude, this);
-		battery = new Battery(sensorUnit);
+		//sensorUnit = new SensorUnit(this.longitude, this.latitude, this);
+		battery = new Battery();
 		withRadio = true;
 		withSensor = true;
 		calculateRadioSpace();
@@ -110,43 +107,17 @@ public class SensorNode extends DeviceWithRadio {
 	 *            Radius of the sensor (default value = 0 meters)
 	 * @param radioRadius
 	 *            Radius (range) of the radio (in meter)
-	 * @param cuRadius
+	 * @param suRadius
 	 *            Radius of the sensor unit (default value = 10 meters)
 	 */
 	public SensorNode(double x, double y, double radius, double radioRadius,
-			double cuRadius, int id) {
+			double suRadius, int id) {
 		super(x, y, radius, radioRadius, id);
-		sensorUnit = new SensorUnit(this.longitude, this.latitude, cuRadius, this);
-		battery = new Battery(sensorUnit);
+		//sensorUnit = new SensorUnit(this.longitude, this.latitude, suRadius, this);
+		battery = new Battery();
 		withRadio = true;
 		withSensor = true;
 		calculateRadioSpace();
-		initBuffer();
-	}
-
-	/**
-	 * Constructor 4
-	 * 
-	 * @param x
-	 *            Latitude
-	 * @param y
-	 *            Longitude
-	 * @param radius
-	 *            Radius of the sensor (default value = 0 meters)
-	 * @param radioRadius
-	 *            Radius (range) of the radio (in meter)
-	 * @param cuRadius
-	 *            Radius of the sensor unit (default value = 10 meters)
-	 * @param sb
-	 *            A two dimensional table that contains a set of informations
-	 *            about the sensor (temperature, co2, etc.) The first column
-	 *            contains the name of the parameter The second column contains
-	 *            the value of the corresponding parameter
-	 */
-	public SensorNode(double x, double y, double radius, double radioRadius,
-			double cuRadius, String[][] sb, int id) {
-		this(x, y, radius, radioRadius, cuRadius, id);
-		this.setInfos(sb);
 		initBuffer();
 	}
 
@@ -162,56 +133,21 @@ public class SensorNode extends DeviceWithRadio {
 	 *            Radius of the sensor (default value = 0 meters)
 	 * @param radioRadius
 	 *            Radius (range) of the radio (in meter)
-	 * @param cuRadius
+	 * @param suRadius
 	 *            Radius of the sensor unit (default value = 10 meters)
 	 */
 	public SensorNode(String x, String y, String radius, String radioRadius,
-			String cuRadius, int id) {
+			String suRadius, int id) {
 		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(radius),
 				Double.valueOf(radioRadius), id);
-		sensorUnit = new SensorUnit(this.longitude, this.latitude, Double.valueOf(cuRadius),
-				this);
-		battery = new Battery(sensorUnit);
+		//sensorUnit = new SensorUnit(this.longitude, this.latitude, Double.valueOf(suRadius), this);
+		battery = new Battery();
 		withRadio = true;
 		withSensor = true;
 		calculateRadioSpace();
 		initBuffer();
 	}
-
-	/**
-	 * Constructor 6
-	 * 
-	 * @param x
-	 *            Latitude
-	 * @param y
-	 *            Longitude
-	 * @param radius
-	 *            Radius of the sensor (default value = 0 meters)
-	 * @param radioRadius
-	 *            Radius (range) of the radio (in meter)
-	 * @param cuRadius
-	 *            Radius of the sensor unit (default value = 10 meters)
-	 * @param gpsFileName
-	 *            The path of the GPS file
-	 * @param scriptFileName
-	 *            The path of the script file
-	 */
-	public SensorNode(String id, String rdInfos, String x, String y, String radius, String radioRadius,
-			String cuRadius, String gpsFileName, String scriptFileName) {
-		this(x, y, radius, radioRadius, cuRadius, Integer.valueOf(id));
-		String [] srd = rdInfos.split("#");
-		my = Integer.valueOf(srd[0]);
-		ch = Integer.valueOf(srd[1]);
-		nId = Integer.valueOf(srd[2]);
-		gpsFileName = (gpsFileName.equals("#") ? "" : gpsFileName);
-		scriptFileName = (scriptFileName.equals("#") ? "" : scriptFileName);
-		setGPSFileName(gpsFileName);
-		setScriptFileName(scriptFileName);
-		calculateRadioSpace();
-		initBuffer();
-	}
 	
-
 	public void calculateRadioSpace() {
 		int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
 		int x = coord[0];
@@ -239,10 +175,7 @@ public class SensorNode extends DeviceWithRadio {
 		variation = rnd.nextGaussian()/0.8;
 	}
 
-	@Override
-	public void setSensorUnitRadius(double captureRadio) {
-		sensorUnit.setRadius(captureRadio);
-	}
+	
 
 	/**
 	 * Draw the (line) detection link
@@ -378,61 +311,10 @@ public class SensorNode extends DeviceWithRadio {
 		g.setColor(UColor.NOIR_TTRANSPARENT);
 		g.drawOval(x - 3, y - 3, 6, 6);
 	}
-	
-	@Override
-	public void drawSensorUnit(Graphics g) {
-		int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
-		int x = coord[0];
-		int y = coord[1];
-		if(hide == 0 || hide == 1) {
-			sensorUnit.setPosition(x, y);
-			sensorUnit.draw(g, 0, isSensorDetecting());
-		}
-
-		if(hide == 2) {
-			sensorUnit.setPosition(x, y);
-			sensorUnit.draw(g, 1, isSensorDetecting());
-		}
-	}
-
-	@Override
-	public double getSensorUnitRadius() {
-		return sensorUnit.getRadius();
-	}	
-
-	// ------------------------------------------------------------------------
-	// Return the type which is a SENSOR
-	// In particular for this object (SensorNode) the type can be also 
-	// a target
-	// ------------------------------------------------------------------------
-	@Override
-	public int getType() {
-		return type;
-	}
-	
-	// Set type to SENSOR
-	public void setAsSensor() {
-		type = Device.SENSOR;
-	}
-
-	// Set type to SENSOR
-	public void setAsTarget() {
-		type = Device.TARGET;
-	}
-
 
 	@Override
 	public String getIdFL() {
 		return "S";
-	}
-
-	/**
-	 * Set the capture unit
-	 * 
-	 * @param sensorUnit
-	 */
-	public void setCaptureUnit(SensorUnit sensorUnit) {
-		this.sensorUnit = sensorUnit;
 	}
 
 	/**
@@ -444,16 +326,7 @@ public class SensorNode extends DeviceWithRadio {
 		this.battery = battery;
 	}
 
-	@Override
-	public SensorNode clone() throws CloneNotSupportedException {
-		SensorNode newSensor = (SensorNode) super.clone();
-		SensorUnit newCaptureUnit = (SensorUnit) sensorUnit.clone();
-		Battery newBattery = (Battery) battery.clone();
-		newSensor.setCaptureUnit(newCaptureUnit);
-		newCaptureUnit.setNode(newSensor);
-		newSensor.setBattery(newBattery);
-		return newSensor;
-	}
+	
 
 	@Override
 	public String getNodeIdName() {
@@ -583,34 +456,7 @@ public class SensorNode extends DeviceWithRadio {
 		return buffer;
 	}
 	
-	public boolean isSensorDetecting() {
-		for(Device d : DeviceList.getNodes()) {
-			if(detect(d) && this!=d) return true;
-		}
-		return false ;
-	}
 	
-	public double getSensorValue() {
-		for(Device d : DeviceList.getNodes()) {
-			if(detect(d) && this!=d) return d.getValue();
-		}
-		return 0.0 ;
-	}
-	
-	public String getSensorValues() {
-		String s = "";
-		boolean first = true; 
-		for(Device d : DeviceList.getNodes()) {
-			if(detect(d) && this!=d) {
-				if (!first) {
-					s+="#";
-				}
-				s += d.getId()+"#"+d.getValue();
-				first = false;
-			}
-		}
-		return s ;
-	}
 	
 	public boolean isRadioDetecting() {
 		for(Device d : DeviceList.getNodes()) {
@@ -637,15 +483,7 @@ public class SensorNode extends DeviceWithRadio {
 	
 	public void setComEdgeDrawn(boolean comEdgeDrawn) {
 		this.comEdgeDrawn = comEdgeDrawn;
-	}
-
-	/**
-	 * @param device
-	 * @return if a device is in the sensor unit area of the current device
-	 */
-	public boolean detect(Device device) {		
-		return (sensorUnit.detect(device));
-	}
+	}	
 	
 	public void drawSendingReceiving(Graphics g, int x, int y) {
 		if(drawTxRx) {
@@ -712,17 +550,25 @@ public class SensorNode extends DeviceWithRadio {
 			WisenSimulation.consolPrint(event+" | ");			
 		}		
 	}
-
-	@Override
-	public void gotoTheNextInstruction() {
-		if(!script.getCurrent().isExecuting()) {			
-			script.next();
-		}		
+	
+	public abstract boolean detect(Device device);
+	public abstract boolean isSensorDetecting() ;
+	
+	public String getSensorValues() {
+		String s = "";
+		boolean first = true; 
+		for(Device d : DeviceList.getNodes()) {
+			if(detect(d) && this!=d) {
+				if (!first) {
+					s+="#";
+				}
+				s += d.getId()+"#"+d.getValue();
+				first = false;
+			}
+		}
+		return s ;
 	}
 
-	@Override
-	public void gotoTheNextEvent(long min) {
-		event = event - min;
-	}
+	
 	
 }

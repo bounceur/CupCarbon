@@ -30,9 +30,10 @@ import utilities.UColor;
  * @author Lounis Massinissa
  * @version 1.0
  */
-public class BaseStation extends SensorNode {
+public class BaseStation extends StdSensorNode {
 
 	protected int type = Device.BASE_STATION;
+	
 	{
 		radioRangeColor1 = UColor.JAUNE_TRANSPARENT;
 		radioRangeColor2 = UColor.JAUNEF_TRANSPARENT;
@@ -118,5 +119,9 @@ public class BaseStation extends SensorNode {
 	
 	@Override 
 	public void consumeRx(double v) {}
-	
+
+	@Override
+	public boolean detect(Device device) {
+		return false;
+	}	
 }

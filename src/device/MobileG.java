@@ -47,10 +47,10 @@ public abstract class MobileG extends DeviceWithoutRadio {
 	
 	public abstract void draw(Graphics g) ;
 
-	@Override
-	public double getSensorUnitRadius() {
-		return 0 ;
-	}
+//	@Override
+//	public double getSensorUnitRadius() {
+//		return 0 ;
+//	}
 	
 	@Override
 	public double getRadioRadius() {

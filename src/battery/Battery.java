@@ -19,7 +19,6 @@
 
 package battery;
 
-import sensorunit.SensorUnit;
 
 /**
  * @author Ahcene Bounceur
@@ -30,7 +29,7 @@ public class Battery implements Cloneable {
 
 	public static int eMax = 100000000;
 
-	private SensorUnit sensorUnit;
+	//private SensorUnit sensorUnit;
 	private int level = eMax;
 
 	/**
@@ -38,9 +37,9 @@ public class Battery implements Cloneable {
 	 * 
 	 * @param sensorUnit
 	 */
-	public Battery(SensorUnit sensorUnit) {
-		this.sensorUnit = sensorUnit;
-	}
+//	public Battery(SensorUnit sensorUnit) {
+//		this.sensorUnit = sensorUnit;
+//	}
 
 	/**
 	 * @return the initial capacity of the battery
@@ -113,14 +112,14 @@ public class Battery implements Cloneable {
 	 * 
 	 * @param unitCapture
 	 */
-	public void setSensorUnit(SensorUnit unitCapture) {
-		this.sensorUnit = unitCapture;
-	}
+//	public void setSensorUnit(SensorUnit unitCapture) {
+//		this.sensorUnit = unitCapture;
+//	}
 
 	@Override
 	public Battery clone() throws CloneNotSupportedException {
 		Battery newBattery = (Battery) super.clone();
-		newBattery.setSensorUnit(sensorUnit.clone());
+		//newBattery.setSensorUnit(sensorUnit.clone());
 		return newBattery;
 	}
 }

@@ -185,31 +185,4 @@ public class Command_SEND extends Command {
 		return "-finish sending-";
 	}
 	
-//	public static void main(String [] args) {
-//		List<Packet> l = new LinkedList<Packet>();
-//		Packet p1 = new Packet ("A",1,10);
-//		Packet p2 = new Packet ("C",6,4);
-//		Packet p3 = new Packet ("B",2,8);
-//		Packet p4 = new Packet ("D",5,4);
-//		Packet p5 = new Packet ("E",7,4);
-//			
-//		l.add(p1);
-//		l.add(p2);
-//		l.add(p3);
-//		l.add(p4);
-//		l.add(p5);
-//		
-//		Collections.sort(l);
-//		
-//		for (Packet p : l)
-//			System.out.println(p);
-//		
-//		l.remove(0);
-//		l.remove(0);
-//		
-//		System.out.println();
-//		for (Packet p : l)
-//			System.out.println(p);
-//	}
-	
 }

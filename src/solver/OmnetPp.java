@@ -29,6 +29,7 @@ import javax.swing.JOptionPane;
 import project.Project;
 import device.Device;
 import device.DeviceList;
+import device.StdSensorNode;
 import device.SensorNode;
 
 public class OmnetPp {
@@ -36,9 +37,9 @@ public class OmnetPp {
 	public static void omnetFileGeneration() {
 		try {
 			List<Device> nodes = DeviceList.getNodes();
-			SensorNode sensoRef = new SensorNode(84, -212, 10, 10, -1);
-			SensorNode sensoRef2 = new SensorNode(49, -5, 10, 10, -1);
-			SensorNode santander = new SensorNode(43.499880816365234,
+			SensorNode sensoRef = new StdSensorNode(84, -212, 10, 10, -1);
+			SensorNode sensoRef2 = new StdSensorNode(49, -5, 10, 10, -1);
+			SensorNode santander = new StdSensorNode(43.499880816365234,
 					-3.8828086853027344, 10, 10, -1);
 			PrintStream psgps = new PrintStream(new FileOutputStream(
 					Project.projectPath + "/omnet/" + "omnetGPS" + ".txt"));

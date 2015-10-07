@@ -46,8 +46,6 @@ public class NetworkLoader extends Thread {
 			double x = 0;
 			double y = 0;
 			FileInputStream fis = new FileInputStream("sensors.txt");
-			//FileInputStream fis = new FileInputStream("dubai.txt");
-			//FileInputStream fis = new FileInputStream("morlaix.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			String s;
 			String[] ps;
@@ -129,7 +127,7 @@ public class NetworkLoader extends Thread {
 					if (ics[0].equals("Time"))
 						info[6][1] = ics[1];
 				}
-				DeviceList.add(new SensorNode(x, y, 0, 30, 10, info,-1));
+				DeviceList.add(new StdSensorNode(x, y, 0, 30, 10, info,-1));
 				//MarkerList.add(new Marker(x,y,10));
 				//Layer.getMapViewer().repaint();
 				mapViewer.repaint();

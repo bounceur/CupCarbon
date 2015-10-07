@@ -39,20 +39,21 @@ import utilities.UColor;
  * @author Lounis Massinissa
  * @version 1.0
  */
-public class SensorUnit implements KeyListener, Cloneable {
+public class MediaSensorUnit implements KeyListener, Cloneable {
 
-	protected double radius = 10;
+	protected double radius = 100;
 	protected double longitude;
 	protected double latitude;
 	protected Device node;
 	protected boolean displayRadius = false;
 	
 	
-	protected int n = 30;
-	protected double deg = 0.209333;
+	protected int n = 12;
+	protected double deg = 0.1;
+	protected double dec = 0;
 	
-	protected int [] polyX = new int[n];
-	protected int [] polyY = new int[n];
+	protected int [] polyX1 = new int[n];
+	protected int [] polyY1 = new int[n];
 
 	/**
 	 * Constructor 1 : radius is equal to 10 meter
@@ -60,26 +61,29 @@ public class SensorUnit implements KeyListener, Cloneable {
 	 * @param y Position of the sensor unit on the map
 	 * @param node which is associated to this sensor unit
 	 */
-	public SensorUnit(double longitude, double latitude, Device node) {
+	public MediaSensorUnit(double longitude, double latitude, Device node) {
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.node = node;
 		calculateSensingArea();
 		Layer.getMapViewer().addKeyListener(this);
 	}
-
+	
 	/**
-	 * Constructor 3 : radius is equal to 10 meter
+	 * Constructor 2 : radius is equal to 10 meter
 	 * @param x Position of the sensor unit on the map
 	 * @param y Position of the sensor unit on the map
 	 * @param cuRadius the value of the radius 
 	 * @param node which is associated to this sensor unit
 	 */
-	public SensorUnit(double longitude, double latitude, double radius, Device node) {
+	public MediaSensorUnit(double longitude, double latitude, double radius, double deg, double dec, int n, Device node) {
 		this(longitude, latitude, node);
 		this.radius = radius;
+		this.deg = deg;
+		this.dec = dec;
+		this.n = n;
 		calculateSensingArea();
-	}	
+	}
 
 	public void calculateSensingArea() {
 		int rayon = MapCalc.radiusInPixels(radius) ; 
@@ -87,12 +91,14 @@ public class SensorUnit implements KeyListener, Cloneable {
 		double r2=0;
 		double r3=0;
 		
-		double i=0.0;
-		for(int k=0; k<n; k++) {
+		polyX1[0] = (int)longitude;
+		polyY1[0] = (int)latitude;
+		double i=dec;
+		for(int k=1; k<n; k++) {
 			r2 = rayon*Math.cos(i);
 			r3 = rayon*Math.sin(i);
-			polyX[k]=(int)(longitude+r2);
-			polyY[k]=(int)(latitude+r3);
+			polyX1[k]=(int)(longitude+r2);
+			polyY1[k]=(int)(latitude+r3);
 			i+=deg;
 		}
 	}
@@ -122,7 +128,7 @@ public class SensorUnit implements KeyListener, Cloneable {
 	
 	public boolean detect(Device device) {
 		if(device.getRadius()>0) {
-			Polygon poly = new Polygon(polyX, polyY, n);
+			Polygon poly = new Polygon(polyX1, polyY1, n);
 			if(device.getType()==Device.FLYING_OBJECT) {
 				for(FlyingObject d : ((FlyingGroup)device).getFlyingObjects()) {
 					GeoPosition gp = new GeoPosition(d.getLongitude(),d.getLatitude());
@@ -148,34 +154,38 @@ public class SensorUnit implements KeyListener, Cloneable {
 	public void draw(Graphics g, int mode, boolean detection) {
 		 calculateSensingArea();
 		if (!detection)
-			g.setColor(UColor.WHITE_LLTRANSPARENT);
+			g.setColor(UColor.BLEU_TRANSPARENT);
 		if (detection)
-			g.setColor(UColor.JAUNE_SENSOR);
+			g.setColor(UColor.VERTF_TRANSPARENT);
 	
 		if (mode == 0)
-			g.fillPolygon(polyX, polyY, n);
+			g.fillPolygon(polyX1, polyY1, n);
 		g.setColor(UColor.NOIRF_TTTRANSPARENT);
-		g.drawPolygon(polyX, polyY, n);
+		g.drawPolygon(polyX1, polyY1, n);
 	}
 
 	@Override
 	public void keyPressed(KeyEvent key) {
-		if (node.isSelected()) {
+		if (node.isSelected()) {			
+			if (key.getKeyChar() =='p') {
+				dec+=0.1;
+			}
+			if (key.getKeyChar() =='o') {
+				dec-=0.1;
+			}
 			if (key.getKeyChar() == ')') {
-				radius += 5;
-				Layer.getMapViewer().repaint();
+				radius+=5;
 			}
 			if (key.getKeyChar() == '(') {
-				radius -= 5;
-				Layer.getMapViewer().repaint();
-			}			
-		}
-		if (key.getKeyChar() == 'e') {
-			displayRadius = true;
-		}
-
-		if (key.getKeyChar() == 'r') {
-			displayRadius = false;
+				radius-=5;
+			}
+			if (key.getKeyChar() == 'P') {
+				deg+=0.01;
+			}
+			if (key.getKeyChar() == 'O') {
+				deg-=0.01;
+			}
+			Layer.getMapViewer().repaint();
 		}
 	}
 
@@ -200,12 +210,32 @@ public class SensorUnit implements KeyListener, Cloneable {
 		this.node = node;
 	}
 
+	public double getDeg() {
+		return deg;
+	}
+	
+	public double getDec() {
+		return dec;
+	}
+	
+	public int getN() {
+		return n;
+	}
+	
+	public void setDeg(double deg) {
+		this.deg = deg ;
+	}
+	
+	public void setDec(double dec) {
+		this.dec = dec ;
+	}
+	
 	/**
 	 * Clone the sensor unit
 	 */
 	@Override
-	public SensorUnit clone() throws CloneNotSupportedException {
-		SensorUnit newCU = (SensorUnit) super.clone();
+	public MediaSensorUnit clone() throws CloneNotSupportedException {
+		MediaSensorUnit newCU = (MediaSensorUnit) super.clone();
 		Layer.getMapViewer().addKeyListener(newCU);
 		return newCU;
 	}

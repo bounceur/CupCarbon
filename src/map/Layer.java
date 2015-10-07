@@ -54,10 +54,11 @@ import cupcarbon.CupCarbonMap;
 import device.BaseStation;
 import device.Device;
 import device.DeviceList;
+import device.MediaSensorNode;
 import device.Mobile;
 import device.MobileWithRadio;
 import device.NetworkLoader;
-import device.SensorNode;
+import device.StdSensorNode;
 import flying_object.FlyingGroup;
 
 public class Layer implements Painter<Object>, MouseListener,
@@ -158,7 +159,7 @@ public class Layer implements Painter<Object>, MouseListener,
 				g.drawString("   Flying Object", (float) x, (float) y);
 			}
 			if (lastKey == '4') {
-				g.drawString("   Router", (float) x, (float) y);
+				g.drawString("   Media Sensor", (float) x, (float) y);
 			}
 			if (lastKey == '5') {
 				g.drawString("   Base Station", (float) x, (float) y);
@@ -259,7 +260,7 @@ public class Layer implements Painter<Object>, MouseListener,
 			GeoPosition gp = mapViewer.convertPointToGeoPosition(p);
 			
 			if (lastKey == '1') {
-				DeviceList.add(new SensorNode(gp.getLatitude(), gp.getLongitude(),
+				DeviceList.add(new StdSensorNode(gp.getLatitude(), gp.getLongitude(),
 						0, 100, 20, -1));
 				mapViewer.repaint();
 				/* Tanguy */
@@ -272,6 +273,14 @@ public class Layer implements Painter<Object>, MouseListener,
 				mapViewer.repaint();
 				/* Tanguy */
 				addDeviceAction("Gas");
+				/* ------ */
+			}
+			if (lastKey == '4') {
+				DeviceList.add(new MediaSensorNode(gp.getLatitude(), gp.getLongitude(),
+						0, 100, 60, -1, 0.1, 0, 12));
+				mapViewer.repaint();
+				/* Tanguy */
+				addDeviceAction("MediaSensorNode");
 				/* ------ */
 			}
 			if (lastKey == '3') {
@@ -653,7 +662,7 @@ public class Layer implements Painter<Object>, MouseListener,
 					if (ics[0].equals("Time"))
 						info[6][1] = ics[1];
 				}
-				DeviceList.add(new SensorNode(x, y, 0, 30, 10, info, -1));
+				DeviceList.add(new StdSensorNode(x, y, 0, 30, 10, info, -1));
 				// MarkerList.add(new Marker(x,y,10));
 				mapViewer.repaint();
 			}

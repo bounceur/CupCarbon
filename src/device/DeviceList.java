@@ -34,9 +34,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import natural_events.Gas;
 import map.Layer;
 import markers.Marker;
+import natural_events.Gas;
 import solver.SensorGraph;
 import utilities.MapCalc;
 import actions_ui.DeleteDevice;
@@ -168,10 +168,10 @@ public class DeviceList {
 				fos.print(" " + node.getLatitude());
 				fos.print(" " + node.getRadius());
 
-				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION || node.getType() == Device.BRIDGE || node.getType() == Device.MOBILE_WR)
+				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION || node.getType() == Device.MEDIA_SENSOR || node.getType() == Device.MOBILE_WR)
 					fos.print(" " + node.getRadioRadius());
 
-				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION )
+				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION || node.getType() == Device.MEDIA_SENSOR)
 					fos.print(" " + node.getSensorUnitRadius());
 
 				if (node.getType() == Device.FLYING_OBJECT)
@@ -180,15 +180,20 @@ public class DeviceList {
 				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION 
 						|| node.getType() == Device.FLYING_OBJECT
 						|| node.getType() == Device.MOBILE
-						|| node.getType() == Device.MOBILE_WR) {
+						|| node.getType() == Device.MOBILE_WR
+						|| node.getType() == Device.MEDIA_SENSOR) {
 					//System.out.println("----> " + node.getGPSFileName());
 					fos.print(" "
 							+ ((node.getGPSFileName() == "") ? "#" : node
 									.getGPSFileName()));
 				}
 
-				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION ) {
+				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION || node.getType() == Device.MEDIA_SENSOR) {
 					fos.print(" "+ ((node.getScriptFileName() == "") ? "#" : node.getScriptFileName()));
+				}
+				
+				if (node.getType() == Device.MEDIA_SENSOR) {
+					fos.print(" " + node.getSensorUnitDeg()+ " " + node.getSensorUnitDec()+ " " + node.getSensorUnitN());
 				}
 
 				fos.println();
@@ -210,27 +215,26 @@ public class DeviceList {
 			String[] str=null;
 			int idMax = 0 ;
 			while ((line = br.readLine()) != null) {
-				str = line.split(" ");				
+				str = line.split(" ");
+				System.out.println(str.length);
 				switch (str.length) {
 				case 6:
-					addNodeByType(str[0], str[1], str[2], str[3], str[4],
-							str[5]);
+					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5]);
 					break;
 				case 7:
-					addNodeByType(str[0], str[1], str[2], str[3], str[4],
-							str[5], str[6]);
+					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6]);
 					break;
 				case 8:
-					addNodeByType(str[0], str[1], str[2], str[3], str[4],
-							str[5], str[6], str[7]);
+					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7]);
 					break;
 				case 9:
-					addNodeByType(str[0], str[1], str[2], str[3], str[4],
-							str[5], str[6], str[7], str[8]);
+					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8]);
 					break;
 				case 10:
-					addNodeByType(str[0], str[1], str[2], str[3], str[4],
-							str[5], str[6], str[7], str[8], str[9]);
+					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[9]);
+					break;
+				case 13:
+					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[9], str[10], str[11], str[12]);
 					break;
 				}
 				int v = Integer.valueOf(str[1]);
@@ -267,25 +271,25 @@ public class DeviceList {
 	public static void addNodeByType(String... type) {
 		int id = Integer.valueOf(type[1]);
 		switch (Integer.valueOf(type[0])) {
-		case 1:
-			add(new SensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9]));
+		case Device.SENSOR:
+			add(new StdSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9]));
 			break;
-		case 2:
+		case Device.GAS:
 			add(new Gas(type[3], type[4], type[5], id));
 			break;
-		case 3:
+		case Device.FLYING_OBJECT:
 			add(new FlyingGroup(type[3], type[4], type[5], type[6], type[7]));
 			break;
-		case 4:
+		case Device.BASE_STATION:
 			add(new BaseStation(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9]));
 			break;
-		case 6:
+		case Device.MEDIA_SENSOR:
+			add(new MediaSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10], type[11], type[12]));
+			break;
+		case Device.MOBILE:
 			add(new Mobile(type[3], type[4], type[5], type[6], id));
 			break;
-		case 7:
-			add(new MobileWithRadio(type[3], type[4], type[5], type[6], type[7], id));
-			break;
-		case 8:
+		case Device.MARKER:
 			add(new Marker(type[3], type[4], type[5]));
 			break;
 		}

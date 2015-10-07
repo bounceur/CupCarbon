@@ -22,7 +22,7 @@ package solver;
 import map.Layer;
 import device.Device;
 import device.DeviceList;
-import device.SensorNode;
+import device.StdSensorNode;
 
 /**
  * @author Ahcene Bounceur
@@ -88,11 +88,11 @@ public class NetworkEnvelopeHTmp extends Thread {
 			yc = n1.getLongitude();
 			x0 = xc-0.2;
 			y0 = yc-0.2;
-			n3 = new SensorNode(y0, x0, 10, 10, -1);
+			n3 = new StdSensorNode(y0, x0, 10, 10, -1);
 			
 			x1 = xc-0.1;
 			y1 = yc;	
-			n4 = new SensorNode(y1, x1, 10, 10, -1);
+			n4 = new StdSensorNode(y1, x1, 10, 10, -1);
 			
 			
 			//trouve = false;

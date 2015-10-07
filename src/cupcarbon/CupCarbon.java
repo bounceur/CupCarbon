@@ -570,11 +570,11 @@ public class CupCarbon {
 		mntmSelectAllMobiles_1.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "select_node.png"));
 
-		JMenuItem mntmSelectAllRouters = new JMenuItem("Select All Routers");
+		JMenuItem mntmSelectAllRouters = new JMenuItem("Select All Media Sensors");
 		mnSelectAll.add(mntmSelectAllRouters);
 		mntmSelectAllRouters.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WorldMap.setSelectionOfAllNodes(true, Device.BRIDGE,
+				WorldMap.setSelectionOfAllNodes(true, Device.MEDIA_SENSOR,
 						chckbxmntmAddSelection.getState());
 			}
 		});
@@ -659,11 +659,11 @@ public class CupCarbon {
 		mntmDeselectAllMobiles_1.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "deselect_node.png"));
 
-		JMenuItem mntmDeselectAllRouters = new JMenuItem("Deselect All Routers");
+		JMenuItem mntmDeselectAllRouters = new JMenuItem("Deselect All Media Sensors");
 		mnDeselectAll.add(mntmDeselectAllRouters);
 		mntmDeselectAllRouters.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WorldMap.setSelectionOfAllNodes(false, Device.BRIDGE, true);
+				WorldMap.setSelectionOfAllNodes(false, Device.MEDIA_SENSOR, true);
 			}
 		});
 		mntmDeselectAllRouters.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH

@@ -187,7 +187,10 @@ public final class SensorAddCommand {
 			command = new Command_ENDIF(sensorNode);
 			script.getCurrentIf().setEndIfIndex(script.getSizeCommands());
 			script.removeCurrentIf();
-		}		
+		}
+		if (inst[0].toLowerCase().equals("rotate")) {
+			command = new Command_ROTATE(sensorNode, inst[1]);
+		}	
 		
 		if (command != null) {
 			script.add(command);

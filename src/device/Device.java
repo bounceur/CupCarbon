@@ -62,7 +62,7 @@ public abstract class Device implements Runnable, MouseListener,
 	public static final int GAS = 2;
 	public static final int FLYING_OBJECT = 3;
 	public static final int BASE_STATION = 4;
-	public static final int BRIDGE = 5;
+	public static final int MEDIA_SENSOR = 5;
 	public static final int MOBILE = 6;
 	public static final int MOBILE_WR = 7;
 	public static final int MARKER = 8;
@@ -465,6 +465,18 @@ public abstract class Device implements Runnable, MouseListener,
 	 */
 	public double getSensorUnitRadius() {
 		return 0.0;
+	}
+	
+	public double getSensorUnitDeg() {
+		return 0.0;
+	}
+	
+	public double getSensorUnitDec() {
+		return 0.0;
+	}
+	
+	public int getSensorUnitN() {
+		return 0;
 	}
 
 	/**

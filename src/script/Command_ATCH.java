@@ -1,7 +1,7 @@
 package script;
 
-import arduino.XBeeFrameGenerator;
 import wisen_simulation.SimLog;
+import arduino.XBeeFrameGenerator;
 import device.DataInfo;
 import device.SensorNode;
 

@@ -23,12 +23,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
-import device.Device;
-import device.DeviceList;
-import device.SensorNode;
 import map.Layer;
 import utilities.MapCalc;
 import utilities.UColor;
+import device.Device;
+import device.DeviceList;
+import device.StdSensorNode;
 
 public class Marker extends Device {
 
@@ -135,7 +135,7 @@ public class Marker extends Device {
 	
 	public void transformMarkerToSensor() {
 		if(selected) {
-			DeviceList.add(new SensorNode(longitude, latitude, 0, 100, -1));
+			DeviceList.add(new StdSensorNode(longitude, latitude, 0, 100, -1));
 		}
 	}
 

@@ -20,7 +20,7 @@ public class Command_ATGET extends Command {
 		
 		if(arg1.equals("id")) {
 			SimLog.add("S" + sensor.getId() + " ATGET ID.");
-			//System.out.println(sensor.getId());
+			//System.out.println(node.getId());
 			v = ""+sensor.getId();
 		}
 		

@@ -169,9 +169,9 @@ public abstract class MobileGWR extends DeviceWithRadio {
 		}
 	}
 	*/
-	@Override
-	public double getSensorUnitRadius() {
-		return radius;
-	}
+//	@Override
+//	public double getSensorUnitRadius() {
+//		return radius;
+//	}
 
 }

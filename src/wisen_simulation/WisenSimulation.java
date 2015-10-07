@@ -59,7 +59,7 @@ public class WisenSimulation extends Thread {
 		Channel.init();
 		
 		for (Device device : devices) {
-			if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {
+			if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
 				device.initForSimulation();
 			}
 			if (mobility) {
@@ -91,7 +91,7 @@ public class WisenSimulation extends Thread {
 			if (generateResults) {
 				ps.print("Time (Sec);");
 				for (Device device : devices) {					
-					if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {						
+					if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {						
 						ps.print("S"+device.getId() + ";");
 					}
 				}
@@ -184,7 +184,7 @@ public class WisenSimulation extends Thread {
 				min = Long.MAX_VALUE;
 				for (Device device : devices) {
 					if(!device.isDead()) {
-						if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {
+						if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
 							consolPrint(device + " [" +device.getScript().getCurrent().toString()+"] - ");
 							device.execute();
 							if ((min > device.getEvent()))
@@ -234,7 +234,7 @@ public class WisenSimulation extends Thread {
 					
 					for (Device device : devices) {
 						if(!device.isDead()) {
-							if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {
+							if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
 								if (generateResults) ps.print(device.getBatteryLevel() + ";");								
 								consolPrint(device.getBatteryLevel()+" | ");								
 								if (device.isSending() || device.isReceiving()) {
@@ -257,7 +257,7 @@ public class WisenSimulation extends Thread {
 				allDeadSensors = true; 
 				for (Device device : devices) {
 					if(!device.isDead()) {
-						if(device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION) {
+						if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
 							consolPrint(device.getEvent()+" : "); 
 							
 							if(device.getEvent() != Long.MAX_VALUE)
