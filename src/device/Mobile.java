@@ -51,7 +51,7 @@ public class Mobile extends MobileG {
 			int rayon = MapCalc.radiusInPixels(this.radius) ;
 					
 			if (inside || selected) {
-				g.setColor(UColor.NOIR_TRANSPARENT);
+				g.setColor(UColor.BLACK_TRANSPARENT);
 				g.drawLine(x-rayon-3, y-rayon-3, x-rayon+2, y-rayon-3);
 				g.drawLine(x-rayon-3, y-rayon-3, x-rayon-3, y-rayon+2);
 				g.drawLine(x-rayon-3, y+rayon+3, x-rayon+2, y+rayon+3);
@@ -64,7 +64,7 @@ public class Mobile extends MobileG {
 	
 			switch(hide) {
 			case 0 : {
-				g.setColor(UColor.NOIR_TTRANSPARENT);
+				g.setColor(UColor.BLACK_TTRANSPARENT);
 				g.fillRect(x - rayon, y - rayon, rayon * 2, rayon * 2);
 			}
 			case 1 : 

@@ -154,13 +154,13 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	public void draw(Graphics g, int mode, boolean detection) {
 		 calculateSensingArea();
 		if (!detection)
-			g.setColor(UColor.BLEU_TRANSPARENT);
+			g.setColor(UColor.BLUE_TRANSPARENT);
 		if (detection)
-			g.setColor(UColor.VERTF_TRANSPARENT);
+			g.setColor(UColor.GREEND_TRANSPARENT);
 	
 		if (mode == 0)
 			g.fillPolygon(polyX1, polyY1, n);
-		g.setColor(UColor.NOIRF_TTTRANSPARENT);
+		g.setColor(UColor.BLACK_TTTRANSPARENT);
 		g.drawPolygon(polyX1, polyY1, n);
 	}
 

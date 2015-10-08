@@ -104,6 +104,9 @@ public final class SensorAddCommand {
 		if (inst[0].toLowerCase().equals("rand")) {
 			command = new Command_RAND(sensorNode, inst[1]);
 		}
+		if (inst[0].toLowerCase().equals("rgauss")) {
+			command = new Command_RGAUSS(sensorNode, inst[1]);
+		}
 		if (inst[0].toLowerCase().equals("led")) {
 			command = new Command_LED(sensorNode, inst[1], inst[2]);
 		}
@@ -183,14 +186,22 @@ public final class SensorAddCommand {
 			command = new Command_ELSE(sensorNode);
 			script.getCurrentIf().setElseIndex(script.getSizeCommands());
 		}		
+		
 		if (inst[0].toLowerCase().equals("endif")) {
 			command = new Command_ENDIF(sensorNode);
 			script.getCurrentIf().setEndIfIndex(script.getSizeCommands());
 			script.removeCurrentIf();
 		}
+		
 		if (inst[0].toLowerCase().equals("rotate")) {
 			command = new Command_ROTATE(sensorNode, inst[1]);
+		}
+		
+		if (inst[0].toLowerCase().equals("coord")) {
+			command = new Command_COORD(sensorNode, inst[1], inst[2]);
 		}	
+		
+		//-------
 		
 		if (command != null) {
 			script.add(command);

@@ -1,7 +1,6 @@
 package script;
 
 import map.Layer;
-import arduino.BeginInstructions;
 import device.MediaSensorNode;
 import device.SensorNode;
 
@@ -22,18 +21,10 @@ public class Command_ROTATE extends Command {
 		Layer.getMapViewer().repaint();	
 		return 0;
 	}
-	
-	@Override
-	public String getArduinoForm() {
-		BeginInstructions.add("pinMode(13, OUTPUT);");
-		String s = arg;
-		if(arg.charAt(0)=='$') s = arg.substring(1);
-		return "\tdigitalWrite(13, "+s+");";
-	}
 
 	@Override
 	public String toString() {
-		return "MARK";
+		return "ROTATE";
 	}
 	
 }

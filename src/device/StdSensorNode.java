@@ -156,10 +156,10 @@ public class StdSensorNode extends SensorNode {
 		}
 	}
 
-//	@Override
-//	public double getSensorUnitRadius() {
-//		return sensorUnit.getRadius();
-//	}
+	@Override
+	public double getSensorUnitRadius() {
+		return sensorUnit.getRadius();
+	}
 	
 	/**
 	 * Set the capture unit

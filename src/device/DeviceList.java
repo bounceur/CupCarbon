@@ -120,9 +120,9 @@ public class DeviceList {
 	 */
 	public static List<SensorNode> getSensorNodes() {
 		List<SensorNode> snodes = new ArrayList<SensorNode>();
-		for(Device n : nodes) {
-			if(n.getType() == Device.SENSOR || n.getType()==Device.BASE_STATION)
-				snodes.add((SensorNode) n);
+		for(Device device : nodes) {
+			if(device.getType() == Device.SENSOR || device.getType() == Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION)
+				snodes.add((SensorNode) device);
 		}
 		return snodes;
 	}
@@ -132,9 +132,9 @@ public class DeviceList {
 	 */
 	public static List<Device> getSensorAndMobileNodes() {
 		List<Device> nodes = new ArrayList<Device>();
-		for(Device n : nodes) {
-			if((n.getType() == Device.SENSOR) || (n.getType() == Device.MOBILE))
-				nodes.add((SensorNode) n);
+		for(Device node : nodes) {
+			if((node.getType() == Device.SENSOR) || node.getType() == Device.MEDIA_SENSOR || (node.getType() == Device.MOBILE))
+				nodes.add((SensorNode) node);
 		}
 		return nodes;
 	}
@@ -144,9 +144,9 @@ public class DeviceList {
 	 */
 	public static List<Device> getMobileNodes() {
 		List<Device> snodes = new ArrayList<Device>();
-		for(Device n : nodes) {
-			if(n.getType() == Device.MOBILE)
-				snodes.add(n);
+		for(Device node : nodes) {
+			if(node.getType() == Device.MOBILE)
+				snodes.add(node);
 		}
 		return snodes;
 	}
@@ -310,7 +310,7 @@ public class DeviceList {
 
 	
 	/**
-	 * Draw Links between
+	 * Draw devices
 	 * 
 	 * @param g
 	 *            Graphics

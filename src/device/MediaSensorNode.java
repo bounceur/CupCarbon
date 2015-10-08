@@ -268,8 +268,6 @@ public class MediaSensorNode extends SensorNode {
 	public void setSensorUnitRadius(double radius) {
 		sensorUnit.setRadius(radius);
 	}
-
-	
 	
 	@Override
 	public int getType() {

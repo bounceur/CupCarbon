@@ -57,8 +57,8 @@ public abstract class SensorNode extends DeviceWithRadio {
 	protected byte [] buffer = new byte [bufferSize];
 	protected boolean bufferReady = false;	
 
-	protected Color radioRangeColor1 = UColor.MAUVE_TRANSPARENT;
-	protected Color radioRangeColor2 = UColor.MAUVEF_TRANSPARENT;
+	protected Color radioRangeColor1 = UColor.PURPLE_TRANSPARENT;
+	protected Color radioRangeColor2 = UColor.PURPLED_TRANSPARENT;
 	
 	/**
 	 * Constructor 1 Instanciate the sensor unit 
@@ -208,7 +208,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 			int rayon = MapCalc.radiusInPixels(radioRangeRadius) ; 
 	
 			if (inside || selected) {
-				g.setColor(UColor.NOIR_TRANSPARENT);
+				g.setColor(UColor.BLACK_TRANSPARENT);
 				g.drawLine(x - rayon - 3, y - rayon - 3, x - rayon + 2, y
 						- rayon - 3);
 				g.drawLine(x - rayon - 3, y - rayon - 3, x - rayon - 3, y
@@ -229,7 +229,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 			if(!isDead()) {
 				if(hide == 0 || hide == 3) {
 					if (!isDead()) {
-						g.setColor(UColor.NOIR_TTRANSPARENT);
+						g.setColor(UColor.BLACK_TTRANSPARENT);
 						g.drawPolygon(polyX[0], polyY[0], nPoint);
 					}
 				}
@@ -262,7 +262,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 			int rayon2 = MapCalc.radiusInPixels(this.radius);
 
 			if (selected) {
-				g.setColor(UColor.NOIR_TTRANSPARENT);
+				g.setColor(UColor.BLACK_TTRANSPARENT);
 				g.drawOval(x - rayon - 8, y - rayon - 8, (rayon + 8) * 2, (rayon + 8) * 2);
 			}
 
@@ -308,7 +308,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 		if(!getScriptFileName().equals(""))
 			g.fillOval(x - 3, y - 3, 6, 6);
 		
-		g.setColor(UColor.NOIR_TTRANSPARENT);
+		g.setColor(UColor.BLACK_TTRANSPARENT);
 		g.drawOval(x - 3, y - 3, 6, 6);
 	}
 
@@ -568,7 +568,5 @@ public abstract class SensorNode extends DeviceWithRadio {
 		}
 		return s ;
 	}
-
-	
 	
 }

@@ -35,8 +35,8 @@ public class BaseStation extends StdSensorNode {
 	protected int type = Device.BASE_STATION;
 	
 	{
-		radioRangeColor1 = UColor.JAUNE_TRANSPARENT;
-		radioRangeColor2 = UColor.JAUNEF_TRANSPARENT;
+		radioRangeColor1 = UColor.YELLOW_TRANSPARENT;
+		radioRangeColor2 = UColor.YELLOWD_TRANSPARENT;
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public class BaseStation extends StdSensorNode {
 		if(!getScriptFileName().equals(""))
 			g.fillPolygon(triangleX, triangleY, 3);
 		
-		g.setColor(UColor.NOIR_TTRANSPARENT);
+		g.setColor(UColor.BLACK_TTRANSPARENT);
 		g.drawPolygon(triangleX, triangleY, 3);
 	}
 	

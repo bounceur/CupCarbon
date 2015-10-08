@@ -250,10 +250,10 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			int r2 = 8;
 			if(hide == 0 || hide == 4) {
 				g.drawOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
-				g.setColor(UColor.VERTF_TRANSPARENT);
+				g.setColor(UColor.GREEND_TRANSPARENT);
 				g.fillOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
 			}
-			g.setColor(UColor.VERTF_TRANSPARENT);
+			g.setColor(UColor.GREEND_TRANSPARENT);
 			g.fillOval(x-(r2+1), y-(r2+1), (r2+1)*2, (r2+1)*2);
 			g.setColor(Color.GRAY);
 			g.drawOval(x-(r2+1), y-(r2+1), (r2+1)*2, (r2+1)*2);
@@ -268,7 +268,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				int r2 = 8;
 				if(hide == 0 || hide == 4) {
 					g.drawOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
-					g.setColor(UColor.VERTF_TRANSPARENT);
+					g.setColor(UColor.GREEND_TRANSPARENT);
 					g.fillOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
 				}
 				g.setColor(UColor.colorTab[ledColor-1]);
@@ -360,7 +360,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 
 		if((drawRadioLinks && !(device.isSending() && isReceiving())) ||
 				(isSending() && device.isReceiving())
-				) {
+				) {			
 			switch(drawRadioLinksColor) {
 			case 0 : g.setColor(Color.DARK_GRAY); break;
 			case 1 : g.setColor(Color.DARK_GRAY); break;
@@ -372,6 +372,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setStroke(new BasicStroke(1));
 			if(isSending() && device.isReceiving()) {
+				System.out.println("A");
 				g.setColor(radioLinkColor);
 				g2.setStroke(new BasicStroke(3));
 				

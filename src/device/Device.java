@@ -270,7 +270,16 @@ public abstract class Device implements Runnable, MouseListener,
 	}
 	
 	/**
-	 * ConsumeTx
+	 * Consume
+	 * 
+	 * @param v
+	 */
+	public void consume(int v) {
+		this.getBattery().consume(v);
+	}
+	
+	/**
+	 * consumeTx
 	 * 
 	 * @param v
 	 */
@@ -280,7 +289,7 @@ public abstract class Device implements Runnable, MouseListener,
 	}
 	
 	/**
-	 * ConsumeRx
+	 * consumeRx
 	 * 
 	 * @param v
 	 */
@@ -1230,7 +1239,7 @@ public abstract class Device implements Runnable, MouseListener,
 			int ly1 = coord[1];
 			g.setColor(UColor.WHITE_TRANSPARENT);
 			g.fillRect(lx1 + 20, ly1 - 25, 150, 90);
-			g.setColor(UColor.NOIR_TRANSPARENT);
+			g.setColor(UColor.BLACK_TRANSPARENT);
 			g.drawRect(lx1 + 20, ly1 - 25, 150, 90);
 			g.setColor(Color.black);
 			g.drawString(getInfos()[0][0] + getInfos()[0][1], lx1 + 30, ly1 - 10);

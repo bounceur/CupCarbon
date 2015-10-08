@@ -105,9 +105,9 @@ public class Building implements MouseListener, KeyListener {
 			iCoordY[i]=coord[1];
 		}
 		if(!selected)
-			g.setColor(UColor.BLEU_TRANSPARENT);
+			g.setColor(UColor.BLACK_TTTTRANSPARENT);
 		else
-			g.setColor(UColor.BLEUF_TRANSPARENT);
+			g.setColor(UColor.BLACK_TTRANSPARENT);
 		g.fillPolygon(iCoordX, iCoordY, n);
 		g.setColor(Color.DARK_GRAY);
 		g.drawPolygon(iCoordX, iCoordY, n);

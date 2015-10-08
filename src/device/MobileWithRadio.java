@@ -57,7 +57,7 @@ public class MobileWithRadio extends MobileGWR {
 			int rayon2 = MapCalc.radiusInPixels(this.radius) ;
 					
 			if (inside || selected) {
-				g.setColor(UColor.NOIR_TRANSPARENT);
+				g.setColor(UColor.BLACK_TRANSPARENT);
 				g.drawLine(x-rayon-3, y-rayon-3, x-rayon+2, y-rayon-3);
 				g.drawLine(x-rayon-3, y-rayon-3, x-rayon-3, y-rayon+2);
 				g.drawLine(x-rayon-3, y+rayon+3, x-rayon+2, y+rayon+3);
@@ -70,7 +70,7 @@ public class MobileWithRadio extends MobileGWR {
 	
 			switch(hide) {
 			case 0 : {
-				g.setColor(UColor.NOIRF_TTTRANSPARENT);
+				g.setColor(UColor.BLACK_TTTRANSPARENT);
 				g.fillOval(x - rayon, y - rayon, rayon * 2, rayon * 2);
 				g.fillOval(x - rayon2, y - rayon2, rayon2 * 2, rayon2 * 2);
 			}

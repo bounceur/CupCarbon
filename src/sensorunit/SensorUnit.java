@@ -150,11 +150,11 @@ public class SensorUnit implements KeyListener, Cloneable {
 		if (!detection)
 			g.setColor(UColor.WHITE_LLTRANSPARENT);
 		if (detection)
-			g.setColor(UColor.JAUNE_SENSOR);
+			g.setColor(UColor.YELLOW_SENSOR);
 	
 		if (mode == 0)
 			g.fillPolygon(polyX, polyY, n);
-		g.setColor(UColor.NOIRF_TTTRANSPARENT);
+		g.setColor(UColor.BLACK_TTTRANSPARENT);
 		g.drawPolygon(polyX, polyY, n);
 	}
 
