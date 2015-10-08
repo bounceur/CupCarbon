@@ -52,8 +52,8 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	protected double deg = 0.1;
 	protected double dec = 0;
 	
-	protected int [] polyX1 = new int[n];
-	protected int [] polyY1 = new int[n];
+	protected int [] polyX = new int[n];
+	protected int [] polyY = new int[n];
 
 	/**
 	 * Constructor 1 : radius is equal to 10 meter
@@ -91,14 +91,14 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 		double r2=0;
 		double r3=0;
 		
-		polyX1[0] = (int)longitude;
-		polyY1[0] = (int)latitude;
+		polyX[0] = (int)longitude;
+		polyY[0] = (int)latitude;
 		double i=dec;
 		for(int k=1; k<n; k++) {
 			r2 = rayon*Math.cos(i);
 			r3 = rayon*Math.sin(i);
-			polyX1[k]=(int)(longitude+r2);
-			polyY1[k]=(int)(latitude+r3);
+			polyX[k]=(int)(longitude+r2);
+			polyY[k]=(int)(latitude+r3);
 			i+=deg;
 		}
 	}
@@ -128,7 +128,7 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	
 	public boolean detect(Device device) {
 		if(device.getRadius()>0) {
-			Polygon poly = new Polygon(polyX1, polyY1, n);
+			Polygon poly = new Polygon(polyX, polyY, n);
 			if(device.getType()==Device.FLYING_OBJECT) {
 				for(FlyingObject d : ((FlyingGroup)device).getFlyingObjects()) {
 					GeoPosition gp = new GeoPosition(d.getLongitude(),d.getLatitude());
@@ -151,17 +151,17 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	/**
 	 * Draw the sensor unit
 	 */
-	public void draw(Graphics g, int mode, boolean detection) {
+	public void draw(Graphics g, int mode, boolean detection, boolean buildingDetection) {
 		 calculateSensingArea();
-		if (!detection)
+		if (!detection && !buildingDetection)
 			g.setColor(UColor.BLUE_TRANSPARENT);
-		if (detection)
+		else
 			g.setColor(UColor.GREEND_TRANSPARENT);
 	
 		if (mode == 0)
-			g.fillPolygon(polyX1, polyY1, n);
+			g.fillPolygon(polyX, polyY, n);
 		g.setColor(UColor.BLACK_TTTRANSPARENT);
-		g.drawPolygon(polyX1, polyY1, n);
+		g.drawPolygon(polyX, polyY, n);
 	}
 
 	@Override
@@ -238,6 +238,10 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 		MediaSensorUnit newCU = (MediaSensorUnit) super.clone();
 		Layer.getMapViewer().addKeyListener(newCU);
 		return newCU;
+	}
+	
+	public Polygon getPoly() {
+		return new Polygon(polyX, polyY, n);
 	}
 	
 }

@@ -14,9 +14,9 @@ import map.Layer;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
-import device.Device;
 import utilities.MapCalc;
 import utilities.UColor;
+import device.Device;
 
 /**
  * @author Ahcene Bounceur
@@ -203,6 +203,14 @@ public class Building implements MouseListener, KeyListener {
 
 	public boolean isSelected() {
 		return selected ;
+	}
+	
+	public boolean intersect(Polygon p) {
+		for (int i=0; i<n; i++){
+			if(p.contains(iCoordX[i], iCoordY[i]))
+				return true;
+		}
+		return false;
 	}
 	
 //	public boolean intersect(int cadreX1, int cadreY1, int cadreX2, int cadreY2) {

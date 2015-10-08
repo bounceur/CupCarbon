@@ -1,6 +1,7 @@
 package buildings;
 
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -121,5 +122,13 @@ public class BuildingList extends Thread {
 				break;
 			}
 		}
+	}
+	
+	public static boolean intersect(Polygon p) {
+		for (Building building : buildingList){
+			if (building.intersect(p))
+				return true;
+		}
+		return false;
 	}
 }

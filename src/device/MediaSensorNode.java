@@ -25,6 +25,7 @@ import java.awt.Graphics;
 import sensorunit.MediaSensorUnit;
 import utilities.MapCalc;
 import battery.Battery;
+import buildings.BuildingList;
 
 /**
  * @author Ahcene Bounceur
@@ -171,12 +172,12 @@ public class MediaSensorNode extends SensorNode {
 		int y = coord[1];
 		if(hide == 0 || hide == 1) {
 			sensorUnit.setPosition(x, y);
-			sensorUnit.draw(g, 0, isSensorDetecting());
+			sensorUnit.draw(g, 0, isSensorDetecting(), detectBuildings());
 		}
 
 		if(hide == 2) {
 			sensorUnit.setPosition(x, y);
-			sensorUnit.draw(g, 1, isSensorDetecting());
+			sensorUnit.draw(g, 1, isSensorDetecting(), detectBuildings());
 		}
 	}
 	
@@ -206,6 +207,10 @@ public class MediaSensorNode extends SensorNode {
 	 */
 	public boolean detect(Device device) {		
 		return (sensorUnit.detect(device));
+	}
+	
+	public boolean detectBuildings() {		
+		return BuildingList.intersect(sensorUnit.getPoly());
 	}
 	
 	public boolean isSensorDetecting() {
