@@ -91,7 +91,7 @@ import device.DeviceList;
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
- * @version 2.0 (U-One)
+ * @version 2.1 (U-One)
  */
 
 public class CupCarbon {
