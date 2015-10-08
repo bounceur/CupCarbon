@@ -372,7 +372,6 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setStroke(new BasicStroke(1));
 			if(isSending() && device.isReceiving()) {
-				System.out.println("A");
 				g.setColor(radioLinkColor);
 				g2.setStroke(new BasicStroke(3));
 				

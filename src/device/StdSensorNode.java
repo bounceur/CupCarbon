@@ -217,6 +217,11 @@ public class StdSensorNode extends SensorNode {
 		}
 		return s ;
 	}
+
+	@Override
+	public String getIdFL() {
+		return "S";
+	}
 	
 	@Override
 	public int getType() {

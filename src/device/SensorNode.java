@@ -310,12 +310,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 		
 		g.setColor(UColor.BLACK_TTRANSPARENT);
 		g.drawOval(x - 3, y - 3, 6, 6);
-	}
-
-	@Override
-	public String getIdFL() {
-		return "S";
-	}
+	}	
 
 	/**
 	 * Set the battery

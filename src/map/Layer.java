@@ -449,7 +449,7 @@ public class Layer implements Painter<Object>, MouseListener,
 				selectType = 0;
 		}
 		
-		if (lastKey == 'o') {
+		if (lastKey == ':') {
 			int n = MarkerList.size();
         	Building building = new Building(n);
         	

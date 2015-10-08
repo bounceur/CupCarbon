@@ -216,7 +216,6 @@ public class DeviceList {
 			int idMax = 0 ;
 			while ((line = br.readLine()) != null) {
 				str = line.split(" ");
-				System.out.println(str.length);
 				switch (str.length) {
 				case 6:
 					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5]);

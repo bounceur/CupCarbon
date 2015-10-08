@@ -268,6 +268,11 @@ public class MediaSensorNode extends SensorNode {
 	public void setSensorUnitRadius(double radius) {
 		sensorUnit.setRadius(radius);
 	}
+
+	@Override
+	public String getIdFL() {
+		return "MS";
+	}
 	
 	@Override
 	public int getType() {
