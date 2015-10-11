@@ -194,12 +194,16 @@ public final class SensorAddCommand {
 		}
 		
 		if (inst[0].toLowerCase().equals("rotate")) {
-			command = new Command_ROTATE(sensorNode, inst[1]);
+			command = new Command_ROTATE(sensorNode, inst[1], inst[2]);
 		}
 		
 		if (inst[0].toLowerCase().equals("coord")) {
-			command = new Command_COORD(sensorNode, inst[1], inst[2]);
-		}	
+			command = new Command_COORD(sensorNode, inst[1], inst[2], inst[3]);
+		}
+		
+		if (inst[0].toLowerCase().equals("move")) {
+			command = new Command_MOVE(sensorNode, inst[1]);
+		}
 		
 		//-------
 		

@@ -6,20 +6,24 @@ import device.SensorNode;
 
 public class Command_ROTATE extends Command {
 
-	protected String arg = "" ;
+	protected String arg1 = "" ;
+	protected String arg2 = "" ;
 	
-	public Command_ROTATE(SensorNode sensor, String arg) {
+	public Command_ROTATE(SensorNode sensor, String arg1, String arg2) {
 		this.sensor = sensor ;
-		this.arg = arg ;
+		this.arg1 = arg1 ;
+		this.arg2 = arg2 ;
 	}
 
 	@Override
 	public long execute() {
-		String args = sensor.getScript().getVariableValue(arg);
-		double n = Double.valueOf(args);
+		String vArg1 = sensor.getScript().getVariableValue(arg1);
+		String vArg2 = sensor.getScript().getVariableValue(arg2);
+		double n = Double.valueOf(vArg1);
+		int t = Integer.valueOf(vArg2);
 		((MediaSensorNode) sensor).setSensorUnitDec(n);
 		Layer.getMapViewer().repaint();	
-		return 0;
+		return t;
 	}
 
 	@Override

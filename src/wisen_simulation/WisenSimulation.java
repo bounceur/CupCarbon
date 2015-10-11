@@ -298,13 +298,13 @@ public class WisenSimulation extends Thread {
 		WsnSimulationWindow.setProgress(0);
 		CupCarbon.lblSimulation.setText(" | Simulation: 0%");
 
-		if (mobility) {
+		//if (mobility) {
 			for (Device device : devices) {
 				device.toOri();
 				device.stopSimulation();
 			}
 			Layer.getMapViewer().repaint();
-		}
+		//}
 	}
 
 	// ------------------------------------------------------------
