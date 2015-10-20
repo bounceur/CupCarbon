@@ -660,6 +660,13 @@ public abstract class Device implements Runnable, MouseListener,
 		double y2 = device.getLatitude();
 		return MapCalc.distance(longitude, latitude, x2, y2);
 	}
+	
+	public double distance(int id) {
+		Device device = DeviceList.getNodeById(id);
+		double x2 = device.getLongitude();
+		double y2 = device.getLatitude();
+		return MapCalc.distance(longitude, latitude, x2, y2);
+	}
 
 	/**
 	 * @param device

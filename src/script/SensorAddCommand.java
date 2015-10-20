@@ -205,6 +205,18 @@ public final class SensorAddCommand {
 			command = new Command_MOVE(sensorNode, inst[1]);
 		}
 		
+		if (inst[0].toLowerCase().equals("distance")) {
+			command = new Command_DISTANCE(sensorNode, inst[1], inst[2]);
+		}
+		
+		if (inst[0].toLowerCase().equals("inc")) {
+			command = new Command_PLUS(sensorNode, inst[1], "$"+inst[1], "1");
+		}
+		
+		if (inst[0].toLowerCase().equals("dec")) {
+			command = new Command_MINUS(sensorNode, inst[1], "$"+inst[1], "1");
+		}
+		
 		//-------
 		
 		if (command != null) {
