@@ -27,10 +27,10 @@ package battery;
  */
 public class Battery implements Cloneable {
 
-	public static int eMax = 100000000;
+	public double eMax = 10000;
 
 	//private SensorUnit sensorUnit;
-	private int level = eMax;
+	private double level = eMax;
 
 	/**
 	 * Battery initialization
@@ -44,14 +44,14 @@ public class Battery implements Cloneable {
 	/**
 	 * @return the initial capacity of the battery
 	 */
-	public long getInitialLevel() {
-		return (int) (eMax);
+	public double getInitialLevel() {
+		return eMax;
 	}
 	
 	/**
 	 * @return the capacity of the battery
 	 */
-	public int getLevel() {
+	public double getLevel() {
 		return level;
 	}
 	
@@ -68,7 +68,7 @@ public class Battery implements Cloneable {
 	 * @param capacity 
 	 * the capacity of the battry
 	 */
-	public void setLevel(int capacity) {
+	public void setLevel(double capacity) {
 		this.level = capacity;
 	}
 
@@ -76,8 +76,8 @@ public class Battery implements Cloneable {
 	 * @param eMax
 	 * Initialization of the battery (energy max given)
 	 */
-	public void init(int eMax) {
-		Battery.eMax = eMax;
+	public void init(double eMax) {
+		this.eMax = eMax;
 		level = eMax;
 	}
 	
@@ -98,6 +98,10 @@ public class Battery implements Cloneable {
 		level -= v;
 		if (level < 0)
 			level = 0;
+	}
+	
+	public double getBatteryConsumption() {
+		return eMax - level;
 	}
 
 	/**

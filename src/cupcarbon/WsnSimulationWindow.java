@@ -240,7 +240,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 				else
 					DataInfo.UartDataRate = Integer.parseInt((String) freqComboBox.getSelectedItem());
 				SimulationInputs.iterNumber = Integer.parseInt(iterNumberTextField.getText());
-				SimulationInputs.energyMax = Integer.parseInt(energyMaxTextField.getText());
+				//SimulationInputs.energyMax = Integer.parseInt(energyMaxTextField.getText());
 				SimulationInputs.mobility = cboxMobility.isSelected();
 				SimulationInputs.visualDelay = Integer.parseInt(vdTextField.getText());
 				SimulationInputs.displayLog = chckbxGenerateLog.isSelected();
@@ -315,7 +315,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 		else
 			DataInfo.UartDataRate = Integer.parseInt((String) freqComboBox.getSelectedItem());
 		SimulationInputs.iterNumber = Integer.parseInt(iterNumberTextField.getText());
-		SimulationInputs.energyMax = Integer.parseInt(energyMaxTextField.getText());
+		//SimulationInputs.energyMax = Integer.parseInt(energyMaxTextField.getText());
 		SimulationInputs.mobility = cboxMobility.isSelected();
 		SimulationInputs.visualDelay = Integer.parseInt(vdTextField.getText());
 		SimulationInputs.displayLog = chckbxGenerateLog.isSelected();

@@ -1293,7 +1293,7 @@ public abstract class Device implements Runnable, MouseListener,
 	/**
 	 * @return the battery level
 	 */
-	public int getBatteryLevel() {
+	public double getBatteryLevel() {
 		if(getBattery() != null)
 			return getBattery().getLevel();
 		return 0;
@@ -1306,8 +1306,8 @@ public abstract class Device implements Runnable, MouseListener,
 		return getBattery().getLevelInPercent();
 	}
 	
-	public int getBatteryConsumption() {
-		return Battery.eMax-this.getBatteryLevel();
+	public double getBatteryConsumption() {
+		return getBattery().getBatteryConsumption();
 	}
 
 	/**

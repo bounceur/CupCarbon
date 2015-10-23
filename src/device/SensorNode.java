@@ -35,7 +35,6 @@ import script.SensorAddCommand;
 import utilities.MapCalc;
 import utilities.UColor;
 import wisen_simulation.SimLog;
-import wisen_simulation.SimulationInputs;
 import wisen_simulation.WisenSimulation;
 import battery.Battery;
 
@@ -278,7 +277,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 				g.setColor(UColor.WHITE_LTRANSPARENT);
 				g.fillRect(x-30, y-25, 6, 50);
 				g.setColor(UColor.GREEN);
-				g.fillRect(x-30, y-(int)(battery.getLevel()/1000000./2.)+25, 6, (int)(battery.getLevel()/1000000./2.));
+				g.fillRect(x-30, y-(int)(battery.getLevel()/battery.getInitialLevel()*100/2.)+25, 6, (int)(battery.getLevel()/battery.getInitialLevel()*100/2.));
 				g.setColor(Color.DARK_GRAY);
 				g.drawRect(x-30, y-25, 6, 50);
 				g.drawString("Battery"+id+": " + battery.getLevel(), x-30, y+35);
@@ -517,7 +516,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 		DeviceList.initAll();
 		initBuffer();
 		setDead(false);		
-		getBattery().init(SimulationInputs.energyMax);
+		//getBattery().init(SimulationInputs.energyMax);
 		loadScript();
 		getScript().init();
 		setEvent(0);
