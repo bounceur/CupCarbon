@@ -39,7 +39,6 @@ public class WsnSimulationWindow extends JInternalFrame {
 	private JComboBox<String> freqComboBox;
 	private static JProgressBar progressBar;
 	private static JLabel stateLabel;
-	private JTextField energyMaxTextField;
 	private JCheckBox cboxMobility;
 	private JTextField vdTextField;
 	private JTextField textField;
@@ -71,7 +70,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 		setTitle("Simulation Parameters");
 		setIconifiable(true);
 		setClosable(true);
-		setBounds(100, 100, 387, 439);
+		setBounds(100, 100, 387, 400);
 		panel = new JPanel();
 		panel.setBorder(new EmptyBorder(7, 7, 7, 7));
 		getContentPane().add(panel, BorderLayout.NORTH);
@@ -79,7 +78,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 
 		JPanel panel_12 = new JPanel();
 		panel.add(panel_12);
-		panel_12.setLayout(new GridLayout(2, 1, 5, 5));
+		panel_12.setLayout(new GridLayout(1, 1, 5, 5));
 
 		JPanel panel_8 = new JPanel();
 		panel_12.add(panel_8);
@@ -95,21 +94,6 @@ public class WsnSimulationWindow extends JInternalFrame {
 		iterNumberTextField.setFont(new Font("Arial", Font.PLAIN, 12));
 		iterNumberTextField.setText("1000");
 		iterNumberTextField.setColumns(10);
-
-		JPanel panel_9 = new JPanel();
-		panel_12.add(panel_9);
-		panel_9.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_9.setLayout(new BoxLayout(panel_9, BoxLayout.X_AXIS));
-
-		JLabel lblEnergy = new JLabel("Initial Energy ");
-		panel_9.add(lblEnergy);
-		lblEnergy.setFont(new Font("Arial", Font.PLAIN, 12));
-
-		energyMaxTextField = new JTextField();
-		energyMaxTextField.setFont(new Font("Arial", Font.PLAIN, 12));
-		energyMaxTextField.setText("100000000");
-		panel_9.add(energyMaxTextField);
-		energyMaxTextField.setColumns(10);
 
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.CENTER);

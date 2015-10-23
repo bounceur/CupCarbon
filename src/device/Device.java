@@ -125,8 +125,8 @@ public abstract class Device implements Runnable, MouseListener,
 
 	protected double consumptionTx = 0;
 	protected double consumptionRx = 0;
-	protected double eTx = 1;
-	protected double eRx = 1;
+	protected double eTx = 0.0000592;
+	protected double eRx = 0.0000286;
 	protected double eS = 1;
 	protected double beta = 1;
 	
