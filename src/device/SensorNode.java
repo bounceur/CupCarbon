@@ -277,10 +277,13 @@ public abstract class SensorNode extends DeviceWithRadio {
 				g.setColor(UColor.WHITE_LTRANSPARENT);
 				g.fillRect(x-30, y-25, 6, 50);
 				g.setColor(UColor.GREEN);
-				g.fillRect(x-30, y-(int)(battery.getLevel()/battery.getInitialLevel()*100/2.)+25, 6, (int)(battery.getLevel()/battery.getInitialLevel()*100/2.));
+				if (battery.getLevel()/battery.getInitialLevel()<0.5) g.setColor(UColor.ORANGE);
+				if (battery.getLevel()/battery.getInitialLevel()<0.2) g.setColor(UColor.RED);
+				System.out.println();
+				g.fillRect(x-30, y-(int)(battery.getLevel()/battery.getInitialLevel()*100./2.)+25, 6, (int)(battery.getLevel()/battery.getInitialLevel()*100./2.));
 				g.setColor(Color.DARK_GRAY);
 				g.drawRect(x-30, y-25, 6, 50);
-				g.drawString("Battery"+id+": " + battery.getLevel(), x-30, y+35);
+				g.drawString("Battery"+id+": " + (int)battery.getLevel(), x-30, y+35);
 				
 				g.setColor(UColor.WHITE_LTRANSPARENT);
 				g.fillRect(x-20, y-25, 6, 50);

@@ -744,8 +744,7 @@ public class DeviceList {
 	public static void setEMax(String value) {
 		for (Device d : nodes) {
 			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-				d.getBattery().init(Integer.valueOf(value));
-				//d.getBattery().setLevel(Integer.valueOf(value));
+				d.getBattery().init(Double.valueOf(value));
 			}
 		}
 		Layer.getMapViewer().repaint();
