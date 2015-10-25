@@ -157,12 +157,13 @@ public abstract class Device implements Runnable, MouseListener,
 	
 	protected boolean drawArrows = true ;
 	
+	protected String message = "";
 	
 	// ------
-		// Propagation
-		protected double requiredQuality = -80.0; // dB
-		protected double transmitPower = 0 ; // dBm
-		protected double frequency = 2.4e9; // GHz
+	// Propagation
+	protected double requiredQuality = -80.0; // dB
+	protected double transmitPower = 0 ; // dBm
+	protected double frequency = 2.4e9; // GHz
 
 	/**
 	 * Empty constructor
@@ -1185,7 +1186,11 @@ public abstract class Device implements Runnable, MouseListener,
 	public void drawId(int x, int y, Graphics g) {
 		if (displayDetails) {
 			g.setColor(Color.BLACK);
-			g.drawString(getNodeIdName()+" ["+my+"]", (int) (x + 10), (int) (y + 10));
+			g.drawString(getNodeIdName()+" ["+my+"]", (int) (x + 10), (int) (y + 5));
+			if(!message.equals("")) {
+				g.setColor(Color.BLUE);
+				g.drawString(">> "+message, (int) (x + 10), (int) (y + 15));
+			}
 		}
 	}
 	
@@ -1583,7 +1588,16 @@ public abstract class Device implements Runnable, MouseListener,
 	}
 	
 	public void init() {
-		
+		message = "";
+		setMarked(false);
+		setVisited(false);
+		setDead(false);			
+		setLedColor(0);
+		getBattery().init();
+		if(getType()==Device.SENSOR) {
+			setSending(false);
+			setReceiving(false);
+		}
 	}
 	
 	public boolean isSending() {
@@ -1662,6 +1676,14 @@ public abstract class Device implements Runnable, MouseListener,
 		this.distanceModeDelay = distanceModeDelay;
 	}
 
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
+	public String getMessage() {
+		return message;
+	}
+	
 	public abstract void execute();
 	public abstract void drawRadioLinks(Graphics g) ;
 	public abstract double getAttenuation(double d);

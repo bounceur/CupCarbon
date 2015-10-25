@@ -18,12 +18,15 @@ public class Command_PRINTLN extends Command {
 	public long execute() {
 		SimLog.add("S" + sensor.getId() + " PRINTLN "+Arrays.toString(arg));
 		String message = "";
+		String part = "";
 		System.out.print("S" + sensor.getId() + " >> ");
 		for (int i=1; i<arg.length; i++) {
-			message = sensor.getScript().getVariableValue(arg[i]);
-			System.out.print(message+" ");
+			part = sensor.getScript().getVariableValue(arg[i]);
+			if (!part.equals("\\")) 
+				message += part+" ";
 		}
-		System.out.println();
+		sensor.setMessage(message);
+		System.out.println(message);
 		return 0;
 	}
 	

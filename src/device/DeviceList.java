@@ -463,15 +463,7 @@ public class DeviceList {
 	public static void initAll() {
 		envelopeList = new LinkedList<LinkedList<Integer>>();
 		for (Device device : nodes) {
-			device.setMarked(false);
-			device.setVisited(false);
-			device.setDead(false);			
-			device.setLedColor(0);
-			device.getBattery().init();
-			if(device.getType()==Device.SENSOR) {
-				device.setSending(false);
-				device.setReceiving(false);
-			}
+			device.init();			
 		}
 		Layer.getMapViewer().repaint();
 	}

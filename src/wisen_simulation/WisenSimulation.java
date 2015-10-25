@@ -134,7 +134,7 @@ public class WisenSimulation extends Thread {
 			
 			for (iter = 0; iter < iterNumber; iter++) {
 				if (min == Long.MAX_VALUE) {
-					System.out.println(Channel.size());
+					//System.out.println(Channel.size());
 					System.out.println("Infinite WAITs!");
 					JOptionPane.showMessageDialog(null, "Infinite WAITs! [iter: "+iter+"]", "Simulation Stopped", JOptionPane.INFORMATION_MESSAGE);
 					break;
