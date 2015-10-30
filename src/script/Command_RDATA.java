@@ -3,28 +3,28 @@ package script;
 import wisen_simulation.SimLog;
 import device.SensorNode;
 
-public class Command_RPACKET extends Command {
+public class Command_RDATA extends Command {
 
-	protected String packet = "";
+	protected String data = "";
 	protected String [] args = null;
 	
-	public Command_RPACKET(SensorNode sensor, String [] args) {
+	public Command_RDATA(SensorNode sensor, String [] args) {
 		this.sensor = sensor ;		
 		this.args = args ;
 	}
 
 	@Override
 	public long execute() {
-		packet = sensor.getScript().getVariableValue(args[1]);
-		SimLog.add("S" + sensor.getId() + " Read Packet: "+packet);
-		String [] tab = packet.split("#");
+		data = sensor.getScript().getVariableValue(args[1]);
+		SimLog.add("S" + sensor.getId() + " Read DATA: "+data);
+		String [] tab = data.split("#");
 		
 		for(int i=2; i<args.length; i++) {
 			try {
 				sensor.getScript().addVariable(args[i], tab[i-2]);
 			} 
 			catch(Exception e) {
-				System.err.println("S"+sensor.getId()+" [ERROR RPACKET]: No packet to read!");
+				System.err.println("S"+sensor.getId()+" [ERROR RDATA]: No data to read!");
 			}
 		}
 		return 0;

@@ -33,7 +33,7 @@ import utilities.UColor;
 public class BaseStation extends StdSensorNode {
 
 	protected int type = Device.BASE_STATION;
-	
+
 	{
 		radioRangeColor1 = UColor.YELLOW_TRANSPARENT;
 		radioRangeColor2 = UColor.YELLOWD_TRANSPARENT;

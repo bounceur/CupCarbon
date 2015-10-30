@@ -307,5 +307,11 @@ public class FlyingGroup extends MobileG {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public void initBattery() {
+		// TODO Auto-generated method stub
+		
+	}
 }
 

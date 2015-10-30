@@ -283,4 +283,9 @@ public class MediaSensorNode extends SensorNode {
 	public int getType() {
 		return Device.MEDIA_SENSOR;
 	}
+
+	@Override
+	public void initBattery() {
+		getBattery().init();
+	}
 }

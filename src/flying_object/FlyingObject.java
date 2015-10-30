@@ -366,6 +366,12 @@ public class FlyingObject extends MobileG {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public void initBattery() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 //	public double getRadius() {
 //		this.radius = 100;

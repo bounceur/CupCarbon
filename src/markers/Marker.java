@@ -197,4 +197,10 @@ public class Marker extends Device {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void initBattery() {
+		// TODO Auto-generated method stub
+		
+	}
 }

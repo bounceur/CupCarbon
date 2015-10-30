@@ -68,11 +68,11 @@ public final class SensorAddCommand {
 		if (inst[0].toLowerCase().equals("println")) {
 			command =  new Command_PRINTLN(sensorNode, inst);
 		}
-		if (inst[0].toLowerCase().equals("packet")) {
-			command = new Command_PACKET(sensorNode, inst);
+		if (inst[0].toLowerCase().equals("data")) {
+			command = new Command_DATA(sensorNode, inst);
 		}
-		if (inst[0].toLowerCase().equals("rpacket")) {
-			command = new Command_RPACKET(sensorNode, inst);
+		if (inst[0].toLowerCase().equals("rdata")) {
+			command = new Command_RDATA(sensorNode, inst);
 		}
 		if (inst[0].toLowerCase().equals("angle")) {
 			command = new Command_ANGLE(sensorNode, inst[1], inst[2], inst[3], inst[4]);

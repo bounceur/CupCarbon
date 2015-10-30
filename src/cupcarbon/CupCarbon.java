@@ -1268,6 +1268,7 @@ public class CupCarbon {
 		mnSimulation.add(new JSeparator());
 
 		JMenuItem mntmCreateComScenario = new JMenuItem("Communication script");
+		mntmCreateComScenario.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.ALT_MASK));
 		mntmCreateComScenario.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "stylo.png"));
 		mnSimulation.add(mntmCreateComScenario);

@@ -136,4 +136,9 @@ public class Mobile extends MobileG {
 		return 0;
 	}
 
+	@Override
+	public void initBattery() {
+		
+	}
+
 }

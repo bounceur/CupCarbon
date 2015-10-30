@@ -147,4 +147,10 @@ public class MobileWithRadio extends MobileGWR {
 		
 	}
 
+	@Override
+	public void initBattery() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

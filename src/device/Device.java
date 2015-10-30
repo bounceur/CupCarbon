@@ -417,7 +417,7 @@ public abstract class Device implements Runnable, MouseListener,
 		infos[4][1] = ""+ch+" ("+Integer.toHexString(ch).toUpperCase()+")";
 		infos[5][1] = scriptFileName;
 		infos[6][1] = gpsFileName;
-		infos[7][1] = getBatteryLevelInPercent()+" % ["+getBatteryConsumption()+"]";
+		infos[7][1] = getBatteryLevelInPercent()+" % ["+(int)getBatteryConsumption()+"]";
 		return infos;
 	}
 
@@ -1593,12 +1593,15 @@ public abstract class Device implements Runnable, MouseListener,
 		setVisited(false);
 		setDead(false);			
 		setLedColor(0);
-		getBattery().init();
+		initBattery();
+		//getBattery().init();
 		if(getType()==Device.SENSOR) {
 			setSending(false);
 			setReceiving(false);
 		}
 	}
+	
+	public abstract void initBattery() ;
 	
 	public boolean isSending() {
 		return sending;

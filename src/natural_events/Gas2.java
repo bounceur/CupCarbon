@@ -244,4 +244,10 @@ public class Gas2 extends DeviceWithoutRadio {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public void initBattery() {
+		// TODO Auto-generated method stub
+		
+	}
 }

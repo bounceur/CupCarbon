@@ -227,4 +227,9 @@ public class StdSensorNode extends SensorNode {
 	public int getType() {
 		return Device.SENSOR;
 	}
+
+	@Override
+	public void initBattery() {
+		getBattery().init();
+	}
 }
