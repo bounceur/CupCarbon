@@ -20,6 +20,10 @@ public class ScriptFunctions {
 		if(function.equals("angle")) {
 			return Functions.angle(args);
 		}
+		
+		if(function.equals("check")) {
+			return Functions.check(args);
+		}
 				
 		return "[SCRIPT] FUNCTION ERROR: Unknown function!";
 	}

@@ -1,5 +1,7 @@
 package script_functions;
 
+import java.util.Arrays;
+
 public class Functions {
 
 	public static String min(String [] args) {
@@ -58,6 +60,70 @@ public class Functions {
 				b = (2 * Math.PI) + b;
 		}
 		return ""+b;
+	}
+	
+	public static String check(String [] args) {
+		
+		int [][] g = {{1,0,1,0,1},{1,1,0,0,1},{1,1,1,1,0}};
+		
+		//String s = args[0].replaceAll("#", "");
+		
+		String [] s = args[0].split("#");
+		
+		System.out.println(s);
+		int [] vp = new int [5];
+		vp[0] = s[2].charAt(0)-'0';
+		vp[1] = s[7].charAt(0)-'0';
+		vp[2] = s[12].charAt(0)-'0';
+		vp[3] = s[17].charAt(0)-'0';
+		vp[4] = s[22].charAt(0)-'0';
+
+		String [] id = new String [5];
+		id[0] = s[1]+"";
+		id[1] = s[6]+"";
+		id[2] = s[11]+"";
+		id[3] = s[16]+"";
+		id[4] = s[21]+""; 
+		 
+		System.out.println(Arrays.toString(vp));
+		
+		int c1 = (vp[0] * g[0][0] + vp[1] * g[0][1] + vp[2] * g[0][2] + vp[3] * g[0][3] + vp[4] * g[0][4])%2;
+		int c2 = (vp[0] * g[1][0] + vp[1] * g[1][1] + vp[2] * g[1][2] + vp[3] * g[1][3] + vp[4] * g[1][4])%2;
+		int c3 = (vp[0] * g[2][0] + vp[1] * g[2][1] + vp[2] * g[2][2] + vp[3] * g[2][3] + vp[4] * g[2][4])%2;
+		
+		boolean error1 = false;
+		boolean error2 = false;
+		boolean error3 = false;
+		
+		for (int i=0; i<5; i++) {
+			int cp1 = s[i*5+3].charAt(0)-'0';
+			int cp2 = s[i*5+4].charAt(0)-'0';
+			int cp3 = s[i*5+5].charAt(0)-'0';
+			error1 = (c1==cp1);
+			error2 = (c2==cp2);
+			error3 = (c3==cp3);
+		}
+		
+		String state = "";
+		int malicious = -1;
+		System.out.println(error1);
+		System.out.println(error2);
+		System.out.println(error3);
+		if(error1 && error2 && error3) { state = "[OK]"; malicious = -1;}
+		if(!error1 && !error2 && !error3) { state = "[MALICIOUS "+id[0]+"]"; malicious = 0;}
+		if(error1 && !error2 && !error3) { state = "[MALICIOUS "+id[1]+"]"; malicious = 1;}
+		if(!error1 && error2 && !error3) { state = "[MALICIOUS "+id[2]+"]"; malicious = 2;}
+		if(error1 && error2 && !error3) { state = "[MALICIOUS "+id[3]+"]"; malicious = 3;}
+		if(!error1 && !error2 && error3) { state = "[MALICIOUS "+id[4]+"]"; malicious = 4;}
+
+		String sOut = state+ " "+ Arrays.toString(vp);
+		
+		if (malicious != -1) {
+			vp[malicious] = 1 - vp[malicious];
+			sOut += " -> "+ Arrays.toString(vp);
+		}
+		
+		return sOut;
 	}
 	
 	public static String myf(String [] args) {
