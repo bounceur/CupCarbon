@@ -121,6 +121,8 @@ public class Script {
 	}
 	
 	public String getVariableValue(String arg) {
+		if (arg.equals("\\"))
+			return "";
 		if (arg.equals(""))
 			return ""; 
 		if(arg.charAt(0)=='$')

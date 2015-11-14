@@ -22,8 +22,8 @@ public class Command_PRINTLN extends Command {
 		System.out.print("S" + sensor.getId() + " >> ");
 		for (int i=1; i<arg.length; i++) {
 			part = sensor.getScript().getVariableValue(arg[i]);
-			if (!part.equals("\\")) 
-				message += part+" ";
+			//if (!part.equals("\\")) 
+			message += part + " ";
 		}
 		sensor.setMessage(message);
 		System.out.println(message);
