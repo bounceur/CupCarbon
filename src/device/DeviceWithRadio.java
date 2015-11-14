@@ -198,12 +198,14 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				}
 				requiredQuality += 0.1;
 				Layer.getMapViewer().repaint();
-			}			
+				
+			}
+			if(key.getKeyChar() == 'a') {
+				setDrawArrows(!getDrawArrows());
+				Layer.getMapViewer().repaint();
+			}
 		}
-		if(key.getKeyChar() == 'a') {
-			setDrawArrows(!getDrawArrows());
-			Layer.getMapViewer().repaint();
-		}				
+					
 	}
 	
 	@Override

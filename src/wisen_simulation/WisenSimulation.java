@@ -285,6 +285,8 @@ public class WisenSimulation extends Thread {
 			}
 			SimLog.close();
 			ps.close();
+			if(iter==iterNumber)
+				JOptionPane.showMessageDialog(null, "Simulation Finished!", "Simulation", JOptionPane.INFORMATION_MESSAGE);
 		} 
 		catch (FileNotFoundException e) {e.printStackTrace();} 
 		catch (InterruptedException e) {e.printStackTrace();}
@@ -292,9 +294,7 @@ public class WisenSimulation extends Thread {
 		long endTime = System.currentTimeMillis();
 		System.out.println("End of Simulation (WISEN : D-Event).");
 		System.out.println(((endTime - startTime) / 1000.) + " sec");
-		WsnSimulationWindow.setState("End (WISEN Simulation) at iter " + iter
-				+ ". Simulation Time : " + ((endTime - startTime) / 1000.)
-				+ " sec.");
+		WsnSimulationWindow.setState("End (WISEN Simulation) at iter " + iter + ". Simulation Time : " + ((endTime - startTime) / 1000.) + " sec.");
 		WsnSimulationWindow.setProgress(0);
 		CupCarbon.lblSimulation.setText(" | Simulation: 0%");
 

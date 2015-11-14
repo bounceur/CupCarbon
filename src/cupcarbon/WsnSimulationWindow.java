@@ -92,7 +92,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 		iterNumberTextField = new JTextField();
 		panel_8.add(iterNumberTextField);
 		iterNumberTextField.setFont(new Font("Arial", Font.PLAIN, 12));
-		iterNumberTextField.setText("1000");
+		iterNumberTextField.setText("10000");
 		iterNumberTextField.setColumns(10);
 
 		JPanel panel_1 = new JPanel();

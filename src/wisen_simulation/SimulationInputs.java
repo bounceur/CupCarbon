@@ -31,7 +31,7 @@ public class SimulationInputs {
 
 	public static boolean mobility = false;
 	//public static int energyMax = 100000000;
-	public static int iterNumber = 1000;
+	public static int iterNumber = 10000;
 	
 	public static int visualDelay = 10;
 	public static boolean showInConsole = false;

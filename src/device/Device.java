@@ -1628,7 +1628,7 @@ public abstract class Device implements Runnable, MouseListener,
 	}	
 	
 	public void setDrawArrows(boolean b) {
-		this.drawArrows = b;
+		drawArrows = b;
 	}
 	
 	public boolean getDrawArrows() {
