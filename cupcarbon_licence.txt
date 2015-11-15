@@ -1,6 +1,6 @@
-CupCarbon Copyright (C) 2013-2015 Ahcene Bounceur - UBO - Lab-STICC
+CupCarbon Copyright (C) 2013-2016 Ahcene Bounceur - UBO - Lab-STICC
 ----------------------------------------------
-CupCarbon V 2.2 (U-ONE): Free OSM based Wireless Sensor Network design and simulation platform
+CupCarbon V 2.3 (U-ONE): Free OSM based Wireless Sensor Network design and simulation platform
 SenScript V 2.3
 www.cupcarbon.com
 ----------------------------------------------
