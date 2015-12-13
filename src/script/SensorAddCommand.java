@@ -1,10 +1,14 @@
 package script;
 
 
+import java.util.Stack;
+
 import device.SensorNode;
 
 public final class SensorAddCommand {
 
+	public static Stack<String> endof = new Stack<String>();
+	
 	public static String detectKeyWord(String s) {		
 		return s.replaceFirst("\\(", " (");
 	}
@@ -14,6 +18,11 @@ public final class SensorAddCommand {
 		String[] inst = instStr.split(" ");
 		
 		Command command = null;
+		
+		if (inst[0].toLowerCase().equals("end")) {
+			instStr = endof.pop();
+			addCommand(instStr, sensorNode, script);
+		}
 		
 		if (inst[0].toLowerCase().equals("delay")) {
 			command = new Command_DELAY(sensorNode, inst[1]);
@@ -142,8 +151,12 @@ public final class SensorAddCommand {
 		}
 		if (inst[0].toLowerCase().equals("atpl")) {
 			command = new Command_ATPL(sensorNode, inst[1]);
-		}				
+		}
+		if (inst[0].toLowerCase().equals("atsm")) {
+			command = new Command_ATSM(sensorNode, inst[1]);
+		}
 		if (inst[0].toLowerCase().equals("while")) {
+			endof.push("endwhile");
 			Command_WHILE commandWhile = new Command_WHILE(sensorNode, instStr);
 			if (script.getCurrentWhile() != null){
 				commandWhile.setParent(script.getCurrentWhile());
@@ -158,6 +171,7 @@ public final class SensorAddCommand {
 			script.add(commandWEndhile);
 		}
 		if (inst[0].toLowerCase().equals("for")) {
+			endof.push("endfor");
 			Command_FOR cmdFor = null;
 			if(inst.length==4) cmdFor = new Command_FOR(sensorNode, inst[1], inst[2], inst[3], "1");
 			if(inst.length==5) cmdFor = new Command_FOR(sensorNode, inst[1], inst[2], inst[3], inst[4]);
@@ -175,6 +189,7 @@ public final class SensorAddCommand {
 		}
 		
 		if (inst[0].toLowerCase().equals("if")) {
+			endof.push("endif");
 			Command_IF commandIf = new Command_IF(sensorNode, instStr);
 			if (script.getCurrentIf() != null){
 				commandIf.setParent(script.getCurrentIf());
@@ -215,6 +230,10 @@ public final class SensorAddCommand {
 		
 		if (inst[0].toLowerCase().equals("dec")) {
 			command = new Command_MINUS(sensorNode, inst[1], "$"+inst[1], "1");
+		}
+		
+		if (inst[0].toLowerCase().equals("getinfo")) {
+			command = new Command_GETINFO(sensorNode, inst[1]);
 		}
 		
 		//-------

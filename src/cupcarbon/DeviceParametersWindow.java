@@ -64,7 +64,9 @@ public class DeviceParametersWindow extends JInternalFrame {
 	public static JTextField tf_eMax;
 	public static JTextField tf_eTx;
 	public static JTextField tf_eRx;
-	public static JTextField tf_eS;
+	public static JTextField tf_eSlp;
+	public static JTextField tf_eL;
+	public static JTextField tf_eS;		
 	public static JTextField tf_beta;
 
 	/**
@@ -94,7 +96,7 @@ public class DeviceParametersWindow extends JInternalFrame {
 		setClosable(true);
 		setIconifiable(true);
 		setTitle("Node Parameters");
-		setBounds(10, 10, 460, 600);
+		setBounds(10, 10, 460, 641);
 
 		JPanel panel_2 = new JPanel();
 		getContentPane().add(panel_2, BorderLayout.SOUTH);
@@ -112,7 +114,7 @@ public class DeviceParametersWindow extends JInternalFrame {
 								tf_eTx.getText(),
 								tf_eRx.getText(),
 								tf_eS.getText(),
-								tf_beta.getText(), ""
+								tf_beta.getText(), "" , tf_eSlp.getText(), tf_eL.getText()
 					);
 			}
 		});
@@ -183,9 +185,17 @@ public class DeviceParametersWindow extends JInternalFrame {
 		lblEnergyRx.setFont(new Font("Arial", Font.PLAIN, 11));
 		panel_9.add(lblEnergyRx);
 		
-		JLabel lblBta = new JLabel("Sensing Energy");
-		lblBta.setFont(new Font("Arial", Font.PLAIN, 11));
-		panel_9.add(lblBta);
+		JLabel lbl_sens = new JLabel("Sensing Energy");
+		lbl_sens.setFont(new Font("Arial", Font.PLAIN, 11));
+		panel_9.add(lbl_sens);
+		
+		JLabel lblSleepingEnergy = new JLabel("Sleeping Energy");
+		lblSleepingEnergy.setFont(new Font("Arial", Font.PLAIN, 11));
+		panel_9.add(lblSleepingEnergy);
+		
+		JLabel lblListeningEnergy = new JLabel("Listening Energy");
+		lblListeningEnergy.setFont(new Font("Arial", Font.PLAIN, 11));
+		panel_9.add(lblListeningEnergy);
 		
 		JLabel lblBeta = new JLabel("Beta");
 		lblBeta.setFont(new Font("Arial", Font.PLAIN, 11));
@@ -253,6 +263,14 @@ public class DeviceParametersWindow extends JInternalFrame {
 		tf_eS.setColumns(10);
 		panel_10.add(tf_eS);
 		
+		tf_eSlp = new JTextField();
+		tf_eSlp.setColumns(10);
+		panel_10.add(tf_eSlp);
+		
+		tf_eL = new JTextField();
+		tf_eL.setColumns(10);
+		panel_10.add(tf_eL);
+		
 		tf_beta = new JTextField();
 		tf_beta.setColumns(10);
 		panel_10.add(tf_beta);
@@ -261,11 +279,11 @@ public class DeviceParametersWindow extends JInternalFrame {
 		panel_8.add(panel_11, BorderLayout.EAST);
 		panel_11.setLayout(new GridLayout(0, 1, 0, 0));
 
-		JPanel panel_1_ = new JPanel();
-		FlowLayout flowLayout_5 = (FlowLayout) panel_1_.getLayout();
-		flowLayout_5.setVgap(0);
-		flowLayout_5.setHgap(0);
-		panel_11.add(panel_1_);
+		JPanel panel_1_1 = new JPanel();
+		FlowLayout fl_panel_1_1 = (FlowLayout) panel_1_1.getLayout();
+		fl_panel_1_1.setVgap(0);
+		fl_panel_1_1.setHgap(0);
+		panel_11.add(panel_1_1);
 
 		JButton button_ = new JButton("");
 		button_.addActionListener(new ActionListener() {
@@ -302,9 +320,9 @@ public class DeviceParametersWindow extends JInternalFrame {
 			}
 		});
 		button_1_.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
-		panel_1_.add(button_1_);
+		panel_1_1.add(button_1_);
 		button_.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "Ouvrir.png"));
-		panel_1_.add(button_);
+		panel_1_1.add(button_);
 
 		JPanel panel_1 = new JPanel();
 		FlowLayout flowLayout_6 = (FlowLayout) panel_1.getLayout();
@@ -540,6 +558,18 @@ public class DeviceParametersWindow extends JInternalFrame {
 		flowLayout_10.setHgap(0);
 		panel_11.add(panel_5);
 		
+		JPanel panel_Slp = new JPanel();
+		FlowLayout flowLayout_Slp = (FlowLayout) panel_Slp.getLayout();
+		flowLayout_Slp.setVgap(0);
+		flowLayout_Slp.setHgap(0);
+		panel_11.add(panel_Slp);
+		
+		JPanel panel_L = new JPanel();
+		FlowLayout flowLayout_L = (FlowLayout) panel_L.getLayout();
+		flowLayout_L.setVgap(0);
+		flowLayout_L.setHgap(0);
+		panel_11.add(panel_L);
+		
 		JButton button_10 = new JButton("");
 		button_10.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -548,6 +578,28 @@ public class DeviceParametersWindow extends JInternalFrame {
 		});
 		button_10.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
 		panel_5.add(button_10);
+		
+		
+		
+		
+		JButton button_Slp = new JButton("");
+		button_Slp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DeviceList.setESlp(tf_eSlp.getText());
+			}
+		});
+		button_Slp.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		panel_Slp.add(button_Slp);
+		
+		JButton button_L = new JButton("");
+		button_L.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DeviceList.setEL(tf_eL.getText());
+			}
+		});
+		button_L.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		panel_L.add(button_L);
+		
 		
 		JPanel panel_6 = new JPanel();
 		FlowLayout flowLayout_11 = (FlowLayout) panel_6.getLayout();
@@ -558,7 +610,7 @@ public class DeviceParametersWindow extends JInternalFrame {
 		JButton button_11 = new JButton("");
 		button_11.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DeviceList.setBeta(tf_beta.getText());
+				//DeviceList.setBeta(tf_beta.getText());
 			}
 		});
 		button_11.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));

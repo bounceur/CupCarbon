@@ -33,21 +33,20 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
-import map.Layer;
-import markers.Marker;
-import markers.MarkerList;
-
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
-import script.Script;
-import utilities.MapCalc;
-import utilities.UColor;
-import utilities._Constantes;
 import actions_ui.AddDevice;
 import actions_ui.MoveDevice;
 import actions_ui.MoveMarker;
 import battery.Battery;
 import cupcarbon.DeviceParametersWindow;
+import map.Layer;
+import markers.Marker;
+import markers.MarkerList;
+import script.Script;
+import utilities.MapCalc;
+import utilities.UColor;
+import utilities._Constantes;
 
 /**
  * @author Ahcene Bounceur
@@ -71,6 +70,7 @@ public abstract class Device implements Runnable, MouseListener,
 	
 	public static final boolean DEAD = false;
 	public static final boolean ALIVE = true;
+	public static final boolean SLEEP = false;
 
 	public static int moveSpeed = 100;
 
@@ -127,11 +127,14 @@ public abstract class Device implements Runnable, MouseListener,
 	protected double consumptionRx = 0;
 	protected double eTx = 0.0000592;
 	protected double eRx = 0.0000286;
+	protected double eSlp = 0.0000001;//Sleep
+	protected double eL = 0.000001;//Listen
 	protected double eS = 1;
-	protected double beta = 1;
+	//protected double beta = 1;
 	
 	protected Color radioLinkColor = UColor.RED;
 	
+	protected boolean sleeping = false;
 	protected boolean receiving = false;
 	protected boolean sending = false;
 	protected boolean writing = false;
@@ -714,8 +717,9 @@ public abstract class Device implements Runnable, MouseListener,
 			DeviceParametersWindow.tf_eTx.setText("" + getETx()) ;
 			DeviceParametersWindow.tf_eRx.setText("" + getERx()) ;
 			DeviceParametersWindow.tf_eS.setText("" + getES()) ;
-			DeviceParametersWindow.tf_beta.setText("" + getBeta()) ;
-
+			DeviceParametersWindow.tf_eSlp.setText("" + getESlp()) ;
+			DeviceParametersWindow.tf_eL.setText("" + getEL()) ;
+			//DeviceParametersWindow.tf_beta.setText("" + getBeta()) ;
 			DeviceParametersWindow.scriptComboBox.setSelectedItem("");
 			DeviceParametersWindow.gpsPathNameComboBox.setSelectedItem("");
 			
@@ -1400,6 +1404,23 @@ public abstract class Device implements Runnable, MouseListener,
 	public void setERx(double eRx) {
 		this.eRx = eRx;
 	}
+	
+	public double getESlp() {
+		return eSlp;
+	}
+
+	public void setESlp(double eSlp) {
+		this.eSlp = eSlp;
+	}
+
+	public double getEL() {
+		return eL;
+	}
+
+	public void setEL(double eL) {
+		this.eL = eL;
+	}
+
 
 	public double getES() {
 		return eS;
@@ -1407,14 +1428,6 @@ public abstract class Device implements Runnable, MouseListener,
 
 	public void setES(double eS) {
 		this.eS = eS;
-	}
-
-	public double getBeta() {
-		return beta;
-	}
-
-	public void setBeta(double beta) {
-		this.beta = beta;
 	}
 	
 	public void setTrgetName(String targetName) {
@@ -1602,6 +1615,15 @@ public abstract class Device implements Runnable, MouseListener,
 	}
 	
 	public abstract void initBattery() ;
+	
+	
+	public boolean isSleeping() {
+		return sleeping;
+	}
+	
+	public void setSleeping(boolean b) {
+		sleeping = b;
+	}
 	
 	public boolean isSending() {
 		return sending;

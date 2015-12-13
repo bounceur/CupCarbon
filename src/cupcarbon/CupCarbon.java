@@ -56,15 +56,18 @@ import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 
+import org.jdesktop.swingx.mapviewer.GeoPosition;
+
+import actions_ui.Historic;
+import arduino.Arduino;
+import buildings.BuildingList;
+import device.Device;
+import device.DeviceList;
 import map.Layer;
 import map.RandomDevices;
 import map.WorldMap;
 import markers.Marker;
 import markers.MarkerList;
-
-import org.jdesktop.swingx.mapviewer.GeoPosition;
-
-import buildings.BuildingList;
 import osm.City;
 import perso.ExampleClass;
 import perso.MonAlgoClass;
@@ -73,8 +76,6 @@ import project.Project;
 import simulation.FaultInjector;
 import solver.CharlySchedul;
 import solver.EnvelopeJarvis;
-import solver.EnvelopeLPCN;
-import solver.EnvelopeLPCNMobile;
 import solver.NetworkCenter;
 import solver.NetworkEnvelopeC;
 import solver.NetworkEnvelopeP;
@@ -82,16 +83,12 @@ import solver.NetworkPerso;
 import solver.SensorSetCover;
 import solver.SensorTargetCoverageRun;
 import solver.SolverProxyParams;
-import actions_ui.Historic;
-import arduino.Arduino;
-import device.Device;
-import device.DeviceList;
 
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
- * @version 2.1 (U-One)
+ * @version 2.3 (U-One)
  */
 
 public class CupCarbon {
@@ -121,8 +118,8 @@ public class CupCarbon {
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	protected FaultInjector faultInjector = null;
-	protected EnvelopeLPCN lpcn = null;
-	protected EnvelopeLPCNMobile lpcnm = null;
+	//protected EnvelopeLPCN lpcn = null;
+	//protected EnvelopeLPCNMobile lpcnm = null;
 	private JTextField textField;
 	private JTextField textField_1;
 	
@@ -1044,8 +1041,8 @@ public class CupCarbon {
 		mntmRunGiftWrap.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "edu_mathematics-1.png"));
 		mntmRunGiftWrap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				lpcn = new EnvelopeLPCN() ;
-				lpcn.start();			
+				//lpcn = new EnvelopeLPCN() ;
+				//lpcn.start();			
 			}
 		});
 		mnEnvelope.add(mntmRunGiftWrap);
@@ -1054,8 +1051,8 @@ public class CupCarbon {
 		mntmStopGiftWrap.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "edu_mathematics-1.png"));
 		mntmStopGiftWrap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(lpcn!=null) 
-					lpcn.stopAlgorithm();			
+				//if(lpcn!=null) 
+				//	lpcn.stopAlgorithm();			
 			}
 		});
 		mnEnvelope.add(mntmStopGiftWrap);
@@ -1064,8 +1061,8 @@ public class CupCarbon {
 		mntmRunLpcnMobile.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "edu_mathematics-1.png"));
 		mntmRunLpcnMobile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				lpcnm = new EnvelopeLPCNMobile() ;
-				lpcnm.start();			
+				//lpcnm = new EnvelopeLPCNMobile() ;
+				//lpcnm.start();			
 			}
 		});
 		mnEnvelope.add(mntmRunLpcnMobile);
@@ -1074,8 +1071,8 @@ public class CupCarbon {
 		mntmStopLpcnMobile.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "edu_mathematics-1.png"));
 		mntmStopLpcnMobile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(lpcnm!=null) 
-					lpcnm.stopAlgorithm();	
+				//if(lpcnm!=null) 
+				//	lpcnm.stopAlgorithm();	
 			}
 		});
 		mnEnvelope.add(mntmStopLpcnMobile);

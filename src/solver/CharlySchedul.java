@@ -58,8 +58,6 @@ public class CharlySchedul {
 					ps.print(d.getSensorUnitRadius() + " ");
 					System.out.print(d.getRadioRadius() + " ");
 					ps.print(d.getRadioRadius() + " ");
-					System.out.print(d.getBeta() + " ");
-					ps.print(d.getBeta() + " ");
 					System.out.println();
 					ps.println();
 				}

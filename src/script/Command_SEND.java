@@ -50,7 +50,7 @@ public class Command_SEND extends Command {
 				v = Double.valueOf(sensor.getScript().getVariableValue(arg3));
 			}
 			for (SensorNode snode : sensor.getSensorNodeNeighbors()) {
-				if (sensor.radioDetect(snode) && !snode.isDead() && sensor.sameCh(snode) && sensor.sameNId(snode) && snode.getId()!=v) {
+				if (sensor.radioDetect(snode) && !snode.isDead() && !snode.isSleeping() && sensor.sameCh(snode) && sensor.sameNId(snode) && snode.getId()!=v) {
 					snode.setReceiving(true);
 					Channel.addPacket(message, sensor, snode);
 				}
@@ -65,7 +65,7 @@ public class Command_SEND extends Command {
 				SensorNode snode = DeviceList.getSensorNodeById((int)destNodeId);
 				if (snode != null) {
 					SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
-					if (sensor.radioDetect(snode) && !snode.isDead() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
+					if (sensor.radioDetect(snode) && !snode.isDead() && !snode.isSleeping() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
 						snode.setReceiving(true);
 						Channel.addPacket(message, sensor, snode);
 					}
@@ -81,7 +81,7 @@ public class Command_SEND extends Command {
 				if(!dest.equals("0")) {
 					SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the nodes with MY="+destNodeId+": ");
 					for(SensorNode snode : DeviceList.getSensorNodes()) {
-						if ((sensor.radioDetect(snode)) && (!snode.isDead()) && (snode.getMy()==destNodeId) && sensor.sameCh(snode) && sensor.sameNId(snode)) {
+						if ((sensor.radioDetect(snode)) && (!snode.isDead() && !snode.isSleeping()) && (snode.getMy()==destNodeId) && sensor.sameCh(snode) && sensor.sameNId(snode)) {
 							SimLog.add("  -> S" + snode.getId() + " ");							
 							snode.setReceiving(true);
 							Channel.addPacket(message, sensor, snode);
@@ -96,7 +96,7 @@ public class Command_SEND extends Command {
 						SensorNode snode = DeviceList.getSensorNodeById((int)destNodeId);
 						if (snode != null) {
 							SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
-							if (!snode.isDead() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
+							if (!snode.isDead() && !snode.isSleeping() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
 								snode.setReceiving(true);
 								Channel.addPacket(message, sensor, snode);
 								sensor.setDistanceMode(true);

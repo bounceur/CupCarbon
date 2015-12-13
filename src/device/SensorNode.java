@@ -225,12 +225,12 @@ public abstract class SensorNode extends DeviceWithRadio {
 				g.drawLine(x + rayon + 3, y + rayon + 3, x + rayon + 3, y
 						+ rayon - 2);
 			}
-			if(!isDead()) {
+			if(!isDead() || !isSleeping()) {
 				if(hide == 0 || hide == 3) {
-					if (!isDead()) {
+					//if (!isDead()) {
 						g.setColor(UColor.BLACK_TTRANSPARENT);
 						g.drawPolygon(polyX[0], polyY[0], nPoint);
-					}
+					//}
 				}
 				
 				g.setColor(Color.DARK_GRAY);
@@ -442,7 +442,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 		List<SensorNode> neighnodes = new ArrayList<SensorNode>();
 		
 		for(SensorNode snode : DeviceList.getSensorNodes()) {
-			if(((radioDetect(snode))) && this!=snode && !this.isDead() && !snode.isDead() && sameCh(snode) && sameNId(snode)) {
+			if(((radioDetect(snode))) && this!=snode && !this.isDead() && !snode.isDead() && !this.isSleeping() && !snode.isSleeping() && sameCh(snode) && sameNId(snode)) {
 				neighnodes.add(snode);
 			}
 		}

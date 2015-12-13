@@ -437,7 +437,7 @@ public class DeviceList {
 
 	public static void updateFromMap(String xS, String yS, String radiusS,
 			String radioRadiusS, String captureRadiusS, String gpsFileName,
-			String eMax, String eTx, String eRx, String eS, String beta, String targetName
+			String eMax, String eTx, String eRx, String eS, String beta, String targetName, String eSlp, String eL
 			) {
 		Device node;
 		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
@@ -453,7 +453,9 @@ public class DeviceList {
 				node.setETx(Double.valueOf(eTx));
 				node.setERx(Double.valueOf(eRx));
 				node.setES(Double.valueOf(eS));
-				node.setBeta(Double.valueOf(beta));
+				node.setESlp(Double.valueOf(eSlp));
+				node.setES(Double.valueOf(eL));
+				//node.setBeta(Double.valueOf(beta));
 				node.setTrgetName(targetName);				
 			}
 		}
@@ -769,14 +771,32 @@ public class DeviceList {
 		Layer.getMapViewer().repaint();
 	}
 	
-	public static void setBeta(String value) {
+//	public static void setBeta(String value) {
+//		for (Device d : nodes) {
+//			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+//				d.setBeta(Double.valueOf(value));
+//			}
+//		}
+//		Layer.getMapViewer().repaint();
+//	}
+	
+	public static void setESlp(String value) {
 		for (Device d : nodes) {
 			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-				d.setBeta(Double.valueOf(value));
+				d.setESlp(Double.valueOf(value));
 			}
 		}
 		Layer.getMapViewer().repaint();
-	}	
+	}
+	
+	public static void setEL(String value) {
+		for (Device d : nodes) {
+			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+				d.setEL(Double.valueOf(value));
+			}
+		}
+		Layer.getMapViewer().repaint();
+	}
 	
 
 	public static void selectById(String id) {
