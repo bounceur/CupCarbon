@@ -237,6 +237,7 @@ public final class SensorAddCommand {
 		}
 		
 		//-------
+		// This part must be here (at the end). All new commands must be added before (above)
 		
 		if (command != null) {
 			script.add(command);

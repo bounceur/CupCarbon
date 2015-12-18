@@ -49,6 +49,8 @@ public abstract class SensorNode extends DeviceWithRadio {
 	protected boolean comEdgeDrawn = false;
 	protected Random rnd = new Random();
 	protected double variation = rnd.nextGaussian();
+	
+	protected boolean ackOk = false; 
 
 	//
 	protected int bufferSize = 1024;
@@ -564,6 +566,14 @@ public abstract class SensorNode extends DeviceWithRadio {
 			}
 		}
 		return s ;
+	}
+	
+	public boolean getAckOk() {
+		return ackOk;
+	}
+	
+	public void setAckOk(boolean ackOk) {
+		this.ackOk = ackOk;
 	}
 	
 }

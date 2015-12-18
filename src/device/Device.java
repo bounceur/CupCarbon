@@ -1676,7 +1676,8 @@ public abstract class Device implements Runnable, MouseListener,
 	}
 
 	public void gotoTheNextInstruction() {
-		if(!script.getCurrent().isExecuting()) {			
+		//System.out.println(getId()+" -> "+script.getCurrent()+" "+script.getIndex());
+		if(!script.getCurrent().isExecuting()) {
 			script.next();
 		}		
 	}

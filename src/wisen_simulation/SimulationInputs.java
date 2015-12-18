@@ -29,6 +29,11 @@ package wisen_simulation;
  */
 public class SimulationInputs {
 
+	public static final int PROBA = 0;
+	public static final int ALPHAD = 1;
+	public static final int NONE = 0;
+	public static final int CSMA = 1;
+	
 	public static boolean mobility = false;
 	//public static int energyMax = 100000000;
 	public static int iterNumber = 10000;
@@ -38,4 +43,7 @@ public class SimulationInputs {
 	public static boolean displayLog = true;
 	public static boolean displayResults = true;
 	
+	public static double ackType = SimulationInputs.PROBA ;
+	public static double ackProba = 0.9 ;
+	public static int protocol = SimulationInputs.CSMA ;
 }

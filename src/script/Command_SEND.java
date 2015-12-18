@@ -1,15 +1,14 @@
 package script;
 
-import utilities.UColor;
-import wisen_simulation.SimLog;
 import arduino.XBeeFrameGenerator;
 import device.Channel;
 import device.DataInfo;
 import device.DeviceList;
 import device.SensorNode;
+import utilities.UColor;
+import wisen_simulation.SimLog;
 
 public class Command_SEND extends Command {
-
 	
 	protected String arg1 = "";
 	protected String arg2 = "";
@@ -17,6 +16,7 @@ public class Command_SEND extends Command {
 	protected String arg4 = "";	
 	protected String arg5 = "";	
 	
+	private boolean ack = false;
 	
 	public Command_SEND(SensorNode sensor, String arg1, String arg2) {
 		this.sensor = sensor ;
@@ -52,7 +52,7 @@ public class Command_SEND extends Command {
 			for (SensorNode snode : sensor.getSensorNodeNeighbors()) {
 				if (sensor.radioDetect(snode) && !snode.isDead() && !snode.isSleeping() && sensor.sameCh(snode) && sensor.sameNId(snode) && snode.getId()!=v) {
 					snode.setReceiving(true);
-					Channel.addPacket(message, sensor, snode);
+					Channel.addPacket(2, message, sensor, snode);
 				}
 			}
 		}
@@ -67,7 +67,7 @@ public class Command_SEND extends Command {
 					SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
 					if (sensor.radioDetect(snode) && !snode.isDead() && !snode.isSleeping() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
 						snode.setReceiving(true);
-						Channel.addPacket(message, sensor, snode);
+						Channel.addPacket(0, message, sensor, snode);
 					}
 				}
 				else 
@@ -84,7 +84,7 @@ public class Command_SEND extends Command {
 						if ((sensor.radioDetect(snode)) && (!snode.isDead() && !snode.isSleeping()) && (snode.getMy()==destNodeId) && sensor.sameCh(snode) && sensor.sameNId(snode)) {
 							SimLog.add("  -> S" + snode.getId() + " ");							
 							snode.setReceiving(true);
-							Channel.addPacket(message, sensor, snode);
+							Channel.addPacket(0, message, sensor, snode);
 						}						
 					}
 				}
@@ -98,7 +98,7 @@ public class Command_SEND extends Command {
 							SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
 							if (!snode.isDead() && !snode.isSleeping() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
 								snode.setReceiving(true);
-								Channel.addPacket(message, sensor, snode);
+								Channel.addPacket(0, message, sensor, snode);
 								sensor.setDistanceMode(true);
 								snode.setDistanceMode(true);
 							}
@@ -124,27 +124,57 @@ public class Command_SEND extends Command {
 		String message = arg1;
 		message = sensor.getScript().getVariableValue(message);
 		int messageLength = message.length();
-				
-		if (writing) {
-			SimLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");
-			writing = false ;			
-			sensor.setSending(true);
-			sendOperation(message);
-			sensor.setTxConsumption(1);
-			sensor.consumeTx(messageLength*8);
-			sensor.initTxConsumption(); 
-			executing=false;
-			return 0;
-		}
 		
-		if(!writing) {
+		//System.out.println(sensor.getId()+" -> "+" SEND "+sensor.getId());
+		
+		if(!writing) {	
+			ack = false;
 			SimLog.add("S" + sensor.getId() + " is writing the message : \"" + message + "\" in its buffer.");
 			writing = true ;
-			executing = true;
+			executing = true;			
+			//System.out.println("W1 "+executing);
+			
 			// Considerer la mise en buffer du message (coute UartDataRate baud)			
 			double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
 			return (long)(Math.round(messageLength*8.*ratio));
 		}
+		
+		if (writing && !ack) {			
+			//System.out.println("sending");		
+			SimLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");	
+			sensor.setSending(true);
+			sendOperation(message);
+			sensor.setTxConsumption(1);
+			sensor.consumeTx(messageLength*8);
+			sensor.initTxConsumption();
+			
+			if (arg2.equals("*")) {
+				ack = false;
+				writing = false ;					
+				executing=false;
+				return 0;
+			}
+			else {
+				ack = true;
+				return Long.MAX_VALUE;// (250000*3);
+			}
+		}
+		
+		if(ack) {
+			//System.out.println(sensor.getId()+" ACK Received : "+sensor.getAckOk());
+			ack = false;
+			if(sensor.getAckOk()) {
+				writing = false;
+				executing = false;				
+			} 
+			else {
+				writing = true;
+				executing = true;
+				sensor.getScript().previous();
+			}
+			return 0;
+		}
+				
 		return 0;
 	}
 	

@@ -176,7 +176,9 @@ public class WisenSimulation extends Thread {
 				
 				consolPrintln(" + "+min+" = "+ttime);
 				
+				//System.out.println(Channel.getMin()+" "+Channel.display());
 				Channel.goToTheNextTime(min);
+				//System.out.println(Channel.getMin()+" "+Channel.display());
 				if (Channel.getMin()==0) {
 					Channel.messageReceived();
 				}
@@ -264,9 +266,11 @@ public class WisenSimulation extends Thread {
 								device.gotoTheNextEvent(min);								
 							
 							if(device.getEvent()==0) {
+								//System.out.println(min);
 								fMessage += device.getScript().getCurrent().finishMessage() + "\n";
 								device.gotoTheNextInstruction() ;								
 							}
+							
 							consolPrint(device.getEvent()+" | ");
 							if (!device.isDead())
 								allDeadSensors = false;

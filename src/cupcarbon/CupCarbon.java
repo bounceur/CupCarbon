@@ -88,7 +88,7 @@ import solver.SolverProxyParams;
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
- * @version 2.3 (U-One)
+ * @version 2.4 (U-One)
  */
 
 public class CupCarbon {

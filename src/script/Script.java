@@ -55,10 +55,21 @@ public class Script {
 	}
 
 	public void next() {
+		//System.out.println("NEXT -> " + sensor.getId());
 		if (!breaked) {
 			index++;
 			if (index >= commands.size()){
 				index = loopIndex;
+			}
+		}		
+	}
+	
+	public void previous() {
+		//System.out.println("NEXT -> " + sensor.getId());
+		if (!breaked) {
+			index--;
+			if (index < 0){
+				index = 0;
 			}
 		}		
 	}
@@ -102,15 +113,15 @@ public class Script {
 		return event;
 	}
 		
-	public int getNextIteration() {
-		int index = this.index;
-		while (index < commands.size()) {
-			if (commands.get(index).isElse() || commands.get(index).isEndIf())
-				return index;
-			index++;
-		}
-		return this.index;
-	}
+//	public int getNextIteration() {
+//		int index = this.index;
+//		while (index < commands.size()) {
+//			if (commands.get(index).isElse() || commands.get(index).isEndIf())
+//				return index;
+//			index++;
+//		}
+//		return this.index;
+//	}
 	
 	public void addVariable(String s1, String s2) {
 		variables.put(s1, s2);
