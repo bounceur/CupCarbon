@@ -195,9 +195,9 @@ public class Command_SEND extends Command {
 	@Override
 	public String toString() {
 		if(writing)
-			return "SEND [W2]";	
+			return "SEND [RADIO]";	
 		else 
-			return "SEND [W1]"; 
+			return "SEND [UART]"; 
 		
 	}
 	

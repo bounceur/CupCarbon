@@ -20,10 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.SoftBevelBorder;
 
 import device.DataInfo;
 import wisen_simulation.SimulationInputs;
@@ -48,6 +46,8 @@ public class WsnSimulationWindow extends JInternalFrame {
 	private JCheckBox chckbxGenerateLog;
 	private JCheckBox chckbxShowInConsole;
 	private JTextField ackProbaCB;
+	private JComboBox<String> protocolCBox;
+	private JComboBox<String> ackTypeCB;
 	
 	/**
 	 * Launch the application.
@@ -160,12 +160,12 @@ public class WsnSimulationWindow extends JInternalFrame {
 		textField.setColumns(10);
 
 		JPanel panel_7 = new JPanel();
-		panel_7.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panel_7.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_1.add(panel_7);
 		panel_7.setLayout(new GridLayout(0, 1, 0, 0));
 
 		JPanel panel_13 = new JPanel();
-		panel_13.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panel_13.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_7.add(panel_13);
 		panel_13.setLayout(new GridLayout(4, 1, 0, 0));
 
@@ -190,6 +190,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 		panel_16.add(lblMs);
 		
 		JPanel panel_19 = new JPanel();
+		panel_19.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_13.add(panel_19);
 				panel_19.setLayout(new GridLayout(0, 2, 0, 0));
 				
@@ -206,7 +207,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 						lblProtocol.setFont(new Font("Arial", Font.PLAIN, 12));
 						panel_2.add(lblProtocol);
 						
-						JComboBox<String> protocolCBox = new JComboBox<String>();
+						protocolCBox = new JComboBox<String>();
 						protocolCBox.setToolTipText("Protocol");
 						protocolCBox.setModel(new DefaultComboBoxModel<String>(new String[] {"CSMA"}));
 						protocolCBox.setSelectedIndex(0);
@@ -222,7 +223,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 						lblAck.setFont(new Font("Arial", Font.PLAIN, 12));
 						panel_9.add(lblAck);
 						
-						JComboBox<String> ackTypeCB = new JComboBox<String>();
+						ackTypeCB = new JComboBox<String>();
 						ackTypeCB.setToolTipText("ACK");
 						ackTypeCB.setModel(new DefaultComboBoxModel<String>(new String[] {"Probability", "Alpha-distribution"}));
 						ackTypeCB.setSelectedIndex(0);
@@ -231,7 +232,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 						
 						ackProbaCB = new JTextField();
 						ackProbaCB.setToolTipText("ACK Probability");
-						ackProbaCB.setText("0.9");
+						ackProbaCB.setText(""+SimulationInputs.ackProba);
 						ackProbaCB.setFont(new Font("Arial", Font.PLAIN, 12));
 						ackProbaCB.setColumns(10);
 						panel_9.add(ackProbaCB);
@@ -261,20 +262,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 		btnApply.setIcon(new ImageIcon("images/stylo.png"));
 		btnApply.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (freqComboBox.getSelectedItem().equals("-"))
-					DataInfo.UartDataRate = 0;
-				else
-					DataInfo.UartDataRate = Integer.parseInt((String) freqComboBox.getSelectedItem());
-				SimulationInputs.iterNumber = Integer.parseInt(iterNumberTextField.getText());
-				//SimulationInputs.energyMax = Integer.parseInt(energyMaxTextField.getText());
-				SimulationInputs.mobility = cboxMobility.isSelected();
-				SimulationInputs.visualDelay = Integer.parseInt(vdTextField.getText());
-				SimulationInputs.displayLog = chckbxGenerateLog.isSelected();
-				SimulationInputs.displayResults = chckbxGenerateResults.isSelected();
-				SimulationInputs.showInConsole = chckbxShowInConsole.isSelected(); 
-				SimulationInputs.protocol = protocolCBox.getSelectedIndex();
-				SimulationInputs.ackType = ackTypeCB.getSelectedIndex();
-				SimulationInputs.ackProba = Double.parseDouble(ackProbaCB.getText());
+				apply();
 			}
 		});
 		btnApply.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -343,13 +331,14 @@ public class WsnSimulationWindow extends JInternalFrame {
 			DataInfo.UartDataRate = 0;
 		else
 			DataInfo.UartDataRate = Integer.parseInt((String) freqComboBox.getSelectedItem());
-		SimulationInputs.iterNumber = Integer.parseInt(iterNumberTextField.getText());
-		//SimulationInputs.energyMax = Integer.parseInt(energyMaxTextField.getText());
-		SimulationInputs.mobility = cboxMobility.isSelected();
-		SimulationInputs.visualDelay = Integer.parseInt(vdTextField.getText());
-		SimulationInputs.displayLog = chckbxGenerateLog.isSelected();
-		SimulationInputs.displayResults = chckbxGenerateResults.isSelected();
-		SimulationInputs.showInConsole = chckbxShowInConsole.isSelected(); 
+		apply();
+//		SimulationInputs.iterNumber = Integer.parseInt(iterNumberTextField.getText());
+//		//SimulationInputs.energyMax = Integer.parseInt(energyMaxTextField.getText());
+//		SimulationInputs.mobility = cboxMobility.isSelected();
+//		SimulationInputs.visualDelay = Integer.parseInt(vdTextField.getText());
+//		SimulationInputs.displayLog = chckbxGenerateLog.isSelected();
+//		SimulationInputs.displayResults = chckbxGenerateResults.isSelected();
+//		SimulationInputs.showInConsole = chckbxShowInConsole.isSelected(); 
 		wisenSimulation = new WisenSimulation();
 		wisenSimulation.start();
 	}
@@ -363,4 +352,22 @@ public class WsnSimulationWindow extends JInternalFrame {
 		wisenSimulation.stopSimulation();
 	}
 
+	public void apply() {
+		if (freqComboBox.getSelectedItem().equals("-"))
+			DataInfo.UartDataRate = 0;
+		else
+			DataInfo.UartDataRate = Integer.parseInt((String) freqComboBox.getSelectedItem());
+		SimulationInputs.iterNumber = Integer.parseInt(iterNumberTextField.getText());
+		//SimulationInputs.energyMax = Integer.parseInt(energyMaxTextField.getText());
+		SimulationInputs.mobility = cboxMobility.isSelected();
+		SimulationInputs.visualDelay = Integer.parseInt(vdTextField.getText());
+		SimulationInputs.displayLog = chckbxGenerateLog.isSelected();
+		SimulationInputs.displayResults = chckbxGenerateResults.isSelected();
+		SimulationInputs.showInConsole = chckbxShowInConsole.isSelected(); 
+		SimulationInputs.protocol = protocolCBox.getSelectedIndex();
+		SimulationInputs.ackType = ackTypeCB.getSelectedIndex();
+		double proba = Double.parseDouble(ackProbaCB.getText());
+		SimulationInputs.ackProba = (proba>1)?1:proba;
+	}
+	
 }

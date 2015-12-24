@@ -333,7 +333,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	}		
 	
 	public void loadScript() {
-		script = new Script(this);
+		script = new Script(this);		
 		String projectTmpScriptPath = Project.getProjectScriptPath() + File.separator + scriptFileName;
 		String tmp = projectTmpScriptPath;
 		try {
@@ -344,7 +344,6 @@ public abstract class SensorNode extends DeviceWithRadio {
 				addCommand(s);	
 			}
 			br.close();
-			
 		} catch (Exception e) {e.printStackTrace();}
 	}
 

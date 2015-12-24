@@ -19,6 +19,7 @@
 
 package script;
 
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -36,10 +37,11 @@ public class Script {
 	protected Script parent;
 	protected Command_IF currentIf = null;
 	protected Command_WHILE currentWhile = null;
-	protected Command_FOR currentFor = null;
+	protected Command_FOR currentFor = null;	
 	
 	protected VariableList variables ; 
 	protected TabList tables;
+	protected Hashtable<String, Integer> labels;
 
 	protected boolean waiting = false;
 	
@@ -48,6 +50,8 @@ public class Script {
 		index = 0;
 		variables = new VariableList();
 		tables = new TabList();
+		labels = new Hashtable<String, Integer>();
+		System.out.println("--------->"+labels.size());
 	}
 	
 	public void add(Command command) {
@@ -75,6 +79,7 @@ public class Script {
 	}
 
 	public void init() {
+		//labels = new Hashtable<String, Integer>();
 		variables = new VariableList();
 		sensor.initBuffer();		
 		tables = new TabList();
@@ -86,7 +91,7 @@ public class Script {
 		level = 0;
 	}
 	
-	public int getSizeCommands(){
+	public int size(){
 		return commands.size();
 	}
 	
@@ -237,5 +242,13 @@ public class Script {
 
 	public void displayVars() {
 		System.out.println(variables);
+	}
+	
+	public void addLabel(String label, int lineNumber) {
+		labels.put(label, lineNumber);
+	}
+	
+	public int getLineOfLabel(String label) {
+		return labels.get(label);
 	}
 }

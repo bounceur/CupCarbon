@@ -17,6 +17,11 @@ public final class SensorAddCommand {
 		instStr = detectKeyWord(instStr);
 		String[] inst = instStr.split(" ");
 		
+		if(inst[0].split(":").length>1) {
+			sensorNode.getScript().addLabel(inst[0].split(":")[0], sensorNode.getScript().size()+1);			
+			inst[0] = inst[0].split(":")[1];
+		}
+		
 		Command command = null;
 		
 		if (inst[0].toLowerCase().equals("end")) {
@@ -202,13 +207,17 @@ public final class SensorAddCommand {
 		
 		if (inst[0].toLowerCase().equals("else")) {
 			command = new Command_ELSE(sensorNode);
-			script.getCurrentIf().setElseIndex(script.getSizeCommands());
+			script.getCurrentIf().setElseIndex(script.size());
 		}		
 		
 		if (inst[0].toLowerCase().equals("endif")) {
 			command = new Command_ENDIF(sensorNode);
-			script.getCurrentIf().setEndIfIndex(script.getSizeCommands());
+			script.getCurrentIf().setEndIfIndex(script.size());
 			script.removeCurrentIf();
+		}
+		
+		if (inst[0].toLowerCase().equals("goto")) {
+			command = new Command_GOTO(sensorNode, inst[1]);
 		}
 		
 		if (inst[0].toLowerCase().equals("rotate")) {
