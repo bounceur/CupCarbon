@@ -7,16 +7,16 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import natural_events.Gas;
-import map.Layer;
-import project.Project;
 import cupcarbon.CupCarbon;
 import cupcarbon.WsnSimulationWindow;
-import device.Channel;
+import device.Channels;
 import device.DataInfo;
 import device.Device;
 import device.DeviceList;
 import flying_object.FlyingGroup;
+import map.Layer;
+import natural_events.Gas;
+import project.Project;
 
 public class WisenSimulation extends Thread {
 
@@ -53,10 +53,19 @@ public class WisenSimulation extends Thread {
 		WsnSimulationWindow.setState("Simulation : initialization ...");
 		System.out.println("Initialization ... ");
 		List<Device> devices = DeviceList.getNodes();
+		
+		
+		//WisenEventList wEvents = new WisenEventList();		
+		//wEvents.addEvent(0, 1000, null);
+		
 		SimLog.add("===========================");
 		SimLog.add("Initialization");
+				
+		Channels.init();
 		
-		Channel.init();
+		//Channels channels = new Channels();
+		//SensorNode.channels = channels;
+		//Channel.init();
 		
 		for (Device device : devices) {
 			if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
@@ -103,7 +112,7 @@ public class WisenSimulation extends Thread {
 			
 			SimLog.add("======================================================");
 			SimLog.add("802.15.4 bit rate: "+DataInfo.ChDataRate+" bits/s");
-			SimLog.add("UART bit rate: "+DataInfo.UartDataRate+" baud (bits/s)");
+			SimLog.add("UART Bit Rate: "+DataInfo.UartDataRate+" baud (bits/s)");
 			SimLog.add("START SIMULATION");
 			SimLog.add("======================================================");
 
@@ -176,12 +185,8 @@ public class WisenSimulation extends Thread {
 				
 				consolPrintln(" + "+min+" = "+ttime);
 				
-				//System.out.println(Channel.getMin()+" "+Channel.display());
-				Channel.goToTheNextTime(min);
-				//System.out.println(Channel.getMin()+" "+Channel.display());
-				if (Channel.getMin()==0) {
-					Channel.messageReceived();
-				}
+				Channels.goToTheNextTime(min);
+				Channels.receivedMessages();
 				
 				min = Long.MAX_VALUE;
 				for (Device device : devices) {
@@ -216,8 +221,8 @@ public class WisenSimulation extends Thread {
 				
 				consolPrintln("");
 				
-				if (min>Channel.getMin())
-					min = Channel.getMin();
+				if (min>Channels.getMin())
+					min = Channels.getMin();
 				
 				if (mobility) {
 					moving = false;
@@ -226,6 +231,16 @@ public class WisenSimulation extends Thread {
 						moving = true;
 					}
 				}	
+				
+				consolPrintln("");
+				
+				//long minevt = wEvents.getMin();
+				
+				
+				
+//				for (WisenEvent event : WisenEventList.eventList) {
+//					
+//				}
 				
 				consolPrintln("");
 				

@@ -84,7 +84,7 @@ public abstract class Device implements Runnable, MouseListener,
 	
 	protected int my = 0;
 	protected int pl = 100;
-	protected int ch = 0xC;
+	protected int ch = 0x0;
 	protected int nId = 0x3334;
 	protected String userId = "";
 
@@ -881,7 +881,7 @@ public abstract class Device implements Runnable, MouseListener,
 					// Layer.addNode(this.clone());
 					DeviceList.add(this.clone());
 					move = false;
-					/* Tanguy */
+					/* For CTRL Z */
 					AddDevice action = new AddDevice(DeviceList.getNodes().get(DeviceList.size()-1), "Clone");
 					action.exec();
 					/* ------ */

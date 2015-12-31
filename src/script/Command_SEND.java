@@ -1,7 +1,7 @@
 package script;
 
 import arduino.XBeeFrameGenerator;
-import device.Channel;
+import device.Channels;
 import device.DataInfo;
 import device.DeviceList;
 import device.SensorNode;
@@ -52,7 +52,7 @@ public class Command_SEND extends Command {
 			for (SensorNode snode : sensor.getSensorNodeNeighbors()) {
 				if (sensor.radioDetect(snode) && !snode.isDead() && !snode.isSleeping() && sensor.sameCh(snode) && sensor.sameNId(snode) && snode.getId()!=v) {
 					snode.setReceiving(true);
-					Channel.addPacket(2, message, sensor, snode);
+					Channels.addPacket(2, message, sensor, snode);
 				}
 			}
 		}
@@ -67,7 +67,7 @@ public class Command_SEND extends Command {
 					SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
 					if (sensor.radioDetect(snode) && !snode.isDead() && !snode.isSleeping() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
 						snode.setReceiving(true);
-						Channel.addPacket(0, message, sensor, snode);
+						Channels.addPacket(0, message, sensor, snode);
 					}
 				}
 				else 
@@ -84,7 +84,7 @@ public class Command_SEND extends Command {
 						if ((sensor.radioDetect(snode)) && (!snode.isDead() && !snode.isSleeping()) && (snode.getMy()==destNodeId) && sensor.sameCh(snode) && sensor.sameNId(snode)) {
 							SimLog.add("  -> S" + snode.getId() + " ");							
 							snode.setReceiving(true);
-							Channel.addPacket(0, message, sensor, snode);
+							Channels.addPacket(0, message, sensor, snode);
 						}						
 					}
 				}
@@ -98,7 +98,7 @@ public class Command_SEND extends Command {
 							SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
 							if (!snode.isDead() && !snode.isSleeping() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
 								snode.setReceiving(true);
-								Channel.addPacket(0, message, sensor, snode);
+								Channels.addPacket(0, message, sensor, snode);
 								sensor.setDistanceMode(true);
 								snode.setDistanceMode(true);
 							}

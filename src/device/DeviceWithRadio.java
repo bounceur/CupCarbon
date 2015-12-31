@@ -32,13 +32,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import map.Layer;
-
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
+import battery.Battery;
+import map.Layer;
 import utilities.MapCalc;
 import utilities.UColor;
-import battery.Battery;
 
 /**
  * @author Ahcene Bounceur
@@ -372,15 +371,15 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			}
 			
 			Graphics2D g2 = (Graphics2D) g;
-			g2.setStroke(new BasicStroke(1));
-			if(isSending() && device.isReceiving()) {
-				g.setColor(radioLinkColor);
-				g2.setStroke(new BasicStroke(3));
-				
-			    if(Layer.getMapViewer().getZoom() < 2) {
-			    	g2.setStroke(new BasicStroke(4));		    	
-			    }
-			}
+			g2.setStroke(new BasicStroke(0.6f));
+//			if(isSending() && device.isReceiving()) {
+//				g.setColor(radioLinkColor);
+//				g2.setStroke(new BasicStroke(3));
+//				
+//			    if(Layer.getMapViewer().getZoom() < 2) {
+//			    	g2.setStroke(new BasicStroke(4));		    	
+//			    }
+//			}
 			g.drawLine(lx1, ly1, lx2, ly2);
 		}
 
@@ -401,13 +400,13 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				dy = ly2 - ly1;
 				alpha = Math.atan(dy / dx);
 				alpha = 180 * alpha / Math.PI;
-				int as = 14;
-				if(isSending() && device.isReceiving()) {
-					as = 18;
-					if(Layer.getMapViewer().getZoom() < 2) {
-						as = 23;		    	
-				    }
-				}
+				int as = 11;
+//				if(isSending() && device.isReceiving()) {
+//					as = 18;
+//					if(Layer.getMapViewer().getZoom() < 2) {
+//						as = 23;		    	
+//				    }
+//				}
 				if (dx >= 0)	
 					g.fillArc((int) lx2 - as, (int) ly2 - as, as*2, as*2,180 - (int) alpha - as, as*2);
 				else

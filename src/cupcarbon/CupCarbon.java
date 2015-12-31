@@ -1,8 +1,8 @@
 /*----------------------------------------------------------------------------------------------------------------
- * CupCarbon: OSM based Wireless Sensor Network design and simulation tool
+ * CupCarbon: A Smart City & IoT Wireless Sensor Network Simulator
  * www.cupcarbon.com
  * ----------------------------------------------------------------------------------------------------------------
- * Copyright (C) 2013-2015 CupCarbon
+ * Copyright (C) 2013-2016 CupCarbon
  * ----------------------------------------------------------------------------------------------------------------
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,12 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *----------------------------------------------------------------------------------------------------------------*/
+ *----------------------------------------------------------------------------------------------------------------
+ * CupCarbon U-One is part of the research project PERSEPTEUR supported by the 
+ * French Agence Nationale de la Recherche ANR 
+ * under the reference ANR-14-CE24-0017-01. 
+ * ----------------------------------------------------------------------------------------------------------------
+ **/
 
 package cupcarbon;
 
@@ -88,7 +93,7 @@ import solver.SolverProxyParams;
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
- * @version 2.42 (U-One)
+ * @version 2.43 (U-One)
  */
 
 public class CupCarbon {

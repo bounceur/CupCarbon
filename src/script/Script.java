@@ -51,7 +51,7 @@ public class Script {
 		variables = new VariableList();
 		tables = new TabList();
 		labels = new Hashtable<String, Integer>();
-		System.out.println("--------->"+labels.size());
+		//System.out.println("--------->"+labels.size());
 	}
 	
 	public void add(Command command) {

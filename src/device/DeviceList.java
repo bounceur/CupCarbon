@@ -1,8 +1,8 @@
 /*----------------------------------------------------------------------------------------------------------------
- * CupCarbon: OSM based Wireless Sensor Network design and simulation tool
+ * CupCarbon: A Smart City & IoT Wireless Sensor Network Simulator
  * www.cupcarbon.com
  * ----------------------------------------------------------------------------------------------------------------
- * Copyright (C) 2013 Ahcene Bounceur
+ * Copyright (C) 2016 CupCarbon
  * ----------------------------------------------------------------------------------------------------------------
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,19 +34,18 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import actions_ui.DeleteDevice;
+import flying_object.FlyingGroup;
 import map.Layer;
 import markers.Marker;
 import natural_events.Gas;
 import solver.SensorGraph;
 import utilities.MapCalc;
-import actions_ui.DeleteDevice;
-import flying_object.FlyingGroup;
 
 /**
  * @author Ahcene Bounceur
- * @author Kamal Mehdi
  * @author Lounis Massinissa
- * @version 1.0
+ * @version 2.0
  */
 public class DeviceList {
 
@@ -331,6 +330,8 @@ public class DeviceList {
 		for (Device n : nodes) {
 			n.drawRadioLinks(g);
 		}
+		
+		Channels.drawChannelLinks(g);
 		
 		for (Device n : nodes) {
 			if(n.displayInfos()) n.drawInfos(g);

@@ -20,8 +20,10 @@
 
 package device;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -45,6 +47,8 @@ import battery.Battery;
  */
 
 public abstract class SensorNode extends DeviceWithRadio {
+	
+	public static Channels channels = null;
 	
 	protected boolean comEdgeDrawn = false;
 	protected Random rnd = new Random();
@@ -201,6 +205,8 @@ public abstract class SensorNode extends DeviceWithRadio {
 	@Override
 	public void drawRadioRange(Graphics g) {
 		if (visible) {
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setStroke(new BasicStroke(0.4f));
 			calculateRadioSpace();
 			initDraw(g);
 			int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
@@ -303,6 +309,8 @@ public abstract class SensorNode extends DeviceWithRadio {
 	}
 	
 	public void drawTheCenter(Graphics g, int x, int y) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setStroke(new BasicStroke(0.6f));
 		if (underSimulation) {
 			g.setColor(UColor.GREEN);
 		} else {
@@ -482,7 +490,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	public void setComEdgeDrawn(boolean comEdgeDrawn) {
 		this.comEdgeDrawn = comEdgeDrawn;
 	}	
-	
+	/*
 	public void drawSendingReceiving(Graphics g, int x, int y) {
 		if(drawTxRx) {
 			for(int i=0; i<nPoint; i++) {
@@ -502,6 +510,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 						g.fillArc(polyX[0][i] - as*sz, polyY[0][i] - as*sz, as*sz*2, as*sz*2,180 - (int) alpha - as, as*2);
 						alpha += Math.toDegrees(deg);
 					}
+					
 					if(sending) {
 						g.setColor(Color.RED);
 						as = 10;
@@ -513,7 +522,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 				}
 			}
 		}		
-	}
+	}*/
 	
 	@Override
 	public void initForSimulation() {

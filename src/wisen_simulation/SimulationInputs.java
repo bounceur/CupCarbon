@@ -44,6 +44,6 @@ public class SimulationInputs {
 	public static boolean displayResults = true;
 	
 	public static double ackType = SimulationInputs.PROBA ;
-	public static double ackProba = 0.9 ;
+	public static double ackProba = 1.0 ;
 	public static int protocol = SimulationInputs.CSMA ;
 }
