@@ -351,7 +351,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 * @param g
 	 *            Graphics
 	 */
-	public void drawRadioLink(Device device, Graphics g) { // SR: Sending Receinving
+	public void drawRadioLink(Device device, Graphics g) {
 		int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
 		int lx1 = coord[0];
 		int ly1 = coord[1];
@@ -359,9 +359,8 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		int lx2 = coord[0];
 		int ly2 = coord[1];
 
-		if((drawRadioLinks && !(device.isSending() && isReceiving())) ||
-				(isSending() && device.isReceiving())
-				) {			
+		//if((drawRadioLinks && !(device.isSending() && isReceiving())) || (isSending() && device.isReceiving())) {	
+		if(drawRadioLinks) {	
 			switch(drawRadioLinksColor) {
 			case 0 : g.setColor(Color.DARK_GRAY); break;
 			case 1 : g.setColor(Color.DARK_GRAY); break;
@@ -384,9 +383,8 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		}
 
 		if(drawArrows || (isSending() && device.isReceiving())) {
-			if((drawRadioLinks && !(device.isSending() && isReceiving())) ||
-					(isSending() && device.isReceiving())
-					) {
+			//if((drawRadioLinks && !(device.isSending() && isReceiving())) || (isSending() && device.isReceiving())) {
+			if(drawRadioLinks) {
 				double dx = 0;
 				double dy = 0;
 				double alpha = 0;

@@ -15,21 +15,13 @@ public class Channels2 {
 
 	public static List<PacketEvent> packetEventList = new LinkedList<PacketEvent>();
 	
-	//protected static LinkedList<List<PacketEvent>> packetEventList = new LinkedList<List<PacketEvent>>();
-	//protected static LinkedList<Integer> iMins = new LinkedList<Integer>();	
-	
 	public Channels2() {
 		super();
 		init();
-		//packetEventList = new LinkedList<PacketEvent>();
 	}
 	
 	public static void init() {
 		packetEventList = new LinkedList<PacketEvent>();			
-//		packetEventList = new LinkedList<List<PacketEvent>>();
-//		for(int i=0; i<20; i++) {
-//			packetEventList.add(new LinkedList<PacketEvent>());
-//		}
 	}
 	
 	public static void addPacket(int type, String message, SensorNode sSensor, SensorNode rSensor) {
@@ -44,14 +36,12 @@ public class Channels2 {
 		PacketEvent packet = new PacketEvent(type, sSensor, rSensor, message, lastTime+duration);
 		
 		packetEventList.add(packet);
-		//System.out.println(sSensor.getId()+" : "+packetEventList);
 	}
 	
 	
 	
 	
-	public static void messageReceived() {
-		
+	public static void messageReceived() {		
 		Layer.getMapViewer().repaint();
 		
 		int type = packetEventList.get(0).getType();
@@ -90,21 +80,7 @@ public class Channels2 {
 				rSensor.setEvent(0);
 			}
 		}
-		
-
-//		String s = "[" ;
-//		for (PacketEvent p : packetEventList) {
-//			s += p+ "->";
-//		}
-//		s += "]";
-//		System.out.println(s);
-		
-		
-//		if(!rSensor.isSleeping())
-//			rSensor.addMessageToBuffer(packetEventList.get(0).getPacket().length()*8, packetEventList.get(0).getPacket());
-//		if(rSensor.getScript().getCurrent().isWait())
-//			rSensor.setEvent(0);
-		packetEventList.remove(0);		
+		packetEventList.remove(0);
 	}
 	
 	public static void goToTheNextTime(long min) {		
@@ -124,47 +100,13 @@ public class Channels2 {
 			return Long.MAX_VALUE;
 	}
 	
-//	public static String getMessage() {
-//		if(packetEventList.size()>0)
-//			return packetEventList.get(0).getPacket();
-//		else
-//			return "";
-//	}
-	
-//	public static int getRSensor() {
-//		if(packetEventList.size()>0)
-//			return packetEventList.get(0).getSensor().getId();
-//		else
-//			return 0;
-//	}
-	
-//	public static List<PacketEvent> getPackets() {
-//		return packetEventList;
-//	}
-	
-//	public static long getTime() {
-//		if(packetEventList.size()>0)
-//			return packetEventList.get(0).getTime();
-//		else
-//			return Long.MAX_VALUE;
-//	}
-	
-//	public static int size() {
-//		return packetEventList.size();
-//	}
-	
 	public static void drawChannelLinks(Graphics g) {
 		if(packetEventList.size()>0) {
 			Graphics2D g2 = (Graphics2D) g;
-			//g2.setStroke(new BasicStroke(1));
-			//if(isSending() && device.isReceiving()) {
-				
-				g2.setStroke(new BasicStroke(2.5f));
-				
-			    if(Layer.getMapViewer().getZoom() < 2) {
-			    	g2.setStroke(new BasicStroke(3));		    	
-			    }
-			//}
+			g2.setStroke(new BasicStroke(2.5f));			
+		    if(Layer.getMapViewer().getZoom() < 2) {
+		    	g2.setStroke(new BasicStroke(3));		    	
+		    }
 			
 			int [] coord ;
 			int lx1 ;

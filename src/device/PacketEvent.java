@@ -56,6 +56,7 @@ public class PacketEvent implements Comparable<PacketEvent> {
 	
 	@Override
 	public String toString() {
+		//System.out.println(packet+" ["+type+":"+sSensor.getId()+"->"+rSensor.getId()+":"+time+"]");
 		return packet+" ["+type+":"+sSensor.getId()+"->"+rSensor.getId()+":"+time+"]";
 	}
 	

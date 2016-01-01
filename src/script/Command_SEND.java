@@ -49,10 +49,10 @@ public class Command_SEND extends Command {
 			if (!arg3.equals("")) {
 				v = Double.valueOf(sensor.getScript().getVariableValue(arg3));
 			}
-			for (SensorNode snode : sensor.getSensorNodeNeighbors()) {
-				if (sensor.radioDetect(snode) && !snode.isDead() && !snode.isSleeping() && sensor.sameCh(snode) && sensor.sameNId(snode) && snode.getId()!=v) {
-					snode.setReceiving(true);
-					Channels.addPacket(2, message, sensor, snode);
+			for (SensorNode rnode : sensor.getSensorNodeNeighbors()) {
+				if (sensor.radioDetect(rnode) && !rnode.isDead() && !rnode.isSleeping() && sensor.sameCh(rnode) && sensor.sameNId(rnode) && rnode.getId()!=v) {
+					rnode.setReceiving(true);
+					Channels.addPacket(2, message, sensor, rnode);
 				}
 			}
 		}
@@ -62,12 +62,12 @@ public class Command_SEND extends Command {
 			double destNodeId;	
 			if(!dest.equals("0")) {
 				destNodeId = Double.valueOf(dest);
-				SensorNode snode = DeviceList.getSensorNodeById((int)destNodeId);
-				if (snode != null) {
+				SensorNode rnode = DeviceList.getSensorNodeById((int)destNodeId);
+				if (rnode != null) {
 					SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
-					if (sensor.radioDetect(snode) && !snode.isDead() && !snode.isSleeping() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
-						snode.setReceiving(true);
-						Channels.addPacket(0, message, sensor, snode);
+					if (sensor.radioDetect(rnode) && !rnode.isDead() && !rnode.isSleeping() && sensor.sameCh(rnode) && sensor.sameNId(rnode)) {
+						rnode.setReceiving(true);
+						Channels.addPacket(0, message, sensor, rnode);
 					}
 				}
 				else 
@@ -80,11 +80,11 @@ public class Command_SEND extends Command {
 				
 				if(!dest.equals("0")) {
 					SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the nodes with MY="+destNodeId+": ");
-					for(SensorNode snode : DeviceList.getSensorNodes()) {
-						if ((sensor.radioDetect(snode)) && (!snode.isDead() && !snode.isSleeping()) && (snode.getMy()==destNodeId) && sensor.sameCh(snode) && sensor.sameNId(snode)) {
-							SimLog.add("  -> S" + snode.getId() + " ");							
-							snode.setReceiving(true);
-							Channels.addPacket(0, message, sensor, snode);
+					for(SensorNode rnode : DeviceList.getSensorNodes()) {
+						if ((sensor.radioDetect(rnode)) && (!rnode.isDead() && !rnode.isSleeping()) && (rnode.getMy()==destNodeId) && sensor.sameCh(rnode) && sensor.sameNId(rnode)) {
+							SimLog.add("  -> S" + rnode.getId() + " ");							
+							rnode.setReceiving(true);
+							Channels.addPacket(0, message, sensor, rnode);
 						}						
 					}
 				}
@@ -93,14 +93,14 @@ public class Command_SEND extends Command {
 					dest = sensor.getScript().getVariableValue(dest);
 					if(!dest.equals("0")) {
 						destNodeId = Integer.valueOf(dest);
-						SensorNode snode = DeviceList.getSensorNodeById((int)destNodeId);
-						if (snode != null) {
+						SensorNode rnode = DeviceList.getSensorNodeById((int)destNodeId);
+						if (rnode != null) {
 							SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
-							if (!snode.isDead() && !snode.isSleeping() && sensor.sameCh(snode) && sensor.sameNId(snode)) {
-								snode.setReceiving(true);
-								Channels.addPacket(0, message, sensor, snode);
+							if (!rnode.isDead() && !rnode.isSleeping() && sensor.sameCh(rnode) && sensor.sameNId(rnode)) {
+								rnode.setReceiving(true);
+								Channels.addPacket(0, message, sensor, rnode);
 								sensor.setDistanceMode(true);
-								snode.setDistanceMode(true);
+								rnode.setDistanceMode(true);
 							}
 						}
 						else 
@@ -131,7 +131,7 @@ public class Command_SEND extends Command {
 			ack = false;
 			SimLog.add("S" + sensor.getId() + " is writing the message : \"" + message + "\" in its buffer.");
 			writing = true ;
-			executing = true;			
+			executing = true;
 			//System.out.println("W1 "+executing);
 			
 			// Considerer la mise en buffer du message (coute UartDataRate baud)			

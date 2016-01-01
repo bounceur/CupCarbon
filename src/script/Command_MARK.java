@@ -1,9 +1,8 @@
 package script;
 
-import map.Layer;
-import wisen_simulation.SimLog;
 import arduino.BeginInstructions;
 import device.SensorNode;
+import wisen_simulation.SimLog;
 
 public class Command_MARK extends Command {
 
@@ -26,7 +25,7 @@ public class Command_MARK extends Command {
 			sensor.setMarked(true);
 			SimLog.add("S" + sensor.getId() + " MARK");
 		}
-		Layer.getMapViewer().repaint();	
+		//Layer.getMapViewer().repaint();	
 		return 0;
 	}
 	

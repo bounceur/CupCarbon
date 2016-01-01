@@ -42,24 +42,22 @@ public class Channels {
 		channelEventList.get(sSensor.getCh()).add(packet);
 	}
 	
-	
-	
-	
 	public static void receivedMessages() {
 		for (List<PacketEvent> packetEventList : channelEventList) {
 			if(packetEventList.size()>0) {
 				if(packetEventList.get(0).getTime()==0) {
 					//Layer.getMapViewer().repaint();
-					
 					int type = packetEventList.get(0).getType();
 					String message = packetEventList.get(0).getPacket();
 					SensorNode rSensor = packetEventList.get(0).getRSensor();
-					SensorNode sSensor = packetEventList.get(0).getSSensor();
-					
+					SensorNode sSensor = packetEventList.get(0).getSSensor();					
 					
 					boolean berOk = true;
 					
 					berOk = Ber.berOk();
+					
+					sSensor.setSending(false);
+					rSensor.setReceiving(false);
 					
 					if ((type == 0) || (type == 2)) {	
 						if (berOk || (type == 2)) {
@@ -67,8 +65,9 @@ public class Channels {
 								rSensor.addMessageToBuffer(packetEventList.get(0).getPacket().length()*8, packetEventList.get(0).getPacket());
 							if(rSensor.getScript().getCurrent().isWait())
 								rSensor.setEvent(0);
-							if(type == 0)
+							if(type == 0) {								
 								addPacket(1, "0", rSensor, sSensor);
+							}
 						}
 						else
 							addPacket(1, "1", rSensor, sSensor);
@@ -84,6 +83,7 @@ public class Channels {
 						}
 					}
 					packetEventList.remove(0);
+					//Layer.getMapViewer().repaint();
 				}
 			}
 		}
@@ -109,8 +109,6 @@ public class Channels {
 	}
 	
 	public static void drawChannelLinks(Graphics g) {
-		//System.out.println(channelEventList);
-		//System.out.println("---------------");
 		for (List<PacketEvent> packetEventList : channelEventList) {
 			if(packetEventList.size()>0) {
 				Graphics2D g2 = (Graphics2D) g;
@@ -159,16 +157,15 @@ public class Channels {
 		}
 	}
 	
-	public static String display() {
+	public static void display() {
 		String s="";
-		for (List<PacketEvent> packetEventList : channelEventList) {
-			s = "[" ;
+		for (List<PacketEvent> packetEventList : channelEventList) {			
+			s += "[" ;
 			for (PacketEvent p : packetEventList) {
-				s += p+ " | ";
+				s += p.toString() + " | ";
 			}
 			s += "]\n";
 		}
-		return s;
-		
+		System.out.println(s);
 	}
 }

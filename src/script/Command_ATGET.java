@@ -1,6 +1,7 @@
 package script;
 
 import wisen_simulation.SimLog;
+import device.DataInfo;
 import device.SensorNode;
 
 public class Command_ATGET extends Command {
@@ -35,11 +36,15 @@ public class Command_ATGET extends Command {
 		}
 		
 		sensor.getScript().addVariable(arg2, v);
-		return 0;
+		
+		double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
+		String message = "ATXX";
+		String answer = "XXXX"; //v; We assume that the answer contains 4 bytes
+		return (long)(Math.round((answer.length()+message.length())*8.0*ratio));
 	}
 
 	@Override
 	public String toString() {
-		return "GET";
+		return "ATGET";
 	}
 }

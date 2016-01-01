@@ -141,6 +141,7 @@ public class WisenSimulation extends Thread {
 				}
 			}
 			
+			boolean once = false;
 			for (iter = 0; iter < iterNumber; iter++) {
 				if (min == Long.MAX_VALUE) {
 					//System.out.println(Channel.size());
@@ -205,7 +206,7 @@ public class WisenSimulation extends Thread {
 				long minmv = Long.MAX_VALUE;
 				if (mobility) {
 					for (Device device : devices) {
-						if(!device.isDead()) {						
+						if(!device.isDead()) {
 							if (device.getEvent2() == 0) {
 								SimLog.add(device.getIdFL()+device.getId()+" DEPLACEMENT");
 								if (device.canMove()) {
@@ -221,8 +222,20 @@ public class WisenSimulation extends Thread {
 				
 				consolPrintln("");
 				
-				if (min>Channels.getMin())
+				//System.out.println(iter + " : ");
+				//Channels.display();				
+				
+				if (min > Channels.getMin())
 					min = Channels.getMin();
+				
+				if(Channels.getMin()==0) {
+					Layer.getMapViewer().repaint();
+					sleep(visualDelay);
+				}
+					
+				
+				//System.out.println(Channels.getMin());
+				//System.out.println("---------------");
 				
 				if (mobility) {
 					moving = false;
@@ -234,9 +247,7 @@ public class WisenSimulation extends Thread {
 				
 				consolPrintln("");
 				
-				//long minevt = wEvents.getMin();
-				
-				
+				//long minevt = wEvents.getMin();				
 				
 //				for (WisenEvent event : WisenEventList.eventList) {
 //					
@@ -246,24 +257,28 @@ public class WisenSimulation extends Thread {
 				
 				if((min!=0) || (moving)) {
 					if (generateResults) ps.print(time + ";");
-					
-					sleep(visualDelay);
-					
+					Layer.getMapViewer().repaint();
+					once = false;
 					for (Device device : devices) {
 						if(!device.isDead()) {
 							if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
 								if (generateResults) ps.print(device.getBatteryLevel() + ";");								
-								consolPrint(device.getBatteryLevel()+" | ");								
+								consolPrint(device.getBatteryLevel()+" | ");
+								//Layer.getMapViewer().repaint();
 								if (device.isSending() || device.isReceiving()) {
-									sleep(visualDelay);
+									if (!once) {
+										once = true;
+										sleep(visualDelay);
+									}
 									device.setSending(false);
 									device.setReceiving(false);
-									device.setDistanceMode(false);
+									device.setDistanceMode(false);									
 								}
 							}							
 						}
 						if(device.getType()==Device.GAS && mobility) ((Gas) device).simNext();
 					}
+					Layer.getMapViewer().repaint();
 					consolPrintln("");
 					
 					if (generateResults) ps.println();										
@@ -272,16 +287,15 @@ public class WisenSimulation extends Thread {
 				Layer.getMapViewer().repaint();
 				
 				allDeadSensors = true; 
-				for (Device device : devices) {
+				for (Device device : devices) {					
 					if(!device.isDead()) {
 						if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
-							consolPrint(device.getEvent()+" : "); 
+							consolPrint(device.getEvent()+" : ");
 							
 							if(device.getEvent() != Long.MAX_VALUE)
 								device.gotoTheNextEvent(min);								
 							
 							if(device.getEvent()==0) {
-								//System.out.println(min);
 								fMessage += device.getScript().getCurrent().finishMessage() + "\n";
 								device.gotoTheNextInstruction() ;								
 							}
@@ -294,7 +308,7 @@ public class WisenSimulation extends Thread {
 					if (mobility) {						
 						device.setEvent2(device.getEvent2()-min);
 					}
-				}				
+				}
 
 				consolPrintln("");
 				consolPrintln("------------------------------------------");				
