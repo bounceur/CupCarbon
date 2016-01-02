@@ -51,7 +51,7 @@ public class Command_SEND extends Command {
 			}
 			for (SensorNode rnode : sensor.getSensorNodeNeighbors()) {
 				if (sensor.radioDetect(rnode) && !rnode.isDead() && !rnode.isSleeping() && sensor.sameCh(rnode) && sensor.sameNId(rnode) && rnode.getId()!=v) {
-					rnode.setReceiving(true);
+					//rnode.setReceiving(true);
 					Channels.addPacket(2, message, sensor, rnode);
 				}
 			}
@@ -66,7 +66,7 @@ public class Command_SEND extends Command {
 				if (rnode != null) {
 					SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
 					if (sensor.radioDetect(rnode) && !rnode.isDead() && !rnode.isSleeping() && sensor.sameCh(rnode) && sensor.sameNId(rnode)) {
-						rnode.setReceiving(true);
+						//rnode.setReceiving(true);
 						Channels.addPacket(0, message, sensor, rnode);
 					}
 				}
@@ -83,7 +83,7 @@ public class Command_SEND extends Command {
 					for(SensorNode rnode : DeviceList.getSensorNodes()) {
 						if ((sensor.radioDetect(rnode)) && (!rnode.isDead() && !rnode.isSleeping()) && (rnode.getMy()==destNodeId) && sensor.sameCh(rnode) && sensor.sameNId(rnode)) {
 							SimLog.add("  -> S" + rnode.getId() + " ");							
-							rnode.setReceiving(true);
+							//rnode.setReceiving(true);
 							Channels.addPacket(0, message, sensor, rnode);
 						}						
 					}
@@ -97,7 +97,7 @@ public class Command_SEND extends Command {
 						if (rnode != null) {
 							SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
 							if (!rnode.isDead() && !rnode.isSleeping() && sensor.sameCh(rnode) && sensor.sameNId(rnode)) {
-								rnode.setReceiving(true);
+								//rnode.setReceiving(true);
 								Channels.addPacket(0, message, sensor, rnode);
 								sensor.setDistanceMode(true);
 								rnode.setDistanceMode(true);
@@ -139,10 +139,9 @@ public class Command_SEND extends Command {
 			return (long)(Math.round(messageLength*8.*ratio));
 		}
 		
-		if (writing && !ack) {			
-			//System.out.println("sending");		
+		if (writing && !ack) {					
 			SimLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");	
-			sensor.setSending(true);
+			//sensor.setSending(true);
 			sendOperation(message);
 			sensor.setTxConsumption(1);
 			sensor.consumeTx(messageLength*8);

@@ -42,6 +42,7 @@ public class SimulationInputs {
 	public static boolean showInConsole = false;
 	public static boolean displayLog = true;
 	public static boolean displayResults = true;
+	public static boolean showAckLinks = false;
 	
 	public static double ackType = SimulationInputs.PROBA ;
 	public static double ackProba = 1.0 ;

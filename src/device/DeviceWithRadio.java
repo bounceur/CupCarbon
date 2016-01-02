@@ -380,11 +380,11 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 //			    }
 //			}
 			g.drawLine(lx1, ly1, lx2, ly2);
-		}
+		
 
-		if(drawArrows || (isSending() && device.isReceiving())) {
-			//if((drawRadioLinks && !(device.isSending() && isReceiving())) || (isSending() && device.isReceiving())) {
-			if(drawRadioLinks) {
+			if(drawArrows) {// || (isSending() && device.isReceiving())) {
+				//if((drawRadioLinks && !(device.isSending() && isReceiving())) || (isSending() && device.isReceiving())) {
+				//if(drawRadioLinks) {
 				double dx = 0;
 				double dy = 0;
 				double alpha = 0;

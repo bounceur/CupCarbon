@@ -100,6 +100,10 @@ public abstract class Command {
 		return false;
 	}
 	
+	public boolean visual() {
+		return false;
+	}
+	
 	public boolean isExecuting() {
 		return executing;
 	}

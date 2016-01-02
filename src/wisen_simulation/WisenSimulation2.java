@@ -18,7 +18,7 @@ import map.Layer;
 import natural_events.Gas;
 import project.Project;
 
-public class WisenSimulation extends Thread {
+public class WisenSimulation2 extends Thread {
 
 	private boolean mobility = false;
 	private long iterNumber = 0;
@@ -34,7 +34,7 @@ public class WisenSimulation extends Thread {
 	
 	public static long ttime = 0;
 	
-	public WisenSimulation() {
+	public WisenSimulation2() {
 
 	}
 
@@ -54,10 +54,18 @@ public class WisenSimulation extends Thread {
 		System.out.println("Initialization ... ");
 		List<Device> devices = DeviceList.getNodes();
 		
+		
+		//WisenEventList wEvents = new WisenEventList();		
+		//wEvents.addEvent(0, 1000, null);
+		
 		SimLog.add("===========================");
 		SimLog.add("Initialization");
 				
 		Channels.init();
+		
+		//Channels channels = new Channels();
+		//SensorNode.channels = channels;
+		//Channel.init();
 		
 		for (Device device : devices) {
 			if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
@@ -133,8 +141,10 @@ public class WisenSimulation extends Thread {
 				}
 			}
 			
+			//boolean once = false;
 			for (iter = 0; iter < iterNumber; iter++) {
 				if (min == Long.MAX_VALUE) {
+					//System.out.println(Channel.size());
 					System.out.println("Infinite WAITs!");
 					JOptionPane.showMessageDialog(null, "Infinite WAITs! [iter: "+iter+"]", "Simulation Stopped", JOptionPane.INFORMATION_MESSAGE);
 					break;
@@ -231,20 +241,42 @@ public class WisenSimulation extends Thread {
 //				for (WisenEvent event : WisenEventList.eventList) {
 //					
 //				}
-
+							
+				//Layer.getMapViewer().repaint();
+				//sleep(visualDelay);
 				
 				consolPrintln("");
 				if((min!=0) || (moving)) {
-					
+					//Layer.getMapViewer().repaint();
 					if (generateResults) ps.print(time + ";");
 					
+//					once = false;
 					for (Device device : devices) {
+//						if(!device.isDead()) {
+//							if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
+//								if (generateResults) ps.print(device.getBatteryLevel() + ";");								
+//								consolPrint(device.getBatteryLevel()+" | ");
+//								//Layer.getMapViewer().repaint();
+//								if (device.isSending() || device.isReceiving()) {
+//									if (!once) {
+//										once = true;
+//										sleep(visualDelay);
+//									}
+//									device.setSending(false);
+//									device.setReceiving(false);
+//									device.setDistanceMode(false);									
+//								}
+//							}							
+//						}
 						if(device.getType()==Device.GAS && mobility) ((Gas) device).simNext();
 					}
+//					Layer.getMapViewer().repaint();
 					consolPrintln("");
 					
 					if (generateResults) ps.println();										
 				}
+				
+				//Layer.getMapViewer().repaint();
 				
 				allDeadSensors = true; 
 				for (Device device : devices) {					

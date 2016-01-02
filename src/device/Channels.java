@@ -10,6 +10,7 @@ import map.Layer;
 import physical_layer.Ber;
 import utilities.MapCalc;
 import wisen_simulation.SimLog;
+import wisen_simulation.SimulationInputs;
 
 public class Channels {
 	
@@ -35,56 +36,70 @@ public class Channels {
 		if(sSensor.isDistanceMode() && rSensor.isDistanceMode())
 			duration = sSensor.getDistanceModeDelay()*DataInfo.ChDataRate;
 		long lastTime = 0;
-		if (channelEventList.get(sSensor.getCh()).size()>0) 
-			lastTime = channelEventList.get(sSensor.getCh()).get(channelEventList.get(sSensor.getCh()).size()-1).getTime();
-		PacketEvent packet = new PacketEvent(type, sSensor, rSensor, message, lastTime+duration);
+		if (channelEventList.get(sSensor.getCh()).size()>0 && type != 2) { 
+				lastTime = channelEventList.get(sSensor.getCh()).get(channelEventList.get(sSensor.getCh()).size()-1).getTime();
+		}
+		else {
+			sSensor.setSending(true);
+			rSensor.setReceiving(true);
+		}
 		
+		PacketEvent packet = new PacketEvent(type, sSensor, rSensor, message, lastTime+duration);		
 		channelEventList.get(sSensor.getCh()).add(packet);
 	}
 	
 	public static void receivedMessages() {
 		for (List<PacketEvent> packetEventList : channelEventList) {
-			if(packetEventList.size()>0) {
-				if(packetEventList.get(0).getTime()==0) {
-					//Layer.getMapViewer().repaint();
-					int type = packetEventList.get(0).getType();
-					String message = packetEventList.get(0).getPacket();
-					SensorNode rSensor = packetEventList.get(0).getRSensor();
-					SensorNode sSensor = packetEventList.get(0).getSSensor();					
-					
-					boolean berOk = true;
-					
-					berOk = Ber.berOk();
-					
-					sSensor.setSending(false);
-					rSensor.setReceiving(false);
-					
-					if ((type == 0) || (type == 2)) {	
-						if (berOk || (type == 2)) {
-							if(!rSensor.isSleeping())
-								rSensor.addMessageToBuffer(packetEventList.get(0).getPacket().length()*8, packetEventList.get(0).getPacket());
-							if(rSensor.getScript().getCurrent().isWait())
+			boolean stop = false; // For broadcast sending
+			while(!stop) {
+				if(packetEventList.size()>0) {
+					if(packetEventList.get(0).getTime()==0) {
+						//Layer.getMapViewer().repaint();
+						int type = packetEventList.get(0).getType();
+						String message = packetEventList.get(0).getPacket();
+						SensorNode rSensor = packetEventList.get(0).getRSensor();
+						SensorNode sSensor = packetEventList.get(0).getSSensor();					
+						
+						boolean berOk = true;
+						
+						berOk = Ber.berOk();
+						
+						sSensor.setSending(false);
+						rSensor.setReceiving(false);
+						
+						if ((type == 0) || (type == 2)) {	
+							if (berOk || (type == 2)) {
+								if(!rSensor.isSleeping())
+									rSensor.addMessageToBuffer(packetEventList.get(0).getPacket().length()*8, packetEventList.get(0).getPacket());
+								if(rSensor.getScript().getCurrent().isWait())
+									rSensor.setEvent(0);
+								if(type == 0) {								
+									addPacket(1, "0", rSensor, sSensor);
+								}
+							}
+							else
+								addPacket(1, "1", rSensor, sSensor);
+						}
+						if (type == 1) {
+							if (message.equals("0")) {
+								rSensor.setAckOk(true);
 								rSensor.setEvent(0);
-							if(type == 0) {								
-								addPacket(1, "0", rSensor, sSensor);
+							}
+							else {
+								rSensor.setAckOk(false);
+								rSensor.setEvent(0);
 							}
 						}
-						else
-							addPacket(1, "1", rSensor, sSensor);
-					}
-					if (type == 1) {
-						if (message.equals("0")) {
-							rSensor.setAckOk(true);
-							rSensor.setEvent(0);
+						packetEventList.remove(0);
+						if(packetEventList.size()>0) {
+							packetEventList.get(0).getSSensor().setSending(true);
+							packetEventList.get(0).getRSensor().setReceiving(true);
 						}
-						else {
-							rSensor.setAckOk(false);
-							rSensor.setEvent(0);
-						}
+						//Layer.getMapViewer().repaint();
 					}
-					packetEventList.remove(0);
-					//Layer.getMapViewer().repaint();
+					else stop = true;
 				}
+				else stop = true;
 			}
 		}
 	}
@@ -127,8 +142,10 @@ public class Channels {
 				double alpha = 0;
 				for(PacketEvent pev : packetEventList) {
 					if(pev.getSSensor().isSending() && pev.getRSensor().isReceiving()) {
-						if(pev.getType()==0 || pev.getType()==2) {
+						if(pev.getType()==0 || pev.getType()==2 || ((pev.getType()==1) && SimulationInputs.showAckLinks)) {
 							g.setColor(pev.getSSensor().getRadioLinkColor());
+							if((pev.getType()==1) && SimulationInputs.showAckLinks)
+								g.setColor(pev.getSSensor().getACKLinkColor());
 							coord = MapCalc.geoToIntPixelMapXY(pev.getSSensor().getLongitude(), pev.getSSensor().getLatitude());
 							lx1 = coord[0];
 							ly1 = coord[1];		

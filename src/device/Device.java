@@ -133,6 +133,7 @@ public abstract class Device implements Runnable, MouseListener,
 	//protected double beta = 1;
 	
 	protected Color radioLinkColor = UColor.RED;
+	protected Color ackLinkColor = UColor.BLACK_TRANSPARENT;
 	
 	protected boolean sleeping = false;
 	protected boolean receiving = false;
@@ -1659,6 +1660,10 @@ public abstract class Device implements Runnable, MouseListener,
 	
 	public Color getRadioLinkColor() {
 		return radioLinkColor;
+	}
+	
+	public Color getACKLinkColor() {
+		return ackLinkColor;
 	}
 
 	public void setRadioLinkColor(Color radioLinkColor) {
