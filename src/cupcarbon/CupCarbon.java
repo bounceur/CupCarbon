@@ -93,7 +93,7 @@ import solver.SolverProxyParams;
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
- * @version 2.44 (U-One)
+ * @version 2.5 (U-One)
  */
 
 public class CupCarbon {
@@ -111,7 +111,7 @@ public class CupCarbon {
 	private CupCarbonMap cupCarbonMap;
 	private GpsWindow gpsWindow = new GpsWindow();
 	private DeviceParametersWindow deviceParametersWindow = new DeviceParametersWindow();
-	private FlyingObjParametersWindow flyingObjParametersWindow = new FlyingObjParametersWindow();
+	//private FlyingObjParametersWindow flyingObjParametersWindow = new FlyingObjParametersWindow();
 	private InformationWindow infoWindow = new InformationWindow();
 	private WsnSimulationWindow wsnSimWindow = new WsnSimulationWindow();
 
@@ -841,16 +841,16 @@ public class CupCarbon {
 			}
 		});
 
-		JMenuItem mntmFlyingObjectParameters = new JMenuItem(
-				"Flying Object Parameters");
-		mntmFlyingObjectParameters.addActionListener(new ActionListener() {
+		JMenuItem mntmMarkerParameters = new JMenuItem(
+				"Marker Parameters");
+		mntmMarkerParameters.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				openFlyingObjectParemeterWindow();
 			}
 		});
-		mntmFlyingObjectParameters.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
+		mntmMarkerParameters.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "ui_menu_blue.png"));
-		mnNodes.add(mntmFlyingObjectParameters);
+		mnNodes.add(mntmMarkerParameters);
 		mntmRouteFromMarkers.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "route.png"));
 		mnNodes.add(mntmRouteFromMarkers);
@@ -1141,19 +1141,6 @@ public class CupCarbon {
 			}
 		});
 
-		JSeparator separator_7 = new JSeparator();
-		mnResolution.add(separator_7);
-
-		JMenuItem mntmInitialize = new JMenuItem("Initialize All & Envelope");
-		mntmInitialize.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				DeviceList.initAll();
-			}
-		});
-		mntmInitialize.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
-				+ "circle_grey.png"));
-		mnResolution.add(mntmInitialize);
-
 		JMenu mnSimulation = new JMenu("Simulation");
 		mnSimulation.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "run.png"));
 		menuBar.add(mnSimulation);
@@ -1207,6 +1194,19 @@ public class CupCarbon {
 		mntmStopSimulation.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "flag_red.png"));
 		mnSimulation.add(mntmStopSimulation);
+		
+				JSeparator separator_7 = new JSeparator();
+				mnSimulation.add(separator_7);
+		
+				JMenuItem mntmInitialize = new JMenuItem("Initialize All");
+				mnSimulation.add(mntmInitialize);
+				mntmInitialize.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						DeviceList.initAll();
+					}
+				});
+				mntmInitialize.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
+						+ "circle_grey.png"));
 		
 //		JSeparator separator_14 = new JSeparator();
 //		mnSimulation.add(separator_14);
@@ -1618,20 +1618,24 @@ public class CupCarbon {
 				WsnSimulationWindow.quickRun();
 			}
 		});
-
-		JButton btnNewButton = new JButton("Marker Parameters");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (!gpsWindow.isVisible()) {
-					desktopPane.add(gpsWindow);
-					gpsWindow.setVisible(true);
-				}
-				gpsWindow.toFront();
+		
+		JButton btnConnexions = new JButton("Connexions");
+		btnConnexions.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DeviceList.resetPropagations();
+				Layer.getMapViewer().repaint();
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
-				+ "ui_menu_blue.png"));
-		toolBar.add(btnNewButton);
+		toolBar.add(btnConnexions);
+		
+		JButton btnPropagations = new JButton("Propagations");
+		btnPropagations.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DeviceList.calculatePropagations();
+				Layer.getMapViewer().repaint();
+			}
+		});
+		toolBar.add(btnPropagations);
 		toolBar.add(btnSensorParameters);
 		toolBar.add(btnQuickSimulation);
 		
@@ -1730,11 +1734,11 @@ public class CupCarbon {
 	}
 
 	private void openFlyingObjectParemeterWindow() {
-		if (!flyingObjParametersWindow.isVisible()) {
-			flyingObjParametersWindow.setVisible(true);
-			desktopPane.add(flyingObjParametersWindow);
+		if (!gpsWindow.isVisible()) {
+			desktopPane.add(gpsWindow);
+			gpsWindow.setVisible(true);
 		}
-		flyingObjParametersWindow.toFront();
+		gpsWindow.toFront();
 	}
 
 	public static void updateInfos() {

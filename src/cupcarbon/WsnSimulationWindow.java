@@ -49,6 +49,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 	private JTextField ackProbaCB;
 	private JComboBox<String> protocolCBox;
 	private JComboBox<String> ackTypeCB;
+	private JCheckBox checkBoxAck;
 	
 	/**
 	 * Launch the application.
@@ -220,9 +221,9 @@ public class WsnSimulationWindow extends JInternalFrame {
 						panel_13.add(panel_9);
 						panel_9.setLayout(new BoxLayout(panel_9, BoxLayout.X_AXIS));
 						
-						JLabel lblAck = new JLabel(" ACK ");
-						lblAck.setFont(new Font("Arial", Font.PLAIN, 12));
-						panel_9.add(lblAck);
+						checkBoxAck = new JCheckBox("ACK");
+						checkBoxAck.setFont(new Font("Arial", Font.PLAIN, 12));
+						panel_9.add(checkBoxAck);
 						
 						ackTypeCB = new JComboBox<String>();
 						ackTypeCB.setToolTipText("ACK");
@@ -368,12 +369,13 @@ public class WsnSimulationWindow extends JInternalFrame {
 		SimulationInputs.visualDelay = Integer.parseInt(vdTextField.getText());
 		SimulationInputs.displayLog = chckbxGenerateLog.isSelected();
 		SimulationInputs.displayResults = chckbxGenerateResults.isSelected();
-		SimulationInputs.showInConsole = chckbxShowInConsole.isSelected(); 
+		SimulationInputs.showInConsole = chckbxShowInConsole.isSelected();
 		SimulationInputs.protocol = protocolCBox.getSelectedIndex();
-		SimulationInputs.ackType = ackTypeCB.getSelectedIndex();		
+		SimulationInputs.ackType = ackTypeCB.getSelectedIndex();
 		double proba = Double.parseDouble(ackProbaCB.getText());
 		SimulationInputs.ackProba = (proba>1)?1:proba;
 		SimulationInputs.showAckLinks = chckbxAck.isSelected();
+		SimulationInputs.ack = checkBoxAck.isSelected();
 	}
 	
 }

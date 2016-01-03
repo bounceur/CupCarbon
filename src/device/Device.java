@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -139,7 +140,7 @@ public abstract class Device implements Runnable, MouseListener,
 	protected boolean receiving = false;
 	protected boolean sending = false;
 	protected boolean writing = false;
-	protected boolean distanceMode = false ;
+	//protected boolean distanceMode = false ;
 	protected long distanceModeDelay = 2000 ;
 
 	protected boolean state = ALIVE;
@@ -163,11 +164,7 @@ public abstract class Device implements Runnable, MouseListener,
 	
 	protected String message = "";
 	
-	// ------
-	// Propagation
-	protected double requiredQuality = -80.0; // dB
-	protected double transmitPower = 0 ; // dBm
-	protected double frequency = 2.4e9; // GHz
+	// ------	
 
 	/**
 	 * Empty constructor
@@ -290,7 +287,7 @@ public abstract class Device implements Runnable, MouseListener,
 	 */
 	public void consumeTx(int v) {
 		//System.out.println(consumptionTx*v*eTx);
-		this.getBattery().consume(consumptionTx*v*eTx);
+		this.getBattery().consume(consumptionTx*v*eTx*pl/100.);
 	}
 	
 	/**
@@ -668,6 +665,7 @@ public abstract class Device implements Runnable, MouseListener,
 	
 	public double distance(int id) {
 		Device device = DeviceList.getNodeById(id);
+		if (!radioDetect(device)) return -1;
 		double x2 = device.getLongitude();
 		double y2 = device.getLatitude();
 		return MapCalc.distance(longitude, latitude, x2, y2);
@@ -1608,6 +1606,7 @@ public abstract class Device implements Runnable, MouseListener,
 		setDead(false);			
 		setLedColor(0);
 		initBattery();
+		pl = 100;
 		//getBattery().init();
 		if(getType()==Device.SENSOR) {
 			setSending(false);
@@ -1668,17 +1667,7 @@ public abstract class Device implements Runnable, MouseListener,
 
 	public void setRadioLinkColor(Color radioLinkColor) {
 		this.radioLinkColor = radioLinkColor;
-	}
-
-	
-	
-	public double getRequiredQuality() {
-		return requiredQuality;
-	}
-
-	public void setRequiredQuality(double requiredQuality) {
-		this.requiredQuality = requiredQuality;
-	}
+	}	
 
 	public void gotoTheNextInstruction() {
 		//System.out.println(getId()+" -> "+script.getCurrent()+" "+script.getIndex());
@@ -1691,13 +1680,13 @@ public abstract class Device implements Runnable, MouseListener,
 		event = event - min;
 	}
 	
-	public boolean isDistanceMode() {
-		return distanceMode;
-	}
-
-	public void setDistanceMode(boolean distanceMode) {
-		this.distanceMode = distanceMode;
-	}
+//	public boolean isDistanceMode() {
+//		return distanceMode;
+//	}
+//
+//	public void setDistanceMode(boolean distanceMode) {
+//		this.distanceMode = distanceMode;
+//	}
 
 	public long getDistanceModeDelay() {
 		return distanceModeDelay;
@@ -1715,9 +1704,12 @@ public abstract class Device implements Runnable, MouseListener,
 		return message;
 	}
 	
+	public abstract Polygon getRadioPolygon();
+	
 	public abstract void execute();
 	public abstract void drawRadioLinks(Graphics g) ;
-	public abstract double getAttenuation(double d);
-	
-	public boolean radioDetect(Device device) {return false; }	
+	public abstract void calculatePropagations();
+	public abstract void resetPropagations();
+	public abstract void drawRadioPropagations(Graphics g) ;
+	public abstract boolean radioDetect(Device device) ;	
 }

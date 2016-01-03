@@ -19,10 +19,11 @@
 
 package wisen_simulation;
 
+import device.RadioDetection;
+
 /**
  * @author Ahcene Bounceur
  * @author Massinissa Lounis
- * @author Arezki Laga
  * @version 1.0
  * 
  * The necessary parameters for the simulation
@@ -35,7 +36,6 @@ public class SimulationInputs {
 	public static final int CSMA = 1;
 	
 	public static boolean mobility = false;
-	//public static int energyMax = 100000000;
 	public static int iterNumber = 10000;
 	
 	public static int visualDelay = 10;
@@ -44,7 +44,10 @@ public class SimulationInputs {
 	public static boolean displayResults = true;
 	public static boolean showAckLinks = false;
 	
+	public static boolean ack = false ;
 	public static double ackType = SimulationInputs.PROBA ;
 	public static double ackProba = 1.0 ;
 	public static int protocol = SimulationInputs.CSMA ;
+	
+	public static int radioDetectionType = RadioDetection.SIMPLE_DETECTION;
 }

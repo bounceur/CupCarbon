@@ -239,6 +239,9 @@ public class WisenSimulation extends Thread {
 					if (generateResults) ps.print(time + ";");
 					
 					for (Device device : devices) {
+						if (generateResults) 
+							ps.print(device.getBatteryLevel() + ";");								
+						consolPrint(device.getBatteryLevel()+" | ");
 						if(device.getType()==Device.GAS && mobility) ((Gas) device).simNext();
 					}
 					consolPrintln("");

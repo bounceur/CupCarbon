@@ -21,6 +21,7 @@ package natural_events;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.util.Random;
 
 import device.Device;
@@ -221,19 +222,36 @@ public class Gas extends DeviceWithoutRadio {
 
 	@Override
 	public void drawRadioLinks(Graphics g) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
-
+	
 	@Override
-	public double getAttenuation(double d) {
+	public void drawRadioPropagations(Graphics g) {
 		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
 	public void initBattery() {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public Polygon getRadioPolygon() {
+		return null;
+	}
+
+	@Override
+	public void calculatePropagations() {
 		// TODO Auto-generated method stub
-		
+	}
+	
+	@Override
+	public void resetPropagations() {
+
+	}
+
+	@Override
+	public boolean radioDetect(Device device) {
+		return false;
 	}
 }

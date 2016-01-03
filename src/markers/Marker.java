@@ -21,14 +21,15 @@ package markers;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.awt.event.KeyEvent;
 
-import map.Layer;
-import utilities.MapCalc;
-import utilities.UColor;
 import device.Device;
 import device.DeviceList;
 import device.StdSensorNode;
+import map.Layer;
+import utilities.MapCalc;
+import utilities.UColor;
 
 public class Marker extends Device {
 
@@ -182,14 +183,12 @@ public class Marker extends Device {
 
 	@Override
 	public void drawRadioLinks(Graphics g) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
 	}
-
+	
 	@Override
-	public double getAttenuation(double d) {
+	public void drawRadioPropagations(Graphics g) {
 		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -202,5 +201,25 @@ public class Marker extends Device {
 	public void initBattery() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Polygon getRadioPolygon() {
+		return null;
+	}
+
+	@Override
+	public void calculatePropagations() {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void resetPropagations() {
+
+	}
+
+	@Override
+	public boolean radioDetect(Device device) {
+		return false;
 	}
 }

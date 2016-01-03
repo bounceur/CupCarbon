@@ -28,8 +28,8 @@ public class Channels2 {
 		SimLog.add("S" + rSensor.getId() + " is receiving the message : \"" + message + "\" in its buffer.");
 		double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
 		long duration =  ((int)(Math.round(message.length()*8.*ratio))) + (message.length()*8);
-		if(sSensor.isDistanceMode() && rSensor.isDistanceMode())
-			duration = sSensor.getDistanceModeDelay()*DataInfo.ChDataRate;
+		//if(sSensor.isDistanceMode() && rSensor.isDistanceMode())
+		duration = sSensor.getDistanceModeDelay()*DataInfo.ChDataRate;
 		long lastTime = 0;
 		if (packetEventList.size()>0) 
 			lastTime = packetEventList.get(packetEventList.size()-1).getTime();

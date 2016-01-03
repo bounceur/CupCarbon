@@ -27,10 +27,11 @@ import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import battery.Battery;
 import project.Project;
 import script.Script;
 import script.SensorAddCommand;
@@ -38,7 +39,6 @@ import utilities.MapCalc;
 import utilities.UColor;
 import wisen_simulation.SimLog;
 import wisen_simulation.WisenSimulation;
-import battery.Battery;
 
 /**
  * @author Ahcene Bounceur
@@ -234,7 +234,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 						+ rayon - 2);
 			}
 			if(!isDead() || !isSleeping()) {
-				if(hide == 0 || hide == 3) {
+				if(hide == 0 || hide == 2 || hide == 3) {
 					//if (!isDead()) {
 						g.setColor(UColor.BLACK_TTRANSPARENT);
 						g.drawPolygon(polyX[0], polyY[0], nPoint);
@@ -242,7 +242,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 				}
 				
 				g.setColor(Color.DARK_GRAY);
-				if(hide == 0 || hide==4) {	
+				if(hide == 0 || hide==5) {	
 					if (inside) {
 						g.setColor(radioRangeColor2);
 					} 
@@ -281,7 +281,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 
 			drawTheCenter(g, x, y);
 			
-			if (displayDetails && drawBatteryLevel) {
+			if (drawBatteryLevel) {
 				g.setColor(UColor.WHITE_LTRANSPARENT);
 				g.fillRect(x-30, y-25, 6, 50);
 				g.setColor(UColor.GREEN);
@@ -448,8 +448,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	}
 	
 	public List<SensorNode> getSensorNodeNeighbors() {
-		List<SensorNode> neighnodes = new ArrayList<SensorNode>();
-		
+		List<SensorNode> neighnodes = new LinkedList<SensorNode>();		
 		for(SensorNode snode : DeviceList.getSensorNodes()) {
 			if(((radioDetect(snode))) && this!=snode && !this.isDead() && !snode.isDead() && !this.isSleeping() && !snode.isSleeping() && sameCh(snode) && sameNId(snode)) {
 				neighnodes.add(snode);

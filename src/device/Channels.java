@@ -33,8 +33,10 @@ public class Channels {
 		SimLog.add("S" + rSensor.getId() + " is receiving the message : \"" + message + "\" in its buffer.");
 		double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
 		long duration =  ((int)(Math.round(message.length()*8.*ratio))) + (message.length()*8);
-		if(sSensor.isDistanceMode() && rSensor.isDistanceMode())
-			duration = sSensor.getDistanceModeDelay()*DataInfo.ChDataRate;
+		//if(sSensor.isDistanceMode() && rSensor.isDistanceMode())
+		//	duration = sSensor.getDistanceModeDelay()*DataInfo.ChDataRate;
+		
+		
 		long lastTime = 0;
 		if (channelEventList.get(sSensor.getCh()).size()>0 && type != 2) { 
 				lastTime = channelEventList.get(sSensor.getCh()).get(channelEventList.get(sSensor.getCh()).size()-1).getTime();
@@ -73,7 +75,7 @@ public class Channels {
 									rSensor.addMessageToBuffer(packetEventList.get(0).getPacket().length()*8, packetEventList.get(0).getPacket());
 								if(rSensor.getScript().getCurrent().isWait())
 									rSensor.setEvent(0);
-								if(type == 0) {								
+								if((type == 0) && (SimulationInputs.ack)) {								
 									addPacket(1, "0", rSensor, sSensor);
 								}
 							}

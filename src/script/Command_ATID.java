@@ -3,6 +3,7 @@ package script;
 import arduino.XBeeFrameGenerator;
 import wisen_simulation.SimLog;
 import device.DataInfo;
+import device.DeviceList;
 import device.SensorNode;
 
 public class Command_ATID extends Command {
@@ -19,7 +20,8 @@ public class Command_ATID extends Command {
 		SimLog.add("S" + sensor.getId() + " ATNI "+arg);
 		String args = sensor.getScript().getVariableValue(arg);
 		sensor.setId(Integer.valueOf(args));
-
+		if (DeviceList.propagationsCalculated)
+			DeviceList.calculatePropagations();
 		double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
 		String message = "ATNI "+args;
 		return (long)(Math.round(message.length()*8.*ratio));

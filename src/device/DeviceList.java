@@ -51,9 +51,9 @@ public class DeviceList {
 
 	public static List<Device> nodes = new ArrayList<Device>();
 	public static boolean drawLinks = true;
-	//private static boolean displayConnectionDistance = false;
 	public static LinkedList<LinkedList<Integer>> envelopeList = new LinkedList<LinkedList<Integer>>();
 	public static int number = 1;
+	public static boolean propagationsCalculated = false; 
 	
 	/**
 	 * 
@@ -118,7 +118,7 @@ public class DeviceList {
 	 * @return the sensor nodes
 	 */
 	public static List<SensorNode> getSensorNodes() {
-		List<SensorNode> snodes = new ArrayList<SensorNode>();
+		List<SensorNode> snodes = new LinkedList<SensorNode>();
 		for(Device device : nodes) {
 			if(device.getType() == Device.SENSOR || device.getType() == Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION)
 				snodes.add((SensorNode) device);
@@ -328,7 +328,10 @@ public class DeviceList {
 		}
 		
 		for (Device n : nodes) {
-			n.drawRadioLinks(g);
+			if(propagationsCalculated)
+				n.drawRadioPropagations(g);
+			else
+				n.drawRadioLinks(g);
 		}
 		
 		Channels.drawChannelLinks(g);
@@ -844,20 +847,18 @@ public class DeviceList {
 		}
 	}
 	
-//	public void calculateLinks() {
-//		neighbors = new LinkedList<Device> () ;
-//		for(Device device : DeviceList.getNodes()) {
-//			if((!isDead() || !device.isDead()) && this!=device) {
-//				if (!isDead() && !device.isDead()) 
-//					neighbors.add(device);
-//				if (device.radioDetect(this))
-//					if (!this.isDead())
-//						device.addNeighbor(this);
-//					else
-//						device.removeNeighbor(this);				
-//			}
-//		}
-//			//Layer.getMapViewer().repaint();
-//	}
+	public static void calculatePropagations() {
+		propagationsCalculated = true;
+		for(Device device : nodes) {
+			device.calculatePropagations();
+		}
+	}
+	
+	public static void resetPropagations() {
+		propagationsCalculated = false;
+		for(Device device : nodes) {
+			device.resetPropagations();
+		}
+	}
 	
 }

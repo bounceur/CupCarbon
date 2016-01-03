@@ -22,13 +22,14 @@ package flying_object;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
 
-import utilities.MapCalc;
-import utilities.UColor;
 import device.Device;
 import device.MobileG;
+import utilities.MapCalc;
+import utilities.UColor;
 
 /**
  * @author Ahcene Bounceur
@@ -299,19 +300,36 @@ public class FlyingGroup extends MobileG {
 	@Override
 	public void drawRadioLinks(Graphics g) {
 		// TODO Auto-generated method stub
-		
 	}
-
+	
 	@Override
-	public double getAttenuation(double d) {
+	public void drawRadioPropagations(Graphics g) {
 		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
 	public void initBattery() {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
+	}
+	
+	@Override
+	public Polygon getRadioPolygon() {
+		return null;
+	}
+
+	@Override
+	public void calculatePropagations() {
+		// TODO Auto-generated method stub		
+	}
+	
+	@Override
+	public void resetPropagations() {
+
+	}
+	
+	@Override
+	public boolean radioDetect(Device device) {
+		return false;
 	}
 }
 

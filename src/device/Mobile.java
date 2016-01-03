@@ -21,6 +21,7 @@ package device;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
 
 import utilities.MapCalc;
 import utilities.UColor;
@@ -120,25 +121,45 @@ public class Mobile extends MobileG {
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void drawRadioLinks(Graphics g) {
-		// TODO Auto-generated method stub
-		
+	}
+	
+	@Override
+	public void drawRadioPropagations(Graphics g) {
 	}
 
-	@Override
-	public double getAttenuation(double d) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+//	@Override
+//	public double getAttenuation(double d) {
+//		return 0;
+//	}
 
 	@Override
 	public void initBattery() {
 		
+	}
+	
+	public Polygon getRadioPolygon() {
+		return null;
+	}
+
+	@Override
+	public void calculatePropagations() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void resetPropagations() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public boolean radioDetect(Device device) {
+		return false;
 	}
 
 }

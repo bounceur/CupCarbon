@@ -22,6 +22,7 @@ package flying_object;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -358,13 +359,11 @@ public class FlyingObject extends MobileG {
 	@Override
 	public void drawRadioLinks(Graphics g) {
 		// TODO Auto-generated method stub
-		
 	}
-
+	
 	@Override
-	public double getAttenuation(double d) {
+	public void drawRadioPropagations(Graphics g) {
 		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -373,10 +372,23 @@ public class FlyingObject extends MobileG {
 		
 	}
 	
-//	public double getRadius() {
-//		this.radius = 100;
-//		return this.radius;
-//	}
-		
+	@Override
+	public Polygon getRadioPolygon() {
+		return null;
+	}
+
+	@Override
+	public void calculatePropagations() {
+		// TODO Auto-generated method stub
+	}
 	
+	@Override
+	public void resetPropagations() {
+
+	}
+
+	@Override
+	public boolean radioDetect(Device device) {
+		return false;
+	}
 }

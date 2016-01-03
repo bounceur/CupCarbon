@@ -145,12 +145,12 @@ public class StdSensorNode extends SensorNode {
 		int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
 		int x = coord[0];
 		int y = coord[1];
-		if(hide == 0 || hide == 1) {
+		if(hide == 0 || hide == 4) {
 			sensorUnit.setPosition(x, y);
 			sensorUnit.draw(g, 0, isSensorDetecting());
 		}
 
-		if(hide == 2) {
+		if(hide == 3) {
 			sensorUnit.setPosition(x, y);
 			sensorUnit.draw(g, 1, isSensorDetecting());
 		}

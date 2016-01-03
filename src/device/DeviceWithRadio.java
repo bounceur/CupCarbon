@@ -25,19 +25,18 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
+import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
-import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import battery.Battery;
 import map.Layer;
 import utilities.MapCalc;
 import utilities.UColor;
+import wisen_simulation.SimulationInputs;
 
 /**
  * @author Ahcene Bounceur
@@ -55,6 +54,10 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	protected boolean augmenterRadio = false ;
 	protected boolean reduireRadio = false ;
 	
+	// ------ Simple Propagation
+	public double requiredQuality = -80.0; // dB
+	public double transmitPower = 0 ; // dBm
+	
 	protected int nPoint = 30; //63;	
 	protected double deg = 0.209333;
 	protected int nZone = 1;
@@ -62,7 +65,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	protected int [][] polyX = new int[nZone][nPoint];
 	protected int [][] polyY = new int[nZone][nPoint];
 	
-	//protected LinkedList<Device> neighbors = new LinkedList<Device> () ;	
+	protected LinkedList<Device> neighbors = new LinkedList<Device> () ;	
 	
 	/**
 	 * 
@@ -157,14 +160,12 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		if (augmenterRadio) {			
 			radioRangeRadius += 1;
 			radioRangeRadiusOri += 1 ;
-			requiredQuality += 0.1;
 			Layer.getMapViewer().repaint();
 		}
 		if (reduireRadio) {
 			if(radioRangeRadius>0) { 
 				radioRangeRadius -= 1 ;
 				radioRangeRadiusOri -= 1 ;
-				requiredQuality += 0.1;
 			}
 			Layer.getMapViewer().repaint();
 		}
@@ -184,7 +185,6 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				augmenterRadio = !augmenterRadio ;
 				radioRangeRadius+=1 ;
 				radioRangeRadiusOri+=1 ;
-				requiredQuality -= 0.1;
 				Layer.getMapViewer().repaint();
 			}
 			if(key.getKeyChar()=='-') {
@@ -195,7 +195,6 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 					radioRangeRadius-=1 ;
 					radioRangeRadiusOri-=1 ;
 				}
-				requiredQuality += 0.1;
 				Layer.getMapViewer().repaint();
 				
 			}
@@ -225,7 +224,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			g.setColor(UColor.WHITE_TRANSPARENT);
 			int lr1 = (int) (r * Math.cos(Math.PI / 4.));
 			g.drawLine(x, y, (int) (x + lr1), (int) (y - lr1));
-			g.drawString("" +requiredQuality+" dB", x + (lr1 / 2), (int) (y - (lr1 / 4.)));
+			//g.drawString("" +requiredQuality+" dB", x + (lr1 / 2), (int) (y - (lr1 / 4.)));
 		}		
 	}
 	
@@ -282,7 +281,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 //	public void calculateNeighbours() {
 //		neighbors = new LinkedList<Device> () ;
-//		for(Device device : DeviceList.getNodes()) {
+//		for(SensorNode device : DeviceList.getSensorNodes()) {
 //			if(radioDetect(device) && this!=device) {
 //				if (!isDead() && !device.isDead()) 
 //					neighbors.add(device);
@@ -293,7 +292,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 //						device.removeNeighbor(this);				
 //			}
 //		}
-//		//Layer.getMapViewer().repaint();
+//		Layer.getMapViewer().repaint();
 //	}
 	
 //	public void addNeighbor(Device device) {
@@ -311,37 +310,51 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 //	}
 	
 	public List<Device> getNeighbors() {
-		List<Device> neghnodes = new ArrayList<Device>();
-		for (int i = 0; i < DeviceList.size(); i++) {
-			if(this != DeviceList.getNodes().get(i)) 
-				if((DeviceList.getNodes().get(i).radioDetect(this)) || (radioDetect(DeviceList.getNodes().get(i)))) {
-					neghnodes.add(DeviceList.getNodes().get(i));
-				}
+		if(DeviceList.propagationsCalculated)
+			return neighbors;
+		else {
+			List<Device> neighnodes = new LinkedList<Device>();
+			for (int i = 0; i < DeviceList.size(); i++) {
+				if(this != DeviceList.getNodes().get(i)) 
+					if((DeviceList.getNodes().get(i).radioDetect(this)) || (radioDetect(DeviceList.getNodes().get(i)))) {
+						neighnodes.add(DeviceList.getNodes().get(i));
+					}
+			}
+			return neighnodes;
 		}
-		return neghnodes;
 	}
 	
-	public void displayNeghbors() {
-		System.out.print(id+" : ");
-		for (int i = 0; i < DeviceList.size(); i++) {
-			if(this != DeviceList.getNodes().get(i)) 
-				if((DeviceList.getNodes().get(i).radioDetect(this)) || (radioDetect(DeviceList.getNodes().get(i)))) {
-					System.out.print(DeviceList.getNodes().get(i)+" ");
-				}
-		}
-		System.out.println();
-	}
+//	public void displayNeighbors() {
+//		System.out.print(id+" : ");
+//		for (int i = 0; i < DeviceList.size(); i++) {
+//			if(this != DeviceList.getNodes().get(i)) 
+//				if((DeviceList.getNodes().get(i).radioDetect(this)) || (radioDetect(DeviceList.getNodes().get(i)))) {
+//					System.out.print(DeviceList.getNodes().get(i)+" ");
+//				}
+//		}
+//		System.out.println();
+//	}
 	
 	public void drawRadioLinks(Graphics g) {
 		for(Device device : DeviceList.getNodes()) {
 			if(radioDetect(device) && this!=device && !isDead() && !device.isDead()) {
-				drawRadioLink(device, g);
+				drawRadioLink(device, g, 1);
 				if (Layer.displayRLDistance) {
-					drawDistance(longitude, latitude, device.getLongitude(), device.getLatitude(), (int) distance(device), getPowerReception(device), g);
+					drawDistance(longitude, latitude, device.getLongitude(), device.getLatitude(), (int) distance(device), 0/*getPowerReception(device)*/, g);
 				}
 			}
 		}
 	}
+	
+	public void drawRadioPropagations(Graphics g) {
+		for(Device device : neighbors) {
+			drawRadioLink(device, g, 0);
+			if (Layer.displayRLDistance) {
+				drawDistance(longitude, latitude, device.getLongitude(), device.getLatitude(), (int) distance(device), 0/*getPowerReception(device)*/, g);
+			}
+		}
+	}
+	
 	
 	/**
 	 * Draw the (line) radio link
@@ -351,15 +364,14 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 * @param g
 	 *            Graphics
 	 */
-	public void drawRadioLink(Device device, Graphics g) {
+	public void drawRadioLink(Device device, Graphics g, int type) {
 		int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
 		int lx1 = coord[0];
 		int ly1 = coord[1];
 		coord = MapCalc.geoToIntPixelMapXY(device.getLongitude(), device.getLatitude());
 		int lx2 = coord[0];
 		int ly2 = coord[1];
-
-		//if((drawRadioLinks && !(device.isSending() && isReceiving())) || (isSending() && device.isReceiving())) {	
+		
 		if(drawRadioLinks) {	
 			switch(drawRadioLinksColor) {
 			case 0 : g.setColor(Color.DARK_GRAY); break;
@@ -370,21 +382,14 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			}
 			
 			Graphics2D g2 = (Graphics2D) g;
-			g2.setStroke(new BasicStroke(0.6f));
-//			if(isSending() && device.isReceiving()) {
-//				g.setColor(radioLinkColor);
-//				g2.setStroke(new BasicStroke(3));
-//				
-//			    if(Layer.getMapViewer().getZoom() < 2) {
-//			    	g2.setStroke(new BasicStroke(4));		    	
-//			    }
-//			}
+			Stroke dashed = new BasicStroke(0.6f);
+			if(type==1)
+				dashed = new BasicStroke(0.6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{4}, 0);
+	        g2.setStroke(dashed);
 			g.drawLine(lx1, ly1, lx2, ly2);
 		
 
-			if(drawArrows) {// || (isSending() && device.isReceiving())) {
-				//if((drawRadioLinks && !(device.isSending() && isReceiving())) || (isSending() && device.isReceiving())) {
-				//if(drawRadioLinks) {
+			if(drawArrows) {
 				double dx = 0;
 				double dy = 0;
 				double alpha = 0;
@@ -399,12 +404,6 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				alpha = Math.atan(dy / dx);
 				alpha = 180 * alpha / Math.PI;
 				int as = 11;
-//				if(isSending() && device.isReceiving()) {
-//					as = 18;
-//					if(Layer.getMapViewer().getZoom() < 2) {
-//						as = 23;		    	
-//				    }
-//				}
 				if (dx >= 0)	
 					g.fillArc((int) lx2 - as, (int) ly2 - as, as*2, as*2,180 - (int) alpha - as, as*2);
 				else
@@ -445,48 +444,70 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		}
 	}
 	
-	///
 	/**
 	 * @param device
-	 * @return if a device is in the radio area of the current device
+	 * @return if a neighbor device is in the radio area of the current device
 	 */
-	public boolean radioDetect2(Device device) {	
-		if (withRadio && device.withRadio()) {
-			GeoPosition gp = new GeoPosition(device.getLongitude(),device.getLatitude());
-			Point2D p1 = Layer.getMapViewer().getTileFactory().geoToPixel(gp, Layer.getMapViewer().getZoom());
-			Polygon poly = new Polygon(polyX[0],polyY[0],nPoint);
-			return (poly.contains(p1));
+	public boolean radioDetect(Device device) {
+		DeviceWithRadio deviceWR = (DeviceWithRadio) device;
+		if (!DeviceList.propagationsCalculated)
+			return RadioDetection.simpleDetection(this, deviceWR);
+		else {
+			if (SimulationInputs.radioDetectionType == RadioDetection.POWER_RECEPTION_DETECTION)
+				return RadioDetection.powerReceptionDetection(this, deviceWR);
 		}
-		return false;
+		return true;
 	}
 	
-	public boolean radioDetect(Device device) {	
-		if (	withRadio && device.withRadio() && 
-				this.getNId() == device.getNId() &&
-				this.getCh() == device.getCh()
-		) {
-			if ( (getPowerReception(device) > requiredQuality) ||
-					(isDistanceMode() && device.isDistanceMode())  
-					)
-				return true;
+	/**
+	 * @param device
+	 * @return if a neighbor device is in the propagation area of the current device
+	 */
+	public boolean propagationDetect(Device device) {
+		if (DeviceList.propagationsCalculated)
+			return neighbors.contains(device);
+		else
+			return radioDetect(device);
+	}
+	
+	public Polygon getRadioPolygon() {
+		return new Polygon(polyX[0],polyY[0],nPoint);
+	}
+	
+	public void calculatePropagations() {
+		SimulationInputs.radioDetectionType = RadioDetection.POWER_RECEPTION_DETECTION;
+		neighbors = new LinkedList<Device> () ;
+		for(Device device : DeviceList.getNodes()) {
+			if(radioDetect(device) && this!=device && !isDead() && !device.isDead()) {
+				neighbors.add(device);
+			}
+			//neighbors.add(device);						
 		}
-		return false;
 	}
 	
-	public double getAttenuation(double d) {
-		double c = 2.9979e+08;
-		double lambda = c/frequency;
-		double att = (20*Math.log10(4*Math.PI*d/lambda)) ; 
-		return att ;
+	public void resetPropagations() {
+		SimulationInputs.radioDetectionType = RadioDetection.SIMPLE_DETECTION;
+		neighbors = new LinkedList<Device> () ;
 	}
 	
+	public double getRequiredQuality() {
+		return requiredQuality;
+	}
+
+	public void setRequiredQuality(double requiredQuality) {
+		this.requiredQuality = requiredQuality;
+	}
+
 	public double getTransmitPower() {
-		return transmitPower;
+		double tpW = (Math.pow(10, transmitPower/10.))/1000.;
+		double nTpW = tpW * 1e6;
+		nTpW = nTpW * pl /100.;
+		double nTpDbm = 10*Math.log10(nTpW/1000.);
+		return nTpDbm;
 	}
-	
-	public double getPowerReception(Device device) {
-		double pr = transmitPower - device.getAttenuation(distance(device));
-		return pr ;
+
+	public void setTransmitPower(double transmitPower) {
+		this.transmitPower = transmitPower;
 	}
 
 }
