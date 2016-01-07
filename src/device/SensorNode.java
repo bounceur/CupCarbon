@@ -91,8 +91,8 @@ public abstract class SensorNode extends DeviceWithRadio {
 	 * @param radioRadius
 	 *            Radius (range) of the radio (in meter)
 	 */
-	public SensorNode(double x, double y, double radius, double radioRadius, int id) {
-		super(x, y, radius, radioRadius, id);
+	public SensorNode(double x, double y, double z, double radius, double radioRadius, int id) {
+		super(x, y, z, radius, radioRadius, id);
 		//sensorUnit = new SensorUnit(this.longitude, this.latitude, this);
 		battery = new Battery();
 		withRadio = true;
@@ -115,9 +115,9 @@ public abstract class SensorNode extends DeviceWithRadio {
 	 * @param suRadius
 	 *            Radius of the sensor unit (default value = 10 meters)
 	 */
-	public SensorNode(double x, double y, double radius, double radioRadius,
+	public SensorNode(double x, double y, double z, double radius, double radioRadius,
 			double suRadius, int id) {
-		super(x, y, radius, radioRadius, id);
+		super(x, y, z, radius, radioRadius, id);
 		//sensorUnit = new SensorUnit(this.longitude, this.latitude, suRadius, this);
 		battery = new Battery();
 		withRadio = true;
@@ -141,9 +141,9 @@ public abstract class SensorNode extends DeviceWithRadio {
 	 * @param suRadius
 	 *            Radius of the sensor unit (default value = 10 meters)
 	 */
-	public SensorNode(String x, String y, String radius, String radioRadius,
+	public SensorNode(String x, String y, String z, String radius, String radioRadius,
 			String suRadius, int id) {
-		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(radius),
+		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(radius),
 				Double.valueOf(radioRadius), id);
 		//sensorUnit = new SensorUnit(this.longitude, this.latitude, Double.valueOf(suRadius), this);
 		battery = new Battery();
@@ -581,6 +581,10 @@ public abstract class SensorNode extends DeviceWithRadio {
 	
 	public void setAckOk(boolean ackOk) {
 		this.ackOk = ackOk;
+	}
+	
+	public int getBufferSize() {
+		return bufferSize;
 	}
 	
 }

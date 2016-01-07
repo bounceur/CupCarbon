@@ -38,7 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
-import map.Layer;
+import map.MapLayer;
 import device.DeviceList;
 
 /**
@@ -316,7 +316,7 @@ public class DeviceParametersWindow extends JInternalFrame {
 		button_1_.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DeviceList.setScriptFileName(scriptComboBox.getSelectedItem()+"");
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 			}
 		});
 		button_1_.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));

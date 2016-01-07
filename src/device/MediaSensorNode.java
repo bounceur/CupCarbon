@@ -42,7 +42,7 @@ public class MediaSensorNode extends SensorNode {
 	 */
 	public MediaSensorNode() {
 		super();
-		sensorUnit = new MediaSensorUnit(this.longitude, this.latitude, this);		
+		sensorUnit = new MediaSensorUnit(this.longitude, this.latitude, this.elevation, this);		
 	}
 
 	/**
@@ -57,9 +57,9 @@ public class MediaSensorNode extends SensorNode {
 	 * @param radioRadius
 	 *            Radius (range) of the radio (in meter)
 	 */
-	public MediaSensorNode(double x, double y, double radius, double radioRadius, int id) {
-		super(x, y, radius, radioRadius, id);
-		sensorUnit = new MediaSensorUnit(this.longitude, this.latitude, this);		
+	public MediaSensorNode(double x, double y, double z, double radius, double radioRadius, int id) {
+		super(x, y, z, radius, radioRadius, id);
+		sensorUnit = new MediaSensorUnit(this.longitude, this.latitude, this.elevation, this);		
 	}
 
 	/**
@@ -76,10 +76,10 @@ public class MediaSensorNode extends SensorNode {
 	 * @param suRadius
 	 *            Radius of the sensor unit (default value = 10 meters)
 	 */
-	public MediaSensorNode(double x, double y, double radius, double radioRadius,
+	public MediaSensorNode(double x, double y, double z, double radius, double radioRadius,
 			double suRadius, int id, double deg, double dec, int n) {
-		super(x, y, radius, radioRadius, id);
-		sensorUnit = new MediaSensorUnit(this.longitude, this.latitude, suRadius, deg, dec, n, this);
+		super(x, y, z, radius, radioRadius, id);
+		sensorUnit = new MediaSensorUnit(this.longitude, this.latitude, this.elevation, suRadius, deg, dec, n, this);
 	}
 	
 	/**
@@ -101,8 +101,8 @@ public class MediaSensorNode extends SensorNode {
 	 *            contains the name of the parameter The second column contains
 	 *            the value of the corresponding parameter
 	 */
-	public MediaSensorNode(double x, double y, double radius, double radioRadius, double suRadius, String[][] sb, int id, double deg, double dec, int n) {
-		this(x, y, radius, radioRadius, suRadius, id, deg, dec, n);
+	public MediaSensorNode(double x, double y, double z, double radius, double radioRadius, double suRadius, String[][] sb, int id, double deg, double dec, int n) {
+		this(x, y, z, radius, radioRadius, suRadius, id, deg, dec, n);
 		this.setInfos(sb);
 		initBuffer();
 	}
@@ -125,9 +125,9 @@ public class MediaSensorNode extends SensorNode {
 	 * @param scriptFileName
 	 *            The path of the script file
 	 */
-	public MediaSensorNode(String id, String rdInfos, String x, String y, String radius, String radioRadius,
+	public MediaSensorNode(String id, String rdInfos, String x, String y, String z, String radius, String radioRadius,
 			String suRadius, String gpsFileName, String scriptFileName, String degS, String decS, String nS) {
-		this(x, y, radius, radioRadius, suRadius, Integer.valueOf(id), Double.valueOf(degS), Double.valueOf(decS), Integer.valueOf(nS));
+		this(x, y, z, radius, radioRadius, suRadius, Integer.valueOf(id), Double.valueOf(degS), Double.valueOf(decS), Integer.valueOf(nS));
 		String [] srd = rdInfos.split("#");
 		my = Integer.valueOf(srd[0]);
 		ch = Integer.valueOf(srd[1]);
@@ -155,9 +155,9 @@ public class MediaSensorNode extends SensorNode {
 	 * @param suRadius
 	 *            Radius of the sensor unit (default value = 10 meters)
 	 */
-	public MediaSensorNode(String x, String y, String radius, String radioRadius, String suRadius, int id, double deg, double dec, int n) {
-		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(radius), Double.valueOf(radioRadius), id);
-		sensorUnit = new MediaSensorUnit(this.longitude, this.latitude, Double.valueOf(suRadius), deg, dec, n, this);
+	public MediaSensorNode(String x, String y, String z, String radius, String radioRadius, String suRadius, int id, double deg, double dec, int n) {
+		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(radius), Double.valueOf(radioRadius), id);
+		sensorUnit = new MediaSensorUnit(this.longitude, this.latitude, this.elevation, Double.valueOf(suRadius), deg, dec, n, this);
 	}
 	
 //	@Override

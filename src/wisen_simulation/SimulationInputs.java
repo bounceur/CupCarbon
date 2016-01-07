@@ -20,6 +20,7 @@
 package wisen_simulation;
 
 import device.RadioDetection;
+import physical_layer.Ber;
 
 /**
  * @author Ahcene Bounceur
@@ -29,9 +30,7 @@ import device.RadioDetection;
  * The necessary parameters for the simulation
  */
 public class SimulationInputs {
-
-	public static final int PROBA = 0;
-	public static final int ALPHAD = 1;
+	
 	public static final int NONE = 0;
 	public static final int CSMA = 1;
 	
@@ -45,7 +44,7 @@ public class SimulationInputs {
 	public static boolean showAckLinks = false;
 	
 	public static boolean ack = false ;
-	public static double ackType = SimulationInputs.PROBA ;
+	public static double ackType = Ber.PROBABILITY;
 	public static double ackProba = 1.0 ;
 	public static int protocol = SimulationInputs.CSMA ;
 	

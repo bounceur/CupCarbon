@@ -27,7 +27,7 @@ import java.awt.event.KeyEvent;
 import device.Device;
 import device.DeviceList;
 import device.StdSensorNode;
-import map.Layer;
+import map.MapLayer;
 import utilities.MapCalc;
 import utilities.UColor;
 
@@ -35,12 +35,12 @@ public class Marker extends Device {
 
 	private static String idFL = "M" ; // ID First Letter	
 	
-	public Marker(double x, double y, double radius) {
-		super(x, y, radius, 0);
+	public Marker(double x, double y, double z, double radius) {
+		super(x, y, z, radius, 0);
 	}
 	
-	public Marker(String x, String y, String radius) {
-		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(radius), 0);
+	public Marker(String x, String y, String z, String radius) {
+		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(radius), 0);
 	}
 		
 	@Override
@@ -84,11 +84,15 @@ public class Marker extends Device {
 		// b = true : the created node will be selected
 		double x1 = marker1.getLongitude();
 		double y1 = marker1.getLatitude();
+		double z1 = marker1.getElevation();
 		double x2 = marker2.getLongitude();
 		double y2 = marker2.getLatitude();
+		double z2 = marker2.getElevation();
+		
 		double x = x1+((x2-x1)/2.0);
 		double y = y1+((y2-y1)/2.0);
-		Marker marker = new Marker(x, y, 10) ; 
+		double z = z1+((z2-z1)/2.0);
+		Marker marker = new Marker(x, y, z, 10) ; 
 		if(b) marker.setSelection(true);
 		return marker;
 	}
@@ -129,14 +133,14 @@ public class Marker extends Device {
 		if(selected) {
 			int ix = MarkerList.getIndex(this)+1 ;
 			if(ix<MarkerList.size()) {
-				Layer.addMarker(ix,getCentre(this,MarkerList.get(ix),true));
+				MapLayer.addMarker(ix,getCentre(this,MarkerList.get(ix),true));
 			}
 		}
 	}	
 	
 	public void transformMarkerToSensor() {
 		if(selected) {
-			DeviceList.add(new StdSensorNode(longitude, latitude, 0, 100, -1));
+			DeviceList.add(new StdSensorNode(longitude, latitude, elevation, 0, 100, -1));
 		}
 	}
 

@@ -57,8 +57,8 @@ public class BaseStation extends StdSensorNode {
 	 * @param scriptFileName
 	 *            The path of the script file
 	 */
-	public BaseStation(String id, String rdInfos, String x, String y, String radius, String radioRadius, String cuRadius, String gpsFileName, String scriptFileName) {
-		super(id, rdInfos,  x,  y,  radius, radioRadius, cuRadius, gpsFileName, scriptFileName);
+	public BaseStation(String id, String rdInfos, String x, String y, String z, String radius, String radioRadius, String cuRadius, String gpsFileName, String scriptFileName) {
+		super(id, rdInfos,  x,  y,  z, radius, radioRadius, cuRadius, gpsFileName, scriptFileName);
 	}
 	
 	/**
@@ -75,8 +75,8 @@ public class BaseStation extends StdSensorNode {
 	 * @param cuRadius
 	 *            Radius of the sensor unit (default value = 10 meters)
 	 */
-	public BaseStation(double x, double y, double radius, double radioRadius, double cuRadius, int id) {
-		super(x, y, radius, radioRadius, cuRadius, id);
+	public BaseStation(double x, double y, double z, double radius, double radioRadius, double cuRadius, int id) {
+		super(x, y, z, radius, radioRadius, cuRadius, id);
 	}
 	
 	@Override

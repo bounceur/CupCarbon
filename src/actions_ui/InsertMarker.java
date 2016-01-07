@@ -19,7 +19,7 @@
 
 package actions_ui;
 
-import map.Layer;
+import map.MapLayer;
 import markers.Marker;
 import markers.MarkerList;
 
@@ -48,7 +48,7 @@ public class InsertMarker extends Actions {
 		for(int i=0; i<MarkerList.size(); i++){
 			if(MarkerList.get(i).getId() == this.device.getId()){
 				MarkerList.delete(i);
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 				Historic.remove();
 				break;
 			}
@@ -58,9 +58,9 @@ public class InsertMarker extends Actions {
 	@Override
 	public void redo(){
 		System.out.println("Redo");
-		Marker marker = new Marker(this.device.getLongitude()+"", this.device.getLatitude()+"", this.device.getRadius()+"");
+		Marker marker = new Marker(this.device.getLongitude()+"", this.device.getLatitude()+"", this.device.getElevation()+"", this.device.getRadius()+"");
 		MarkerList.add(marker);
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 		Historic.add(this, true);
 		
 	}

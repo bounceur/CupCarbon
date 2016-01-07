@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.util.LinkedList;
 import java.util.List;
 
-import map.Layer;
+import map.MapLayer;
 import physical_layer.Ber;
 import utilities.MapCalc;
 import wisen_simulation.SimLog;
@@ -42,7 +42,7 @@ public class Channels2 {
 	
 	
 	public static void messageReceived() {		
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 		
 		int type = packetEventList.get(0).getType();
 		String message = packetEventList.get(0).getPacket();
@@ -53,7 +53,7 @@ public class Channels2 {
 		
 		boolean berOk = true;
 		
-		berOk = Ber.berOk();
+		berOk = Ber.berOk(message);
 		
 		if ((type == 0) || (type == 2)) {	
 			if (berOk || (type == 2)) {
@@ -104,7 +104,7 @@ public class Channels2 {
 		if(packetEventList.size()>0) {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setStroke(new BasicStroke(2.5f));			
-		    if(Layer.getMapViewer().getZoom() < 2) {
+		    if(MapLayer.getMapViewer().getZoom() < 2) {
 		    	g2.setStroke(new BasicStroke(3));		    	
 		    }
 			
@@ -134,7 +134,7 @@ public class Channels2 {
 						alpha = Math.atan(dy / dx);
 						alpha = 180 * alpha / Math.PI;
 						int as = 16;
-						if(Layer.getMapViewer().getZoom() < 2) {
+						if(MapLayer.getMapViewer().getZoom() < 2) {
 							as = 21;		    	
 						}
 						if (dx >= 0)	

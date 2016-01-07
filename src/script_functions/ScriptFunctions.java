@@ -24,6 +24,18 @@ public class ScriptFunctions {
 		if(function.equals("check")) {
 			return Functions.check(args);
 		}
+		
+		if(function.equals("fmu")) {
+			return Functions.fmu(args);
+		}
+		
+		if(function.equals("fsigma")) {
+			return Functions.fsigma(args);
+		}
+		
+		if(function.equals("factor")) {
+			return Functions.factor(args);
+		}
 				
 		return "[SCRIPT] FUNCTION ERROR: Unknown function!";
 	}

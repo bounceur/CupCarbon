@@ -19,7 +19,7 @@
 
 package solver;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -73,7 +73,7 @@ public class NetworkEnvelopeH2 extends Thread {
 			cur = imin;
 			DeviceList.getNodes().get(imin).setMarked(true);
 			DeviceList.getNodes().get(imin).setVisited(true);
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 			DeviceList.addToLastEnvelope(imin);
 
 			delay();
@@ -110,7 +110,7 @@ public class NetworkEnvelopeH2 extends Thread {
 					if (trouve) {
 						DeviceList.getNodes().get(imin).setMarked(true);
 						DeviceList.getNodes().get(imin).setVisited(true);
-						Layer.getMapViewer().repaint();
+						MapLayer.getMapViewer().repaint();
 						DeviceList.addToLastEnvelope(imin);
 
 						n1 = DeviceList.getNodes().get(imin);

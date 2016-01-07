@@ -26,7 +26,7 @@ import java.util.Random;
 
 import device.Device;
 import device.DeviceWithoutRadio;
-import map.Layer;
+import map.MapLayer;
 import utilities.MapCalc;
 import utilities.UColor;
 
@@ -43,13 +43,13 @@ public class Gas extends DeviceWithoutRadio {
 	protected double value = 0.0f ;
 	protected Random random ;
 	
-	public Gas(double x, double y, double radius, int id) {
-		super(x, y, radius, id);
+	public Gas(double x, double y, double z, double radius, int id) {
+		super(x, y, z, radius, id);
 		random = new Random();
 	}
 	
-	public Gas(String x, String y, String radius, int id) {
-		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(radius), id);
+	public Gas(String x, String y, String z, String radius, int id) {
+		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(radius), id);
 		random = new Random();
 	}
 
@@ -138,14 +138,14 @@ public class Gas extends DeviceWithoutRadio {
 		value = 0.0f;
 		for(int i=0;i<1000; i++) {
 			simNext();
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {e.printStackTrace();}
 		}		
 		underSimulation = false ;
 		thread = null ;
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	@Override
@@ -222,7 +222,6 @@ public class Gas extends DeviceWithoutRadio {
 
 	@Override
 	public void drawRadioLinks(Graphics g) {
-		// TODO Auto-generated method stub		
 	}
 	
 	@Override

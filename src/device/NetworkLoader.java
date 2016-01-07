@@ -45,6 +45,7 @@ public class NetworkLoader extends Thread {
 			
 			double x = 0;
 			double y = 0;
+			double z = 0;
 			FileInputStream fis = new FileInputStream("sensors.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			String s;
@@ -90,6 +91,8 @@ public class NetworkLoader extends Thread {
 						x = Double.parseDouble(ics[1]);
 					if (ics[0].equals("Longitude"))
 						y = Double.parseDouble(ics[1]);
+					if (ics[0].equals("Elevation"))
+						z = Double.parseDouble(ics[1]);
 					if (ics[0].equals("Sensor_Type"))
 						info[0][1] = ics[1];
 					if (ics[0].equals("Temperature")) {
@@ -127,7 +130,7 @@ public class NetworkLoader extends Thread {
 					if (ics[0].equals("Time"))
 						info[6][1] = ics[1];
 				}
-				DeviceList.add(new StdSensorNode(x, y, 0, 30, 10, info,-1));
+				DeviceList.add(new StdSensorNode(x, y, z, 0, 30, 10, info, -1));
 				//MarkerList.add(new Marker(x,y,10));
 				//Layer.getMapViewer().repaint();
 				mapViewer.repaint();

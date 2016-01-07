@@ -36,10 +36,11 @@ public abstract class DeviceWithoutRadio extends DeviceWithWithoutRadio {
 	/**
 	 * @param x
 	 * @param y
+	 * @param z
 	 * @param radius
 	 */
-	public DeviceWithoutRadio(double x, double y, double radius, int id) {
-		super(x, y, radius, id);
+	public DeviceWithoutRadio(double x, double y, double z, double radius, int id) {
+		super(x, y, z, radius, id);
 	}	
 
 }

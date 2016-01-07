@@ -21,7 +21,7 @@ package solver;
 
 import java.util.LinkedList;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -75,7 +75,7 @@ public class NetworkEnvelopeC2 extends Thread {
 			}
 		}
 		DeviceList.getNodes().get(imin).setMarked(true);
-		Layer.getMapViewer().repaint();		
+		MapLayer.getMapViewer().repaint();		
 		
 		try {
 			sleep(500);
@@ -116,7 +116,7 @@ public class NetworkEnvelopeC2 extends Thread {
 		existList.add(imin);
 		cur = imin;
 		DeviceList.getNodes().get(imin).setMarked(true);
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 		p2 = imin;
 		px2 = x2 ;
 		py2 = y2 ;
@@ -159,7 +159,7 @@ public class NetworkEnvelopeC2 extends Thread {
 				existList.add(imin);
 				cur = imin;
 				DeviceList.getNodes().get(imin).setMarked(true);
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 				try {
 					sleep(500);
 				} catch (InterruptedException e) {}

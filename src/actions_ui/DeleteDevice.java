@@ -19,7 +19,7 @@
 
 package actions_ui;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -44,11 +44,11 @@ public class DeleteDevice extends Actions {
 	@Override
 	public void undo() {
 		DeviceList.add(this.device);
-		Layer.getMapViewer().addMouseListener(this.device);
-		Layer.getMapViewer().addMouseMotionListener(this.device);
-		Layer.getMapViewer().addKeyListener(this.device);
+		MapLayer.getMapViewer().addMouseListener(this.device);
+		MapLayer.getMapViewer().addMouseMotionListener(this.device);
+		MapLayer.getMapViewer().addKeyListener(this.device);
 		Historic.remove();
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 		
 	}
 	
@@ -56,6 +56,6 @@ public class DeleteDevice extends Actions {
 	public void redo(){
 		DeviceList.delete(DeviceList.size()-1);
 		Historic.add(null, true);
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 }

@@ -28,7 +28,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 
-import map.Layer;
+import map.MapLayer;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
@@ -123,7 +123,7 @@ public class FlyingObject extends MobileG {
 		// int x = MapCalc.geoToIntPixelMapX(this.x, this.y);
 		// int y = MapCalc.geoToIntPixelMapY(this.x, this.y);
 		// int v = 5*(Layer.getMapViewer().getZoom()-10);
-		int v = 10 - Layer.getMapViewer().getZoom();
+		int v = 10 - MapLayer.getMapViewer().getZoom();
 		if (v < 0)
 			v = 1;
 		int rayon = MapCalc.radiusInPixels(this.radius);
@@ -247,7 +247,7 @@ public class FlyingObject extends MobileG {
 				int d = 1;
 				for (int i = 0; i < distance; i++) {
 					move(getAngle(x1, y1, x2, y2));
-					Layer.getMapViewer().repaint();
+					MapLayer.getMapViewer().repaint();
 					try {
 						Thread.sleep(d);
 					} catch (InterruptedException e) {
@@ -262,7 +262,7 @@ public class FlyingObject extends MobileG {
 		toOri();
 		thread = null;
 		underSimulation = false;
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	/**
@@ -291,7 +291,7 @@ public class FlyingObject extends MobileG {
 
 	public void setXYFromMouse(int xm, int ym) {
 		Point p = new Point(xm, ym);
-		GeoPosition gp = Layer.getMapViewer().convertPointToGeoPosition(p);
+		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
 		longitude = gp.getLatitude();
 		latitude = gp.getLongitude();
 	}

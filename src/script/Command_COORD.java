@@ -1,6 +1,6 @@
 package script;
 
-import map.Layer;
+import map.MapLayer;
 import device.SensorNode;
 
 public class Command_COORD extends Command {
@@ -24,7 +24,7 @@ public class Command_COORD extends Command {
 		sensor.setLatitude(Double.valueOf(vArg1));
 		sensor.setLongitude(Double.valueOf(vArg2));
 		int t = Integer.valueOf(vArg3);
-		Layer.getMapViewer().repaint();	
+		MapLayer.getMapViewer().repaint();	
 		return t;
 	}
 

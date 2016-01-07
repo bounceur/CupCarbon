@@ -21,7 +21,7 @@ package solver;
 
 import java.util.List;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -82,7 +82,7 @@ public class NetworkEnvelopeNAN extends Thread {
 		previous = imin;
 		current = imin;
 		nodes.get(imin).setMarked(true);
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 		DeviceList.addToLastEnvelope(imin);
 
 		delay();
@@ -130,7 +130,7 @@ public class NetworkEnvelopeNAN extends Thread {
 				imin = current;			
 
 			nodes.get(imin).setMarked(true);
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 			DeviceList.addToLastEnvelope(imin);
 
 			previous = current;

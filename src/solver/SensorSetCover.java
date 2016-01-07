@@ -24,7 +24,7 @@ import graph.GraphStd;
 
 import java.util.List;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -71,7 +71,7 @@ public class SensorSetCover {
 		// System.out.println(++k+" : "+i);
 		// }
 		// return nbCouvrants;
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	public static void sensorTargetSetCover() {
@@ -99,7 +99,7 @@ public class SensorSetCover {
 			nodes.get(graphe.get(imax).getNumber()).setMarked(true);
 			graphe.removeWithNeighbors(imax);
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 }

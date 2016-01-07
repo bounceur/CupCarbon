@@ -22,7 +22,7 @@ package utilities;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
-import map.Layer;
+import map.MapLayer;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
@@ -47,11 +47,11 @@ public class MapCalc {
 	 *         coordinates (x, y)
 	 */
 	public static Point2D geoXYToPixelMap(double x, double y) {
-		return Layer
+		return MapLayer
 				.getMapViewer()
 				.getTileFactory()
 				.geoToPixel(new GeoPosition(x, y),
-						Layer.getMapViewer().getZoom());
+						MapLayer.getMapViewer().getZoom());
 	}
 
 	// public static GeoPosition geoXYToPixel(int x, int y) {
@@ -70,13 +70,13 @@ public class MapCalc {
 	 * @return The pixel of the map from a given pixel of the window
 	 */
 	public static Point2D pixelPanelToPixelMap(int x, int y) {
-		return Layer
+		return MapLayer
 				.getMapViewer()
 				.getTileFactory()
 				.geoToPixel(
-						Layer.getMapViewer().convertPointToGeoPosition(
+						MapLayer.getMapViewer().convertPointToGeoPosition(
 								new Point(x, y)),
-						Layer.getMapViewer().getZoom());
+						MapLayer.getMapViewer().getZoom());
 	}
 
 	// public static int geoToIntPixelMapX(double x, double y) {
@@ -166,10 +166,10 @@ public class MapCalc {
 	 */
 	public static int radiusInPixels(double radius) {
 		GeoPosition p1 = new GeoPosition(36.000000, 40.000000);
-		Point2D pt1 = Layer.getMapViewer().getTileFactory().geoToPixel(p1, Layer.getMapViewer().getZoom());
+		Point2D pt1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(p1, MapLayer.getMapViewer().getZoom());
 		int v1 = (int) pt1.getX();
 		GeoPosition p2 = new GeoPosition(36.000000, 40.0011125);
-		Point2D pt2 = Layer.getMapViewer().getTileFactory().geoToPixel(p2, Layer.getMapViewer().getZoom());
+		Point2D pt2 = MapLayer.getMapViewer().getTileFactory().geoToPixel(p2, MapLayer.getMapViewer().getZoom());
 		int v2 = (int) pt2.getX();
 		int rp = (int) (radius * (v2 - v1) / 100);
 		return rp;

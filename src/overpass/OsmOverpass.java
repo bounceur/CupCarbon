@@ -28,7 +28,7 @@ import javax.xml.bind.JAXBException;
 
 import buildings.Building;
 import buildings.BuildingList;
-import map.Layer;
+import map.MapLayer;
 
 /**
  * @author BOYER Yoann
@@ -82,13 +82,13 @@ public class OsmOverpass extends Thread {
 		    	        }
 		        	}
 		        	
-		        	Layer.getMapViewer().addMouseListener(building);
-		    		Layer.getMapViewer().addKeyListener(building);
+		        	MapLayer.getMapViewer().addMouseListener(building);
+		    		MapLayer.getMapViewer().addKeyListener(building);
 		        	BuildingList.add(building);
 	        	}
 	        }
 	        isLoading = false;
-	        Layer.mapViewer.repaint();
+	        MapLayer.mapViewer.repaint();
 	        System.out.println("[Buildings] Building maker finished.");	        
 		} catch (JAXBException e) {
 			e.printStackTrace();

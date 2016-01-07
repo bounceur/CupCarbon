@@ -41,7 +41,7 @@ import actions_ui.MoveDevice;
 import actions_ui.MoveMarker;
 import battery.Battery;
 import cupcarbon.DeviceParametersWindow;
-import map.Layer;
+import map.MapLayer;
 import markers.Marker;
 import markers.MarkerList;
 import script.Script;
@@ -89,10 +89,11 @@ public abstract class Device implements Runnable, MouseListener,
 	protected int nId = 0x3334;
 	protected String userId = "";
 
-	protected double longitude, latitude;
+	protected double longitude, latitude, elevation;
 	protected double longitude_ori;
 	protected double latitude_ori;
-	protected double dlongitude, dlatitude;
+	protected double elevation_ori;
+	protected double dlongitude, dlatitude, delevation;
 	protected double radius = 0;
 	protected double radiusOri = 0;
 	protected boolean selected = false;
@@ -126,11 +127,11 @@ public abstract class Device implements Runnable, MouseListener,
 
 	protected double consumptionTx = 0;
 	protected double consumptionRx = 0;
-	protected double eTx = 0.0000592;
-	protected double eRx = 0.0000286;
-	protected double eSlp = 0.0000001;//Sleep
-	protected double eL = 0.000001;//Listen
-	protected double eS = 1;
+	protected double eTx = 0.0000592; //sending energy
+	protected double eRx = 0.0000286; // receiving energy
+	protected double eSlp = 0.0000001;//Sleeping energy
+	protected double eL = 0.000001;//Listening energy
+	protected double eS = 1; // sensing energy
 	//protected double beta = 1;
 	
 	protected Color radioLinkColor = UColor.RED;
@@ -179,10 +180,12 @@ public abstract class Device implements Runnable, MouseListener,
 	 *            Longitude
 	 * @param y
 	 *            Latitude
+	 * @param z         
+	 *            Elevation
 	 * @param radius
 	 *            Radius
 	 */
-	public Device(double x, double y, double radius, int id) {
+	public Device(double x, double y, double z, double radius, int id) {
 		if(id==-1) 
 			this.id = DeviceList.number++;
 		else 
@@ -190,11 +193,12 @@ public abstract class Device implements Runnable, MouseListener,
 		userId = "_" + id;
 		this.longitude = x;
 		this.latitude = y;
+		this.elevation = z;
 		this.radius = radius;
 		radiusOri = radius;
-		Layer.getMapViewer().addMouseListener(this);
-		Layer.getMapViewer().addMouseMotionListener(this);
-		Layer.getMapViewer().addKeyListener(this);
+		MapLayer.getMapViewer().addMouseListener(this);
+		MapLayer.getMapViewer().addMouseMotionListener(this);
+		MapLayer.getMapViewer().addKeyListener(this);
 	}
 
 	/**
@@ -592,6 +596,23 @@ public abstract class Device implements Runnable, MouseListener,
 	}
 
 	/**
+	 * @return the elevation
+	 */
+	public double getElevation() {
+		return elevation;
+	}
+
+	/**
+	 * Set the elevation
+	 * 
+	 * @param x
+	 *            elevation
+	 */
+	public void setElevation(double elevation) {		
+		this.elevation = elevation;
+	}
+	
+	/**
 	 * Set if it is possible to move or not the device
 	 * 
 	 * @param b
@@ -606,7 +627,7 @@ public abstract class Device implements Runnable, MouseListener,
 	 */
 	public double convertRadius() {
 		return 40075017.0 * Math.cos(latitude)
-				/ Math.pow(2, (Layer.getMapViewer().getZoom() + 8));
+				/ Math.pow(2, (MapLayer.getMapViewer().getZoom() + 8));
 	}
 
 	/**
@@ -620,10 +641,10 @@ public abstract class Device implements Runnable, MouseListener,
 	 */
 	public void inside(int xs, int ys) {
 		Point p = new Point(xs, ys);
-		GeoPosition gp = Layer.getMapViewer().convertPointToGeoPosition(p);
-		Point2D p1 = Layer.getMapViewer().getTileFactory().geoToPixel(gp, Layer.getMapViewer().getZoom());
+		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
+		Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
 		GeoPosition gp2 = new GeoPosition(longitude, latitude);
-		Point2D p2 = Layer.getMapViewer().getTileFactory().geoToPixel(gp2, Layer.getMapViewer().getZoom());
+		Point2D p2 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp2, MapLayer.getMapViewer().getZoom());
 		double d1 = p1.getX() - p2.getX();
 		double d2 = p1.getY() - p2.getY();
 		inside = false;
@@ -752,7 +773,7 @@ public abstract class Device implements Runnable, MouseListener,
 	 */
 	public void calculateDxDy(int evx, int evy) {
 		Point p = new Point(evx, evy);
-		GeoPosition gp = Layer.getMapViewer().convertPointToGeoPosition(p);
+		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
 		double ex = gp.getLatitude();
 		double ey = gp.getLongitude();
 		dlongitude = ex - longitude;
@@ -768,17 +789,17 @@ public abstract class Device implements Runnable, MouseListener,
 	public void mouseClicked(MouseEvent e) {
 		if (!inside && !ctrlDown) {
 			selected = false;
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		}
 
 		if (inside) {			
 			selected = !selected;			
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		}
 		
 		if(move) {
 			move = false;
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		}		
 		increaseNode = false;
 		reduceNode = false;
@@ -828,7 +849,7 @@ public abstract class Device implements Runnable, MouseListener,
 		lastKeyCode = key.getKeyCode();
 		if (lastKeyCode == 27) {
 			initSelection();
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		}
 		if (key.isShiftDown())
 			shiftDown = true;
@@ -1001,7 +1022,7 @@ public abstract class Device implements Runnable, MouseListener,
 
 		if (key == 'w') {
 			selected = false;
-			if (Layer.selectType == getType())
+			if (MapLayer.selectType == getType())
 				selected = true;
 		}		
 
@@ -1011,7 +1032,7 @@ public abstract class Device implements Runnable, MouseListener,
 			selected = false;
 		}
 		
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 
@@ -1029,13 +1050,13 @@ public abstract class Device implements Runnable, MouseListener,
 		thread = null;
 		underSimulation = false;
 		//if(getType()==Device.SENSOR) getBattery().init();
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public void stopSimByAlgo() {
 		thread = null;
 		underSimulation = false;
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	/**
@@ -1086,7 +1107,7 @@ public abstract class Device implements Runnable, MouseListener,
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		Point p = new Point(e.getX(), e.getY());
-		GeoPosition gp = Layer.getMapViewer().convertPointToGeoPosition(p);
+		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
 		double ex = gp.getLatitude();
 		double ey = gp.getLongitude();
 
@@ -1100,24 +1121,24 @@ public abstract class Device implements Runnable, MouseListener,
 
 		if (inside != tmp_inside) {
 			//sensorParametersUpdate();
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		}
 
 		if ((move && selected) && hide == 0) {
 			longitude = ex - dlongitude;
 			latitude = ey - dlatitude;
 			//calculateNeighbours();
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		}
 
 		if (increaseNode) {
 			radius += 30;
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		}
 		if (reduceNode) {
 			if (radius > 0)
 				radius -= 30;
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		}		
 	}
 
@@ -1280,9 +1301,9 @@ public abstract class Device implements Runnable, MouseListener,
 		newNode.move = true;
 		newNode.setScriptFileName(scriptFileName);
 		newNode.setGPSFileName(gpsFileName);
-		Layer.getMapViewer().addMouseListener(newNode);
-		Layer.getMapViewer().addMouseMotionListener(newNode);
-		Layer.getMapViewer().addKeyListener(newNode);
+		MapLayer.getMapViewer().addMouseListener(newNode);
+		MapLayer.getMapViewer().addMouseMotionListener(newNode);
+		MapLayer.getMapViewer().addKeyListener(newNode);
 		return newNode;
 	}
 
@@ -1363,11 +1384,13 @@ public abstract class Device implements Runnable, MouseListener,
 	public void fixori() {
 		longitude_ori = longitude;
 		latitude_ori = latitude;
+		elevation_ori = elevation;
 	}
 
 	public void toOri() {
 		longitude = longitude_ori;
 		latitude = latitude_ori;
+		elevation = elevation_ori;
 	}
 	
 	public int getHide() {
@@ -1518,9 +1541,9 @@ public abstract class Device implements Runnable, MouseListener,
 		newNode.move = true;
 		newNode.setScriptFileName(scriptFileName);
 		newNode.setGPSFileName(gpsFileName);
-		Layer.getMapViewer().addMouseListener(newNode);
-		Layer.getMapViewer().addMouseMotionListener(newNode);
-		Layer.getMapViewer().addKeyListener(newNode);
+		MapLayer.getMapViewer().addMouseListener(newNode);
+		MapLayer.getMapViewer().addMouseMotionListener(newNode);
+		MapLayer.getMapViewer().addKeyListener(newNode);
 		return newNode;
 	}
 	
@@ -1529,9 +1552,9 @@ public abstract class Device implements Runnable, MouseListener,
 		newNode.move = true;
 		newNode.setScriptFileName(scriptFileName);
 		newNode.setGPSFileName(gpsFileName);
-		Layer.getMapViewer().addMouseListener(newNode);
-		Layer.getMapViewer().addMouseMotionListener(newNode);
-		Layer.getMapViewer().addKeyListener(newNode);
+		MapLayer.getMapViewer().addMouseListener(newNode);
+		MapLayer.getMapViewer().addMouseMotionListener(newNode);
+		MapLayer.getMapViewer().addKeyListener(newNode);
 		return newNode;
 	}
 	
@@ -1561,9 +1584,9 @@ public abstract class Device implements Runnable, MouseListener,
 			newNode.move = true;
 			newNode.setScriptFileName(scriptFileName);
 			newNode.setGPSFileName(gpsFileName);
-			Layer.getMapViewer().addMouseListener(newNode);
-			Layer.getMapViewer().addMouseMotionListener(newNode);
-			Layer.getMapViewer().addKeyListener(newNode);
+			MapLayer.getMapViewer().addMouseListener(newNode);
+			MapLayer.getMapViewer().addMouseMotionListener(newNode);
+			MapLayer.getMapViewer().addKeyListener(newNode);
 			return newNode;
 		}
 	

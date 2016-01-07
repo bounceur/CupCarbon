@@ -19,7 +19,7 @@
 
 package actions_ui;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -48,10 +48,10 @@ public class MoveDevice extends Actions {
 		DeviceList.delete(DeviceList.size()-i);
 		Historic.remove();
 		DeviceList.add(this.device);				
-		Layer.getMapViewer().addMouseListener(this.device);
-		Layer.getMapViewer().addMouseMotionListener(this.device);
-		Layer.getMapViewer().addKeyListener(this.device);
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().addMouseListener(this.device);
+		MapLayer.getMapViewer().addMouseMotionListener(this.device);
+		MapLayer.getMapViewer().addKeyListener(this.device);
+		MapLayer.getMapViewer().repaint();
 		device.setMove(false);
 	}
 	
@@ -60,10 +60,10 @@ public class MoveDevice extends Actions {
 		DeviceList.delete(DeviceList.size()-i);
 		Historic.add(null, true);
 		DeviceList.add(this.device);
-		Layer.getMapViewer().addMouseListener(this.device);
-		Layer.getMapViewer().addMouseMotionListener(this.device);
-		Layer.getMapViewer().addKeyListener(this.device);
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().addMouseListener(this.device);
+		MapLayer.getMapViewer().addMouseMotionListener(this.device);
+		MapLayer.getMapViewer().addKeyListener(this.device);
+		MapLayer.getMapViewer().repaint();
 		device.setMove(false);
 		
 	}

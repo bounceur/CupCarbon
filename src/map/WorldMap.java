@@ -28,7 +28,7 @@ import org.jdesktop.swingx.mapviewer.TileFactoryInfo;
 public class WorldMap extends JXMapKit {
 
 	private static final long serialVersionUID = 1L;
-	private static Layer layer;
+	private static MapLayer layer;
 	private final int max = 19;
 	public static String tileType = ".png";
 	public static String tileUrl = "http://otile1.mqcdn.com/tiles/1.0.0/osm/";
@@ -101,10 +101,10 @@ public class WorldMap extends JXMapKit {
 		// setCenterPosition(new
 		// GeoPosition(48.58273977037357,-3.8297653198242188));//Morlaix
 		setZoom(2);
-		layer = new Layer(getMainMap());
+		layer = new MapLayer(getMainMap());
 	}
 
-	public static Layer getLayer() {
+	public static MapLayer getLayer() {
 		return layer;
 	}
 	

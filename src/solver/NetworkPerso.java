@@ -21,7 +21,7 @@ package solver;
 
 import java.util.List;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -47,7 +47,7 @@ protected boolean loop = true ;
 		//for(s=0.0001; s<0.1; s+=0.0001) {
 			for (int i = 0; i < nodes.size(); i++) {
 				nodes.get(i).setMarked(false);
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 			}
 			//delay();
 			for(int i = 0; i < nodes.size(); i++) {
@@ -86,7 +86,7 @@ protected boolean loop = true ;
 				}
 				//System.out.println(imax);
 				nodes.get(imax).setMarked(true);
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 				delay();
 			}			
 		//}

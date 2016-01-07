@@ -19,7 +19,7 @@
 
 package solver;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -64,7 +64,7 @@ public class OfNetworkEnvelopeCtmp extends Thread {
 			}
 		}
 		DeviceList.getNodes().get(imin).setMarked(true);
-		Layer.getMapViewer().repaint();		
+		MapLayer.getMapViewer().repaint();		
 		
 		try {
 			sleep(500);
@@ -102,7 +102,7 @@ public class OfNetworkEnvelopeCtmp extends Thread {
 			cur = imin;
 			System.out.println("  > "+cur);
 			DeviceList.getNodes().get(cur).setMarked(true);
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 			x2 = DeviceList.getNodes().get(cur).getLatitude();
 			y2 = DeviceList.getNodes().get(cur).getLongitude();
 			p2 = cur ;
@@ -129,7 +129,7 @@ public class OfNetworkEnvelopeCtmp extends Thread {
 			cur = imin;
 			System.out.println("  > "+cur);
 			DeviceList.getNodes().get(cur).setMarked(true);
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 			x2 = DeviceList.getNodes().get(cur).getLatitude();
 			y2 = DeviceList.getNodes().get(cur).getLongitude();
 			p3 = cur ;

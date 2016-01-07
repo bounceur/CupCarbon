@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.LinkedList;
 
-import map.Layer;
+import map.MapLayer;
 import markers.Marker;
 import markers.MarkerList;
 import overpass.OsmOverpass;
@@ -31,8 +31,8 @@ public class BuildingList extends Thread {
 	
 	public static void add(String str) {
 		Building building = new Building(str);
-		Layer.getMapViewer().addMouseListener(building);
-		Layer.getMapViewer().addKeyListener(building);
+		MapLayer.getMapViewer().addMouseListener(building);
+		MapLayer.getMapViewer().addKeyListener(building);
 		buildingList.add(building);
 	}
 	
@@ -54,8 +54,8 @@ public class BuildingList extends Thread {
 	
 	public static void reset() {
 		for(Building building : buildingList) {
-			Layer.getMapViewer().removeMouseListener(building);
-			Layer.getMapViewer().removeKeyListener(building);
+			MapLayer.getMapViewer().removeMouseListener(building);
+			MapLayer.getMapViewer().removeKeyListener(building);
 			building = null;
 		}
 		buildingList = new LinkedList<Building>();
@@ -103,7 +103,7 @@ public class BuildingList extends Thread {
 			line = br.readLine();
 			while ((line = br.readLine()) != null) {
 				BuildingList.add(line);
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 			}
 			br.close();			
 		} catch (FileNotFoundException e) {
@@ -116,8 +116,8 @@ public class BuildingList extends Thread {
 	public static void delete(Building building) {
 		for(Building b : buildingList) {			
 			if(b==building) {
-				Layer.getMapViewer().removeMouseListener(b);
-				Layer.getMapViewer().removeKeyListener(b);
+				MapLayer.getMapViewer().removeMouseListener(b);
+				MapLayer.getMapViewer().removeKeyListener(b);
 				buildingList.remove(b);
 				break;
 			}

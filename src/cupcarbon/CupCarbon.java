@@ -68,7 +68,7 @@ import arduino.Arduino;
 import buildings.BuildingList;
 import device.Device;
 import device.DeviceList;
-import map.Layer;
+import map.MapLayer;
 import map.RandomDevices;
 import map.WorldMap;
 import markers.Marker;
@@ -97,6 +97,12 @@ import solver.SolverProxyParams;
  */
 
 public class CupCarbon {
+	
+	public static final int TWO_D = 0;
+	public static final int THREE_D_UNITY = 1;
+	
+	public static int ihmType = THREE_D_UNITY;
+	
 
 	private JFrame mainFrame;
 	public static JLabel lblSimulation = new JLabel(" | Simulation");
@@ -1623,7 +1629,7 @@ public class CupCarbon {
 		btnConnexions.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DeviceList.resetPropagations();
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 			}
 		});
 		toolBar.add(btnConnexions);
@@ -1632,7 +1638,7 @@ public class CupCarbon {
 		btnPropagations.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DeviceList.calculatePropagations();
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 			}
 		});
 		toolBar.add(btnPropagations);
@@ -1748,7 +1754,7 @@ public class CupCarbon {
 	
 	public void changeTiles(String s) {
 		WorldMap.tileUrl = s;				
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setProxy() {

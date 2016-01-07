@@ -19,7 +19,7 @@
 
 package actions_ui;
 
-import map.Layer;
+import map.MapLayer;
 import markers.Marker;
 import markers.MarkerList;
 
@@ -44,18 +44,18 @@ public class DeleteMarker extends Actions {
 	@Override
 	public void undo() {
 		MarkerList.add((Marker)this.device);
-		Layer.getMapViewer().addMouseListener(this.device);
-		Layer.getMapViewer().addMouseMotionListener(this.device);
-		Layer.getMapViewer().addKeyListener(this.device);
+		MapLayer.getMapViewer().addMouseListener(this.device);
+		MapLayer.getMapViewer().addMouseMotionListener(this.device);
+		MapLayer.getMapViewer().addKeyListener(this.device);
 		Historic.remove();
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	@Override
 	public void redo(){
 		MarkerList.delete(MarkerList.size()-1);
 		Historic.add(this,true);
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 }

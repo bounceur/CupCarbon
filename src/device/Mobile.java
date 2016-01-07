@@ -30,16 +30,16 @@ public class Mobile extends MobileG {
 	
 	private static String idFL = "M" ; // ID First Letter
 
-	public Mobile(double x, double y, double rayon, int id) {
-		super(x, y, rayon,"", id);
+	public Mobile(double x, double y, double z, double rayon, int id) {
+		super(x, y, z, rayon, "", id);
 	}
 	
-	public Mobile(double x, double y, double rayon, String gpsFileName, int id) {
-		super(x, y, rayon, gpsFileName, id);	
+	public Mobile(double x, double y, double z, double rayon, String gpsFileName, int id) {
+		super(x, y, z, rayon, gpsFileName, id);	
 	}
 	
-	public Mobile(String x, String y, String rayon, String gpsFileName, int id) {
-		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(rayon), gpsFileName, id);	
+	public Mobile(String x, String y, String z, String rayon, String gpsFileName, int id) {
+		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(rayon), gpsFileName, id);	
 	}
 		
 	@Override

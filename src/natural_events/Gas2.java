@@ -26,7 +26,7 @@ import java.util.Random;
 
 import device.Device;
 import device.DeviceWithoutRadio;
-import map.Layer;
+import map.MapLayer;
 import utilities.MapCalc;
 import utilities.UColor;
 
@@ -43,12 +43,12 @@ public class Gas2 extends DeviceWithoutRadio {
 	protected int [] polyY = new int[62];
 	protected double value = 0.0f ;
 	
-	public Gas2(double x, double y, double radius, int id) {
-		super(x, y, radius, id);
+	public Gas2(double x, double y, double z, double radius, int id) {
+		super(x, y, z, radius, id);
 	}
 	
-	public Gas2(String x, String y, String radius, int id) {
-		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(radius), id);
+	public Gas2(String x, String y, String z, String radius, int id) {
+		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(radius), id);
 	}
 
 	public void draw(Graphics g) {
@@ -150,7 +150,7 @@ public class Gas2 extends DeviceWithoutRadio {
 		radius = 0;
 		for(int i=0;i<1000; i++) {
 			simNext();
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {e.printStackTrace();}
@@ -158,7 +158,7 @@ public class Gas2 extends DeviceWithoutRadio {
 		toOri();
 		underSimulation = false ;
 		thread = null ;
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	@Override

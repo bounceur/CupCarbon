@@ -34,17 +34,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import markers.Marker;
-import markers.MarkerList;
-import natural_events.Gas;
-
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.painter.Painter;
 
-import overpass.OsmOverpass;
-import utilities.MapCalc;
-import utilities.UColor;
 import actions_ui.AddDevice;
 import actions_ui.AddMarker;
 import buildings.Building;
@@ -60,8 +53,15 @@ import device.MobileWithRadio;
 import device.NetworkLoader;
 import device.StdSensorNode;
 import flying_object.FlyingGroup;
+import markers.Marker;
+import markers.MarkerList;
+import natural_events.Gas;
+import overpass.OsmOverpass;
+import three_d_visual.ThreeDUnityIHM;
+import utilities.MapCalc;
+import utilities.UColor;
 
-public class Layer implements Painter<Object>, MouseListener,
+public class MapLayer implements Painter<Object>, MouseListener,
 		MouseMotionListener, KeyListener {
 
 	public static JXMapViewer mapViewer = null;
@@ -91,11 +91,11 @@ public class Layer implements Painter<Object>, MouseListener,
 
 	public static boolean displayRLDistance = false; // RadioLink distance
 	
-	public Layer() {
+	public MapLayer() {
 	}
 
-	public Layer(JXMapViewer mapViewer) {
-		Layer.mapViewer = mapViewer;
+	public MapLayer(JXMapViewer mapViewer) {
+		MapLayer.mapViewer = mapViewer;
 		buildingList = new BuildingList();
 		markerList = new MarkerList();
 		nodeList = new DeviceList();
@@ -260,60 +260,60 @@ public class Layer implements Painter<Object>, MouseListener,
 			GeoPosition gp = mapViewer.convertPointToGeoPosition(p);
 			
 			if (lastKey == '1') {
-				DeviceList.add(new StdSensorNode(gp.getLatitude(), gp.getLongitude(),
-						0, 100, 20, -1));
+				StdSensorNode sn = new StdSensorNode(gp.getLatitude(), gp.getLongitude(), 0, 0, 100, 20, -1); 
+				DeviceList.add(sn);
 				mapViewer.repaint();
 				/* Tanguy */
 				addDeviceAction("SensorNode");
 				/* ------ */
+				ThreeDUnityIHM.addStdSensorNode(sn);
 			}
 			if (lastKey == '2') {
-				DeviceList
-						.add(new Gas(gp.getLatitude(), gp.getLongitude(), 10, -1));
+				DeviceList.add(new Gas(gp.getLatitude(), gp.getLongitude(), 0, 10, -1));
 				mapViewer.repaint();
 				/* Tanguy */
 				addDeviceAction("Gas");
 				/* ------ */
 			}
 			if (lastKey == '4') {
-				DeviceList.add(new MediaSensorNode(gp.getLatitude(), gp.getLongitude(),
-						0, 100, 60, -1, 0.1, 0, 12));
+				DeviceList.add(new MediaSensorNode(gp.getLatitude(), gp.getLongitude(), 0, 0, 100, 60, -1, 0.1, 0, 12));
 				mapViewer.repaint();
 				/* Tanguy */
 				addDeviceAction("MediaSensorNode");
 				/* ------ */
 			}
 			if (lastKey == '3') {
-				DeviceList.add(new FlyingGroup(gp.getLatitude(), gp
-						.getLongitude(), 10, 30));
+				DeviceList.add(new FlyingGroup(gp.getLatitude(), gp.getLongitude(), 0, 10, 30));
 				mapViewer.repaint();
 				addDeviceAction("FlyingGroup");
 			}
 			if (lastKey == '5') {
-				DeviceList.add(new BaseStation(gp.getLatitude(), gp.getLongitude(),
-						0, 100, 20, -1));
+				BaseStation bs = new BaseStation(gp.getLatitude(), gp.getLongitude(), 0, 0, 100, 20, -1);
+				DeviceList.add(bs);
 				//DeviceList.add(new BaseStation(gp.getLatitude(), gp
 				//		.getLongitude(), 0, 100, -1));
 				mapViewer.repaint();
 				addDeviceAction("BaseStation");
+				ThreeDUnityIHM.addBaseStation(bs);
 			}
 			if (lastKey == '6') {
-				DeviceList.add(new Mobile(gp.getLatitude(), gp.getLongitude(),
-						10, -1));
+				Mobile mobile = new Mobile(gp.getLatitude(), gp.getLongitude(), 0, 10, -1);
+				DeviceList.add(mobile);
 				mapViewer.repaint();
 				addDeviceAction("Mobile");
+				ThreeDUnityIHM.addMobile(mobile);
 			}
 			if (lastKey == '7') {
-				DeviceList.add(new MobileWithRadio(gp.getLatitude(), gp
-						.getLongitude(), 10, 100, -1));
+				DeviceList.add(new MobileWithRadio(gp.getLatitude(), gp.getLongitude(), 0, 10, 100, -1));
 				mapViewer.repaint();
 				addDeviceAction("MobileWithRadio");
 			}
 			if (lastKey == '8') {
-				MarkerList.add(new Marker(gp.getLatitude(), gp.getLongitude(),
-						10));
+				Marker marker = new Marker(gp.getLatitude(), gp.getLongitude(), 0, 10);
+				MarkerList.add(marker);
 				mapViewer.repaint();
 				addMarkerAction("Marker");
+				ThreeDUnityIHM.addMarker(marker);
 			}
 		}
 		
@@ -373,9 +373,9 @@ public class Layer implements Painter<Object>, MouseListener,
 
 	public static boolean inMultipleSelection(double x, double y, int cadreX1,
 			int cadreY1, int cadreX2, int cadreY2) {
-		GeoPosition gp1 = Layer.getMapViewer().convertPointToGeoPosition(
+		GeoPosition gp1 = MapLayer.getMapViewer().convertPointToGeoPosition(
 				new Point(cadreX1, cadreY1));
-		GeoPosition gp2 = Layer.getMapViewer().convertPointToGeoPosition(
+		GeoPosition gp2 = MapLayer.getMapViewer().convertPointToGeoPosition(
 				new Point(cadreX2, cadreY2));
 		return x < gp1.getLatitude() && y > gp1.getLongitude()
 				&& x > gp2.getLatitude() && y < gp2.getLongitude();
@@ -457,10 +457,10 @@ public class Layer implements Painter<Object>, MouseListener,
         		building.set(MarkerList.get(i).getLongitude(), MarkerList.get(i).getLatitude(), i);
         	}
         	
-        	Layer.getMapViewer().addMouseListener(building);
-    		Layer.getMapViewer().addKeyListener(building);
+        	MapLayer.getMapViewer().addMouseListener(building);
+    		MapLayer.getMapViewer().addKeyListener(building);
         	BuildingList.add(building);
-	        Layer.mapViewer.repaint();
+	        MapLayer.mapViewer.repaint();
 		}
 		
 //		if (lastKey == 't' || lastKey == 'o') {
@@ -662,7 +662,7 @@ public class Layer implements Painter<Object>, MouseListener,
 					if (ics[0].equals("Time"))
 						info[6][1] = ics[1];
 				}
-				DeviceList.add(new StdSensorNode(x, y, 0, 30, 10, info, -1));
+				DeviceList.add(new StdSensorNode(x, y, 0, 0, 30, 10, info, -1));
 				// MarkerList.add(new Marker(x,y,10));
 				mapViewer.repaint();
 			}

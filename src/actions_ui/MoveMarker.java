@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import map.Layer;
+import map.MapLayer;
 import markers.Marker;
 import markers.MarkerList;
 import device.Device;
@@ -70,10 +70,10 @@ public class MoveMarker extends Actions {
 		while(checkSwap()){
 			checkSwap();
 		}
-		Layer.getMapViewer().addMouseListener(this.device);
-		Layer.getMapViewer().addMouseMotionListener(this.device);
-		Layer.getMapViewer().addKeyListener(this.device);
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().addMouseListener(this.device);
+		MapLayer.getMapViewer().addMouseMotionListener(this.device);
+		MapLayer.getMapViewer().addKeyListener(this.device);
+		MapLayer.getMapViewer().repaint();
 		device.setMove(false);		
 	}
 
@@ -84,10 +84,10 @@ public class MoveMarker extends Actions {
 		while(checkSwap()){
 			checkSwap();
 		}
-		Layer.getMapViewer().addMouseListener(this.device);
-		Layer.getMapViewer().addMouseMotionListener(this.device);
-		Layer.getMapViewer().addKeyListener(this.device);
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().addMouseListener(this.device);
+		MapLayer.getMapViewer().addMouseMotionListener(this.device);
+		MapLayer.getMapViewer().addKeyListener(this.device);
+		MapLayer.getMapViewer().repaint();
 		Historic.add(null, true);
 		device.setMove(false);		
 	}

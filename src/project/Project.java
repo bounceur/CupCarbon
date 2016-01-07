@@ -29,7 +29,7 @@ import java.io.PrintStream;
 
 import javax.swing.JOptionPane;
 
-import map.Layer;
+import map.MapLayer;
 import markers.MarkerList;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
@@ -185,10 +185,10 @@ public final class Project {
 			System.out.println(br.readLine());
 			System.out.println(br.readLine());
 			int zoom = Integer.valueOf(br.readLine().split(" ")[1]);
-			Layer.getMapViewer().setZoom(zoom);
+			MapLayer.getMapViewer().setZoom(zoom);
 			double la = Double.valueOf(br.readLine().split(" ")[1]);
 			double lo = Double.valueOf(br.readLine().split(" ")[1]);
-			Layer.getMapViewer().setCenterPosition(new GeoPosition(la, lo));
+			MapLayer.getMapViewer().setCenterPosition(new GeoPosition(la, lo));
 			br.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -205,11 +205,11 @@ public final class Project {
 			fos.println("----------------");
 			fos.println("Name "
 					+ projectName.substring(0, projectName.length() - 4));
-			fos.println("zoom " + Layer.getMapViewer().getZoom());
+			fos.println("zoom " + MapLayer.getMapViewer().getZoom());
 			fos.println("centerposition_la "
-					+ Layer.getMapViewer().getCenterPosition().getLatitude());
+					+ MapLayer.getMapViewer().getCenterPosition().getLatitude());
 			fos.println("centerposition_lo "
-					+ Layer.getMapViewer().getCenterPosition().getLongitude());
+					+ MapLayer.getMapViewer().getCenterPosition().getLongitude());
 			fos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

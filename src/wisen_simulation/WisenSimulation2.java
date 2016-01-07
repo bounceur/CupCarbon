@@ -14,7 +14,7 @@ import device.DataInfo;
 import device.Device;
 import device.DeviceList;
 import flying_object.FlyingGroup;
-import map.Layer;
+import map.MapLayer;
 import natural_events.Gas;
 import project.Project;
 
@@ -92,7 +92,7 @@ public class WisenSimulation2 extends Thread {
 		long iter = 0;
 		WsnSimulationWindow.setState("Simulation : End of initialization.");
 		WsnSimulationWindow.setState("Simulate (WISEN) ...");
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 		try {
 			String as = "";
 			if (mobility) as = "_mob";
@@ -306,7 +306,7 @@ public class WisenSimulation2 extends Thread {
 				consolPrintln("------------------------------------------");				
 				WsnSimulationWindow.setProgress((int) (1000 * iter / iterNumber));
 				CupCarbon.lblSimulation.setText(" | Simulation: "+((int) (100 * iter / iterNumber))+"%");
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 				sleep(visualDelay);
 			}
 			SimLog.close();
@@ -316,7 +316,7 @@ public class WisenSimulation2 extends Thread {
 		} 
 		catch (FileNotFoundException e) {e.printStackTrace();} 
 		catch (InterruptedException e) {e.printStackTrace();}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 		long endTime = System.currentTimeMillis();
 		System.out.println("End of Simulation (WISEN : D-Event).");
 		System.out.println(((endTime - startTime) / 1000.) + " sec");
@@ -329,7 +329,7 @@ public class WisenSimulation2 extends Thread {
 				device.toOri();
 				device.stopSimulation();
 			}
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		//}
 	}
 

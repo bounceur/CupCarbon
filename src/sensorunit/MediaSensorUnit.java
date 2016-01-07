@@ -30,7 +30,7 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import device.Device;
 import flying_object.FlyingGroup;
 import flying_object.FlyingObject;
-import map.Layer;
+import map.MapLayer;
 import utilities.MapCalc;
 import utilities.UColor;
 
@@ -44,6 +44,7 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	protected double radius = 100;
 	protected double longitude;
 	protected double latitude;
+	protected double elevation;
 	protected Device node;
 	protected boolean displayRadius = false;
 	
@@ -61,12 +62,13 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	 * @param y Position of the sensor unit on the map
 	 * @param node which is associated to this sensor unit
 	 */
-	public MediaSensorUnit(double longitude, double latitude, Device node) {
+	public MediaSensorUnit(double longitude, double latitude, double elevation, Device node) {
 		this.longitude = longitude;
 		this.latitude = latitude;
+		this.elevation = elevation;
 		this.node = node;
 		calculateSensingArea();
-		Layer.getMapViewer().addKeyListener(this);
+		MapLayer.getMapViewer().addKeyListener(this);
 	}
 	
 	/**
@@ -76,8 +78,8 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	 * @param cuRadius the value of the radius 
 	 * @param node which is associated to this sensor unit
 	 */
-	public MediaSensorUnit(double longitude, double latitude, double radius, double deg, double dec, int n, Device node) {
-		this(longitude, latitude, node);
+	public MediaSensorUnit(double longitude, double latitude, double elevation, double radius, double deg, double dec, int n, Device node) {
+		this(longitude, latitude, elevation, node);
 		this.radius = radius;
 		this.deg = deg;
 		this.dec = dec;
@@ -132,7 +134,7 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 			if(device.getType()==Device.FLYING_OBJECT) {
 				for(FlyingObject d : ((FlyingGroup)device).getFlyingObjects()) {
 					GeoPosition gp = new GeoPosition(d.getLongitude(),d.getLatitude());
-					Point2D p1 = Layer.getMapViewer().getTileFactory().geoToPixel(gp, Layer.getMapViewer().getZoom());
+					Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
 					if(poly.contains(p1))
 						return true;
 				}
@@ -140,7 +142,7 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 			}
 			else {
 				GeoPosition gp = new GeoPosition(device.getLongitude(),device.getLatitude());
-				Point2D p1 = Layer.getMapViewer().getTileFactory().geoToPixel(gp, Layer.getMapViewer().getZoom());		
+				Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());		
 				return (poly.contains(p1));
 			}
 		}
@@ -185,7 +187,7 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 			if (key.getKeyChar() == 'O') {
 				deg-=0.01;
 			}
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		}
 	}
 
@@ -236,7 +238,7 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	@Override
 	public MediaSensorUnit clone() throws CloneNotSupportedException {
 		MediaSensorUnit newCU = (MediaSensorUnit) super.clone();
-		Layer.getMapViewer().addKeyListener(newCU);
+		MapLayer.getMapViewer().addKeyListener(newCU);
 		return newCU;
 	}
 	

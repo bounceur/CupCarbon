@@ -16,7 +16,7 @@ public class StdSensorNode extends SensorNode {
 	 */
 	public StdSensorNode() {
 		super();
-		sensorUnit = new SensorUnit(this.longitude, this.latitude, this);		
+		sensorUnit = new SensorUnit(this.longitude, this.latitude, this.elevation, this);		
 	}
 
 	/**
@@ -31,9 +31,9 @@ public class StdSensorNode extends SensorNode {
 	 * @param radioRadius
 	 *            Radius (range) of the radio (in meter)
 	 */
-	public StdSensorNode(double x, double y, double radius, double radioRadius, int id) {
-		super(x, y, radius, radioRadius, id);
-		sensorUnit = new SensorUnit(this.longitude, this.latitude, this);		
+	public StdSensorNode(double x, double y, double z, double radius, double radioRadius, int id) {
+		super(x, y, z, radius, radioRadius, id);
+		sensorUnit = new SensorUnit(this.longitude, this.latitude, this.elevation, this);		
 	}
 
 	/**
@@ -50,10 +50,10 @@ public class StdSensorNode extends SensorNode {
 	 * @param suRadius
 	 *            Radius of the sensor unit (default value = 10 meters)
 	 */
-	public StdSensorNode(double x, double y, double radius, double radioRadius,
+	public StdSensorNode(double x, double y, double z, double radius, double radioRadius,
 			double suRadius, int id) {
-		super(x, y, radius, radioRadius, id);
-		sensorUnit = new SensorUnit(this.longitude, this.latitude, suRadius, this);
+		super(x, y, z, radius, radioRadius, id);
+		sensorUnit = new SensorUnit(this.longitude, this.latitude, this.elevation, suRadius, this);
 	}
 	
 	/**
@@ -75,8 +75,8 @@ public class StdSensorNode extends SensorNode {
 	 *            contains the name of the parameter The second column contains
 	 *            the value of the corresponding parameter
 	 */
-	public StdSensorNode(double x, double y, double radius, double radioRadius, double suRadius, String[][] sb, int id) {
-		this(x, y, radius, radioRadius, suRadius, id);
+	public StdSensorNode(double x, double y, double z, double radius, double radioRadius, double suRadius, String[][] sb, int id) {
+		this(x, y, z, radius, radioRadius, suRadius, id);
 		this.setInfos(sb);
 		initBuffer();
 	}
@@ -100,9 +100,9 @@ public class StdSensorNode extends SensorNode {
 	 * @param scriptFileName
 	 *            The path of the script file
 	 */
-	public StdSensorNode(String id, String rdInfos, String x, String y, String radius, String radioRadius,
+	public StdSensorNode(String id, String rdInfos, String x, String y, String z, String radius, String radioRadius,
 			String suRadius, String gpsFileName, String scriptFileName) {
-		this(x, y, radius, radioRadius, suRadius, Integer.valueOf(id));
+		this(x, y, z, radius, radioRadius, suRadius, Integer.valueOf(id));
 		String [] srd = rdInfos.split("#");
 		my = Integer.valueOf(srd[0]);
 		ch = Integer.valueOf(srd[1]);
@@ -130,9 +130,9 @@ public class StdSensorNode extends SensorNode {
 	 * @param suRadius
 	 *            Radius of the sensor unit (default value = 10 meters)
 	 */
-	public StdSensorNode(String x, String y, String radius, String radioRadius, String suRadius, int id) {
-		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(radius), Double.valueOf(radioRadius), id);
-		sensorUnit = new SensorUnit(this.longitude, this.latitude, Double.valueOf(suRadius), this);
+	public StdSensorNode(String x, String y, String z, String radius, String radioRadius, String suRadius, int id) {
+		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(radius), Double.valueOf(radioRadius), id);
+		sensorUnit = new SensorUnit(this.longitude, this.latitude, this.elevation, Double.valueOf(suRadius), this);
 	}
 	
 	@Override

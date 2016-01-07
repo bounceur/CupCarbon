@@ -1,6 +1,6 @@
 package script;
 
-import map.Layer;
+import map.MapLayer;
 import device.MediaSensorNode;
 import device.SensorNode;
 
@@ -22,7 +22,7 @@ public class Command_ROTATE extends Command {
 		double n = Double.valueOf(vArg1);
 		int t = Integer.valueOf(vArg2);
 		((MediaSensorNode) sensor).setSensorUnitDec(n);
-		Layer.getMapViewer().repaint();	
+		MapLayer.getMapViewer().repaint();	
 		return t;
 	}
 

@@ -21,7 +21,7 @@ package actions_ui;
 
 import java.util.ArrayList;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -54,7 +54,7 @@ public class AddRandomDevices extends Actions {
 			DeviceList.delete(DeviceList.size()-1);
 		}
 		Historic.remove();
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	@Override
@@ -62,7 +62,7 @@ public class AddRandomDevices extends Actions {
 		for(int i=0; i<this.nbDevice; i++){
 			DeviceList.add(this.listSensors.get(i));
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 		Historic.add(null, true);
 	}
 	

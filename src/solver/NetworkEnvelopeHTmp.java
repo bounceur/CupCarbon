@@ -19,7 +19,7 @@
 
 package solver;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 import device.StdSensorNode;
@@ -78,7 +78,7 @@ public class NetworkEnvelopeHTmp extends Thread {
 			cur=imin;
 			DeviceList.getNodes().get(imin).setMarked(true);
 			//DeviceList.getNodes().get(imin).setVisited(true);
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 			DeviceList.addToLastEnvelope(imin);
 			
 			delay();
@@ -88,11 +88,11 @@ public class NetworkEnvelopeHTmp extends Thread {
 			yc = n1.getLongitude();
 			x0 = xc-0.2;
 			y0 = yc-0.2;
-			n3 = new StdSensorNode(y0, x0, 10, 10, -1);
+			n3 = new StdSensorNode(y0, x0, 0, 10, 10, -1);
 			
 			x1 = xc-0.1;
 			y1 = yc;	
-			n4 = new StdSensorNode(y1, x1, 10, 10, -1);
+			n4 = new StdSensorNode(y1, x1, 0, 10, 10, -1);
 			
 			
 			//trouve = false;
@@ -133,7 +133,7 @@ public class NetworkEnvelopeHTmp extends Thread {
 						prec = cur;
 						DeviceList.getNodes().get(imin).setMarked(true);
 						//DeviceList.getNodes().get(imin).setVisited(true);
-						Layer.getMapViewer().repaint();
+						MapLayer.getMapViewer().repaint();
 						DeviceList.addToLastEnvelope(imin);
 						
 						n3 = n4;

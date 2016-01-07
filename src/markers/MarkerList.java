@@ -38,7 +38,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import cupcarbon.Version;
-import map.Layer;
+import map.MapLayer;
 import project.Project;
 import utilities.MapCalc;
 import utilities.UColor;
@@ -57,9 +57,9 @@ public class MarkerList {
 	
 	public static void reset() {
 		for(Marker marker : markers) {
-			Layer.getMapViewer().removeMouseListener(marker);
-			Layer.getMapViewer().removeMouseMotionListener(marker);
-			Layer.getMapViewer().removeKeyListener(marker);
+			MapLayer.getMapViewer().removeMouseListener(marker);
+			MapLayer.getMapViewer().removeMouseMotionListener(marker);
+			MapLayer.getMapViewer().removeKeyListener(marker);
 			marker = null;
 		}
 		markers = new ArrayList<Marker>();
@@ -81,6 +81,7 @@ public class MarkerList {
 				fos.print("00:00:00");
 				fos.print(" " + marker.getLongitude());
 				fos.print(" " + marker.getLatitude());
+				fos.print(" " + marker.getElevation());
 				fos.print(" " + marker.getRadius());
 				fos.println();
 			}
@@ -103,10 +104,10 @@ public class MarkerList {
 			//line = br.readLine();
 			while ((line = br.readLine()) != null) {
 				str = line.split(" ");
-				addNodeByType(str[1], str[2], str[3]);
+				addNodeByType(str[1], str[2], str[3], str[4]);
 			}
 			br.close();
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -115,7 +116,7 @@ public class MarkerList {
 	}
 
 	public static void addNodeByType(String... type) {
-		add(new Marker(type[0], type[1], type[2]));
+		add(new Marker(type[0], type[1], type[2], type[3]));
 	}
 
 	public static void add(Marker marker) {
@@ -241,9 +242,9 @@ public class MarkerList {
 
 	public static void delete(int idx) {
 		Marker marker = markers.get(idx);
-		Layer.getMapViewer().removeMouseListener(marker);
-		Layer.getMapViewer().removeMouseMotionListener(marker);
-		Layer.getMapViewer().removeKeyListener(marker);
+		MapLayer.getMapViewer().removeMouseListener(marker);
+		MapLayer.getMapViewer().removeMouseMotionListener(marker);
+		MapLayer.getMapViewer().removeKeyListener(marker);
 		markers.remove(idx);
 		marker = null;
 	}
@@ -314,7 +315,7 @@ public class MarkerList {
 				else {
 					s+=delay;
 				}
-				ps.println(s + " " + marker.getLongitude() + " " + marker.getLatitude() + " "
+				ps.println(s + " " + marker.getLongitude() + " " + marker.getLatitude() + " " + marker.getElevation() + " "
 						+ marker.getRadius());				
 			}
 			ps.close();
@@ -332,7 +333,7 @@ public class MarkerList {
 			marker = iterator.next();
 			marker.setMove(false);
 			marker.setSelection(false);
-			if (Layer.inMultipleSelection(marker.getLongitude(), marker.getLatitude(),
+			if (MapLayer.inMultipleSelection(marker.getLongitude(), marker.getLatitude(),
 					cadreX1, cadreX2, cadreY1, cadreY2)) {
 				marker.setSelection(true);
 			}
@@ -344,9 +345,9 @@ public class MarkerList {
 		for (Iterator<Marker> iterator = markers.iterator(); iterator.hasNext();) {
 			marker = iterator.next();
 			if (marker.isSelected()) {
-				Layer.getMapViewer().removeMouseListener(marker);
-				Layer.getMapViewer().removeMouseMotionListener(marker);
-				Layer.getMapViewer().removeKeyListener(marker);
+				MapLayer.getMapViewer().removeMouseListener(marker);
+				MapLayer.getMapViewer().removeMouseMotionListener(marker);
+				MapLayer.getMapViewer().removeKeyListener(marker);
 				iterator.remove();
 				marker = null;
 			}
@@ -357,9 +358,9 @@ public class MarkerList {
 		Marker marker;
 		for (Iterator<Marker> iterator = markers.iterator(); iterator.hasNext();) {
 			marker = iterator.next();
-			Layer.getMapViewer().removeMouseListener(marker);
-			Layer.getMapViewer().removeMouseMotionListener(marker);
-			Layer.getMapViewer().removeKeyListener(marker);
+			MapLayer.getMapViewer().removeMouseListener(marker);
+			MapLayer.getMapViewer().removeMouseMotionListener(marker);
+			MapLayer.getMapViewer().removeKeyListener(marker);
 			iterator.remove();
 			marker = null;
 		}
@@ -373,14 +374,14 @@ public class MarkerList {
 			if (mar.getType() == type || type == -1)
 				mar.setSelection(selection);
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	public void invertSelection() {
 		for (Marker mar : markers) {
 			mar.invSelection();
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	public static void generateGpxFile() {
@@ -435,9 +436,8 @@ public class MarkerList {
 			String[] s2;
 			for (int i = 1; i < s1.length; i++) {
 				s2 = s1[i].split("\"");
-				markers.add(new Marker(Double.valueOf(s2[0]), Double
-						.valueOf(s2[2]), 25));
-				Layer.getMapViewer().repaint();
+				markers.add(new Marker(Double.valueOf(s2[0]), Double.valueOf(s2[2]), 0, 25));
+				MapLayer.getMapViewer().repaint();
 			}
 			br.close();
 			File f = new File("gpx/tmp.gpx");
@@ -460,7 +460,7 @@ public class MarkerList {
 		int n = markers.size()-1;
 		for (int ix = 0; ix < n; ix++) {
 			//if(markers.get(ix*2).isSelected())
-			Layer.addMarker(ix*2+1,Marker.getCentre(markers.get(ix*2),MarkerList.get(ix*2+1),true));
+			MapLayer.addMarker(ix*2+1,Marker.getCentre(markers.get(ix*2),MarkerList.get(ix*2+1),true));
 		}
 	}
 	

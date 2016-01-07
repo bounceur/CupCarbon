@@ -22,7 +22,7 @@ package solver;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -30,7 +30,7 @@ public class SevauxCoverage implements Runnable {
 
 	@Override
 	public void run() {
-		DeviceList nodeList = Layer.getDeviceList();
+		DeviceList nodeList = MapLayer.getDeviceList();
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new FileReader("solution.txt"));
@@ -50,7 +50,7 @@ public class SevauxCoverage implements Runnable {
 					// System.out.println(v);
 					// setAlgoSelect
 				}
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 
 				// Thread.sleep((long) (v1*10000));
 				Thread.sleep((long) (1000));

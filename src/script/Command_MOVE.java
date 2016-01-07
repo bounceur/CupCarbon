@@ -1,6 +1,6 @@
 package script;
 
-import map.Layer;
+import map.MapLayer;
 import device.SensorNode;
 
 public class Command_MOVE extends Command {
@@ -19,7 +19,7 @@ public class Command_MOVE extends Command {
 		if (sensor.canMove()) {
 			sensor.moveToNext(true, 0);									
 		}
-		Layer.getMapViewer().repaint();	
+		MapLayer.getMapViewer().repaint();	
 		return t;
 	}
 

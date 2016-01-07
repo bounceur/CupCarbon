@@ -25,7 +25,7 @@ import graph.Vertex;
 import java.util.List;
 import java.util.ListIterator;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 import device.SensorNode;
@@ -94,7 +94,7 @@ public class SensorTargetCoverageRun implements Runnable {
 			nodes.get(graph.get(imax).getNumber()).setMarked(true);
 			graph.removeWithNeighbors(imax);
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	public void start() {

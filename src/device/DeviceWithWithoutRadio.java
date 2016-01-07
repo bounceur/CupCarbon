@@ -25,7 +25,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 
-import map.Layer;
+import map.MapLayer;
 import project.Project;
 
 /**
@@ -39,6 +39,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	protected LinkedList<Long> routeTime;
 	protected LinkedList<Double> routeX;
 	protected LinkedList<Double> routeY;
+	protected LinkedList<Double> routeZ;
 	protected boolean loop = false;
 	protected int nLoop = 0;
 	protected int routeIndex = 0;
@@ -53,10 +54,11 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	/**
 	 * @param x
 	 * @param y
+	 * @param z
 	 * @param radius
 	 */
-	public DeviceWithWithoutRadio(double x, double y, double radius, int id) {
-		super(x, y, radius, id);
+	public DeviceWithWithoutRadio(double x, double y, double z, double radius, int id) {
+		super(x, y, z, radius, id);
 	}
 
 	// --------------------------------------------------------------------------------
@@ -70,6 +72,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 		routeTime = new LinkedList<Long>();
 		routeX = new LinkedList<Double>();
 		routeY = new LinkedList<Double>();
+		routeZ = new LinkedList<Double>();
 		FileInputStream fis;
 		BufferedReader b = null;
 		String s;
@@ -90,6 +93,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 					routeTime.add(Long.parseLong(ts[0]));
 					routeX.add(Double.parseDouble(ts[1]));
 					routeY.add(Double.parseDouble(ts[2]));
+					routeZ.add(Double.parseDouble(ts[3]));
 				}
 				b.close();
 				fis.close();
@@ -137,7 +141,9 @@ public abstract class DeviceWithWithoutRadio extends Device {
 				}
 				longitude = routeX.get(routeIndex);
 				latitude = routeY.get(routeIndex);
-				Layer.getMapViewer().repaint();
+				elevation = routeZ.get(routeIndex);
+				
+				MapLayer.getMapViewer().repaint();
 				try {
 					Thread.sleep(toWait * Device.moveSpeed);
 				} catch (InterruptedException e) {
@@ -155,7 +161,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 			toOri();
 			thread = null;
 			underSimulation = false;
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		}
 	}
 
@@ -201,10 +207,11 @@ public abstract class DeviceWithWithoutRadio extends Device {
 			}
 			longitude = routeX.get(routeIndex);
 			latitude = routeY.get(routeIndex);
+			elevation = routeZ.get(routeIndex);
 		}
 		if (visual) {
 			try {
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 				Thread.sleep(visualDelay);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -272,5 +279,20 @@ public abstract class DeviceWithWithoutRadio extends Device {
 		this.routeY = routeY;
 	}
 
+	/**
+	 * @param device
+	 * @return if a neighbor device is in the radio area of the current device
+	 */
+	public boolean radioDetect(Device device) {
+		return false;
+	}
+	
+	/**
+	 * @param device
+	 * @return if a neighbor device is in the propagation area of the current device
+	 */
+	public boolean propagationDetect(Device device) {
+		return false;
+	}
 	
 }

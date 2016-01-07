@@ -23,7 +23,7 @@ import graph.GraphStd;
 
 import java.util.List;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -185,7 +185,7 @@ public class NetworkBorder {
 		
 		
 		// Update sensors (coloring)
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 }

@@ -126,6 +126,31 @@ public class Functions {
 		return sOut;
 	}
 	
+	public static String fmu(String [] args) {
+		double muo = Double.valueOf(args[0]);
+		double hop = Double.valueOf(args[1]);
+		double eng = Double.valueOf(args[2]);
+		double mu = (muo*hop+eng)/(hop+1);
+		return ""+mu;
+	}
+	
+	public static String fsigma(String [] args) {
+		double mu = Double.valueOf(args[0]);
+		double sigmao = Double.valueOf(args[1]);
+		double hop = Double.valueOf(args[2]);
+		double eng = Double.valueOf(args[3]);
+		double sigma = Math.sqrt((1/(hop+1))*((sigmao*sigmao)+((eng-mu)*(eng-mu))));
+		return ""+sigma;
+	}
+	
+	public static String factor(String [] args) {
+		double mu = Double.valueOf(args[0]);
+		double sigma = Double.valueOf(args[1]);
+		double eng = Double.valueOf(args[2]);
+		double f = mu - sigma * Math.sin(Math.PI*(mu/eng));
+		return ""+f;
+	}
+	
 	public static String myf(String [] args) {
 		String valToReturn = "";
 		

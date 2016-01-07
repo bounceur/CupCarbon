@@ -29,9 +29,9 @@ public abstract class MobileGWR extends DeviceWithRadio {
 	public int gpsId = 0;
 	public static int gpsNbr = 0;
 
-	public MobileGWR(double x, double y, double radius, double radioRadius,
+	public MobileGWR(double x, double y, double z, double radius, double radioRadius,
 			String gpsFileName, int id) {
-		super(x, y, radius, radioRadius, id);
+		super(x, y, z, radius, radioRadius, id);
 		mobile = true;
 		if (gpsFileName.equals("")) {
 			gpsId = ++gpsNbr;

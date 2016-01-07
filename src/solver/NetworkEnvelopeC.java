@@ -21,7 +21,7 @@ package solver;
 
 import java.util.LinkedList;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -73,7 +73,7 @@ public class NetworkEnvelopeC extends Thread {
 		DeviceList.getNodes().get(imin).setVisited(true);
 		envelope.add(imin);		
 		//System.out.println(envelope);
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 		
 		double x0,y0;		
 		x0 = DeviceList.getNodes().get(imin).getLatitude();
@@ -104,7 +104,7 @@ public class NetworkEnvelopeC extends Thread {
 		DeviceList.getNodes().get(imin).setVisited(true);
 		envelope.add(imin);
 		//System.out.println(envelope);
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 		
 		delay();		
 			
@@ -125,7 +125,7 @@ public class NetworkEnvelopeC extends Thread {
 			}
 			DeviceList.getNodes().get(imin).setMarked(true);
 			DeviceList.getNodes().get(imin).setVisited(true);			
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 			envelope.add(imin);
 			//System.out.println(envelope);
 			n = envelope.size()-1;
@@ -141,7 +141,7 @@ public class NetworkEnvelopeC extends Thread {
 			
 			while(!r) {
 				DeviceList.getNodes().get(envelope.get(n-1)).setMarked(false);				
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 				envelope.remove(n-1);
 				n--;
 				if(n>0) {
@@ -160,7 +160,7 @@ public class NetworkEnvelopeC extends Thread {
 			//System.out.println(envelope);
 			//System.out.println("----------");
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 		System.out.println("---------------------------");
 		System.out.println(" F I N I S H");
 		System.out.println("---------------------------");

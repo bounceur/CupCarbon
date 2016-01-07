@@ -1,6 +1,6 @@
 package simulation;
 
-import map.Layer;
+import map.MapLayer;
 import device.DeviceList;
 
 public class FaultInjector extends Thread {
@@ -16,7 +16,7 @@ public class FaultInjector extends Thread {
 				p=Math.random();				
 				if(p<0.0004) {
 					DeviceList.getNodes().get(i).setDead(true);
-					Layer.getMapViewer().repaint();
+					MapLayer.getMapViewer().repaint();
 				}
 			}
 			try {

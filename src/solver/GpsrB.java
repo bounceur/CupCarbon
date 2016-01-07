@@ -24,7 +24,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.StringTokenizer;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 import device.StdSensorNode;
@@ -61,8 +61,8 @@ public class GpsrB extends Thread {
 							x = (Double.parseDouble(ss[i+3].split(":")[0])/9000.)-4.44945216178894;
 							y = (Double.parseDouble(ss[i+3].split(":")[1])/9000.)+48.389923740704795;
 							//System.out.println("("+x+", "+y+")");
-							DeviceList.add(new StdSensorNode(y,x,20,50,-1));
-							Layer.getMapViewer().repaint();
+							DeviceList.add(new StdSensorNode(y,x,0,20,50,-1));
+							MapLayer.getMapViewer().repaint();
 						}
 					}
 				}				
@@ -80,9 +80,9 @@ public class GpsrB extends Thread {
 							}
 							nextn = Integer.parseInt(ss[i+1].split(",")[0]);
 							//System.out.println(nextn);
-							Device d = Layer.getDeviceList().get(nextn);
+							Device d = MapLayer.getDeviceList().get(nextn);
 							d.setMarked(true);
-							Layer.getMapViewer().repaint();
+							MapLayer.getMapViewer().repaint();
 							Thread.sleep(500);								
 							fos.write(" -> "+nextn+";\n"+nextn);
 						}

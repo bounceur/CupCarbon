@@ -30,8 +30,8 @@ public abstract class MobileG extends DeviceWithoutRadio {
 	public MobileG() {
 	}
 	
-	public MobileG(double x, double y, double rayon, String gpsFileName, int id) {
-		super(x, y, rayon, id);
+	public MobileG(double x, double y, double z, double rayon, String gpsFileName, int id) {
+		super(x, y, z, rayon, id);
 		mobile = true ;		
 		this.gpsFileName = gpsFileName ;
 	}

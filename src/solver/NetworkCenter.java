@@ -21,7 +21,7 @@ package solver;
 
 import java.util.LinkedList;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -45,7 +45,7 @@ public class NetworkCenter extends Thread {
 			DeviceList.getNodes().get(i).setValue(0);
 			DeviceList.getNodes().get(i).setMarked(false);			
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 
 		double sum = 0 ;
 		Device n1, n2;
@@ -101,7 +101,7 @@ public class NetworkCenter extends Thread {
 		System.out.println(max);
 		System.out.println(imax);
 		DeviceList.getNodes().get(imax).setMarked(true);
-		Layer.getMapViewer().repaint();		
+		MapLayer.getMapViewer().repaint();		
 		System.out.println("--------------");
 		
 		

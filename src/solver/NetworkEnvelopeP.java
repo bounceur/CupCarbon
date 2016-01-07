@@ -21,7 +21,7 @@ package solver;
 
 import java.util.List;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -129,7 +129,7 @@ public class NetworkEnvelopeP extends Thread {
 				//DeviceList.addEnvelope1(i); 
 			}
 
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 //			try {
 //				sleep(100);
 //			} catch (InterruptedException e) {}

@@ -47,13 +47,13 @@ public class FlyingGroup extends MobileG {
 		flyingObjects = new Vector<FlyingObject>();
 	}
 
-	public FlyingGroup(double x, double y, double radius) {
-		super(x, y, radius, "",-1);
+	public FlyingGroup(double x, double y, double z, double radius) {
+		super(x, y, z, radius, "",-1);
 		flyingObjects = new Vector<FlyingObject>();
 	}
 
-	public FlyingGroup(double x, double y, double radius, int n) {
-		this(x, y, radius);
+	public FlyingGroup(double x, double y, double z, double radius, int n) {
+		this(x, y, z, radius);
 		flyingObjectNumber = n ;
 		flyingObjects = new Vector<FlyingObject>();
 		for (int i = 0; i < n; i++) {
@@ -61,14 +61,13 @@ public class FlyingGroup extends MobileG {
 		}
 	}
 
-	public FlyingGroup(double x, double y, double radius, int n, String gpsFileName) {
-		this(x, y, radius, n);
+	public FlyingGroup(double x, double y,double z, double radius, int n, String gpsFileName) {
+		this(x, y, z, radius, n);
 		setGPSFileName(gpsFileName) ;
 	}
 
-	public FlyingGroup(String xStr, String yStr, String radiusStr, String nStr, String gpsFileName) {
-		this(Double.valueOf(xStr), Double.valueOf(yStr), Double.valueOf(radiusStr), Integer.parseInt(nStr),
-				gpsFileName);
+	public FlyingGroup(String xStr, String yStr, String zStr, String radiusStr, String nStr, String gpsFileName) {
+		this(Double.valueOf(xStr), Double.valueOf(yStr), Double.valueOf(zStr), Double.valueOf(radiusStr), Integer.parseInt(nStr), gpsFileName);
 	}
 
 	public int getflyingObjectNumber() {

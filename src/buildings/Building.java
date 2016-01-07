@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 
-import map.Layer;
+import map.MapLayer;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
@@ -117,7 +117,7 @@ public class Building implements MouseListener, KeyListener {
 	public void mouseClicked(MouseEvent arg) {
 		if(inside(arg.getX(),arg.getY())) {
 			selected = !selected;
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		}
 		//if(shape.contains(x, y))
 	}
@@ -148,8 +148,8 @@ public class Building implements MouseListener, KeyListener {
 	
 	public boolean inside(int xs, int ys) {
 		Point p = new Point(xs, ys);
-		GeoPosition gp = Layer.getMapViewer().convertPointToGeoPosition(p);
-		Point2D p1 = Layer.getMapViewer().getTileFactory().geoToPixel(gp, Layer.getMapViewer().getZoom());
+		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
+		Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
 		Polygon poly = new Polygon(iCoordX,iCoordY,n);
 		return (poly.contains(p1));
 	}
@@ -158,10 +158,10 @@ public class Building implements MouseListener, KeyListener {
 	public void keyPressed(KeyEvent key) {
 		if(key.getKeyCode()==8 && selected) {
 			selected = false;
-			Layer.getMapViewer().removeMouseListener(this);
-			Layer.getMapViewer().removeMouseListener(this);	
+			MapLayer.getMapViewer().removeMouseListener(this);
+			MapLayer.getMapViewer().removeMouseListener(this);	
 			BuildingList.delete(this);
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		}
 		
 		if(key.getKeyCode() == 27) {
@@ -177,7 +177,7 @@ public class Building implements MouseListener, KeyListener {
 		}
 		
 		if (key.getKeyChar() == 'w') {
-			if (type == Layer.selectType)
+			if (type == MapLayer.selectType)
 				selected = true;
 			else 
 				selected = false;

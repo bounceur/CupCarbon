@@ -23,7 +23,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 
-import map.Layer;
+import map.MapLayer;
 import utilities.MapCalc;
 import utilities.UColor;
 
@@ -31,17 +31,17 @@ public class MobileWithRadio extends MobileGWR {
 
 	private static String idFL = "W" ; // ID First Letter 
 	
-	public MobileWithRadio(double x, double y, double rayon, double radioRadius, int id) {
-		this(x, y, rayon, radioRadius,"", id);
+	public MobileWithRadio(double x, double y, double z, double rayon, double radioRadius, int id) {
+		this(x, y, z, rayon, radioRadius,"", id);
 		withRadio = true ;		
 	}
 	
-	public MobileWithRadio(double x, double y, double rayon, double radioRadius, String gpsFileName, int id) {
-		super(x, y, rayon, radioRadius, gpsFileName, id);	
+	public MobileWithRadio(double x, double y, double z, double rayon, double radioRadius, String gpsFileName, int id) {
+		super(x, y, z, rayon, radioRadius, gpsFileName, id);	
 	}
 	
-	public MobileWithRadio(String x, String y, String rayon, String radioRadius, String gpsFileName, int id) {
-		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(rayon), Double.valueOf(radioRadius), gpsFileName, id);	
+	public MobileWithRadio(String x, String y, String z, String rayon, String radioRadius, String gpsFileName, int id) {
+		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(rayon), Double.valueOf(radioRadius), gpsFileName, id);	
 	}
 		
 	@Override
@@ -120,11 +120,11 @@ public class MobileWithRadio extends MobileGWR {
 		if(selected) {
 			if(key.getKeyChar()==';') {
 				radius+=10 ;
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 			}
 			if(key.getKeyChar()==',') {
 				radius-=10 ;
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 			}
 		}
 	}

@@ -6,8 +6,9 @@ import java.awt.Graphics2D;
 import java.util.LinkedList;
 import java.util.List;
 
-import map.Layer;
+import map.MapLayer;
 import physical_layer.Ber;
+import three_d_visual.ThreeDUnityIHM;
 import utilities.MapCalc;
 import wisen_simulation.SimLog;
 import wisen_simulation.SimulationInputs;
@@ -64,7 +65,7 @@ public class Channels {
 						
 						boolean berOk = true;
 						
-						berOk = Ber.berOk();
+						berOk = Ber.berOk(message);
 						
 						sSensor.setSending(false);
 						rSensor.setReceiving(false);
@@ -130,7 +131,7 @@ public class Channels {
 			if(packetEventList.size()>0) {
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setStroke(new BasicStroke(2.5f));
-			    if(Layer.getMapViewer().getZoom() < 2) {
+			    if(MapLayer.getMapViewer().getZoom() < 2) {
 			    	g2.setStroke(new BasicStroke(3));		    	
 			    }
 				
@@ -142,12 +143,19 @@ public class Channels {
 				double dx = 0;
 				double dy = 0;
 				double alpha = 0;
+				int arrColor = 0;
 				for(PacketEvent pev : packetEventList) {
 					if(pev.getSSensor().isSending() && pev.getRSensor().isReceiving()) {
 						if(pev.getType()==0 || pev.getType()==2 || ((pev.getType()==1) && SimulationInputs.showAckLinks)) {
 							g.setColor(pev.getSSensor().getRadioLinkColor());
-							if((pev.getType()==1) && SimulationInputs.showAckLinks)
+							arrColor = 3; 
+							if((pev.getType()==1) && SimulationInputs.showAckLinks) {
 								g.setColor(pev.getSSensor().getACKLinkColor());
+								arrColor = 5;
+							}
+							
+							ThreeDUnityIHM.arrowDrawing((SensorNode)pev.getSSensor(), (SensorNode)pev.getRSensor(), 2, arrColor, 2);
+							
 							coord = MapCalc.geoToIntPixelMapXY(pev.getSSensor().getLongitude(), pev.getSSensor().getLatitude());
 							lx1 = coord[0];
 							ly1 = coord[1];		
@@ -162,7 +170,7 @@ public class Channels {
 							alpha = Math.atan(dy / dx);
 							alpha = 180 * alpha / Math.PI;
 							int as = 16;
-							if(Layer.getMapViewer().getZoom() < 2) {
+							if(MapLayer.getMapViewer().getZoom() < 2) {
 								as = 21;		    	
 							}
 							if (dx >= 0)	

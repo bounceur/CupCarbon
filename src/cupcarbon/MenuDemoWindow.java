@@ -11,7 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 
-import map.Layer;
+import map.MapLayer;
 import map.WorldMap;
 import markers.MarkerList;
 
@@ -72,7 +72,7 @@ public class MenuDemoWindow extends JInternalFrame {
 		JButton button_6 = new JButton("");
 		button_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Layer.initClick();
+				MapLayer.initClick();
 			}
 		});
 		button_6.setIcon(new ImageIcon(CupCarbonParameters.IMGPATHDEMO + "world.jpg"));

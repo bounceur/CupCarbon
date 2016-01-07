@@ -36,10 +36,11 @@ import java.util.List;
 
 import actions_ui.DeleteDevice;
 import flying_object.FlyingGroup;
-import map.Layer;
+import map.MapLayer;
 import markers.Marker;
 import natural_events.Gas;
 import solver.SensorGraph;
+import three_d_visual.ThreeDUnityIHM;
 import utilities.MapCalc;
 
 /**
@@ -66,9 +67,9 @@ public class DeviceList {
 	
 	public static void reset() {
 		for(Device node : nodes) {
-			Layer.getMapViewer().removeMouseListener(node);
-			Layer.getMapViewer().removeMouseMotionListener(node);
-			Layer.getMapViewer().removeKeyListener(node);
+			MapLayer.getMapViewer().removeMouseListener(node);
+			MapLayer.getMapViewer().removeMouseMotionListener(node);
+			MapLayer.getMapViewer().removeKeyListener(node);
 			node = null;
 		}
 		nodes = new ArrayList<Device>();
@@ -165,6 +166,7 @@ public class DeviceList {
 				fos.print(" " + node.getMy()+"#"+node.getCh()+"#"+node.getNId());
 				fos.print(" " + node.getLongitude());
 				fos.print(" " + node.getLatitude());
+				fos.print(" " + node.getElevation());
 				fos.print(" " + node.getRadius());
 
 				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION || node.getType() == Device.MEDIA_SENSOR || node.getType() == Device.MOBILE_WR)
@@ -215,6 +217,7 @@ public class DeviceList {
 			int idMax = 0 ;
 			while ((line = br.readLine()) != null) {
 				str = line.split(" ");
+				
 				switch (str.length) {
 				case 6:
 					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5]);
@@ -228,11 +231,11 @@ public class DeviceList {
 				case 9:
 					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8]);
 					break;
-				case 10:
-					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[9]);
+				case 11:
+					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[9], str[10]);
 					break;
-				case 13:
-					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[9], str[10], str[11], str[12]);
+				case 14:
+					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[9], str[10], str[11], str[12], str[13]);
 					break;
 				}
 				int v = Integer.valueOf(str[1]);
@@ -245,7 +248,7 @@ public class DeviceList {
 			
 			//for(Device device : DeviceList.getNodes()) device.calculateNeighbours();
 			
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -270,25 +273,25 @@ public class DeviceList {
 		int id = Integer.valueOf(type[1]);
 		switch (Integer.valueOf(type[0])) {
 		case Device.SENSOR:
-			add(new StdSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9]));
+			add(new StdSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10]));
 			break;
 		case Device.GAS:
-			add(new Gas(type[3], type[4], type[5], id));
+			add(new Gas(type[3], type[4], type[5], type[6], id));
 			break;
 		case Device.FLYING_OBJECT:
-			add(new FlyingGroup(type[3], type[4], type[5], type[6], type[7]));
+			add(new FlyingGroup(type[3], type[4], type[5], type[6], type[7], type[8]));
 			break;
 		case Device.BASE_STATION:
-			add(new BaseStation(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9]));
+			add(new BaseStation(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10]));
 			break;
 		case Device.MEDIA_SENSOR:
-			add(new MediaSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10], type[11], type[12]));
+			add(new MediaSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10], type[11], type[12], type[13]));
 			break;
 		case Device.MOBILE:
-			add(new Mobile(type[3], type[4], type[5], type[6], id));
+			add(new Mobile(type[3], type[4], type[5], type[6], type[7], id));
 			break;
 		case Device.MARKER:
-			add(new Marker(type[3], type[4], type[5]));
+			add(new Marker(type[3], type[4], type[5], type[6]));
 			break;
 		}
 	}
@@ -314,7 +317,7 @@ public class DeviceList {
 	 *            Graphics
 	 */
 	public void draw(Graphics g) {
-		for (Device n : nodes) {
+		for (Device n : nodes) {			
 			n.drawRadioRange(g);
 		}
 		
@@ -327,7 +330,8 @@ public class DeviceList {
 			n.draw(g);
 		}
 		
-		for (Device n : nodes) {
+		for (Device n : getSensorNodes()) {
+			ThreeDUnityIHM.updateStdSensorNode((SensorNode) n);
 			if(propagationsCalculated)
 				n.drawRadioPropagations(g);
 			else
@@ -363,9 +367,9 @@ public class DeviceList {
 
 	public static void delete(int idx) {
 		Device node = nodes.get(idx);
-		Layer.getMapViewer().removeMouseListener(node);
-		Layer.getMapViewer().removeMouseMotionListener(node);
-		Layer.getMapViewer().removeKeyListener(node);
+		MapLayer.getMapViewer().removeMouseListener(node);
+		MapLayer.getMapViewer().removeMouseMotionListener(node);
+		MapLayer.getMapViewer().removeKeyListener(node);
 		nodes.remove(idx);
 		node = null;
 	}
@@ -394,7 +398,7 @@ public class DeviceList {
 			node = iterator.next();
 			node.setMove(false);
 			node.setSelection(false);
-			if (Layer.inMultipleSelection(node.getLongitude(), node.getLatitude(), cadreX1,
+			if (MapLayer.inMultipleSelection(node.getLongitude(), node.getLatitude(), cadreX1,
 					cadreX2, cadreY1, cadreY2)) {
 				node.setSelection(true);
 			}
@@ -406,9 +410,9 @@ public class DeviceList {
 		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
 			node = iterator.next();
 			if (node.isSelected() && node.getHide()==0) {
-				Layer.getMapViewer().removeMouseListener(node);
-				Layer.getMapViewer().removeMouseMotionListener(node);
-				Layer.getMapViewer().removeKeyListener(node);
+				MapLayer.getMapViewer().removeMouseListener(node);
+				MapLayer.getMapViewer().removeMouseMotionListener(node);
+				MapLayer.getMapViewer().removeKeyListener(node);
 				iterator.remove();
 				/* Tanguy */
 				DeleteDevice action = new DeleteDevice(node, "Device deleted");
@@ -463,7 +467,7 @@ public class DeviceList {
 				node.setTrgetName(targetName);				
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	public static void initAll() {
@@ -471,7 +475,7 @@ public class DeviceList {
 		for (Device device : nodes) {
 			device.init();			
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	public static void initAlgoSelectedNodes() {
@@ -482,14 +486,14 @@ public class DeviceList {
 				device.setLedColor(0);
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	public static void setAlgoSelect(boolean b) {
 		for (Device node : nodes) {
 			node.setMarked(false);
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	public void setSelectionOfAllNodes(boolean selection, int type,
@@ -500,14 +504,14 @@ public class DeviceList {
 			if (dev.getType() == type || type == -1)
 				dev.setSelection(selection);
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	public void invertSelection() {
 		for (Device dev : nodes) {
 			dev.invSelection();
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 
 	public Point[] getCouple(Device n1, Device n2) {
@@ -534,7 +538,7 @@ public class DeviceList {
 			d.setId(k++);
 			Device.incNumber();
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	//---------
 	
@@ -637,7 +641,7 @@ public class DeviceList {
 				d.setSelection(true);
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void selectWitoutGps() {
@@ -646,7 +650,7 @@ public class DeviceList {
 				d.setSelection(true);
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void selectMarkedSensors() {
@@ -655,7 +659,7 @@ public class DeviceList {
 				d.setSelection(true);
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setMy(String my) {
@@ -664,7 +668,7 @@ public class DeviceList {
 				d.setMy(Integer.valueOf(my));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setId(String id) {
@@ -673,7 +677,7 @@ public class DeviceList {
 				d.setId(Integer.valueOf(id));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setCh(String ch) {
@@ -682,7 +686,7 @@ public class DeviceList {
 				d.setCh(Integer.valueOf(ch));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setNId(String NId) {
@@ -691,7 +695,7 @@ public class DeviceList {
 				d.setNId(Integer.valueOf(NId));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setLongitude(String value) {
@@ -700,7 +704,7 @@ public class DeviceList {
 				d.setLongitude(Double.valueOf(value));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setLatitude(String value) {
@@ -709,7 +713,7 @@ public class DeviceList {
 				d.setLatitude(Double.valueOf(value));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setRadius(String value) {
@@ -718,7 +722,7 @@ public class DeviceList {
 				d.setRadius(Double.valueOf(value));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setRadioRadius(String value) {
@@ -727,7 +731,7 @@ public class DeviceList {
 				d.setRadioRadius(Double.valueOf(value));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setSensorUnitRadius(String value) {
@@ -736,7 +740,7 @@ public class DeviceList {
 				d.setSensorUnitRadius(Double.valueOf(value));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setEMax(String value) {
@@ -745,7 +749,7 @@ public class DeviceList {
 				d.getBattery().init(Double.valueOf(value));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setTx(String value) {
@@ -754,7 +758,7 @@ public class DeviceList {
 				d.setETx(Double.valueOf(value));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setRx(String value) {
@@ -763,7 +767,7 @@ public class DeviceList {
 				d.setERx(Double.valueOf(value));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setSensingEnergy(String value) {
@@ -772,7 +776,7 @@ public class DeviceList {
 				d.setERx(Double.valueOf(value));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 //	public static void setBeta(String value) {
@@ -790,7 +794,7 @@ public class DeviceList {
 				d.setESlp(Double.valueOf(value));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void setEL(String value) {
@@ -799,7 +803,7 @@ public class DeviceList {
 				d.setEL(Double.valueOf(value));
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 
@@ -814,7 +818,7 @@ public class DeviceList {
 					k++;
 				}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void selectByMy(String my) {
@@ -829,7 +833,7 @@ public class DeviceList {
 				}			
 			}
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void selectOneFromSelected() {

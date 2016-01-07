@@ -2,7 +2,7 @@ package script;
 
 import utilities.UColor;
 import wisen_simulation.SimLog;
-import map.Layer;
+import map.MapLayer;
 import device.SensorNode;
 
 public class Command_LED extends Command {
@@ -26,7 +26,7 @@ public class Command_LED extends Command {
 		int ledColor = Double.valueOf(sensor.getScript().getVariableValue(arg2)).intValue();
 		if(ledColor>UColor.colorTab.length) ledColor= ledColor % UColor.colorTab.length;
 		sensor.setLedColor(ledColor);
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 		return 0;
 	}
 

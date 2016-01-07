@@ -19,7 +19,7 @@
 
 package solver;
 
-import map.Layer;
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 
@@ -75,7 +75,7 @@ public class NetworkEnvelopeC3 extends Thread {
 		DeviceList.getNodes().get(imin).setMarked(true);
 		DeviceList.getNodes().get(imin).setVisited(true);
 		DeviceList.addToLastEnvelope(imin);
-		Layer.getMapViewer().repaint();		
+		MapLayer.getMapViewer().repaint();		
 		
 		try {
 			sleep(100);
@@ -116,7 +116,7 @@ public class NetworkEnvelopeC3 extends Thread {
 			DeviceList.getNodes().get(cur).setMarked(true);
 			DeviceList.getNodes().get(cur).setVisited(true);
 			DeviceList.addToLastEnvelope(imin);
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 			x2 = DeviceList.getNodes().get(cur).getLatitude();
 			y2 = DeviceList.getNodes().get(cur).getLongitude();
 			p2 = cur ;
@@ -151,7 +151,7 @@ public class NetworkEnvelopeC3 extends Thread {
 			DeviceList.getNodes().get(cur).setMarked(true);
 			DeviceList.getNodes().get(cur).setVisited(true);
 			DeviceList.addToLastEnvelope(imin);
-			Layer.getMapViewer().repaint();
+			MapLayer.getMapViewer().repaint();
 			x2 = DeviceList.getNodes().get(cur).getLatitude();
 			y2 = DeviceList.getNodes().get(cur).getLongitude();
 			p3 = cur ;
@@ -168,7 +168,7 @@ public class NetworkEnvelopeC3 extends Thread {
 			
 			if(!r) {
 				DeviceList.getNodes().get(p2).setMarked(false);				
-				Layer.getMapViewer().repaint();
+				MapLayer.getMapViewer().repaint();
 				int tmp = p2;
 				double tmpx = px2;
 				double tmpy = py2;
@@ -207,7 +207,7 @@ public class NetworkEnvelopeC3 extends Thread {
 			if(DeviceList.getNodes().get(v).isSelected())
 				DeviceList.addToLastEnvelope(v);
 		}
-		Layer.getMapViewer().repaint();
+		MapLayer.getMapViewer().repaint();
 		System.out.println("---------------------------");
 		System.out.println(" F I N I S H");
 		System.out.println("---------------------------");
