@@ -2,6 +2,7 @@ package three_d_visual;
 
 import cupcarbon.CupCarbon;
 import device.BaseStation;
+import device.Device;
 import device.Mobile;
 import device.SensorNode;
 import markers.Marker;
@@ -31,6 +32,12 @@ public class ThreeDUnityIHM {
 			// 6 : vert
 			// 7 : orange
 			// 8 : rose
+		}
+	}
+	
+	public static void removeDevice(Device device) {
+		if(ThreeDUnity()) {
+			
 		}
 	}
 	
@@ -135,8 +142,11 @@ public class ThreeDUnityIHM {
 		}
 	}
 	
-	public static void updatePosition(int type, int id, double longitude, double latitude, double elevation) {
+	public static void updatePosition(int type, int id, Device device) {
 		if(ThreeDUnity()) {
+			double longitude = device.getLongitude();
+			double latitude = device.getLatitude();
+			double elevation = device.getElevation();	
 			System.out.println("The position of Object "+id+" is updated");
 		}
 	}
@@ -147,8 +157,9 @@ public class ThreeDUnityIHM {
 		}
 	}
 	
-	public static void updateSensorUnitRadius(int type, int id, double value) {
+	public static void updateSensorUnitRadius(Device device, double value) {
 		if(ThreeDUnity()) {
+			int id = device.getId();
 			System.out.println("The sensor unit radius of Object "+id+" is updated");
 		}
 	}

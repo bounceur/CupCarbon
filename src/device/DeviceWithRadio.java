@@ -187,6 +187,8 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				augmenterRadio = !augmenterRadio ;
 				radioRangeRadius+=1 ;
 				radioRangeRadiusOri+=1 ;
+				//ThreeDUnityIHM.updatePosition(this);
+				ThreeDUnityIHM.updateRadioRadius(Device.SENSOR, id, radioRangeRadius);
 				MapLayer.getMapViewer().repaint();
 			}
 			if(key.getKeyChar()=='-') {
@@ -197,6 +199,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 					radioRangeRadius-=1 ;
 					radioRangeRadiusOri-=1 ;
 				}
+				ThreeDUnityIHM.updateRadioRadius(Device.SENSOR, id, radioRangeRadius);
 				MapLayer.getMapViewer().repaint();
 				
 			}

@@ -45,6 +45,7 @@ import map.MapLayer;
 import markers.Marker;
 import markers.MarkerList;
 import script.Script;
+import three_d_visual.ThreeDUnityIHM;
 import utilities.MapCalc;
 import utilities.UColor;
 import utilities._Constantes;
@@ -1128,6 +1129,7 @@ public abstract class Device implements Runnable, MouseListener,
 			longitude = ex - dlongitude;
 			latitude = ey - dlatitude;
 			//calculateNeighbours();
+			ThreeDUnityIHM.updatePosition(Device.SENSOR, id, this);
 			MapLayer.getMapViewer().repaint();
 		}
 

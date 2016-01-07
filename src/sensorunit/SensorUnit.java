@@ -31,6 +31,7 @@ import device.Device;
 import flying_object.FlyingGroup;
 import flying_object.FlyingObject;
 import map.MapLayer;
+import three_d_visual.ThreeDUnityIHM;
 import utilities.MapCalc;
 import utilities.UColor;
 
@@ -165,10 +166,12 @@ public class SensorUnit implements KeyListener, Cloneable {
 		if (node.isSelected()) {
 			if (key.getKeyChar() == ')') {
 				radius += 5;
+				ThreeDUnityIHM.updateSensorUnitRadius(node, radius);
 				MapLayer.getMapViewer().repaint();
 			}
 			if (key.getKeyChar() == '(') {
 				radius -= 5;
+				ThreeDUnityIHM.updateSensorUnitRadius(node, radius);
 				MapLayer.getMapViewer().repaint();
 			}			
 		}

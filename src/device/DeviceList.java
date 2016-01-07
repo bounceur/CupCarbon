@@ -371,6 +371,7 @@ public class DeviceList {
 		MapLayer.getMapViewer().removeMouseMotionListener(node);
 		MapLayer.getMapViewer().removeKeyListener(node);
 		nodes.remove(idx);
+		ThreeDUnityIHM.removeDevice(node);
 		node = null;
 	}
 	
