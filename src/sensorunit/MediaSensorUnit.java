@@ -133,7 +133,7 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 			Polygon poly = new Polygon(polyX, polyY, n);
 			if(device.getType()==Device.FLYING_OBJECT) {
 				for(FlyingObject d : ((FlyingGroup)device).getFlyingObjects()) {
-					GeoPosition gp = new GeoPosition(d.getLongitude(),d.getLatitude());
+					GeoPosition gp = new GeoPosition(d.getLatitude(), d.getLongitude());
 					Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
 					if(poly.contains(p1))
 						return true;
@@ -141,7 +141,7 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 				return false;
 			}
 			else {
-				GeoPosition gp = new GeoPosition(device.getLongitude(),device.getLatitude());
+				GeoPosition gp = new GeoPosition(device.getLatitude(), device.getLongitude());
 				Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());		
 				return (poly.contains(p1));
 			}

@@ -16,7 +16,7 @@ public class Command_GETPOS extends Command {
 	public long execute() {
 		String v = "" ;
 		SimLog.add("S" + sensor.getId() + " GET POSITION.");
-		v = sensor.getLatitude()+"#"+sensor.getLongitude();		
+		v = sensor.getLongitude()+"#"+sensor.getLatitude();		
 		sensor.getScript().addVariable(arg, v);
 		return 0;
 	}

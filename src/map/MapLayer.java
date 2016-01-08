@@ -260,7 +260,7 @@ public class MapLayer implements Painter<Object>, MouseListener,
 			GeoPosition gp = mapViewer.convertPointToGeoPosition(p);
 			
 			if (lastKey == '1') {
-				StdSensorNode sn = new StdSensorNode(gp.getLatitude(), gp.getLongitude(), 0, 0, 100, 20, -1); 
+				StdSensorNode sn = new StdSensorNode(gp.getLongitude(), gp.getLatitude(), 0, 0, 100, 20, -1); 
 				DeviceList.add(sn);
 				mapViewer.repaint();
 				/* Tanguy */
@@ -269,26 +269,26 @@ public class MapLayer implements Painter<Object>, MouseListener,
 				ThreeDUnityIHM.addStdSensorNode(sn);
 			}
 			if (lastKey == '2') {
-				DeviceList.add(new Gas(gp.getLatitude(), gp.getLongitude(), 0, 10, -1));
+				DeviceList.add(new Gas(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
 				mapViewer.repaint();
 				/* Tanguy */
 				addDeviceAction("Gas");
 				/* ------ */
 			}
 			if (lastKey == '4') {
-				DeviceList.add(new MediaSensorNode(gp.getLatitude(), gp.getLongitude(), 0, 0, 100, 60, -1, 0.1, 0, 12));
+				DeviceList.add(new MediaSensorNode(gp.getLongitude(), gp.getLatitude(), 0, 0, 100, 60, -1, 0.1, 0, 12));
 				mapViewer.repaint();
 				/* Tanguy */
 				addDeviceAction("MediaSensorNode");
 				/* ------ */
 			}
 			if (lastKey == '3') {
-				DeviceList.add(new FlyingGroup(gp.getLatitude(), gp.getLongitude(), 0, 10, 30));
+				DeviceList.add(new FlyingGroup(gp.getLongitude(), gp.getLatitude(), 0, 10, 30));
 				mapViewer.repaint();
 				addDeviceAction("FlyingGroup");
 			}
 			if (lastKey == '5') {
-				BaseStation bs = new BaseStation(gp.getLatitude(), gp.getLongitude(), 0, 0, 100, 20, -1);
+				BaseStation bs = new BaseStation(gp.getLongitude(), gp.getLatitude(), 0, 0, 100, 20, -1);
 				DeviceList.add(bs);
 				//DeviceList.add(new BaseStation(gp.getLatitude(), gp
 				//		.getLongitude(), 0, 100, -1));
@@ -297,19 +297,19 @@ public class MapLayer implements Painter<Object>, MouseListener,
 				ThreeDUnityIHM.addBaseStation(bs);
 			}
 			if (lastKey == '6') {
-				Mobile mobile = new Mobile(gp.getLatitude(), gp.getLongitude(), 0, 10, -1);
+				Mobile mobile = new Mobile(gp.getLongitude(), gp.getLatitude(), 0, 10, -1);
 				DeviceList.add(mobile);
 				mapViewer.repaint();
 				addDeviceAction("Mobile");
 				ThreeDUnityIHM.addMobile(mobile);
 			}
 			if (lastKey == '7') {
-				DeviceList.add(new MobileWithRadio(gp.getLatitude(), gp.getLongitude(), 0, 10, 100, -1));
+				DeviceList.add(new MobileWithRadio(gp.getLongitude(), gp.getLatitude(), 0, 10, 100, -1));
 				mapViewer.repaint();
 				addDeviceAction("MobileWithRadio");
 			}
 			if (lastKey == '8') {
-				Marker marker = new Marker(gp.getLatitude(), gp.getLongitude(), 0, 10);
+				Marker marker = new Marker(gp.getLongitude(), gp.getLatitude(), 0, 10);
 				MarkerList.add(marker);
 				mapViewer.repaint();
 				addMarkerAction("Marker");

@@ -644,7 +644,7 @@ public abstract class Device implements Runnable, MouseListener,
 		Point p = new Point(xs, ys);
 		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
 		Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
-		GeoPosition gp2 = new GeoPosition(longitude, latitude);
+		GeoPosition gp2 = new GeoPosition(latitude, longitude);
 		Point2D p2 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp2, MapLayer.getMapViewer().getZoom());
 		double d1 = p1.getX() - p2.getX();
 		double d2 = p1.getY() - p2.getY();
@@ -775,8 +775,8 @@ public abstract class Device implements Runnable, MouseListener,
 	public void calculateDxDy(int evx, int evy) {
 		Point p = new Point(evx, evy);
 		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
-		double ex = gp.getLatitude();
-		double ey = gp.getLongitude();
+		double ex = gp.getLongitude();
+		double ey = gp.getLatitude();
 		dlongitude = ex - longitude;
 		dlatitude = ey - latitude;
 	}
@@ -800,6 +800,7 @@ public abstract class Device implements Runnable, MouseListener,
 		
 		if(move) {
 			move = false;
+			ThreeDUnityIHM.moveDevice(this);
 			MapLayer.getMapViewer().repaint();
 		}		
 		increaseNode = false;
@@ -862,7 +863,10 @@ public abstract class Device implements Runnable, MouseListener,
 		//	cmdDown = true;
 		if (key.getKeyCode() == 65 && ctrlDown) {
 			selected = true;
-			move = false;
+			if(move) {
+				ThreeDUnityIHM.moveDevice(this);
+				move = false;
+			}
 		}
 //		if (key.getKeyCode() == 75 && ctrlDown) {
 //			visible = true;
@@ -1109,8 +1113,8 @@ public abstract class Device implements Runnable, MouseListener,
 	public void mouseMoved(MouseEvent e) {
 		Point p = new Point(e.getX(), e.getY());
 		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
-		double ex = gp.getLatitude();
-		double ey = gp.getLongitude();
+		double ex = gp.getLongitude();
+		double ey = gp.getLatitude();
 
 		if (!move) {
 			calculateDxDy(e.getX(), e.getY());
@@ -1272,7 +1276,7 @@ public abstract class Device implements Runnable, MouseListener,
 		int[] coord;
 		if (displayInfos && selected && infos != null) {
 			g.setFont(new Font("arial", 1, 10));
-			coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
+			coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
 			int lx1 = coord[0];
 			int ly1 = coord[1];
 			g.setColor(UColor.WHITE_TRANSPARENT);

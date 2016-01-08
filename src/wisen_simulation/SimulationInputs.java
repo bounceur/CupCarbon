@@ -48,5 +48,6 @@ public class SimulationInputs {
 	public static double ackProba = 1.0 ;
 	public static int protocol = SimulationInputs.CSMA ;
 	
+	public static boolean symmetricalLinks = true;
 	public static int radioDetectionType = RadioDetection.SIMPLE_DETECTION;
 }

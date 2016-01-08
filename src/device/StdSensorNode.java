@@ -142,7 +142,7 @@ public class StdSensorNode extends SensorNode {
 	
 	@Override
 	public void drawSensorUnit(Graphics g) {
-		int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
+		int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
 		int x = coord[0];
 		int y = coord[1];
 		if(hide == 0 || hide == 4) {

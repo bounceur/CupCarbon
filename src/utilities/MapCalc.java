@@ -144,16 +144,15 @@ public class MapCalc {
 	 */
 	public static double distance(double x1, double y1, double x2, double y2) {
 		double earth_radius = 6378137; // Earth sphere radius: 6378km
-		double rla1 = Math.toRadians(x1);
-		double rlo1 = Math.toRadians(y1);
-		double rla2 = Math.toRadians(x2);
-		double rlo2 = Math.toRadians(y2);
+		double rlo1 = Math.toRadians(x1);
+		double rla1 = Math.toRadians(y1);
+		double rlo2 = Math.toRadians(x2);
+		double rla2 = Math.toRadians(y2);
 
 		double dla = (rla2 - rla1) / 2.0;
 		double dlo = (rlo2 - rlo1) / 2.0;
 
-		double a = (Math.sin(dla) * Math.sin(dla)) + Math.cos(rla1)
-				* Math.cos(rla2) * (Math.sin(dlo) * Math.sin(dlo));
+		double a = (Math.sin(dla) * Math.sin(dla)) + Math.cos(rla1) * Math.cos(rla2) * (Math.sin(dlo) * Math.sin(dlo));
 		double d = 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		return (earth_radius * d);
 	}

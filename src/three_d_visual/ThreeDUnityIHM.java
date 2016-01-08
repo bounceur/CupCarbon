@@ -35,6 +35,25 @@ public class ThreeDUnityIHM {
 		}
 	}
 	
+	public static void comAddArrow(SensorNode sensor1, SensorNode sensor2, int type, int color, int size) {
+		if(ThreeDUnity()) {
+			System.out.println("Arrow between "+sensor1+" and "+sensor2+" is added.");
+			double longitude1 = sensor1.getLongitude() ;
+			double latitude1 = sensor1.getLatitude() ;
+			double elevation1 = sensor1.getElevation() ; 
+			double longitude2 = sensor2.getLongitude() ;
+			double latitude2 = sensor2.getLatitude() ;
+			double elevation2 = sensor2.getElevation() ;
+		}
+	}
+	
+	public static void comDeleteArrow(SensorNode sensor1, SensorNode sensor2) {
+		if(ThreeDUnity()) {
+			System.out.println("Delete Com Arrow between ");
+			
+		}
+	}
+	
 	public static void removeDevice(Device device) {
 		if(ThreeDUnity()) {
 			
@@ -267,6 +286,15 @@ public class ThreeDUnityIHM {
 			
 		}
 	}
+	
+	public static void moveDevice(Device device) {
+		System.out.println("Move device!");
+		double longitude = device.getLongitude();
+		double latitude = device.getLatitude();
+		double elevation = device.getElevation();
+	}
+	
+
 	
 	//------------------------------------------------------------------
 	

@@ -76,7 +76,7 @@ public class Channels {
 									rSensor.addMessageToBuffer(packetEventList.get(0).getPacket().length()*8, packetEventList.get(0).getPacket());
 								if(rSensor.getScript().getCurrent().isWait())
 									rSensor.setEvent(0);
-								if((type == 0) && (SimulationInputs.ack)) {								
+								if((type == 0) && (SimulationInputs.ack)) {									
 									addPacket(1, "0", rSensor, sSensor);
 								}
 							}
@@ -93,7 +93,8 @@ public class Channels {
 								rSensor.setEvent(0);
 							}
 						}
-						packetEventList.remove(0);
+						ThreeDUnityIHM.comDeleteArrow(packetEventList.get(0).getSSensor(), packetEventList.get(0).getRSensor());
+						packetEventList.remove(0);						
 						if(packetEventList.size()>0) {
 							packetEventList.get(0).getSSensor().setSending(true);
 							packetEventList.get(0).getRSensor().setReceiving(true);
@@ -154,12 +155,12 @@ public class Channels {
 								arrColor = 5;
 							}
 							
-							ThreeDUnityIHM.arrowDrawing((SensorNode)pev.getSSensor(), (SensorNode)pev.getRSensor(), 2, arrColor, 2);
+							ThreeDUnityIHM.comAddArrow((SensorNode)pev.getSSensor(), (SensorNode)pev.getRSensor(), 2, arrColor, 2);
 							
-							coord = MapCalc.geoToIntPixelMapXY(pev.getSSensor().getLongitude(), pev.getSSensor().getLatitude());
+							coord = MapCalc.geoToIntPixelMapXY(pev.getSSensor().getLatitude(), pev.getSSensor().getLongitude());
 							lx1 = coord[0];
 							ly1 = coord[1];		
-							coord = MapCalc.geoToIntPixelMapXY(pev.getRSensor().getLongitude(), pev.getRSensor().getLatitude());
+							coord = MapCalc.geoToIntPixelMapXY(pev.getRSensor().getLatitude(), pev.getRSensor().getLongitude());
 							lx2 = coord[0];
 							ly2 = coord[1];
 							dx = lx2 - lx1;

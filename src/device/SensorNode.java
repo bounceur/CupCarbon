@@ -63,7 +63,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	protected boolean bufferReady = false;	
 
 	protected Color radioRangeColor1 = UColor.PURPLE_TRANSPARENT;
-	protected Color radioRangeColor2 = UColor.PURPLED_TRANSPARENT;
+	protected Color radioRangeColor2 = UColor.PURPLED_TRANSPARENT;	
 	
 	/**
 	 * Constructor 1 Instanciate the sensor unit 
@@ -151,10 +151,10 @@ public abstract class SensorNode extends DeviceWithRadio {
 		withSensor = true;
 		calculateRadioSpace();
 		initBuffer();
-	}
+	}	
 	
 	public void calculateRadioSpace() {
-		int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
+		int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
 		int x = coord[0];
 		int y = coord[1];
 		int rayon = MapCalc.radiusInPixels(radioRangeRadius * pl / 100) ; 
@@ -191,10 +191,10 @@ public abstract class SensorNode extends DeviceWithRadio {
 	 *            Graphics
 	 */
 	public void drawDetectionLink(Device device, Graphics g) {
-		int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
+		int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
 		int lx1 = coord[0];
 		int ly1 = coord[1];
-		coord = MapCalc.geoToIntPixelMapXY(device.getLongitude(), device.getLatitude());
+		coord = MapCalc.geoToIntPixelMapXY(device.getLatitude(), device.getLongitude());
 		int lx2 = coord[0];
 		int ly2 = coord[1];
 
@@ -209,7 +209,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 			g2.setStroke(new BasicStroke(0.4f));
 			calculateRadioSpace();
 			initDraw(g);
-			int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
+			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
 			int x = coord[0];
 			int y = coord[1];
 			int rayon = MapCalc.radiusInPixels(radioRangeRadius) ; 
@@ -262,7 +262,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 		if (visible) {
 			calculateRadioSpace();
 			initDraw(g);
-			int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
+			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
 			int x = coord[0];
 			int y = coord[1];
 			int rayon = MapCalc.radiusInPixels(radioRangeRadius) ; 

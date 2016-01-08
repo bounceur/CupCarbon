@@ -24,6 +24,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
 import device.DataInfo;
+import map.MapLayer;
 import wisen_simulation.SimulationInputs;
 import wisen_simulation.WisenSimulation;
 
@@ -40,7 +41,6 @@ public class WsnSimulationWindow extends JInternalFrame {
 	private static JLabel stateLabel;
 	private JCheckBox cboxMobility;
 	private JTextField vdTextField;
-	private JTextField textField;
 
 	private JCheckBox chckbxGenerateResults;
 	private JCheckBox chckbxGenerateLog;
@@ -50,6 +50,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 	private JComboBox<String> protocolCBox;
 	private JComboBox<String> ackTypeCB;
 	private JCheckBox checkBoxAck;
+	private JCheckBox chbxSymRadio;
 	
 	/**
 	 * Launch the application.
@@ -150,16 +151,11 @@ public class WsnSimulationWindow extends JInternalFrame {
 		JPanel panel_17 = new JPanel();
 		panel_3.add(panel_17);
 		panel_17.setLayout(new GridLayout(1, 2, 0, 0));
-
-		JLabel lblCommunication = new JLabel("  Failure Probability   ");
-		lblCommunication.setFont(new Font("Arial", Font.PLAIN, 12));
-		panel_17.add(lblCommunication);
-
-		textField = new JTextField();
-		textField.setFont(new Font("Arial", Font.PLAIN, 12));
-		textField.setText("0");
-		panel_17.add(textField);
-		textField.setColumns(10);
+		
+		chbxSymRadio = new JCheckBox("Symmetrical Radio Links");
+		chbxSymRadio.setSelected(true);
+		chbxSymRadio.setFont(new Font("Arial", Font.PLAIN, 12));
+		panel_17.add(chbxSymRadio);
 
 		JPanel panel_7 = new JPanel();
 		panel_7.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -376,6 +372,8 @@ public class WsnSimulationWindow extends JInternalFrame {
 		SimulationInputs.ackProba = (proba>1)?1:proba;
 		SimulationInputs.showAckLinks = chckbxAck.isSelected();
 		SimulationInputs.ack = checkBoxAck.isSelected();
+		SimulationInputs.symmetricalLinks = chbxSymRadio.isSelected();
+		MapLayer.getMapViewer().repaint();
 	}
 	
 }

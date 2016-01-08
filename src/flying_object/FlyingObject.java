@@ -117,7 +117,7 @@ public class FlyingObject extends MobileG {
 		// Graphics2D g = (Graphics2D) gg;
 		// g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 		// RenderingHints.VALUE_ANTIALIAS_ON);
-		int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
+		int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
 		int x = coord[0];
 		int y = coord[1];
 		// int x = MapCalc.geoToIntPixelMapX(this.x, this.y);

@@ -5,6 +5,7 @@ import java.awt.geom.Point2D;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import map.MapLayer;
+import wisen_simulation.SimulationInputs;
 
 public class RadioDetection {
 	
@@ -18,9 +19,14 @@ public class RadioDetection {
 				device1.getNId() == device2.getNId() &&
 				device1.getCh() == device2.getCh()
 		) {
-			GeoPosition gp = new GeoPosition(device2.getLongitude(), device2.getLatitude());
-			Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
-			return (device1.getRadioPolygon().contains(p1));
+			GeoPosition gp1 = new GeoPosition(device1.getLatitude(), device1.getLongitude());
+			GeoPosition gp2 = new GeoPosition(device2.getLatitude(), device2.getLongitude());
+			Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp1, MapLayer.getMapViewer().getZoom());
+			Point2D p2 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp2, MapLayer.getMapViewer().getZoom());
+			if (SimulationInputs.symmetricalLinks)
+				return (device1.getRadioPolygon().contains(p2) || device2.getRadioPolygon().contains(p1));
+			else
+				return (device1.getRadioPolygon().contains(p2));
 		}
 		return false;
 	}
@@ -30,7 +36,7 @@ public class RadioDetection {
 				device1.getNId() == device2.getNId() &&
 				device1.getCh() == device2.getCh()
 		) {
-			if ( (getPowerReception(((DeviceWithRadio)device1), ((DeviceWithRadio)device2)) > ((DeviceWithRadio)device2).getRequiredQuality()))
+			if ( getPowerReception(((DeviceWithRadio)device1), ((DeviceWithRadio)device2)) > ((DeviceWithRadio)device2).getRequiredQuality())
 				return true;
 		}
 		return false;
@@ -41,7 +47,10 @@ public class RadioDetection {
 				device1.getNId() == device2.getNId() &&
 				device1.getCh() == device2.getCh()
 		) {
-			if ( (getPowerReception(((DeviceWithRadio)device1), ((DeviceWithRadio)device2)) > ((DeviceWithRadio)device2).getRequiredQuality()))
+//			System.out.println(getPowerReception(((DeviceWithRadio)device1), ((DeviceWithRadio)device2)));
+//			System.out.println(((DeviceWithRadio)device2).getRequiredQuality());
+//			System.out.println("-------");
+			if ( getPowerReception(((DeviceWithRadio)device1), ((DeviceWithRadio)device2)) > ((DeviceWithRadio)device2).getRequiredQuality())
 				return true;
 		}
 		return false;

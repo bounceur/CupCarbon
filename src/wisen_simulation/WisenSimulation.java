@@ -134,6 +134,7 @@ public class WisenSimulation extends Thread {
 			}
 			
 			for (iter = 0; iter < iterNumber; iter++) {
+				
 				if (min == Long.MAX_VALUE) {
 					System.out.println("Infinite WAITs!");
 					JOptionPane.showMessageDialog(null, "Infinite WAITs! [iter: "+iter+"]", "Simulation Stopped", JOptionPane.INFORMATION_MESSAGE);
@@ -277,6 +278,9 @@ public class WisenSimulation extends Thread {
 				consolPrintln("------------------------------------------");				
 				WsnSimulationWindow.setProgress((int) (1000 * iter / iterNumber));
 				CupCarbon.lblSimulation.setText(" | Simulation: "+((int) (100 * iter / iterNumber))+"%");
+				
+				//ThreeDUnityIHM.comAddArrow(id, sensor1, sensor2, type, color, size);
+				
 				MapLayer.getMapViewer().repaint();
 				sleep(visualDelay);
 			}

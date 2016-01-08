@@ -59,14 +59,15 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	public double requiredQuality = -80.0; // dB
 	public double transmitPower = 0 ; // dBm
 	
-	protected int nPoint = 30; //63;	
-	protected double deg = 0.209333;
-	protected int nZone = 1;
+	protected int nZone = 1;	
+	
+	protected LinkedList<SensorNode> neighbors = new LinkedList<SensorNode> () ;
+	
+	protected int nPoint = 30;;	
+	protected double deg = 2.*Math.PI/nPoint;
 	
 	protected int [][] polyX = new int[nZone][nPoint];
 	protected int [][] polyY = new int[nZone][nPoint];
-	
-	protected LinkedList<SensorNode> neighbors = new LinkedList<SensorNode> () ;	
 	
 	/**
 	 * 
@@ -86,6 +87,10 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		super(x, y, z, radius, id);
 		this.radioRangeRadius = radioRangeRadius ;
 		radioRangeRadiusOri = radioRangeRadius ;		
+	}
+	
+	public Polygon getRadioPolygon() {
+		return new Polygon(polyX[0],polyY[0],nPoint);
 	}
 
 	@Override
@@ -247,7 +252,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	public void drawMarked(Graphics g) {
 		if (!isDead()) 
 		if (marked) {	
-			int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
+			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
 			int x = coord[0];
 			int y = coord[1];
 			g.setColor(Color.ORANGE);			
@@ -265,7 +270,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		}
 		else {
 			if(ledColor>0) {				
-				int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
+				int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
 				int x = coord[0];
 				int y = coord[1];
 				g.setColor(Color.ORANGE);			
@@ -377,16 +382,16 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 * @param g
 	 *            Graphics
 	 */
-	public void drawRadioLink(Device device, Graphics g, int type) {
-		
-		int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
-		int lx1 = coord[0];
-		int ly1 = coord[1];
-		coord = MapCalc.geoToIntPixelMapXY(device.getLongitude(), device.getLatitude());
-		int lx2 = coord[0];
-		int ly2 = coord[1];
+	public void drawRadioLink(Device device, Graphics g, int type) {		
 		
 		if(drawRadioLinks) {	
+			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+			int lx1 = coord[0];
+			int ly1 = coord[1];
+			coord = MapCalc.geoToIntPixelMapXY(device.getLatitude(), device.getLongitude());
+			int lx2 = coord[0];
+			int ly2 = coord[1];
+			
 			switch(drawRadioLinksColor) {
 			case 0 : g.setColor(Color.DARK_GRAY); break;
 			case 1 : g.setColor(Color.DARK_GRAY); break;
@@ -409,10 +414,10 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				double dx = 0;
 				double dy = 0;
 				double alpha = 0;
-				coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
+				coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
 				lx1 = coord[0];
 				ly1 = coord[1];		
-				coord = MapCalc.geoToIntPixelMapXY(device.getLongitude(), device.getLatitude());
+				coord = MapCalc.geoToIntPixelMapXY(device.getLatitude(), device.getLongitude());
 				lx2 = coord[0];
 				ly2 = coord[1];
 				dx = lx2 - lx1;
@@ -428,11 +433,11 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		}
 	}
 
-	public void drawDistance(double x, double y, double elevation, double x2, double y2, double elevation2, int d, double pr, Graphics g) {
-		int[] coord = MapCalc.geoToIntPixelMapXY(x, y);
+	public void drawDistance(double longitude1, double latitude1, double elevation1, double longitude2, double latitude2, double elevation2, int d, double pr, Graphics g) {
+		int[] coord = MapCalc.geoToIntPixelMapXY(latitude1, longitude1);
 		int lx1 = coord[0];
 		int ly1 = coord[1];
-		coord = MapCalc.geoToIntPixelMapXY(x2, y2);
+		coord = MapCalc.geoToIntPixelMapXY(latitude2, longitude2);
 		int lx2 = coord[0];
 		int ly2 = coord[1];
 		g.setColor(Color.DARK_GRAY);		
@@ -486,10 +491,6 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			return neighbors.contains(device);
 		else
 			return radioDetect(device);
-	}
-	
-	public Polygon getRadioPolygon() {
-		return new Polygon(polyX[0],polyY[0],nPoint);
 	}
 	
 	public void calculatePropagations() {

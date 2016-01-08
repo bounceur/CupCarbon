@@ -156,7 +156,7 @@ public class MarkerList {
 						firstTime = false;
 						x1 = marker.getLongitude();
 						y1 = marker.getLatitude();
-						coord = MapCalc.geoToIntPixelMapXY(x1, y1);
+						coord = MapCalc.geoToIntPixelMapXY(y1, x1);
 						lx1 = coord[0];
 						ly1 = coord[1];								
 						//lx1 = MapCalc.geoToIntPixelMapX(x1, y1);
@@ -167,7 +167,7 @@ public class MarkerList {
 					} else {
 						x2 = marker.getLongitude();
 						y2 = marker.getLatitude();
-						coord = MapCalc.geoToIntPixelMapXY(x2, y2);
+						coord = MapCalc.geoToIntPixelMapXY(y2, x2);
 						lx2 = coord[0];
 						ly2 = coord[1];
 						//lx2 = MapCalc.geoToIntPixelMapX(x2, y2);
@@ -196,7 +196,7 @@ public class MarkerList {
 						}
 						x1 = marker.getLongitude();
 						y1 = marker.getLatitude();
-						coord = MapCalc.geoToIntPixelMapXY(x1, y1);
+						coord = MapCalc.geoToIntPixelMapXY(y1, x1);
 						lx1 = coord[0];
 						ly1 = coord[1];	
 						//lx1 = MapCalc.geoToIntPixelMapX(x1, y1);

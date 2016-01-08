@@ -179,8 +179,7 @@ public final class Project {
 
 	public static void loadParameters() {
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(
-					getProjectPathName()));
+			BufferedReader br = new BufferedReader(new FileReader(getProjectPathName()));
 			System.out.println(br.readLine());
 			System.out.println(br.readLine());
 			System.out.println(br.readLine());
