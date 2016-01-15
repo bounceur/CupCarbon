@@ -32,6 +32,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
@@ -41,14 +42,16 @@ import actions_ui.MoveDevice;
 import actions_ui.MoveMarker;
 import battery.Battery;
 import cupcarbon.DeviceParametersWindow;
+import cupcarbon.RadioParametersWindow;
 import map.MapLayer;
 import markers.Marker;
 import markers.MarkerList;
+import radio.Standard;
 import script.Script;
-import three_d_visual.ThreeDUnityIHM;
 import utilities.MapCalc;
 import utilities.UColor;
 import utilities._Constantes;
+import visualisation.Visualisation;
 
 /**
  * @author Ahcene Bounceur
@@ -57,7 +60,7 @@ import utilities._Constantes;
  */
 public abstract class Device implements Runnable, MouseListener,
 		MouseMotionListener, KeyListener, _Constantes, Cloneable {
-
+	
 	public static final int TARGET = 0;
 	public static final int SENSOR = 1;
 	public static final int GAS = 2;
@@ -74,6 +77,10 @@ public abstract class Device implements Runnable, MouseListener,
 	public static final boolean ALIVE = true;
 	public static final boolean SLEEP = false;
 
+	protected double driftTime = 1e-6;
+	protected double sigmaOfDriftTime = driftTime/3.0;
+	protected double deltaDriftTime = 0.0; 
+	
 	public static int moveSpeed = 100;
 
 	protected boolean altDown = false;
@@ -89,6 +96,10 @@ public abstract class Device implements Runnable, MouseListener,
 	protected int ch = 0x0;
 	protected int nId = 0x3334;
 	protected String userId = "";
+	
+	protected int uartDataRate = 9600;
+	protected int radioDataRate = 250000;
+	protected int standard = Standard.ZIGBEE_802_15_4;
 
 	protected double longitude, latitude, elevation;
 	protected double longitude_ori;
@@ -126,8 +137,8 @@ public abstract class Device implements Runnable, MouseListener,
 	protected String targetName = ""; 
 	protected int ledColor = 0;
 
-	protected double consumptionTx = 0;
-	protected double consumptionRx = 0;
+//	protected double consumptionTx = 0;
+//	protected double consumptionRx = 0;
 	protected double eTx = 0.0000592; //sending energy
 	protected double eRx = 0.0000286; // receiving energy
 	protected double eSlp = 0.0000001;//Sleeping energy
@@ -136,16 +147,15 @@ public abstract class Device implements Runnable, MouseListener,
 	//protected double beta = 1;
 	
 	protected Color radioLinkColor = UColor.RED;
-	protected Color ackLinkColor = UColor.BLACK_TRANSPARENT;
+	protected Color ackLinkColor = Color.BLACK;
 	
-	protected boolean sleeping = false;
 	protected boolean receiving = false;
 	protected boolean sending = false;
 	protected boolean writing = false;
 	//protected boolean distanceMode = false ;
 	protected long distanceModeDelay = 2000 ;
 
-	protected boolean state = ALIVE;
+	protected boolean state = ALIVE; 
 	
 	//----------------------------------
 	// For Algorithms
@@ -155,8 +165,8 @@ public abstract class Device implements Runnable, MouseListener,
 	protected LinkedList<Double> valueList;
 	//----------------------------------
 	
-	protected long event = Long.MAX_VALUE;		// Event relied to actions = sending/receiving
-	protected long event2 = Long.MAX_VALUE;		// Event relied to mobility
+	protected double event = Double.MAX_VALUE;		// Event relied to actions = sending/receiving
+	protected double event2 = Double.MAX_VALUE;		// Event relied to mobility
 	//protected int nextEvent = Integer.MAX_VALUE;		// Calculate the next Event
 	//protected int mrEvent = Integer.MAX_VALUE;		// Event relied to the message reception	
 	
@@ -282,7 +292,7 @@ public abstract class Device implements Runnable, MouseListener,
 	 * @param v
 	 */
 	public void consume(int v) {
-		this.getBattery().consume(v);
+		getBattery().consume(v);
 	}
 	
 	/**
@@ -292,7 +302,8 @@ public abstract class Device implements Runnable, MouseListener,
 	 */
 	public void consumeTx(int v) {
 		//System.out.println(consumptionTx*v*eTx);
-		this.getBattery().consume(consumptionTx*v*eTx*pl/100.);
+		//this.getBattery().consume(consumptionTx*v*eTx*pl/100.);
+		getBattery().consume(v*eTx*pl/100.);
 	}
 	
 	/**
@@ -301,7 +312,8 @@ public abstract class Device implements Runnable, MouseListener,
 	 * @param v
 	 */
 	public void consumeRx(int v) {
-		this.getBattery().consume(consumptionRx*v*eRx);
+		//this.getBattery().consume(consumptionRx*v*eRx);
+		getBattery().consume(v*eRx);
 	}
 	
 	
@@ -344,6 +356,22 @@ public abstract class Device implements Runnable, MouseListener,
 	
 	public void setPl(int pl) {
 		this.pl = pl;
+	}
+	
+	public void setStd(String str) {
+		if(str.equals("NONE")) {
+			standard = Standard.NONE;			
+		}
+		if(str.equals("802.15.4")) {
+			standard = Standard.ZIGBEE_802_15_4;
+		}
+		if(str.equals("WIFI 802.11")) {
+			standard = Standard.WIFI_802_11;
+		}
+		if(str.equals("LoRa")) {
+			standard = Standard.LORA;
+		}
+		radioDataRate = Standard.getDataRate(standard);
 	}
 	
 	public int getMy() {
@@ -434,6 +462,10 @@ public abstract class Device implements Runnable, MouseListener,
 	 *            Yes/No (to select the device by algorithms)
 	 */
 	public void setMarked(boolean b) {
+		if(b) 
+			ledColor = 1;
+		else
+			ledColor = 0;
 		this.marked = b;
 	}
 		
@@ -721,28 +753,32 @@ public abstract class Device implements Runnable, MouseListener,
 	}
 
 	/**
-	 * Update the window of the node parameters
+	 * Update the window of the device/radio parameters
 	 */
-	public void sensorParametersUpdate() {
+	public void deviceRadioParametersUpdate() {
 		if (selected) {
-			DeviceParametersWindow.textField_Id.setText("" + id);
-			DeviceParametersWindow.textField_My.setText("" + my);
-			DeviceParametersWindow.textField_Ch.setText("" + ch);
-			DeviceParametersWindow.textField_NId.setText("" + nId);
-			DeviceParametersWindow.tf_longitude.setText("" + longitude);
-			DeviceParametersWindow.tf_latitude.setText("" + latitude);
-			DeviceParametersWindow.tf_radius.setText("" + getRadius());
-			DeviceParametersWindow.tf_radioRadius.setText("" + getRadioRadius());
-			DeviceParametersWindow.tf_suRadius.setText("" + getSensorUnitRadius()); 
-			DeviceParametersWindow.tf_eMax.setText("" + this.getBatteryLevel()) ;
-			DeviceParametersWindow.tf_eTx.setText("" + getETx()) ;
-			DeviceParametersWindow.tf_eRx.setText("" + getERx()) ;
+			DeviceParametersWindow.textField_Id.setText("" + id) ;		
+			DeviceParametersWindow.tf_longitude.setText("" + longitude) ;
+			DeviceParametersWindow.tf_latitude.setText("" + latitude) ;
+			DeviceParametersWindow.tf_elevation.setText("" + elevation) ;
+			DeviceParametersWindow.tf_radius.setText("" + getRadius()) ;			
+			DeviceParametersWindow.tf_suRadius.setText("" + getSensorUnitRadius()) ; 
+			DeviceParametersWindow.tf_eMax.setText("" + this.getBatteryLevel()) ;		
 			DeviceParametersWindow.tf_eS.setText("" + getES()) ;
-			DeviceParametersWindow.tf_eSlp.setText("" + getESlp()) ;
-			DeviceParametersWindow.tf_eL.setText("" + getEL()) ;
-			//DeviceParametersWindow.tf_beta.setText("" + getBeta()) ;
-			DeviceParametersWindow.scriptComboBox.setSelectedItem("");
-			DeviceParametersWindow.gpsPathNameComboBox.setSelectedItem("");
+			DeviceParametersWindow.scriptComboBox.setSelectedItem("") ;
+			DeviceParametersWindow.gpsPathNameComboBox.setSelectedItem("") ;
+			//DeviceParametersWindow.stdComboBox.
+			
+			RadioParametersWindow.textField_My.setText("" + my) ;
+			RadioParametersWindow.textField_Ch.setText("" + ch) ;
+			RadioParametersWindow.textField_NId.setText("" + nId) ;
+			RadioParametersWindow.tf_radioRadius.setText("" + getRadioRadius()) ;
+			RadioParametersWindow.tf_eTx.setText("" + getETx()) ;
+			RadioParametersWindow.tf_eRx.setText("" + getERx()) ;
+			RadioParametersWindow.tf_eSlp.setText("" + getESlp()) ;
+			RadioParametersWindow.tf_eL.setText("" + getEL()) ;
+			RadioParametersWindow.tf_radioDataRate.setText("" + getRadioDataRate());
+			RadioParametersWindow.stdComboBox.setSelectedIndex(getStandard());
 			
 			String[] gpsFile;
 			String gpsFileName;
@@ -800,7 +836,7 @@ public abstract class Device implements Runnable, MouseListener,
 		
 		if(move) {
 			move = false;
-			ThreeDUnityIHM.moveDevice(this);
+			Visualisation.moveDevice(this);
 			MapLayer.getMapViewer().repaint();
 		}		
 		increaseNode = false;
@@ -864,7 +900,7 @@ public abstract class Device implements Runnable, MouseListener,
 		if (key.getKeyCode() == 65 && ctrlDown) {
 			selected = true;
 			if(move) {
-				ThreeDUnityIHM.moveDevice(this);
+				Visualisation.moveDevice(this);
 				move = false;
 			}
 		}
@@ -895,12 +931,11 @@ public abstract class Device implements Runnable, MouseListener,
 
 	
 	@Override
-	public void keyTyped(KeyEvent e) {
-
+	public void keyTyped(KeyEvent e) {		
 		key = e.getKeyChar();
 
-		if (selected) {
-			sensorParametersUpdate();
+		if (selected) {			
+			deviceRadioParametersUpdate();
 			if (key == 'c') {
 				try {
 					// Layer.addNode(this.clone());
@@ -1133,7 +1168,7 @@ public abstract class Device implements Runnable, MouseListener,
 			longitude = ex - dlongitude;
 			latitude = ey - dlatitude;
 			//calculateNeighbours();
-			ThreeDUnityIHM.updatePosition(Device.SENSOR, id, this);
+			Visualisation.updatePosition(Device.SENSOR, id, this);
 			MapLayer.getMapViewer().repaint();
 		}
 
@@ -1403,7 +1438,7 @@ public abstract class Device implements Runnable, MouseListener,
 		return this.hide;
 	}
 
-	public abstract long getNextTime();
+	public abstract double getNextTime();
 	public abstract void loadRouteFromFile();
 	public abstract void moveToNext(boolean visual, int visualDelay);
 	public abstract boolean hasNext() ;
@@ -1505,23 +1540,23 @@ public abstract class Device implements Runnable, MouseListener,
 		return script;
 	}
 	
-	public void setEvent(int event) {
+	public void setEvent(double event) {
 		this.event = event ;
 	}
 	
 	public void setEvent(String event) {
-		this.event = Long.parseLong(event) ;
+		this.event = Double.parseDouble(event) ;
 	}
 	
-	public long getEvent() {
+	public double getEvent() {
 		return event;
 	}
 	
-	public void setEvent2(long event) {
+	public void setEvent2(double event) {
 		this.event2 = event ;
 	}
 	
-	public long getEvent2() {
+	public double getEvent2() {
 		return event2;
 	}
 
@@ -1603,32 +1638,9 @@ public abstract class Device implements Runnable, MouseListener,
 	public void setIdm() {
 		idm = MarkerList.size();
 	}
-
-	public double getTxConsumption() {
-		return consumptionTx;
-	}
-	
-	public double getRxConsumption() {
-		return consumptionRx;
-	}
-
-	public void setTxConsumption(int v) {
-		consumptionTx += v;
-	}
-	
-	public void setRxConsumption(int v) {
-		consumptionRx += v;
-	}
-	
-	public void initTxConsumption() {
-		consumptionTx = 0;
-	}
-	
-	public void initRxConsumption() {
-		consumptionRx = 0;
-	}
 	
 	public void init() {
+		//packetEventList = new LinkedList<PacketEvent>();
 		message = "";
 		setMarked(false);
 		setVisited(false);
@@ -1644,16 +1656,7 @@ public abstract class Device implements Runnable, MouseListener,
 	}
 	
 	public abstract void initBattery() ;
-	
-	
-	public boolean isSleeping() {
-		return sleeping;
-	}
-	
-	public void setSleeping(boolean b) {
-		sleeping = b;
-	}
-	
+		
 	public boolean isSending() {
 		return sending;
 	}
@@ -1705,7 +1708,7 @@ public abstract class Device implements Runnable, MouseListener,
 		}		
 	}
 
-	public void gotoTheNextEvent(long min) {
+	public void gotoTheNextEvent(double min) {
 		event = event - min;
 	}
 	
@@ -1731,6 +1734,43 @@ public abstract class Device implements Runnable, MouseListener,
 	
 	public String getMessage() {
 		return message;
+	}	
+	
+	public int getUartDataRate() {
+		return uartDataRate;
+	}
+
+	public void setUartDataRate(int uartDataRate) {
+		this.uartDataRate = uartDataRate;
+	}
+
+	public int getRadioDataRate() {
+		return radioDataRate;
+	}
+
+	public void setRadioDataRate(int radioDataRate) {
+		this.radioDataRate = radioDataRate;
+	}	
+	
+	public int getStandard() {
+		return standard;
+	}
+
+	public void setStandard(int standard) {
+		this.standard = standard;
+	}
+
+	public void drift() {
+		Random random = new Random();
+		double d = random.nextGaussian();
+		d += this.sigmaOfDriftTime;
+		deltaDriftTime += d;
+		if(!this.getScript().getCurrent().isDelay())
+			event += deltaDriftTime; 
+	}
+	
+	public double getDeltaOfDriftTime() {
+		return deltaDriftTime;
 	}
 	
 	public abstract Polygon getRadioPolygon();
@@ -1741,4 +1781,5 @@ public abstract class Device implements Runnable, MouseListener,
 	public abstract void resetPropagations();
 	public abstract void drawRadioPropagations(Graphics g) ;
 	public abstract boolean radioDetect(Device device) ;	
+	
 }

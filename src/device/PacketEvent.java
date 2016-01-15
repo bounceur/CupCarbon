@@ -6,14 +6,16 @@ public class PacketEvent implements Comparable<PacketEvent> {
 	protected SensorNode sSensor = null;
 	protected SensorNode rSensor = null;
 	protected String packet = "";
-	protected long time = 0;
+	protected String message = "";
+	protected double time = 0;
 	
-	public PacketEvent(int type, SensorNode sSensor, SensorNode rSensor, String packet, long time) {
+	public PacketEvent(int type, SensorNode sSensor, SensorNode rSensor, String packet, String message, double time) {
 		super();
 		this.type = type ;
 		this.sSensor = sSensor ;
 		this.rSensor = rSensor ;
 		this.packet = packet;
+		this.message = message;
 		this.time = time;
 	}
 	
@@ -25,19 +27,19 @@ public class PacketEvent implements Comparable<PacketEvent> {
 		this.type = type;
 	}
 
-	public String getPacket() {
-		return packet;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setPacket(String packet) {
-		this.packet = packet;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
-	public long getTime() {
+	public double getTime() {
 		return time;
 	}
 
-	public void setTime(long time) {
+	public void setTime(double time) {
 		this.time = time;
 	}
 	
@@ -48,6 +50,14 @@ public class PacketEvent implements Comparable<PacketEvent> {
 	public SensorNode getSSensor() {
 		return sSensor;
 	}
+	
+	public void setPacket(String packet) {
+		this.packet = packet;
+	}
+	
+	public String getPacket() {
+		return packet;
+	}
 
 	@Override
 	public int compareTo(PacketEvent packet) {
@@ -56,8 +66,7 @@ public class PacketEvent implements Comparable<PacketEvent> {
 	
 	@Override
 	public String toString() {
-		//System.out.println(packet+" ["+type+":"+sSensor.getId()+"->"+rSensor.getId()+":"+time+"]");
-		return packet+" ["+type+":"+sSensor.getId()+"->"+rSensor.getId()+":"+time+"]";
+		return message+" ["+type+":"+sSensor.getId()+"->"+rSensor.getId()+":"+time+"]";
 	}
 	
 }

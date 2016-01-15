@@ -19,7 +19,7 @@ public class Command_TSET extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		String tabName = arg1;
 		String x_str = sensor.getScript().getVariableValue(arg2);
 		String y_str = sensor.getScript().getVariableValue(arg3);
@@ -29,7 +29,7 @@ public class Command_TSET extends Command {
 		Object [][] tab = sensor.getScript().getTable(tabName);
 		tab[x][y] = var;
 		SimLog.add("S" + sensor.getId() + " SET TABLE VALUE "+tabName+"["+x+"]["+y+"] = "+var);
-		return 0;
+		return 0 ;
 	}
 
 	@Override

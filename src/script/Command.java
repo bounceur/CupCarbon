@@ -45,7 +45,7 @@ public abstract class Command {
 		currentFor = null;
 	}
 	
-	public abstract long execute() ;
+	public abstract double execute() ;
 	
 	public boolean isIf() {
 		return false ;

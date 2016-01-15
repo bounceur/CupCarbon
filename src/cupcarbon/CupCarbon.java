@@ -93,7 +93,7 @@ import solver.SolverProxyParams;
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
- * @version 2.5 (U-One)
+ * @version 2.6 (U-One)
  */
 
 public class CupCarbon {
@@ -117,9 +117,10 @@ public class CupCarbon {
 	private CupCarbonMap cupCarbonMap;
 	private GpsWindow gpsWindow = new GpsWindow();
 	private DeviceParametersWindow deviceParametersWindow = new DeviceParametersWindow();
+	private RadioParametersWindow radioParametersWindow = new RadioParametersWindow();
 	//private FlyingObjParametersWindow flyingObjParametersWindow = new FlyingObjParametersWindow();
 	private InformationWindow infoWindow = new InformationWindow();
-	private WsnSimulationWindow wsnSimWindow = new WsnSimulationWindow();
+	private WisenSimulationWindow wsnSimWindow = new WisenSimulationWindow();
 
 	private JPanel panel_1;
 	private JLabel lblNodesNumber;
@@ -830,15 +831,14 @@ public class CupCarbon {
 		JSeparator separator_6 = new JSeparator();
 		mnNodes.add(separator_6);
 
-		JMenuItem mntmParameters = new JMenuItem("Device parameters");
-		mntmParameters.addActionListener(new ActionListener() {
+		JMenuItem mntmDevParameters = new JMenuItem("Device parameters");
+		mntmDevParameters.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				openDeviceParemeterWindow();
 			}
 		});
-		mntmParameters.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
-				+ "ui_menu_blue.png"));
-		mnNodes.add(mntmParameters);
+		mntmDevParameters.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "ui_menu_blue.png"));
+		mnNodes.add(mntmDevParameters);
 
 		JMenuItem mntmRouteFromMarkers = new JMenuItem("Route from markers");
 		mntmRouteFromMarkers.addActionListener(new ActionListener() {
@@ -854,6 +854,19 @@ public class CupCarbon {
 				openFlyingObjectParemeterWindow();
 			}
 		});
+		
+		JMenuItem mntmRadioParameters = new JMenuItem("Radio parameters");
+		mntmRadioParameters.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "ui_menu_blue.png"));
+		mntmRadioParameters.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!radioParametersWindow.isVisible()) {
+					radioParametersWindow.setVisible(true);
+					desktopPane.add(radioParametersWindow);
+				}
+				radioParametersWindow.toFront();
+			}
+		});
+		mnNodes.add(mntmRadioParameters);
 		mntmMarkerParameters.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "ui_menu_blue.png"));
 		mnNodes.add(mntmMarkerParameters);
@@ -1606,26 +1619,18 @@ public class CupCarbon {
 			}
 		});
 		toolBar.add(btnMarker);
-
-		JButton btnSensorParameters = new JButton("Device Parameters");
-		btnSensorParameters.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
-				+ "ui_menu_blue.png"));
-		btnSensorParameters.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				openDeviceParemeterWindow();
-			}
-		});
 		
 		JButton btnQuickSimulation = new JButton("");
-		btnQuickSimulation.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
-				+ "run_sim_quick.png"));
+		btnQuickSimulation.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "run_sim_quick.png"));
+				
 		btnQuickSimulation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				WsnSimulationWindow.quickRun();
+				WisenSimulationWindow.quickRun();
 			}
 		});
 		
 		JButton btnConnexions = new JButton("Connexions");
+		btnConnexions.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "connexion.png"));
 		btnConnexions.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DeviceList.resetPropagations();
@@ -1635,6 +1640,7 @@ public class CupCarbon {
 		toolBar.add(btnConnexions);
 		
 		JButton btnPropagations = new JButton("Propagations");
+		btnPropagations.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "propagation.png"));
 		btnPropagations.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DeviceList.calculatePropagations();
@@ -1642,7 +1648,6 @@ public class CupCarbon {
 			}
 		});
 		toolBar.add(btnPropagations);
-		toolBar.add(btnSensorParameters);
 		toolBar.add(btnQuickSimulation);
 		
 		JButton button = new JButton("");
@@ -1650,7 +1655,7 @@ public class CupCarbon {
 				+ "16_square_red.png"));
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WsnSimulationWindow.stopSimulation();
+				WisenSimulationWindow.stopSimulation();
 			}
 		});
 		toolBar.add(button);
@@ -1709,6 +1714,13 @@ public class CupCarbon {
 
 		}
 		// moveToFront(cupCarbonMap);
+//		try {
+//			Class.forName("com.virtualys.cupcarbon.communication.Communication");
+//			com.virtualys.cupcarbon.communication.Communication.initialize();
+//		} catch(ClassNotFoundException e) {
+//			System.out.println("Unknowed exception : " + e.getMessage());
+//		}
+//		/_OM_Vlys_end	
 	}
 
 	private void openDeviceParemeterWindow() {

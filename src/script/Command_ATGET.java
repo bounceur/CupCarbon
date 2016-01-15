@@ -1,8 +1,9 @@
 package script;
 
-import wisen_simulation.SimLog;
-import device.DataInfo;
 import device.SensorNode;
+import radio.Standard;
+import radio.XBeeFrameGenerator;
+import wisen_simulation.SimLog;
 
 public class Command_ATGET extends Command {
 
@@ -16,7 +17,7 @@ public class Command_ATGET extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		String v = "" ;
 		
 		if(arg1.equals("id")) {
@@ -36,11 +37,18 @@ public class Command_ATGET extends Command {
 		}
 		
 		sensor.getScript().addVariable(arg2, v);
+		//double ratio = (sensor.getRadioDataRate()*1.0)/(sensor.getUartDataRate());
+		String message = "XX";
+		//String answer = "XXXX"; //v; We assume that the answer contains 4 bytes
 		
-		double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
-		String message = "ATXX";
-		String answer = "XXXX"; //v; We assume that the answer contains 4 bytes
-		return (long)(Math.round((answer.length()+message.length())*8.0*ratio));
+		String frame = message;
+		if(sensor.getStandard() == Standard.ZIGBEE_802_15_4)
+			frame = XBeeFrameGenerator.at(message);
+		String answer = frame;
+		
+		double ratio = 1.0/sensor.getUartDataRate();
+		return (ratio*(((answer.length()+frame.length())*8.)));
+		//return (long)(Math.round((answer.length()+message.length())*8.0*ratio));
 	}
 
 	@Override

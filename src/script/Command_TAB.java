@@ -17,7 +17,7 @@ public class Command_TAB extends Command {
 	}
 
 	@Override
-	public long execute() {		
+	public double execute() {		
 		String name = arg1;
 		String heigth_str = sensor.getScript().getVariableValue(arg2);			
 		String width_str = sensor.getScript().getVariableValue(arg3);
@@ -27,7 +27,7 @@ public class Command_TAB extends Command {
 		
 		SimLog.add("S" + sensor.getId() + " TABLE "+name+"["+height+"]["+width+"]");
 		
-		return 0;
+		return 0 ;
 	}
 
 	@Override

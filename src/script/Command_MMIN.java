@@ -19,7 +19,7 @@ public class Command_MMIN extends Command {
 	}
 
 	@Override
-	public long execute() {		
+	public double execute() {		
 		SimLog.add("S" + sensor.getId() + " MMIN");
 		String arg = arg1;
 		String arg1s = sensor.getScript().getVariableValue("$"+arg);
@@ -29,7 +29,7 @@ public class Command_MMIN extends Command {
 			sensor.getScript().addVariable(arg, arg2s);
 			sensor.getScript().addVariable(arg3, idMin);
 		}		
-		return 0;		
+		return 0 ;		
 	}
 
 	@Override

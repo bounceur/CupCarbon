@@ -7,16 +7,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 import map.MapLayer;
-import physical_layer.Ber;
-import three_d_visual.ThreeDUnityIHM;
+import radio.Ber;
+import radio.Standard;
+import radio.XBeeFrameGenerator;
 import utilities.MapCalc;
+import utilities.UColor;
+import visualisation.Visualisation;
 import wisen_simulation.SimLog;
 import wisen_simulation.SimulationInputs;
 
 public class Channels {
 	
-	protected static LinkedList<List<PacketEvent>> channelEventList = new LinkedList<List<PacketEvent>>();
-	protected static LinkedList<Integer> iMins = new LinkedList<Integer>();	
+	public static LinkedList<List<PacketEvent>> channelEventList = new LinkedList<List<PacketEvent>>();
+	public static LinkedList<Integer> iMins = new LinkedList<Integer>();	
 	
 	public Channels() {
 		super();
@@ -30,15 +33,17 @@ public class Channels {
 		}
 	}
 	
-	public static void addPacket(int type, String message, SensorNode sSensor, SensorNode rSensor) {
+	public static void addPacketEvent(int type, String packet, String message, SensorNode sSensor, SensorNode rSensor) {
+		// type=0 : Direct sendind
+		// type=1 : ACK sendind
+		// type=2 : Broadcast sendind 
 		SimLog.add("S" + rSensor.getId() + " is receiving the message : \"" + message + "\" in its buffer.");
-		double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
-		long duration =  ((int)(Math.round(message.length()*8.*ratio))) + (message.length()*8);
-		//if(sSensor.isDistanceMode() && rSensor.isDistanceMode())
-		//	duration = sSensor.getDistanceModeDelay()*DataInfo.ChDataRate;
+		double ratio1 = 1.0/sSensor.getRadioDataRate();
+		double ratio2 = 1.0/sSensor.getUartDataRate();
+		double duration =  (ratio1*(packet.length())) + (ratio2*(message.length()*8)) ;
+		// ((int)(Math.round(message.length()*8.*ratio))) + (message.length()*8);
 		
-		
-		long lastTime = 0;
+		double lastTime = 0;
 		if (channelEventList.get(sSensor.getCh()).size()>0 && type != 2) { 
 				lastTime = channelEventList.get(sSensor.getCh()).get(channelEventList.get(sSensor.getCh()).size()-1).getTime();
 		}
@@ -47,8 +52,8 @@ public class Channels {
 			rSensor.setReceiving(true);
 		}
 		
-		PacketEvent packet = new PacketEvent(type, sSensor, rSensor, message, lastTime+duration);		
-		channelEventList.get(sSensor.getCh()).add(packet);
+		PacketEvent packetEvent = new PacketEvent(type, sSensor, rSensor, packet, message, lastTime+duration);		
+		channelEventList.get(sSensor.getCh()).add(packetEvent);
 	}
 	
 	public static void receivedMessages() {
@@ -57,32 +62,41 @@ public class Channels {
 			while(!stop) {
 				if(packetEventList.size()>0) {
 					if(packetEventList.get(0).getTime()==0) {
-						//Layer.getMapViewer().repaint();
 						int type = packetEventList.get(0).getType();
-						String message = packetEventList.get(0).getPacket();
+						String packet = packetEventList.get(0).getPacket();
+						String message = packetEventList.get(0).getMessage();
 						SensorNode rSensor = packetEventList.get(0).getRSensor();
 						SensorNode sSensor = packetEventList.get(0).getSSensor();					
 						
+						rSensor.consumeRx(packet.length());
+						
 						boolean berOk = true;
 						
-						berOk = Ber.berOk(message);
+						berOk = Ber.berOk(packet, rSensor);
 						
 						sSensor.setSending(false);
 						rSensor.setReceiving(false);
 						
+						// type=0 : Direct reception
+						// type=1 : ACK reception
+						// type=2 : Broadcast reception 
 						if ((type == 0) || (type == 2)) {	
 							if (berOk || (type == 2)) {
-								if(!rSensor.isSleeping())
-									rSensor.addMessageToBuffer(packetEventList.get(0).getPacket().length()*8, packetEventList.get(0).getPacket());
-								if(rSensor.getScript().getCurrent().isWait())
+								
+								rSensor.addMessageToBuffer(packetEventList.get(0).getMessage());
+								
+								if(rSensor.getScript().getCurrent().isWait()) {
 									rSensor.setEvent(0);
+								}
+								
 								if((type == 0) && (SimulationInputs.ack)) {									
-									addPacket(1, "0", rSensor, sSensor);
+									addPacketEvent(1, XBeeFrameGenerator.ackInBin("0", "00", "00", Standard.getSubChannel(rSensor.getStandard())*8), "0", rSensor, sSensor);
 								}
 							}
 							else
-								addPacket(1, "1", rSensor, sSensor);
+								addPacketEvent(1, XBeeFrameGenerator.ackInBin("1", "00", "00", Standard.getSubChannel(rSensor.getStandard())*8), "1", rSensor, sSensor);
 						}
+						
 						if (type == 1) {
 							if (message.equals("0")) {
 								rSensor.setAckOk(true);
@@ -93,7 +107,8 @@ public class Channels {
 								rSensor.setEvent(0);
 							}
 						}
-						ThreeDUnityIHM.comDeleteArrow(packetEventList.get(0).getSSensor(), packetEventList.get(0).getRSensor());
+						
+						Visualisation.comDeleteArrow(packetEventList.get(0).getSSensor(), packetEventList.get(0).getRSensor());
 						packetEventList.remove(0);						
 						if(packetEventList.size()>0) {
 							packetEventList.get(0).getSSensor().setSending(true);
@@ -108,28 +123,28 @@ public class Channels {
 		}
 	}
 	
-	public static void goToTheNextTime(long min) {
-		for (List<PacketEvent> packetEventList : channelEventList) {
-			for (PacketEvent packet : packetEventList) {
+	public static void goToTheNextTime(double min) {
+		for (List<PacketEvent> packetEvent : channelEventList) {
+			for (PacketEvent packet : packetEvent) {
 				packet.setTime(packet.getTime()-min);
 			}
 		}
 	}
 	
-	public static long getMin() {
-		long min = Long.MAX_VALUE;
-		for (List<PacketEvent> packetEventList : channelEventList) {		
-			if(packetEventList.size()>0) {
-				if (packetEventList.get(0).getTime() < min)
-					min = packetEventList.get(0).getTime();
+	public static double getMin() {
+		double min = Double.MAX_VALUE;
+		for (List<PacketEvent> PacketEventList : channelEventList) {		
+			if(PacketEventList.size()>0) {
+				if (PacketEventList.get(0).getTime() < min)
+					min = PacketEventList.get(0).getTime();
 			}
 		}
 		return min;
 	}
 	
-	public static void drawChannelLinks(Graphics g) {
-		for (List<PacketEvent> packetEventList : channelEventList) {
-			if(packetEventList.size()>0) {
+	public synchronized static void drawChannelLinks(Graphics g) {
+		for (List<PacketEvent> PacketEventList : channelEventList) {
+			if(PacketEventList.size()>0) {
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setStroke(new BasicStroke(2.5f));
 			    if(MapLayer.getMapViewer().getZoom() < 2) {
@@ -145,17 +160,21 @@ public class Channels {
 				double dy = 0;
 				double alpha = 0;
 				int arrColor = 0;
-				for(PacketEvent pev : packetEventList) {
+				for(PacketEvent pev : PacketEventList) {
+					//System.out.println(pev);
 					if(pev.getSSensor().isSending() && pev.getRSensor().isReceiving()) {
 						if(pev.getType()==0 || pev.getType()==2 || ((pev.getType()==1) && SimulationInputs.showAckLinks)) {
 							g.setColor(pev.getSSensor().getRadioLinkColor());
-							arrColor = 3; 
+							if (pev.getSSensor().getRadioLinkColor() == UColor.RED) 
+								arrColor = 0;
+							else 
+								arrColor = 1; 
 							if((pev.getType()==1) && SimulationInputs.showAckLinks) {
 								g.setColor(pev.getSSensor().getACKLinkColor());
-								arrColor = 5;
+								arrColor = 2;
 							}
 							
-							ThreeDUnityIHM.comAddArrow((SensorNode)pev.getSSensor(), (SensorNode)pev.getRSensor(), 2, arrColor, 2);
+							Visualisation.comAddArrow((SensorNode)pev.getSSensor(), (SensorNode)pev.getRSensor(), 2, arrColor, 2);
 							
 							coord = MapCalc.geoToIntPixelMapXY(pev.getSSensor().getLatitude(), pev.getSSensor().getLongitude());
 							lx1 = coord[0];
@@ -187,9 +206,9 @@ public class Channels {
 	
 	public static void display() {
 		String s="";
-		for (List<PacketEvent> packetEventList : channelEventList) {			
+		for (List<PacketEvent> PacketEventList : channelEventList) {			
 			s += "[" ;
-			for (PacketEvent p : packetEventList) {
+			for (PacketEvent p : PacketEventList) {
 				s += p.toString() + " | ";
 			}
 			s += "]\n";

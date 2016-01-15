@@ -23,12 +23,11 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
-import device.DataInfo;
 import map.MapLayer;
 import wisen_simulation.SimulationInputs;
 import wisen_simulation.WisenSimulation;
 
-public class WsnSimulationWindow extends JInternalFrame {
+public class WisenSimulationWindow extends JInternalFrame {
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,7 +35,6 @@ public class WsnSimulationWindow extends JInternalFrame {
 
 	private JPanel panel;
 	private JTextField iterNumberTextField;
-	private JComboBox<String> freqComboBox;
 	private static JProgressBar progressBar;
 	private static JLabel stateLabel;
 	private JCheckBox cboxMobility;
@@ -51,6 +49,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 	private JComboBox<String> ackTypeCB;
 	private JCheckBox checkBoxAck;
 	private JCheckBox chbxSymRadio;
+	private JCheckBox chckbxCpuDrift;
 	
 	/**
 	 * Launch the application.
@@ -59,7 +58,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					WsnSimulationWindow frame = new WsnSimulationWindow();
+					WisenSimulationWindow frame = new WisenSimulationWindow();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -71,7 +70,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-	public WsnSimulationWindow() {
+	public WisenSimulationWindow() {
 		setTitle("Simulation Parameters");
 		setIconifiable(true);
 		setClosable(true);
@@ -114,21 +113,6 @@ public class WsnSimulationWindow extends JInternalFrame {
 		panel_3.add(panel_4);
 		panel_4.setLayout(new BoxLayout(panel_4, BoxLayout.X_AXIS));
 
-		JLabel lblSerialFrequency = new JLabel("UART Data Rate ");
-		lblSerialFrequency.setFont(new Font("Arial", Font.PLAIN, 12));
-		panel_4.add(lblSerialFrequency);
-
-		freqComboBox = new JComboBox<String>();
-		freqComboBox.setFont(new Font("Arial", Font.PLAIN, 12));
-		panel_4.add(freqComboBox);
-		freqComboBox.setToolTipText("UART Data Rate");
-		freqComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"-", "2400", "3600", "4800", "9600","38400","115200"}));
-		freqComboBox.setSelectedIndex(4);
-
-		JLabel lblBaudRate = new JLabel(" baud");
-		lblBaudRate.setFont(new Font("Arial", Font.PLAIN, 12));
-		panel_4.add(lblBaudRate);
-
 		JPanel panel_18 = new JPanel();
 		panel_18.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_3.add(panel_18);
@@ -156,6 +140,10 @@ public class WsnSimulationWindow extends JInternalFrame {
 		chbxSymRadio.setSelected(true);
 		chbxSymRadio.setFont(new Font("Arial", Font.PLAIN, 12));
 		panel_17.add(chbxSymRadio);
+		
+		chckbxCpuDrift = new JCheckBox("CPU Drift");
+		chckbxCpuDrift.setFont(new Font("Arial", Font.PLAIN, 12));
+		panel_17.add(chckbxCpuDrift);
 
 		JPanel panel_7 = new JPanel();
 		panel_7.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -328,19 +316,8 @@ public class WsnSimulationWindow extends JInternalFrame {
 		stateLabel.setText(s);
 	}
 
-	public void simulateCallBack() {
-		if (freqComboBox.getSelectedItem().equals("-"))
-			DataInfo.UartDataRate = 0;
-		else
-			DataInfo.UartDataRate = Integer.parseInt((String) freqComboBox.getSelectedItem());
+	public void simulateCallBack() {		
 		apply();
-//		SimulationInputs.iterNumber = Integer.parseInt(iterNumberTextField.getText());
-//		//SimulationInputs.energyMax = Integer.parseInt(energyMaxTextField.getText());
-//		SimulationInputs.mobility = cboxMobility.isSelected();
-//		SimulationInputs.visualDelay = Integer.parseInt(vdTextField.getText());
-//		SimulationInputs.displayLog = chckbxGenerateLog.isSelected();
-//		SimulationInputs.displayResults = chckbxGenerateResults.isSelected();
-//		SimulationInputs.showInConsole = chckbxShowInConsole.isSelected(); 
 		wisenSimulation = new WisenSimulation();
 		wisenSimulation.start();
 	}
@@ -355,11 +332,6 @@ public class WsnSimulationWindow extends JInternalFrame {
 	}
 
 	public void apply() {
-		if (freqComboBox.getSelectedItem().equals("-"))
-			DataInfo.UartDataRate = 0;
-		else
-			DataInfo.UartDataRate = Integer.parseInt((String) freqComboBox.getSelectedItem());
-		
 		SimulationInputs.iterNumber = Integer.parseInt(iterNumberTextField.getText());
 		SimulationInputs.mobility = cboxMobility.isSelected();
 		SimulationInputs.visualDelay = Integer.parseInt(vdTextField.getText());
@@ -373,6 +345,7 @@ public class WsnSimulationWindow extends JInternalFrame {
 		SimulationInputs.showAckLinks = chckbxAck.isSelected();
 		SimulationInputs.ack = checkBoxAck.isSelected();
 		SimulationInputs.symmetricalLinks = chbxSymRadio.isSelected();
+		SimulationInputs.cpuDrift = chckbxCpuDrift.isSelected();
 		MapLayer.getMapViewer().repaint();
 	}
 	

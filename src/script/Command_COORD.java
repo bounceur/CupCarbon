@@ -1,6 +1,5 @@
 package script;
 
-import map.MapLayer;
 import device.SensorNode;
 
 public class Command_COORD extends Command {
@@ -17,15 +16,15 @@ public class Command_COORD extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		String vArg1 = sensor.getScript().getVariableValue(arg1);
 		String vArg2 = sensor.getScript().getVariableValue(arg2);
 		String vArg3 = sensor.getScript().getVariableValue(arg3);
 		sensor.setLatitude(Double.valueOf(vArg1));
 		sensor.setLongitude(Double.valueOf(vArg2));
-		int t = Integer.valueOf(vArg3);
-		MapLayer.getMapViewer().repaint();	
-		return t;
+		double t = Integer.valueOf(vArg3);
+		//MapLayer.getMapViewer().repaint();	
+		return t ;
 	}
 
 	@Override

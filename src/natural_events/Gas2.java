@@ -198,7 +198,7 @@ public class Gas2 extends DeviceWithoutRadio {
 	}
 	
 	@Override
-	public long getNextTime() { return 0 ;}
+	public double getNextTime() { return 0 ;}
 	
 	@Override
 	public void loadRouteFromFile() {}

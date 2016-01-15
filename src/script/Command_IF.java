@@ -22,7 +22,7 @@ public class Command_IF extends Command {
 	}
 	
 	@Override
-	public long execute() {		
+	public double execute() {		
 		String condition = arg.replaceFirst("if", "");		
 		EvalCondition evalCondtion = new EvalCondition(sensor);
 		
@@ -38,7 +38,7 @@ public class Command_IF extends Command {
 				sensor.getScript().setIndex(endIfIndex);
 			}
 		
-		return 0;
+		return 0 ;
 	}
 	
 	public void setParent(Command_IF parent){

@@ -18,7 +18,7 @@ public class Command_FUNCTION extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		SimLog.add("S" + sensor.getId() + " CALL FUNCTION "+arg1+"("+arg2+", "+arg3+")");
 		String arg0 = arg1;
 		String function = arg2;			
@@ -26,7 +26,7 @@ public class Command_FUNCTION extends Command {
 		sensor.getScript().variablesToValues(args);
 		String value = ScriptFunctions.function(function, args);
 		sensor.getScript().addVariable(arg0, value);
-		return 0;
+		return 0 ;
 	}
 
 	@Override

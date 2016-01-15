@@ -57,9 +57,9 @@ import markers.Marker;
 import markers.MarkerList;
 import natural_events.Gas;
 import overpass.OsmOverpass;
-import three_d_visual.ThreeDUnityIHM;
 import utilities.MapCalc;
 import utilities.UColor;
+import visualisation.Visualisation;
 
 public class MapLayer implements Painter<Object>, MouseListener,
 		MouseMotionListener, KeyListener {
@@ -266,7 +266,7 @@ public class MapLayer implements Painter<Object>, MouseListener,
 				/* Tanguy */
 				addDeviceAction("SensorNode");
 				/* ------ */
-				ThreeDUnityIHM.addStdSensorNode(sn);
+				Visualisation.addStdSensorNode(sn);
 			}
 			if (lastKey == '2') {
 				DeviceList.add(new Gas(gp.getLongitude(), gp.getLatitude(), 0, 10, -1));
@@ -294,14 +294,14 @@ public class MapLayer implements Painter<Object>, MouseListener,
 				//		.getLongitude(), 0, 100, -1));
 				mapViewer.repaint();
 				addDeviceAction("BaseStation");
-				ThreeDUnityIHM.addBaseStation(bs);
+				Visualisation.addBaseStation(bs);
 			}
 			if (lastKey == '6') {
 				Mobile mobile = new Mobile(gp.getLongitude(), gp.getLatitude(), 0, 10, -1);
 				DeviceList.add(mobile);
 				mapViewer.repaint();
 				addDeviceAction("Mobile");
-				ThreeDUnityIHM.addMobile(mobile);
+				Visualisation.addMobile(mobile);
 			}
 			if (lastKey == '7') {
 				DeviceList.add(new MobileWithRadio(gp.getLongitude(), gp.getLatitude(), 0, 10, 100, -1));
@@ -313,7 +313,7 @@ public class MapLayer implements Painter<Object>, MouseListener,
 				MarkerList.add(marker);
 				mapViewer.repaint();
 				addMarkerAction("Marker");
-				ThreeDUnityIHM.addMarker(marker);
+				Visualisation.addMarker(marker);
 			}
 		}
 		

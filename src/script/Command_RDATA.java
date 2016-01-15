@@ -14,7 +14,7 @@ public class Command_RDATA extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		data = sensor.getScript().getVariableValue(args[1]);
 		SimLog.add("S" + sensor.getId() + " Read DATA: "+data);
 		String [] tab = data.split("#");
@@ -27,7 +27,7 @@ public class Command_RDATA extends Command {
 				System.err.println("S"+sensor.getId()+" [ERROR RDATA]: No data to read!");
 			}
 		}
-		return 0;
+		return 0 ;
 	}
 
 	@Override

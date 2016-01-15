@@ -15,7 +15,7 @@ public class Command_GETPOS2 extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		String v1 = "" ;
 		String v2 = "" ;
 		SimLog.add("S" + sensor.getId() + " GET POSITION2.");
@@ -23,7 +23,7 @@ public class Command_GETPOS2 extends Command {
 		v2 = sensor.getLatitude()+"";
 		sensor.getScript().addVariable(arg1, v1);
 		sensor.getScript().addVariable(arg2, v2);
-		return 0;
+		return 0 ;
 	}
 
 	@Override

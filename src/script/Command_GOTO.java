@@ -12,26 +12,26 @@ public class Command_GOTO extends Command {
 	}
 	
 	@Override
-	public long execute() {
+	public double execute() {
 		
 		if(arg.equals("++")) {
 			sensor.getScript().next();
-			return 0;
+			return 0 ;
 		}
 		if(arg.equals("--")) {
 			sensor.getScript().previous();
-			return 0;
+			return 0 ;
 		}
 		String idxStr = sensor.getScript().getVariableValue(arg);
 		int idx;
 		if(Character.isDigit(idxStr.charAt(0))) {
 			idx = Integer.valueOf(idxStr);
 			sensor.getScript().setIndex(idx-2);
-			return 0;
+			return 0 ;
 		}
 		idx = sensor.getScript().getLineOfLabel(arg);
 		sensor.getScript().setIndex(idx-2);
-		return 0;
+		return 0 ;
 	}
 			
 	@Override

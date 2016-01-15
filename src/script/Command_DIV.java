@@ -17,14 +17,14 @@ public class Command_DIV extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		String v1 = sensor.getScript().getVariableValue(arg2);
 		String v2 = sensor.getScript().getVariableValue(arg3);
 		double z = 0;
 		z = Double.valueOf(v1) / Double.valueOf(v2);
 		SimLog.add("S" + sensor.getId() + " " + arg1 + "=" + Double.valueOf(v1) + "/" + Double.valueOf(v2) + " -> " + z);
 		sensor.getScript().addVariable(arg1, "" + z);
-		return 0;
+		return 0 ;
 	}
 	
 	@Override

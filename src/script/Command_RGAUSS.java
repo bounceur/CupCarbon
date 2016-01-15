@@ -15,12 +15,12 @@ public class Command_RGAUSS extends Command {
 	}
 
 	@Override
-	public long execute() {	
+	public double execute() {	
 		Random r = new Random();
 		double rand = r.nextGaussian(); 
 		SimLog.add("S" + sensor.getId() + " GAUSS RAND: "+rand);
 		sensor.getScript().addVariable(arg, ""+rand);
-		return 0;
+		return 0 ;
 	}
 
 	@Override

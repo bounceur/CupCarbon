@@ -1,9 +1,8 @@
 package script;
 
-import wisen_simulation.SimLog;
 import arduino.Bracket;
-import device.DataInfo;
 import device.SensorNode;
+import wisen_simulation.SimLog;
 
 public class Command_WAIT extends Command {
 	
@@ -15,17 +14,17 @@ public class Command_WAIT extends Command {
 	
 	public Command_WAIT(SensorNode sensor, String arg) {
 		this.sensor = sensor ;
-		this.arg = ""+ ((long)(Long.parseLong(sensor.getScript().getVariableValue(arg)) * DataInfo.ChDataRate / 1000.)) ;
+		this.arg = ""+ ((long)(Long.parseLong(sensor.getScript().getVariableValue(arg)) * sensor.getRadioDataRate() / 1000.)) ;
 	}
 
 	@Override
-	public long execute() {		
-		long event = 0 ;
+	public double execute() {		
+		double event = 0 ;
 
 		if (sensor.dataAvailable()) {			
 			SimLog.add("S" + sensor.getId() + " Buffer available, exit waiting.");
 			sensor.getScript().setWiting(false);
-			event = 0;
+			return 0 ;
 		} 
 		else {
 			SimLog.add("S" + sensor.getId() + " is waiting for data ...");
@@ -33,9 +32,9 @@ public class Command_WAIT extends Command {
 			sensor.getScript().setWiting(true);
 			
 			if (arg.equals(""))
-				event = Long.MAX_VALUE;
+				event = Double.MAX_VALUE;
 			else
-				event = Long.parseLong(sensor.getScript().getVariableValue(arg));
+				event = (Double.parseDouble(sensor.getScript().getVariableValue(arg)));
 		}
 		
 		return event;

@@ -16,7 +16,7 @@ public class Command_GETINFO extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 
 		SimLog.add("S" + sensor.getId() + " GET INFO.");
 		
@@ -29,7 +29,7 @@ public class Command_GETINFO extends Command {
 					sensor.getScript().addVariable(arg, "0");
 			}
 		}
-		return 0;
+		return 0 ;
 	}
 
 	@Override

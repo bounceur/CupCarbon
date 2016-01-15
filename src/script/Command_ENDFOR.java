@@ -13,7 +13,7 @@ public class Command_ENDFOR extends Command {
 	}
 
 	@Override
-	public long execute() {		
+	public double execute() {		
 		SimLog.add("S" + sensor.getId() + " END FOR.");
 		
 		Script script = sensor.getScript();
@@ -46,7 +46,7 @@ public class Command_ENDFOR extends Command {
 			commandFor.init();
 		}
 		
-		return 0;
+		return 0 ;
 	}
 	
 	public int getIndex() {

@@ -19,8 +19,8 @@
 
 package wisen_simulation;
 
-import device.RadioDetection;
-import physical_layer.Ber;
+import propagation.RadioDetection;
+import radio.Ber;
 
 /**
  * @author Ahcene Bounceur
@@ -33,6 +33,8 @@ public class SimulationInputs {
 	
 	public static final int NONE = 0;
 	public static final int CSMA = 1;
+	
+	public static boolean cpuDrift = false;
 	
 	public static boolean mobility = false;
 	public static int iterNumber = 10000;

@@ -1,7 +1,6 @@
 package script;
 
 import device.SensorNode;
-import device.DataInfo;
 import wisen_simulation.SimLog;
 
 public class Command_DELAY extends Command {
@@ -14,10 +13,12 @@ public class Command_DELAY extends Command {
 	}
 
 	@Override
-	public long execute() {				
-		String carg = ""+ ((long)(Long.parseLong(sensor.getScript().getVariableValue(arg)) * DataInfo.ChDataRate / 1000.)) ;
-		SimLog.add("S" + sensor.getId() + " starts delaying for " + (Integer.valueOf(carg)/DataInfo.ChDataRate*1000.) + " milliseconds");
-		return Long.parseLong(carg);
+	public double execute() {				
+		//String carg = ""+ ((long)(Long.parseLong(sensor.getScript().getVariableValue(arg)) * sensor.getRadioDataRate() / 1000.)) ;
+		double carg = Double.parseDouble(sensor.getScript().getVariableValue(arg));
+		//SimLog.add("S" + sensor.getId() + " starts delaying for " + (Integer.valueOf(carg)/sensor.getRadioDataRate()*1000.) + " milliseconds");
+		SimLog.add("S" + sensor.getId() + " starts delaying for " + carg + " milliseconds");
+		return carg/1000. ;
 	}
 	
 	public boolean isDelay() {
@@ -26,7 +27,7 @@ public class Command_DELAY extends Command {
 	
 	@Override
 	public String getArduinoForm() { 
-		return "\tdelay("+(Integer.valueOf(arg)/(DataInfo.ChDataRate/1000.))+");";
+		return "\tdelay("+(Integer.valueOf(arg)/(sensor.getRadioDataRate()/1000.))+");";
 	}
 	
 	@Override

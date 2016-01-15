@@ -1,6 +1,5 @@
 package script;
 
-import map.MapLayer;
 import device.SensorNode;
 
 public class Command_MOVE extends Command {
@@ -13,14 +12,14 @@ public class Command_MOVE extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		String vArg1 = sensor.getScript().getVariableValue(arg1);
-		int t = Integer.valueOf(vArg1);
+		double t = Integer.valueOf(vArg1);
 		if (sensor.canMove()) {
 			sensor.moveToNext(true, 0);									
 		}
-		MapLayer.getMapViewer().repaint();	
-		return t;
+		//MapLayer.getMapViewer().repaint();	
+		return t ;
 	}
 
 	@Override

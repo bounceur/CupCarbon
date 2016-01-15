@@ -16,14 +16,14 @@ public class Command_ROTATE extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		String vArg1 = sensor.getScript().getVariableValue(arg1);
 		String vArg2 = sensor.getScript().getVariableValue(arg2);
 		double n = Double.valueOf(vArg1);
-		int t = Integer.valueOf(vArg2);
+		double t = Integer.valueOf(vArg2);
 		((MediaSensorNode) sensor).setSensorUnitDec(n);
 		MapLayer.getMapViewer().repaint();	
-		return t;
+		return t ;
 	}
 
 	@Override

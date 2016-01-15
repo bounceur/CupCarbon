@@ -40,8 +40,8 @@ import map.MapLayer;
 import markers.Marker;
 import natural_events.Gas;
 import solver.SensorGraph;
-import three_d_visual.ThreeDUnityIHM;
 import utilities.MapCalc;
+import visualisation.Visualisation;
 
 /**
  * @author Ahcene Bounceur
@@ -331,13 +331,13 @@ public class DeviceList {
 		}
 		
 		for (Device n : getSensorNodes()) {
-			ThreeDUnityIHM.updateStdSensorNode((SensorNode) n);
+			//Visualisation.updateStdSensorNode((SensorNode) n);
 			if(propagationsCalculated)
 				n.drawRadioPropagations(g);
 			else
 				n.drawRadioLinks(g);
 		}
-		
+
 		Channels.drawChannelLinks(g);
 		
 		for (Device n : nodes) {
@@ -371,7 +371,7 @@ public class DeviceList {
 		MapLayer.getMapViewer().removeMouseMotionListener(node);
 		MapLayer.getMapViewer().removeKeyListener(node);
 		nodes.remove(idx);
-		ThreeDUnityIHM.removeDevice(node);
+		Visualisation.removeDevice(node);
 		node = null;
 	}
 	
@@ -444,10 +444,9 @@ public class DeviceList {
 		}
 	}
 
-	public static void updateFromMap(String xS, String yS, String radiusS,
-			String radioRadiusS, String captureRadiusS, String gpsFileName,
-			String eMax, String eTx, String eRx, String eS, String beta, String targetName, String eSlp, String eL
-			) {
+	public static void updateDeviceParaFromMap(String xS, String yS, String radiusS,
+			String captureRadiusS, String scriptFileName, String gpsFileName,
+			String eMax, String eS, String uart_dr) {
 		Device node;
 		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
 			node = iterator.next();
@@ -455,17 +454,26 @@ public class DeviceList {
 				node.setLongitude(Double.valueOf(xS));
 				node.setLatitude(Double.valueOf(yS));
 				node.setRadius(Double.valueOf(radiusS));
-				node.setRadioRadius(Double.valueOf(radioRadiusS));
 				node.setSensorUnitRadius(Double.valueOf(captureRadiusS));
+				node.setScriptFileName(scriptFileName);
 				node.setGPSFileName(gpsFileName);
 				node.getBattery().setLevel(Integer.valueOf(eMax));
+				node.setES(Double.valueOf(eS));				
+			}
+		}
+		MapLayer.getMapViewer().repaint();
+	}
+	
+	public static void updateRadioParaFromMap(String radioRadiusS, String eTx, String eRx, String beta, String eSlp, String eL) {
+		Device node;
+		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
+			node = iterator.next();
+			if (node.isSelected()) {
+				node.setRadioRadius(Double.valueOf(radioRadiusS));
 				node.setETx(Double.valueOf(eTx));
 				node.setERx(Double.valueOf(eRx));
-				node.setES(Double.valueOf(eS));
 				node.setESlp(Double.valueOf(eSlp));
-				node.setES(Double.valueOf(eL));
-				//node.setBeta(Double.valueOf(beta));
-				node.setTrgetName(targetName);				
+				node.setES(Double.valueOf(eL));			
 			}
 		}
 		MapLayer.getMapViewer().repaint();
@@ -717,6 +725,15 @@ public class DeviceList {
 		MapLayer.getMapViewer().repaint();
 	}
 	
+	public static void setElevation(String value) {
+		for (Device d : nodes) {
+			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+				d.setElevation(Double.valueOf(value));
+			}
+		}
+		MapLayer.getMapViewer().repaint();
+	}
+	
 	public static void setRadius(String value) {
 		for (Device d : nodes) {
 			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
@@ -864,6 +881,38 @@ public class DeviceList {
 		for(Device device : nodes) {
 			device.resetPropagations();
 		}
+	}
+
+	public static void setUartDataRate(String selectedItem) {
+		for (Device device : nodes) {
+			if (device.isSelected()) {
+				if (selectedItem.equals("-"))
+					device.setUartDataRate(Integer.MAX_VALUE);
+				else
+					device.setUartDataRate(Integer.parseInt(selectedItem));
+			}
+		}
+		MapLayer.getMapViewer().repaint();
+	}
+
+	public static void setRadioDataRate(String text) {
+		for (Device device : nodes) {
+			if (device.isSelected()) {
+				device.setRadioDataRate(Integer.parseInt(text));
+			}
+		}
+		MapLayer.getMapViewer().repaint();		
+		
+	}
+
+	public static void setStd(String str) {
+		for (Device d : nodes) {
+			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+				d.setStd(str);
+				
+			}
+		}
+		MapLayer.getMapViewer().repaint();		
 	}
 	
 }

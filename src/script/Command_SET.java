@@ -15,12 +15,12 @@ public class Command_SET extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		SimLog.add("S" + sensor.getId() + " Set " + arg1 + "=" + arg2);
 		String arg = sensor.getScript().getVariableValue(arg2);
 		//if (arg.equals("\\")) arg = "";
 		sensor.getScript().addVariable(arg1, arg);
-		return 0;
+		return 0 ;
 	}
 
 	@Override

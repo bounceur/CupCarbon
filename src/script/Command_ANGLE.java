@@ -19,7 +19,7 @@ public class Command_ANGLE extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		SimLog.add("S" + sensor.getId() + " Calculate Angle.");
 		
 		String prec = sensor.getScript().getVariableValue(arg2);

@@ -44,7 +44,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	protected int nLoop = 0;
 	protected int routeIndex = 0;
 	protected boolean readyForSimulation = false;
-
+	
 	/**
 	 * Empty constructor
 	 */
@@ -177,14 +177,15 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	// Duration to the Next Time
 	// ------------------------------------------------------------------------
 	@Override
-	public long getNextTime() {
+	public double getNextTime() {
 		if (routeTime.size() > 0) {
 			int diff = 0;
 			if (routeIndex <= 0)
 				diff = (int) (1 * routeTime.get(0));
 			else 
 				diff = (int) (routeTime.get(routeIndex) - routeTime.get(routeIndex - 1));
-			return ((diff * 1000) * DataInfo.ChDataRate / 1000);
+			return (diff * 1000);
+			//return ((diff * 1000) * WisenSimulation.chDataRate / 1000);
 		}
 		return 0;
 	}

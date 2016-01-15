@@ -160,9 +160,6 @@ public final class SensorAddCommand {
 		if (inst[0].toLowerCase().equals("atpl")) {
 			command = new Command_ATPL(sensorNode, inst[1]);
 		}
-		if (inst[0].toLowerCase().equals("atsm")) {
-			command = new Command_ATSM(sensorNode, inst[1]);
-		}
 		if (inst[0].toLowerCase().equals("while")) {
 			endof.push("endwhile");
 			Command_WHILE commandWhile = new Command_WHILE(sensorNode, instStr);
@@ -246,6 +243,10 @@ public final class SensorAddCommand {
 		
 		if (inst[0].toLowerCase().equals("getinfo")) {
 			command = new Command_GETINFO(sensorNode, inst[1]);
+		}
+		
+		if (inst[0].toLowerCase().equals("time")) {
+			command = new Command_TIME(sensorNode, inst[1]);
 		}
 		
 		//-------

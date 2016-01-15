@@ -1,11 +1,13 @@
 package script;
 
 import device.SensorNode;
+import radio.Standard;
+import radio.XBeeFrameGenerator;
 
 public class Command_ATND extends Command {
 
 	protected String arg1 = "";
-	protected String arg2 = "3000" ;
+	protected double arg2 = 3.0;//3 seconds ;
 	
 	public Command_ATND(SensorNode sensor, String arg1) {
 		this.sensor = sensor ;
@@ -18,11 +20,19 @@ public class Command_ATND extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		String args = arg1;
 		int n = sensor.getSensorNodeNeighbors().size();
 		sensor.getScript().addVariable(args, ""+n);
-		return Long.parseLong(sensor.getScript().getVariableValue(arg2));
+		
+		String message = "ND";
+		
+		String frame = message;
+		if(sensor.getStandard() == Standard.ZIGBEE_802_15_4)
+			frame = XBeeFrameGenerator.at(message);
+		
+		double ratio = 1.0/sensor.getUartDataRate();		
+		return arg2 + (ratio*(frame.length()*8.));
 	}
 	
 	@Override

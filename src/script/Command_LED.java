@@ -1,9 +1,9 @@
 package script;
 
-import utilities.UColor;
-import wisen_simulation.SimLog;
-import map.MapLayer;
 import device.SensorNode;
+import utilities.UColor;
+import visualisation.Visualisation;
+import wisen_simulation.SimLog;
 
 public class Command_LED extends Command {
 
@@ -21,13 +21,14 @@ public class Command_LED extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		SimLog.add("S" + sensor.getId() + " LED "+arg1+" -> Color = "+arg2);
 		int ledColor = Double.valueOf(sensor.getScript().getVariableValue(arg2)).intValue();
 		if(ledColor>UColor.colorTab.length) ledColor= ledColor % UColor.colorTab.length;
 		sensor.setLedColor(ledColor);
-		MapLayer.getMapViewer().repaint();
-		return 0;
+		Visualisation.updateStdSensorNode(sensor);
+		//MapLayer.getMapViewer().repaint();
+		return 0 ;
 	}
 
 	@Override

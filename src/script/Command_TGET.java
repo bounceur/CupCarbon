@@ -19,7 +19,7 @@ public class Command_TGET extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		String tabName = arg1;
 		String x_str = sensor.getScript().getVariableValue(arg2);
 		String y_str = sensor.getScript().getVariableValue(arg3);
@@ -31,7 +31,7 @@ public class Command_TGET extends Command {
 		String val = (String) tab[x][y];
 		sensor.getScript().putVariable(var, val);	
 		SimLog.add("S" + sensor.getId() + " GET TABLE VALUE "+tabName+"["+x+"]["+y+"] -> "+val);
-		return 0;
+		return 0 ;
 	}
 
 	@Override

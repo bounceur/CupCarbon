@@ -335,7 +335,7 @@ public class FlyingObject extends MobileG {
 	}
 
 	@Override
-	public long getNextTime() {
+	public double getNextTime() {
 		return 0;
 	}
 

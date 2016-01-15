@@ -15,7 +15,7 @@ public class Command_DATA extends Command {
 	}
 
 	@Override
-	public long execute() {		
+	public double execute() {		
 		String packet= "";
 		for(int i=2; i<args.length-1; i++) {
 			packet += sensor.getScript().getVariableValue(args[i])+"#";
@@ -23,7 +23,7 @@ public class Command_DATA extends Command {
 		packet += sensor.getScript().getVariableValue(args[args.length-1]);
 		sensor.getScript().addVariable(var, packet);
 		SimLog.add("S" + sensor.getId() + " DATA Creation:"+packet);
-		return 0;
+		return 0 ;
 	}
 
 	@Override

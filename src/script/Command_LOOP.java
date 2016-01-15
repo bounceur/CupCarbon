@@ -10,10 +10,10 @@ public class Command_LOOP extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		SimLog.add("S" + sensor.getId() + " Starts the loop section.");
 		sensor.getScript().setIndexToLoopIndex();
-		return 0;
+		return 0 ;
 	}
 
 	@Override

@@ -13,9 +13,9 @@ public class Command_READ extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		sensor.readMessage(arg);
-		return 0;
+		return 0 ;
 	}
 
 	@Override

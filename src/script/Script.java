@@ -31,7 +31,7 @@ public class Script {
 	protected SensorNode sensor = null;
 	protected int index = 0;
 	protected int loopIndex = 0;
-	protected long event = Long.MAX_VALUE - 1;
+	protected double event = Double.MAX_VALUE;
 	protected boolean breaked = false;
 	protected int level;
 	protected Script parent;
@@ -114,7 +114,7 @@ public class Script {
 		waiting = false;
 	}
 
-	public Long getEvent() {
+	public double getEvent() {
 		return event;
 	}
 		

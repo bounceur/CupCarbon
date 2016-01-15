@@ -1,9 +1,11 @@
-package device;
+package propagation;
 
 import java.awt.geom.Point2D;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
+import device.Device;
+import device.DeviceWithRadio;
 import map.MapLayer;
 import wisen_simulation.SimulationInputs;
 

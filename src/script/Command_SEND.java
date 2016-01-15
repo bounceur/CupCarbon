@@ -1,10 +1,11 @@
 package script;
 
-import arduino.XBeeFrameGenerator;
 import device.Channels;
-import device.DataInfo;
 import device.DeviceList;
 import device.SensorNode;
+import radio.Standard;
+import radio.XBeeFrameGenerator;
+import radio.XBeeToArduinoFrameGenerator;
 import utilities.UColor;
 import wisen_simulation.SimLog;
 import wisen_simulation.SimulationInputs;
@@ -44,6 +45,17 @@ public class Command_SEND extends Command {
 	}
 
 	public void sendOperation(String message) {
+		String packet = "";
+		if(sensor.getStandard() == Standard.NONE)
+			packet = message ;
+		if(sensor.getStandard() == Standard.ZIGBEE_802_15_4)
+			packet = XBeeFrameGenerator.data16InBin(message, "00", "00", Standard.getSubChannel(sensor.getStandard())*8);
+		if(sensor.getStandard() == Standard.WIFI_802_11) {
+			packet = XBeeFrameGenerator.data16InBin(message, "00", "00", Standard.getSubChannel(sensor.getStandard())*8);
+		}
+		
+		sensor.consumeTx(packet.length());
+		
 		if (arg2.equals("*")) {
 			SimLog.add("S" + sensor.getId() + " has finished sending in a broadcast the message : \"" + message + "\" to the nodes: ");
 			double v = 0;
@@ -51,9 +63,8 @@ public class Command_SEND extends Command {
 				v = Double.valueOf(sensor.getScript().getVariableValue(arg3));
 			}
 			for (SensorNode rnode : sensor.getSensorNodeNeighbors()) {
-				if (sensor.propagationDetect(rnode) && !rnode.isDead() && !rnode.isSleeping() && sensor.sameCh(rnode) && sensor.sameNId(rnode) && rnode.getId()!=v) {
-					//rnode.setReceiving(true);
-					Channels.addPacket(2, message, sensor, rnode);
+				if (sensor.propagationDetect(rnode) && sensor.canCommunicateWith(rnode) && rnode.getId()!=v) {
+					Channels.addPacketEvent(2, packet, message, sensor, rnode);
 				}
 			}
 		}
@@ -66,9 +77,8 @@ public class Command_SEND extends Command {
 				SensorNode rnode = DeviceList.getSensorNodeById((int) destNodeId);
 				if (rnode != null) {
 					SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
-					if (sensor.propagationDetect(rnode) && !rnode.isDead() && !rnode.isSleeping() && sensor.sameCh(rnode) && sensor.sameNId(rnode)) {
-						//rnode.setReceiving(true);
-						Channels.addPacket(0, message, sensor, rnode);
+					if (sensor.propagationDetect(rnode) && sensor.canCommunicateWith(rnode)) {
+						Channels.addPacketEvent(0, packet, message, sensor, rnode);
 					}
 				}
 				else 
@@ -82,10 +92,10 @@ public class Command_SEND extends Command {
 				if(!dest.equals("0")) {
 					SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the nodes with MY="+destNodeId+": ");
 					for(SensorNode rnode : DeviceList.getSensorNodes()) {
-						if ((sensor.propagationDetect(rnode)) && (!rnode.isDead() && !rnode.isSleeping()) && (rnode.getMy()==destNodeId) && sensor.sameCh(rnode) && sensor.sameNId(rnode)) {
+						if ((sensor.propagationDetect(rnode)) && (rnode.getMy()==destNodeId) && sensor.canCommunicateWith(rnode)) {
 							SimLog.add("  -> S" + rnode.getId() + " ");							
 							//rnode.setReceiving(true);
-							Channels.addPacket(0, message, sensor, rnode);
+							Channels.addPacketEvent(0, packet, message, sensor, rnode);
 						}						
 					}
 				}
@@ -97,9 +107,9 @@ public class Command_SEND extends Command {
 						SensorNode rnode = DeviceList.getSensorNodeById((int)destNodeId);
 						if (rnode != null) {
 							SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
-							if (!rnode.isDead() && !rnode.isSleeping() && sensor.sameCh(rnode) && sensor.sameNId(rnode)) {
+							if (sensor.canCommunicateWith(rnode)) {
 								//rnode.setReceiving(true);
-								Channels.addPacket(0, message, sensor, rnode);
+								Channels.addPacketEvent(0, packet, message, sensor, rnode);
 								//sensor.setDistanceMode(true);
 								//rnode.setDistanceMode(true);
 							}
@@ -117,9 +127,10 @@ public class Command_SEND extends Command {
 	}
 	
 	@Override
-	public long execute() {		
+	public double execute() {		
 		if (arg1.equals("!color")) {
 			sensor.setRadioLinkColor(UColor.colorTab2[Integer.parseInt(arg2)]);
+			//Visualisation.changeColorOfArrows(Integer.parseInt(arg2));
 			return 0;
 		}
 		String message = arg1;
@@ -135,28 +146,27 @@ public class Command_SEND extends Command {
 			executing = true;
 			//System.out.println("W1 "+executing);
 			
-			// Considering the message sent to the buffer (it requires UartDataRate bauds)			
-			double ratio = (DataInfo.ChDataRate*1.0)/(DataInfo.UartDataRate);
-			return (long)(Math.round(messageLength*8.*ratio));
+			// Considering the message sent to the buffer (it requires UartDataRate bauds)
+			//double ratio = (sensor.getRadioDataRate()*1.0)/(sensor.getUartDataRate());
+			//return (long)(Math.round(messageLength*8.*ratio));
+			double ratio = 1.0/(sensor.getUartDataRate());
+			return (ratio * (messageLength*8)) ;
 		}
 		
 		if (writing && !ack) {					
 			SimLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");	
 			//sensor.setSending(true);
-			sendOperation(message);
-			sensor.setTxConsumption(1);
-			sensor.consumeTx(messageLength*8);
-			sensor.initTxConsumption();
+			sendOperation(message);			
 			
 			if (arg2.equals("*") || !SimulationInputs.ack) {
 				ack = false;
 				writing = false ;					
 				executing=false;
-				return 0;
+				return 0 ;
 			}
 			else {
 				ack = true;
-				return Long.MAX_VALUE;// (250000*3);
+				return Double.MAX_VALUE;// (250000*3);
 			}
 		}
 		
@@ -172,7 +182,7 @@ public class Command_SEND extends Command {
 				executing = true;
 				sensor.getScript().previous();
 			}
-			return 0;
+			return 0 ;
 		}
 				
 		return 0;
@@ -188,7 +198,7 @@ public class Command_SEND extends Command {
 		String s1 = sensor.getScript().getVariableValue(arg1);
 		String s2 = sensor.getScript().getVariableValue(arg2);
 		String s3 = sensor.getScript().getVariableValue(arg3);
-		String s = XBeeFrameGenerator.data16(s1, s2, s3);		
+		String s = XBeeToArduinoFrameGenerator.data16(s1, s2, s3);		
 		return s;
 	}
 	

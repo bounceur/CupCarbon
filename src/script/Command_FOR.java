@@ -68,7 +68,7 @@ public class Command_FOR extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		SimLog.add("S" + sensor.getId() + " FOR ");
 		if (first) {
 			step = Double.valueOf(sensor.getScript().getVariableValue(sStep));
@@ -78,7 +78,7 @@ public class Command_FOR extends Command {
 			sensor.getScript().addVariable(arg1, arg);
 		}
 		index = sensor.getScript().getIndex();
-		return 0;
+		return 0 ;
 	}
 	
 	public int getIndex() {

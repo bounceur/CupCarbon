@@ -48,7 +48,7 @@ import wisen_simulation.WisenSimulation;
 
 public abstract class SensorNode extends DeviceWithRadio {
 	
-	public static Channels channels = null;
+	//public static Channels channels = null;
 	
 	protected boolean comEdgeDrawn = false;
 	protected Random rnd = new Random();
@@ -233,7 +233,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 				g.drawLine(x + rayon + 3, y + rayon + 3, x + rayon + 3, y
 						+ rayon - 2);
 			}
-			if(!isDead() || !isSleeping()) {
+			if(!isDead()) {
 				if(hide == 0 || hide == 2 || hide == 3) {
 					//if (!isDead()) {
 						g.setColor(UColor.BLACK_TTRANSPARENT);
@@ -358,10 +358,10 @@ public abstract class SensorNode extends DeviceWithRadio {
 
 	protected boolean receivedEvent = false;		
 	
-	public void addMessageToBuffer(int v, String message) {
-		setRxConsumption(1);
-		consumeRx(v);
-		initRxConsumption(); 
+	public void addMessageToBuffer(String message) {
+//		setRxConsumption(1);
+//		consumeRx(v);
+//		initRxConsumption(); 
 		
 		try {
 			for(int i=0; i< message.length(); i++) {
@@ -450,7 +450,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	public List<SensorNode> getSensorNodeNeighbors() {
 		List<SensorNode> neighnodes = new LinkedList<SensorNode>();		
 		for(SensorNode snode : DeviceList.getSensorNodes()) {
-			if(((radioDetect(snode))) && this!=snode && !this.isDead() && !snode.isDead() && !this.isSleeping() && !snode.isSleeping() && sameCh(snode) && sameNId(snode)) {
+			if(((radioDetect(snode))) && this!=snode && !this.isDead() && !snode.isDead() && sameCh(snode) && sameNId(snode)) {
 				neighnodes.add(snode);
 			}
 		}
@@ -525,13 +525,14 @@ public abstract class SensorNode extends DeviceWithRadio {
 	
 	@Override
 	public void initForSimulation() {
+		this.deltaDriftTime = 0.0;
 		DeviceList.initAll();
 		initBuffer();
 		setDead(false);		
 		//getBattery().init(SimulationInputs.energyMax);
 		loadScript();
 		getScript().init();
-		setEvent(0);
+		setEvent(0);		
 		super.initForSimulation();
 	}
 
@@ -585,6 +586,14 @@ public abstract class SensorNode extends DeviceWithRadio {
 	
 	public int getBufferSize() {
 		return bufferSize;
+	}
+
+	public boolean sameStandard(Device device) {
+		return (getStandard() == device.getStandard());
+	}
+	
+	public boolean canCommunicateWith(SensorNode rNode) {
+		return (!rNode.isDead() && sameCh(rNode) && sameNId(rNode) && sameStandard(rNode));
 	}
 	
 }

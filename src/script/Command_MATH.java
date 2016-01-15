@@ -17,7 +17,7 @@ public class Command_MATH extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		
 		String arg = arg2 ;
 		double a =  Double.valueOf(sensor.getScript().getVariableValue(arg3));
@@ -38,11 +38,13 @@ public class Command_MATH extends Command {
 			r = Math.acos(a);
 		if(arg1.toLowerCase().equals("atan"))
 			r = Math.atan(a);
+		if(arg1.toLowerCase().equals("abs"))
+			r = Math.abs(a);
 
 		SimLog.add("S" + sensor.getId() + arg1.toUpperCase() + " : "+a);
 		
 		sensor.getScript().addVariable(arg,""+r);
-		return 0;
+		return 0 ;
 	}
 
 	@Override

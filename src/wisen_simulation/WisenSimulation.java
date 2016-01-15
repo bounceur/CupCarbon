@@ -1,3 +1,32 @@
+/*----------------------------------------------------------------------------------------------------------------
+ * CupCarbon: A Smart City & IoT Wireless Sensor Network Simulator
+ * www.cupcarbon.com
+ * ----------------------------------------------------------------------------------------------------------------
+ * Copyright (C) 2013-2016 CupCarbon
+ * ----------------------------------------------------------------------------------------------------------------
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *----------------------------------------------------------------------------------------------------------------
+ * CupCarbon U-One is part of the research project PERSEPTEUR supported by the 
+ * French Agence Nationale de la Recherche ANR 
+ * under the reference ANR-14-CE24-0017-01. 
+ * ----------------------------------------------------------------------------------------------------------------
+ **/
+
+/**
+ * @author Ahcene Bounceur
+ * @author Lounis Massinissa
+ */
+
 package wisen_simulation;
 
 import java.io.FileNotFoundException;
@@ -8,9 +37,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import cupcarbon.CupCarbon;
-import cupcarbon.WsnSimulationWindow;
+import cupcarbon.WisenSimulationWindow;
 import device.Channels;
-import device.DataInfo;
 import device.Device;
 import device.DeviceList;
 import flying_object.FlyingGroup;
@@ -20,19 +48,17 @@ import project.Project;
 
 public class WisenSimulation extends Thread {
 
+	public static double time = 0.0;
+	
 	private boolean mobility = false;
 	private long iterNumber = 0;
-
-	private int visualDelay;
 	
 	// Change to true if you want do display some simulation info on the console 
 	public static boolean showInConsole = false;
 
 	private boolean generateResults = true ;
-
-	public static boolean stepByStep = false;
 	
-	public static long ttime = 0;
+	//public static double ttime = 0; 
 	
 	public WisenSimulation() {
 
@@ -46,11 +72,10 @@ public class WisenSimulation extends Thread {
 		mobility = SimulationInputs.mobility;
 		System.out.println("mobility "+mobility);
 		iterNumber = SimulationInputs.iterNumber;		
-		visualDelay = SimulationInputs.visualDelay;
 		generateResults = SimulationInputs.displayResults ;
 		showInConsole = SimulationInputs.showInConsole ;
 
-		WsnSimulationWindow.setState("Simulation : initialization ...");
+		WisenSimulationWindow.setState("Simulation : initialization ...");
 		System.out.println("Initialization ... ");
 		List<Device> devices = DeviceList.getNodes();
 		
@@ -78,12 +103,11 @@ public class WisenSimulation extends Thread {
 			}
 		}		
 		System.out.println("End of Initialization.");		
-		double time = 0;
 		long startTime = System.currentTimeMillis();
 		System.out.println("Start Simulation (WISEN : D-Event) ... ");
 		long iter = 0;
-		WsnSimulationWindow.setState("Simulation : End of initialization.");
-		WsnSimulationWindow.setState("Simulate (WISEN) ...");
+		WisenSimulationWindow.setState("Simulation : End of initialization.");
+		WisenSimulationWindow.setState("Simulate (WISEN) ...");
 		MapLayer.getMapViewer().repaint();
 		try {
 			String as = "";
@@ -103,8 +127,8 @@ public class WisenSimulation extends Thread {
 			String fMessage = "";
 			
 			SimLog.add("======================================================");
-			SimLog.add("802.15.4 bit rate: "+DataInfo.ChDataRate+" bits/s");
-			SimLog.add("UART Bit Rate: "+DataInfo.UartDataRate+" baud (bits/s)");
+			//SimLog.add("802.15.4 bit rate: "+DataInfo.ChDataRate+" bits/s");
+			//SimLog.add("UART Bit Rate: "+DataInfo.UartDataRate+" baud (bits/s)");
 			SimLog.add("START SIMULATION");
 			SimLog.add("======================================================");
 
@@ -118,8 +142,8 @@ public class WisenSimulation extends Thread {
 			// ------------------------------------------------------
 			// ------------------------------------------------------			
 			stopCondition = false;
-			ttime = 0;
-			long min = 0;
+			//ttime = 0;
+			double min = 0;
 			boolean allDeadSensors = false;
 			
 			if (mobility) {
@@ -131,11 +155,16 @@ public class WisenSimulation extends Thread {
 						}
 					}
 				}
-			}
+			}			
 			
-			for (iter = 0; iter < iterNumber; iter++) {
+			double timeEvt = 1.0;
+			time = 0.0;
+			double old_time = time;
+			for (time = 0.0; time < iterNumber;) {
+				//System.out.println("TIME : " + time);
+			//for (iter = 0; iter < iterNumber; iter++) {
 				
-				if (min == Long.MAX_VALUE) {
+				if (min == Double.MAX_VALUE) {
 					System.out.println("Infinite WAITs!");
 					JOptionPane.showMessageDialog(null, "Infinite WAITs! [iter: "+iter+"]", "Simulation Stopped", JOptionPane.INFORMATION_MESSAGE);
 					break;
@@ -158,16 +187,16 @@ public class WisenSimulation extends Thread {
 				SimLog.add("");
 				SimLog.add("----------------------------------------------------------------------------");
 				SimLog.add("Iteration : "+iter);
-				SimLog.add("Min (milliseconds) : "+((min*1.0)/DataInfo.ChDataRate*1000.));
+				SimLog.add("Min (milliseconds) : "+min);
 				
 				consolPrintln("--------------------------------------");
-				consolPrint(""+ttime);
+				consolPrint(""+time);
 				//consolPrint(""+time);
 				
-				time += (min*1.0)/DataInfo.ChDataRate;
-				ttime += min;
+				//time += (min*1.0)/chDataRate;
+				time += min;
 				
-				SimLog.add("Next time (milliseconds) : "+(time*1000));
+				SimLog.add("Next time (milliseconds) : "+time);
 				SimLog.add("--------------------------------------");
 				
 				if(!fMessage.replace("\n", "").equals("")) 
@@ -175,12 +204,12 @@ public class WisenSimulation extends Thread {
 				
 				fMessage = "";
 				
-				consolPrintln(" + "+min+" = "+ttime);
+				consolPrintln(" + "+min+" = "+time);
 				
 				Channels.goToTheNextTime(min);
 				Channels.receivedMessages();
 				
-				min = Long.MAX_VALUE;
+				min = Double.MAX_VALUE;
 				for (Device device : devices) {
 					if(!device.isDead()) {
 						if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
@@ -194,7 +223,7 @@ public class WisenSimulation extends Thread {
 				
 				consolPrintln("");
 				
-				long minmv = Long.MAX_VALUE;
+				double minmv = Double.MAX_VALUE;
 				if (mobility) {
 					for (Device device : devices) {
 						if(!device.isDead()) {
@@ -212,19 +241,24 @@ public class WisenSimulation extends Thread {
 				}
 				
 				consolPrintln("");
-				
+				boolean waitArrow = false;
 				if (min > Channels.getMin()) {
 					min = Channels.getMin();
+					waitArrow = true;
 				}
-				
+
 				if (mobility) {
 					moving = false;
 					if (minmv < min) {
 						min = minmv;
 						moving = true;
 					}
-				}	
+				}
 				
+//				if (wheather) {
+//					
+//				}
+//				
 				consolPrintln("");
 				
 				//long minevt = wEvents.getMin();				
@@ -235,7 +269,7 @@ public class WisenSimulation extends Thread {
 
 				
 				consolPrintln("");
-				if((min!=0) || (moving)) {
+				if((min > 0) || (moving)) {
 					
 					if (generateResults) ps.print(time + ";");
 					
@@ -248,6 +282,22 @@ public class WisenSimulation extends Thread {
 					consolPrintln("");
 					
 					if (generateResults) ps.println();										
+				}
+				
+				//boolean considerVisualDelay = true;
+				
+				if(SimulationInputs.cpuDrift) {
+					if (timeEvt < min) {
+						//considerVisualDelay = false;
+						timeEvt += 1.0;
+						for (Device device : devices) {					
+							if(!device.isDead()) {
+								if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
+									device.drift();
+								}
+							}
+						}	
+					}
 				}
 				
 				allDeadSensors = true; 
@@ -276,13 +326,20 @@ public class WisenSimulation extends Thread {
 
 				consolPrintln("");
 				consolPrintln("------------------------------------------");				
-				WsnSimulationWindow.setProgress((int) (1000 * iter / iterNumber));
+				WisenSimulationWindow.setProgress((int) (1000 * iter / iterNumber));
 				CupCarbon.lblSimulation.setText(" | Simulation: "+((int) (100 * iter / iterNumber))+"%");
 				
 				//ThreeDUnityIHM.comAddArrow(id, sensor1, sensor2, type, color, size);
+								
+				//if(considerVisualDelay) {
 				
 				MapLayer.getMapViewer().repaint();
-				sleep(visualDelay);
+				if (waitArrow)
+					sleep(SimulationInputs.visualDelay);
+				else
+					sleep((int)(SimulationInputs.visualDelay*(time-old_time)));
+				old_time = time;
+				//}
 			}
 			SimLog.close();
 			ps.close();
@@ -295,8 +352,8 @@ public class WisenSimulation extends Thread {
 		long endTime = System.currentTimeMillis();
 		System.out.println("End of Simulation (WISEN : D-Event).");
 		System.out.println(((endTime - startTime) / 1000.) + " sec");
-		WsnSimulationWindow.setState("End (WISEN Simulation) at iter " + iter + ". Simulation Time : " + ((endTime - startTime) / 1000.) + " sec.");
-		WsnSimulationWindow.setProgress(0);
+		WisenSimulationWindow.setState("End (WISEN Simulation) at iter " + iter + ". Simulation Time : " + ((endTime - startTime) / 1000.) + " sec.");
+		WisenSimulationWindow.setProgress(0);
 		CupCarbon.lblSimulation.setText(" | Simulation: 0%");
 
 		//if (mobility) {

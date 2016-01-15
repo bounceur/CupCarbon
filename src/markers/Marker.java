@@ -74,7 +74,7 @@ public class Marker extends Device {
 			drawMoveArrows(x,y,g) ;
 			
 			if(hide==0) {
-				g.setColor(Color.ORANGE);
+				g.setColor(UColor.RED);
 				g.fillOval(x-3, y-3, 6, 6);
 			}
 		}
@@ -161,7 +161,7 @@ public class Marker extends Device {
 	}
 	
 	@Override
-	public long getNextTime() { return 0 ;}
+	public double getNextTime() { return 0 ;}
 	
 	@Override
 	public void loadRouteFromFile() {}

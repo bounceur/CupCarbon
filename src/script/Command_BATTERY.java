@@ -13,12 +13,12 @@ public class Command_BATTERY extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		String v = "" ;
 		SimLog.add("S" + sensor.getId() + " BATTERY .");
 		v = sensor.getBatteryLevel()+"";
 		sensor.getScript().addVariable(arg, v);
-		return 0;
+		return 0 ;
 	}
 
 	@Override

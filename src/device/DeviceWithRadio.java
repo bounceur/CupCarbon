@@ -34,9 +34,10 @@ import java.util.Random;
 
 import battery.Battery;
 import map.MapLayer;
-import three_d_visual.ThreeDUnityIHM;
+import propagation.RadioDetection;
 import utilities.MapCalc;
 import utilities.UColor;
+import visualisation.Visualisation;
 import wisen_simulation.SimulationInputs;
 
 /**
@@ -45,7 +46,6 @@ import wisen_simulation.SimulationInputs;
  * @version 1.0
  */
 public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
-
 	protected Battery battery ;
 	protected double porteeErr = .4 ;
 	protected Random random = new Random() ;
@@ -193,7 +193,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				radioRangeRadius+=1 ;
 				radioRangeRadiusOri+=1 ;
 				//ThreeDUnityIHM.updatePosition(this);
-				ThreeDUnityIHM.updateRadioRadius(Device.SENSOR, id, radioRangeRadius);
+				Visualisation.updateRadioRadius(Device.SENSOR, id, radioRangeRadius);
 				MapLayer.getMapViewer().repaint();
 			}
 			if(key.getKeyChar()=='-') {
@@ -204,7 +204,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 					radioRangeRadius-=1 ;
 					radioRangeRadiusOri-=1 ;
 				}
-				ThreeDUnityIHM.updateRadioRadius(Device.SENSOR, id, radioRangeRadius);
+				Visualisation.updateRadioRadius(Device.SENSOR, id, radioRangeRadius);
 				MapLayer.getMapViewer().repaint();
 				
 			}
@@ -237,39 +237,29 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			//g.drawString("" +requiredQuality+" dB", x + (lr1 / 2), (int) (y - (lr1 / 4.)));
 		}		
 	}
-	
-	@Override 
-	public void consumeTx(double v) {
-		battery.consume(v*eTx);
-	}
-	
-	@Override 
-	public void consumeRx(double v) {
-		battery.consume(v*eRx);
-	}
-	
+		
 	@Override
 	public void drawMarked(Graphics g) {
-		if (!isDead()) 
-		if (marked) {	
-			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
-			int x = coord[0];
-			int y = coord[1];
-			g.setColor(Color.ORANGE);			
-			int r1 = 12;
-			int r2 = 8;
-			if(hide == 0 || hide == 4) {
-				g.drawOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
+		if (!isDead()) {
+			if (ledColor==1) {	
+				int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+				int x = coord[0];
+				int y = coord[1];
+				g.setColor(Color.ORANGE);			
+				int r1 = 12;
+				int r2 = 8;
+				if(hide == 0 || hide == 4) {
+					g.drawOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
+					g.setColor(UColor.GREEND_TRANSPARENT);
+					g.fillOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
+				}
 				g.setColor(UColor.GREEND_TRANSPARENT);
-				g.fillOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
+				g.fillOval(x-(r2+1), y-(r2+1), (r2+1)*2, (r2+1)*2);
+				g.setColor(Color.GRAY);
+				g.drawOval(x-(r2+1), y-(r2+1), (r2+1)*2, (r2+1)*2);
 			}
-			g.setColor(UColor.GREEND_TRANSPARENT);
-			g.fillOval(x-(r2+1), y-(r2+1), (r2+1)*2, (r2+1)*2);
-			g.setColor(Color.GRAY);
-			g.drawOval(x-(r2+1), y-(r2+1), (r2+1)*2, (r2+1)*2);
-		}
-		else {
-			if(ledColor>0) {				
+
+			if(ledColor>1) {				
 				int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
 				int x = coord[0];
 				int y = coord[1];
@@ -354,7 +344,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	public void drawRadioLinks(Graphics g) {
 		for(Device device : DeviceList.getSensorNodes()) {
 			if(radioDetect(device) && this!=device && !isDead() && !device.isDead()) {
-				ThreeDUnityIHM.arrowDrawing((SensorNode)this, (SensorNode)device, 1, 0, 1);
+				Visualisation.arrowDrawing((SensorNode)this, (SensorNode)device, 1, 0, 1);
 				drawRadioLink(device, g, 1);
 				if (MapLayer.displayRLDistance) {
 					drawDistance(longitude, latitude, elevation, device.getLongitude(), device.getLatitude(), device.getElevation(), (int) distance(device), 0/*getPowerReception(device)*/, g);
@@ -365,7 +355,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 	public void drawRadioPropagations(Graphics g) {
 		for(Device device : neighbors) {
-			ThreeDUnityIHM.arrowDrawing((SensorNode)this, (SensorNode)device, 0, 0, 1);
+			Visualisation.arrowDrawing((SensorNode)this, (SensorNode)device, 0, 0, 1);
 			drawRadioLink(device, g, 0);
 			if (MapLayer.displayRLDistance) {
 				drawDistance(longitude, latitude, elevation, device.getLongitude(), device.getLatitude(), device.getElevation(), (int) distance(device), 0/*getPowerReception(device)*/, g);
@@ -410,7 +400,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			
 
 			if(drawArrows) {
-				ThreeDUnityIHM.arrowDrawing((SensorNode)this, (SensorNode)device, type, drawRadioLinksColor, 1);
+				Visualisation.arrowDrawing((SensorNode)this, (SensorNode)device, type, drawRadioLinksColor, 1);
 				double dx = 0;
 				double dy = 0;
 				double alpha = 0;
@@ -442,7 +432,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		int ly2 = coord[1];
 		g.setColor(Color.DARK_GRAY);		
 		g.drawString("" + d + " ["+(int)pr+"]", ((lx1 + lx2) / 2), ((ly1 + ly2) / 2));
-		ThreeDUnityIHM.drawText(((lx1 + lx2) / 2.), ((ly1 + ly2) / 2.), (elevation+elevation2)/2.);
+		Visualisation.drawText(((lx1 + lx2) / 2.), ((ly1 + ly2) / 2.), (elevation+elevation2)/2.);
 	}
 	
 	/**

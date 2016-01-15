@@ -48,10 +48,10 @@ public class Command_WHILE extends Command {
 	}
 	
 	@Override
-	public long execute() {
+	public double execute() {
 		SimLog.add("S" + sensor.getId() + " WHILE ");
 		index = sensor.getScript().getIndex();
-		return 0;
+		return 0 ;
 	}
 	
 	public int getIndex() {

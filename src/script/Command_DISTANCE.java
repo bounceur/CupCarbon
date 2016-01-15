@@ -14,14 +14,14 @@ public class Command_DISTANCE extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		String vArg2 = sensor.getScript().getVariableValue(arg2);
 		int id = Integer.valueOf(vArg2);
 		double distance = sensor.distance(id);
 		
 		sensor.getScript().addVariable(arg1, "" + distance);
 		
-		return 0;
+		return 0 ;
 	}
 
 	@Override

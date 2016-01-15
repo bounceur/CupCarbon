@@ -15,7 +15,7 @@ public class Command_PRINTLN extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		SimLog.add("S" + sensor.getId() + " PRINTLN "+Arrays.toString(arg));
 		String message = "";
 		String part = "";
@@ -27,7 +27,7 @@ public class Command_PRINTLN extends Command {
 		}
 		sensor.setMessage(message);
 		System.out.println(message);
-		return 0;
+		return 0 ;
 	}
 	
 	@Override

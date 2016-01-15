@@ -13,7 +13,7 @@ public class Command_ENDWHILE extends Command {
 	}
 	
 	@Override
-	public long execute() {
+	public double execute() {
 		SimLog.add("S" + sensor.getId() + " END WHILE.");
 		
 		Script script = sensor.getScript();
@@ -30,7 +30,7 @@ public class Command_ENDWHILE extends Command {
 		if (resultOfCondition)
 			script.setIndex(cmdWhile.getIndex()-1);
 		
-		return 0;
+		return 0 ;
 	}
 	
 	public int getIndex() {

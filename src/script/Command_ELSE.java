@@ -15,11 +15,11 @@ public class Command_ELSE extends Command {
 	}
 	
 	@Override
-	public long execute() {
+	public double execute() {
 		SimLog.add("S" + sensor.getId() + " ELSE");
 		if (currentIf.getRestultOfCondition())
 			sensor.getScript().setIndex(currentIf.getEndIfIndex());
-		return 0;
+		return 0 ;
 	}
 
 	@Override

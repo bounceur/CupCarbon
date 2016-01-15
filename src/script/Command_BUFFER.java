@@ -13,13 +13,13 @@ public class Command_BUFFER extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		String v = "" ;
 		SimLog.add("S" + sensor.getId() + " BUFFER .");
 		//v = sensor.getDataSize()+"";
 		v = sensor.getBufferIndex()+"";
 		sensor.getScript().addVariable(arg, v);
-		return 0;
+		return 0 ;
 	}
 
 	@Override

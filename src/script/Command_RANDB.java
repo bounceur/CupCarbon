@@ -19,7 +19,7 @@ public class Command_RANDB extends Command {
 	}
 
 	@Override
-	public long execute() {
+	public double execute() {
 		String arg = arg1 ;
 		int a =  Integer.valueOf(sensor.getScript().getVariableValue(arg2));
 		int b =  Integer.valueOf(sensor.getScript().getVariableValue(arg3))+1;
@@ -30,7 +30,7 @@ public class Command_RANDB extends Command {
 		SimLog.add("S" + sensor.getId() + " RANDB: "+a+" "+b);
 		
 		sensor.getScript().addVariable(arg,""+rand);
-		return 0;
+		return 0 ;
 	}
 
 	@Override
