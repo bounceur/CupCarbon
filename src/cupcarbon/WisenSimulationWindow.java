@@ -34,7 +34,7 @@ public class WisenSimulationWindow extends JInternalFrame {
 	private static WisenSimulation wisenSimulation;
 
 	private JPanel panel;
-	private JTextField iterNumberTextField;
+	private JTextField simulationTimeTextField;
 	private static JProgressBar progressBar;
 	private static JLabel stateLabel;
 	private JCheckBox cboxMobility;
@@ -50,6 +50,7 @@ public class WisenSimulationWindow extends JInternalFrame {
 	private JCheckBox checkBoxAck;
 	private JCheckBox chbxSymRadio;
 	private JCheckBox chckbxCpuDrift;
+	private JTextField tf_arrowsSpeed;
 	
 	/**
 	 * Launch the application.
@@ -89,15 +90,19 @@ public class WisenSimulationWindow extends JInternalFrame {
 		panel_8.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_8.setLayout(new BoxLayout(panel_8, BoxLayout.X_AXIS));
 
-		JLabel lblNumberOfIterations = new JLabel("Number of Iterations");
-		panel_8.add(lblNumberOfIterations);
-		lblNumberOfIterations.setFont(new Font("Arial", Font.PLAIN, 12));
+		JLabel lblSimulationTime = new JLabel(" Simulation time   ");
+		panel_8.add(lblSimulationTime);
+		lblSimulationTime.setFont(new Font("Arial", Font.PLAIN, 12));
 
-		iterNumberTextField = new JTextField();
-		panel_8.add(iterNumberTextField);
-		iterNumberTextField.setFont(new Font("Arial", Font.PLAIN, 12));
-		iterNumberTextField.setText("10000");
-		iterNumberTextField.setColumns(10);
+		simulationTimeTextField = new JTextField();
+		panel_8.add(simulationTimeTextField);
+		simulationTimeTextField.setFont(new Font("Arial", Font.PLAIN, 12));
+		simulationTimeTextField.setText(""+SimulationInputs.simulationTime);
+		simulationTimeTextField.setColumns(10);
+		
+		JLabel lblSeconds = new JLabel("  second(s)  ");
+		lblSeconds.setFont(new Font("Arial", Font.PLAIN, 12));
+		panel_8.add(lblSeconds);
 
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.CENTER);
@@ -171,9 +176,19 @@ public class WisenSimulationWindow extends JInternalFrame {
 		vdTextField.setText("10");
 		vdTextField.setColumns(10);
 
-		JLabel lblMs = new JLabel("  ms   ");
+		JLabel lblMs = new JLabel("  ms / Arrows  ");
 		lblMs.setFont(new Font("Arial", Font.PLAIN, 12));
 		panel_16.add(lblMs);
+		
+		tf_arrowsSpeed = new JTextField();
+		tf_arrowsSpeed.setFont(new Font("Arial", Font.PLAIN, 12));
+		tf_arrowsSpeed.setText("50");
+		panel_16.add(tf_arrowsSpeed);
+		tf_arrowsSpeed.setColumns(10);
+		
+		JLabel label = new JLabel("  ms   ");
+		label.setFont(new Font("Arial", Font.PLAIN, 12));
+		panel_16.add(label);
 		
 		JPanel panel_19 = new JPanel();
 		panel_19.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -332,9 +347,10 @@ public class WisenSimulationWindow extends JInternalFrame {
 	}
 
 	public void apply() {
-		SimulationInputs.iterNumber = Integer.parseInt(iterNumberTextField.getText());
+		SimulationInputs.simulationTime = Double.parseDouble(simulationTimeTextField.getText());
 		SimulationInputs.mobility = cboxMobility.isSelected();
 		SimulationInputs.visualDelay = Integer.parseInt(vdTextField.getText());
+		SimulationInputs.arrowsDelay = Integer.parseInt(tf_arrowsSpeed.getText());
 		SimulationInputs.displayLog = chckbxGenerateLog.isSelected();
 		SimulationInputs.displayResults = chckbxGenerateResults.isSelected();
 		SimulationInputs.showInConsole = chckbxShowInConsole.isSelected();

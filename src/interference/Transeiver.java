@@ -35,25 +35,31 @@ import radio.Standard;
 
 public class Transeiver {
 
-//	public static void main(String[] args) {
+	public static void main(String[] args) {
+		
+//		String data = "AAAAAA";
 //		
-//		int x = 123453;
-//		String s = Integer.toHexString(x);
-//		System.out.println(s);
+//		System.out.println(data);
 //		
-////		String binFrame = XBeeFrameGenerator.data16InBin("Hello Ms Umber, kyehalhé", "00", "00", 1024);
-////
-////		System.out.println(binFrame);
-////		
-//////		String s = "";
-//////		for(int i=0;i<1024;i++) {
-//////			s += (Math.random() < 0.5 ? "0" : "1");
-//////		}
-////		System.out.println(binFrame);
-////		System.out.println(receviedPacketWithAlphaD(binFrame));
-//	}
+//		int std = Standard.ZIGBEE_802_15_4;
+//		
+//		System.out.println(std);
+//		
+//		int subch = Standard.getSubChannel(std);
+//		
+//		System.out.println(subch);
+//		
+//		String packet = XBeeFrameGenerator.data16InBin(data, "00", "00", subch*8);
+//		System.out.println(packet);
+//		String [] received = receviedPacketWithAlphaD(packet, subch);
+//		System.out.println(received[0]);
+//		System.out.println(received[1]);
+
+	}
 	
-	public static String [] receviedPacketWithAlphaD(String tx_bb, Device device) {
+	public static String [] receviedPacketWithAlphaD(String packet, Device device) {
+		// We use device here in order to get the standard which allows to calculate the sub-channel
+		// 
 		Complex[] ch = new Complex[2];
 		ch[0] = new Complex(1, 0);
 		ch[1] = new Complex(0.8, 0);
@@ -76,7 +82,7 @@ public class Transeiver {
 		int[] tx_dn = new int[tx_d];
 		int j = 0;
 		for (int i = 0; i < tx_b; i += 4) {
-			String s = "" + tx_bb.charAt(i) + tx_bb.charAt(i+1) + tx_bb.charAt(i+2) + tx_bb.charAt(i+3);
+			String s = "" + packet.charAt(i) + packet.charAt(i+1) + packet.charAt(i+2) + packet.charAt(i+3);
 			tx_dn[j] = Integer.parseInt(s, 2);
 			j++;
 		}
@@ -229,12 +235,13 @@ public class Transeiver {
 		int errBits = 0;
 		byte [] cb = new byte[rx_d2b.length];
 		for (int i = 0; i < rx_d2b.length; i++) {
-			cb[i] = Byte.parseByte(""+tx_bb.charAt(i));
+			cb[i] = Byte.parseByte(""+packet.charAt(i));
 			errBits += (cb[i] == rx_d2b[i]) ? 0 : 1;
 		}
 
 		String [] toReturn = new String [2];
 		toReturn[0] = receivedPacketStr ;
+
 		toReturn[1] = errBits+"";
 		return toReturn;
 

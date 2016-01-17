@@ -37,9 +37,10 @@ public class SimulationInputs {
 	public static boolean cpuDrift = false;
 	
 	public static boolean mobility = false;
-	public static int iterNumber = 10000;
+	public static double simulationTime = 86400.0;
 	
 	public static int visualDelay = 10;
+	public static int arrowsDelay = 50;
 	public static boolean showInConsole = false;
 	public static boolean displayLog = true;
 	public static boolean displayResults = true;

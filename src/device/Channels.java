@@ -41,7 +41,6 @@ public class Channels {
 		double ratio1 = 1.0/sSensor.getRadioDataRate();
 		double ratio2 = 1.0/sSensor.getUartDataRate();
 		double duration =  (ratio1*(packet.length())) + (ratio2*(message.length()*8)) ;
-		// ((int)(Math.round(message.length()*8.*ratio))) + (message.length()*8);
 		
 		double lastTime = 0;
 		if (channelEventList.get(sSensor.getCh()).size()>0 && type != 2) { 
@@ -142,61 +141,63 @@ public class Channels {
 		return min;
 	}
 	
-	public synchronized static void drawChannelLinks(Graphics g) {
-		for (List<PacketEvent> PacketEventList : channelEventList) {
-			if(PacketEventList.size()>0) {
-				Graphics2D g2 = (Graphics2D) g;
-				g2.setStroke(new BasicStroke(2.5f));
-			    if(MapLayer.getMapViewer().getZoom() < 2) {
-			    	g2.setStroke(new BasicStroke(3));		    	
-			    }
-				
-				int [] coord ;
-				int lx1 ;
-				int ly1 ;
-				int lx2 ;
-				int ly2 ;
-				double dx = 0;
-				double dy = 0;
-				double alpha = 0;
-				int arrColor = 0;
-				for(PacketEvent pev : PacketEventList) {
-					//System.out.println(pev);
-					if(pev.getSSensor().isSending() && pev.getRSensor().isReceiving()) {
-						if(pev.getType()==0 || pev.getType()==2 || ((pev.getType()==1) && SimulationInputs.showAckLinks)) {
-							g.setColor(pev.getSSensor().getRadioLinkColor());
-							if (pev.getSSensor().getRadioLinkColor() == UColor.RED) 
-								arrColor = 0;
-							else 
-								arrColor = 1; 
-							if((pev.getType()==1) && SimulationInputs.showAckLinks) {
-								g.setColor(pev.getSSensor().getACKLinkColor());
-								arrColor = 2;
+	public synchronized static void drawChannelLinks(Graphics g) {		
+		for (List<PacketEvent> packetEventList : channelEventList) {
+			synchronized(packetEventList) {
+				if(packetEventList.size()>0) {
+					Graphics2D g2 = (Graphics2D) g;
+					g2.setStroke(new BasicStroke(2.5f));
+				    if(MapLayer.getMapViewer().getZoom() < 2) {
+				    	g2.setStroke(new BasicStroke(3));		    	
+				    }
+					
+					int [] coord ;
+					int lx1 ;
+					int ly1 ;
+					int lx2 ;
+					int ly2 ;
+					double dx = 0;
+					double dy = 0;
+					double alpha = 0;
+					int arrColor = 0;
+					
+					for(PacketEvent pev : packetEventList) {
+						if(pev.getSSensor().isSending() && pev.getRSensor().isReceiving()) {
+							if(pev.getType()==0 || pev.getType()==2 || ((pev.getType()==1) && SimulationInputs.showAckLinks)) {
+								g.setColor(pev.getSSensor().getRadioLinkColor());
+								if (pev.getSSensor().getRadioLinkColor() == UColor.RED) 
+									arrColor = 0;
+								else 
+									arrColor = 1; 
+								if((pev.getType()==1) && SimulationInputs.showAckLinks) {
+									g.setColor(pev.getSSensor().getACKLinkColor());
+									arrColor = 2;
+								}
+								
+								Visualisation.comAddArrow((SensorNode)pev.getSSensor(), (SensorNode)pev.getRSensor(), 2, arrColor, 2);
+								
+								coord = MapCalc.geoToIntPixelMapXY(pev.getSSensor().getLatitude(), pev.getSSensor().getLongitude());
+								lx1 = coord[0];
+								ly1 = coord[1];		
+								coord = MapCalc.geoToIntPixelMapXY(pev.getRSensor().getLatitude(), pev.getRSensor().getLongitude());
+								lx2 = coord[0];
+								ly2 = coord[1];
+								dx = lx2 - lx1;
+								dy = ly2 - ly1;
+								
+								g.drawLine(lx1, ly1, lx2, ly2);
+								
+								alpha = Math.atan(dy / dx);
+								alpha = 180 * alpha / Math.PI;
+								int as = 16;
+								if(MapLayer.getMapViewer().getZoom() < 2) {
+									as = 21;		    	
+								}
+								if (dx >= 0)	
+									g.fillArc((int) lx2 - as, (int) ly2 - as, as*2, as*2,180 - (int) alpha - as, as*2);
+								else
+									g.fillArc((int) lx2 - as, (int) ly2 - as, as*2, as*2, -(int) alpha - as, as*2);
 							}
-							
-							Visualisation.comAddArrow((SensorNode)pev.getSSensor(), (SensorNode)pev.getRSensor(), 2, arrColor, 2);
-							
-							coord = MapCalc.geoToIntPixelMapXY(pev.getSSensor().getLatitude(), pev.getSSensor().getLongitude());
-							lx1 = coord[0];
-							ly1 = coord[1];		
-							coord = MapCalc.geoToIntPixelMapXY(pev.getRSensor().getLatitude(), pev.getRSensor().getLongitude());
-							lx2 = coord[0];
-							ly2 = coord[1];
-							dx = lx2 - lx1;
-							dy = ly2 - ly1;
-							
-							g.drawLine(lx1, ly1, lx2, ly2);
-							
-							alpha = Math.atan(dy / dx);
-							alpha = 180 * alpha / Math.PI;
-							int as = 16;
-							if(MapLayer.getMapViewer().getZoom() < 2) {
-								as = 21;		    	
-							}
-							if (dx >= 0)	
-								g.fillArc((int) lx2 - as, (int) ly2 - as, as*2, as*2,180 - (int) alpha - as, as*2);
-							else
-								g.fillArc((int) lx2 - as, (int) ly2 - as, as*2, as*2, -(int) alpha - as, as*2);
 						}
 					}
 				}

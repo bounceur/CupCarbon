@@ -4,7 +4,8 @@ public class XBeeFrameGenerator {
 
 	
 	public static void main(String [] arts) {
-		System.out.println(at("ATCH"));
+		//System.out.println(at("ATCH"));
+		System.out.println(byteToBinaryStreem("F"));
 	}
 	
 	public static String at(String ats) {

@@ -51,14 +51,11 @@ public class WisenSimulation extends Thread {
 	public static double time = 0.0;
 	
 	private boolean mobility = false;
-	private long iterNumber = 0;
 	
 	// Change to true if you want do display some simulation info on the console 
 	public static boolean showInConsole = false;
 
 	private boolean generateResults = true ;
-	
-	//public static double ttime = 0; 
 	
 	public WisenSimulation() {
 
@@ -70,8 +67,7 @@ public class WisenSimulation extends Thread {
 	public void simulate() {
 		SimLog.init();
 		mobility = SimulationInputs.mobility;
-		System.out.println("mobility "+mobility);
-		iterNumber = SimulationInputs.iterNumber;		
+		System.out.println("mobility "+mobility);		
 		generateResults = SimulationInputs.displayResults ;
 		showInConsole = SimulationInputs.showInConsole ;
 
@@ -93,7 +89,7 @@ public class WisenSimulation extends Thread {
 				if (device.canMove())
 					device.setEvent2(device.getNextTime());
 				else
-					device.setEvent2(Long.MAX_VALUE);
+					device.setEvent2(Double.MAX_VALUE);
 				if(device.getType()==Device.GAS) {
 					((Gas)device).init();
 				}
@@ -105,7 +101,6 @@ public class WisenSimulation extends Thread {
 		System.out.println("End of Initialization.");		
 		long startTime = System.currentTimeMillis();
 		System.out.println("Start Simulation (WISEN : D-Event) ... ");
-		long iter = 0;
 		WisenSimulationWindow.setState("Simulation : End of initialization.");
 		WisenSimulationWindow.setState("Simulate (WISEN) ...");
 		MapLayer.getMapViewer().repaint();
@@ -127,8 +122,6 @@ public class WisenSimulation extends Thread {
 			String fMessage = "";
 			
 			SimLog.add("======================================================");
-			//SimLog.add("802.15.4 bit rate: "+DataInfo.ChDataRate+" bits/s");
-			//SimLog.add("UART Bit Rate: "+DataInfo.UartDataRate+" baud (bits/s)");
 			SimLog.add("START SIMULATION");
 			SimLog.add("======================================================");
 
@@ -142,7 +135,6 @@ public class WisenSimulation extends Thread {
 			// ------------------------------------------------------
 			// ------------------------------------------------------			
 			stopCondition = false;
-			//ttime = 0;
 			double min = 0;
 			boolean allDeadSensors = false;
 			
@@ -156,44 +148,41 @@ public class WisenSimulation extends Thread {
 					}
 				}
 			}			
-			
+						
 			double timeEvt = 1.0;
 			time = 0.0;
-			double old_time = time;
-			for (time = 0.0; time < iterNumber;) {
-				//System.out.println("TIME : " + time);
-			//for (iter = 0; iter < iterNumber; iter++) {
+			double previousTime = time;
+			
+			while (time <= SimulationInputs.simulationTime) {
 				
 				if (min == Double.MAX_VALUE) {
 					System.out.println("Infinite WAITs!");
-					JOptionPane.showMessageDialog(null, "Infinite WAITs! [iter: "+iter+"]", "Simulation Stopped", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Infinite WAITs! [time = "+time+"]", "Simulation Stopped", JOptionPane.INFORMATION_MESSAGE);
 					break;
 				}
 				
 				if(stopCondition) {
 					System.out.println("Simulation stopped!");
-					JOptionPane.showMessageDialog(null, "Simulation stopped! [iter: "+iter+"]", "Simulation Stopped", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Simulation stopped! [time = "+time+"]", "Simulation Stopped", JOptionPane.INFORMATION_MESSAGE);
 					break;
 				}
 				
 				if(allDeadSensors) {
 					System.out.println("Dead Sensors!");
-					JOptionPane.showMessageDialog(null, "Dead Sensors! [iter: "+iter+"]", "Simulation Stopped", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Dead Sensors! [time = "+time+"]", "Simulation Stopped", JOptionPane.INFORMATION_MESSAGE);
 					break;
 				}
 				
-				consolPrint(iter + " : ");	
+				consolPrint(time + " : ");	
 			
 				SimLog.add("");
 				SimLog.add("----------------------------------------------------------------------------");
-				SimLog.add("Iteration : "+iter);
+				SimLog.add("Time : "+time);
 				SimLog.add("Min (milliseconds) : "+min);
 				
 				consolPrintln("--------------------------------------");
 				consolPrint(""+time);
-				//consolPrint(""+time);
-				
-				//time += (min*1.0)/chDataRate;
+
 				time += min;
 				
 				SimLog.add("Next time (milliseconds) : "+time);
@@ -259,15 +248,12 @@ public class WisenSimulation extends Thread {
 //					
 //				}
 //				
-				consolPrintln("");
-				
-				//long minevt = wEvents.getMin();				
+				consolPrintln("");		
 				
 //				for (WisenEvent event : WisenEventList.eventList) {
 //					
 //				}
 
-				
 				consolPrintln("");
 				if((min > 0) || (moving)) {
 					
@@ -284,11 +270,9 @@ public class WisenSimulation extends Thread {
 					if (generateResults) ps.println();										
 				}
 				
-				//boolean considerVisualDelay = true;
 				
 				if(SimulationInputs.cpuDrift) {
-					if (timeEvt < min) {
-						//considerVisualDelay = false;
+					if (timeEvt <= time) {
 						timeEvt += 1.0;
 						for (Device device : devices) {					
 							if(!device.isDead()) {
@@ -296,20 +280,19 @@ public class WisenSimulation extends Thread {
 									device.drift();
 								}
 							}
-						}	
+						}
 					}
 				}
 				
 				allDeadSensors = true; 
-				for (Device device : devices) {					
+				for (Device device : devices) {
 					if(!device.isDead()) {
 						if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
 							consolPrint(device.getEvent()+" : ");
 							
-							if(device.getEvent() != Long.MAX_VALUE)
-								device.gotoTheNextEvent(min);								
+							device.gotoTheNextEvent(min);								
 							
-							if(device.getEvent()==0) {
+							if(device.getEvent() == 0) {
 								fMessage += device.getScript().getCurrent().finishMessage() + "\n";
 								device.gotoTheNextInstruction() ;								
 							}
@@ -323,27 +306,24 @@ public class WisenSimulation extends Thread {
 						device.setEvent2(device.getEvent2()-min);
 					}
 				}
-
+				
 				consolPrintln("");
 				consolPrintln("------------------------------------------");				
-				WisenSimulationWindow.setProgress((int) (1000 * iter / iterNumber));
-				CupCarbon.lblSimulation.setText(" | Simulation: "+((int) (100 * iter / iterNumber))+"%");
-				
-				//ThreeDUnityIHM.comAddArrow(id, sensor1, sensor2, type, color, size);
+				WisenSimulationWindow.setProgress((int) (1000 * time / SimulationInputs.simulationTime));
+				CupCarbon.lblSimulation.setText(" | Simulation: "+ Math.round(time) + "s [" + ((int) (100 * time / SimulationInputs.simulationTime))+"%]");
 								
-				//if(considerVisualDelay) {
-				
 				MapLayer.getMapViewer().repaint();
-				if (waitArrow)
-					sleep(SimulationInputs.visualDelay);
-				else
-					sleep((int)(SimulationInputs.visualDelay*(time-old_time)));
-				old_time = time;
-				//}
+				if (waitArrow && SimulationInputs.arrowsDelay > 0) {
+					sleep((int)(SimulationInputs.arrowsDelay));
+				}
+				else {
+					sleep((int)(SimulationInputs.visualDelay*(time - previousTime)));
+				}
+				previousTime = time;
 			}
 			SimLog.close();
 			ps.close();
-			if(iter==iterNumber)
+			if(time==SimulationInputs.simulationTime)
 				JOptionPane.showMessageDialog(null, "Simulation Finished!", "Simulation", JOptionPane.INFORMATION_MESSAGE);
 		} 
 		catch (FileNotFoundException e) {e.printStackTrace();} 
@@ -352,7 +332,7 @@ public class WisenSimulation extends Thread {
 		long endTime = System.currentTimeMillis();
 		System.out.println("End of Simulation (WISEN : D-Event).");
 		System.out.println(((endTime - startTime) / 1000.) + " sec");
-		WisenSimulationWindow.setState("End (WISEN Simulation) at iter " + iter + ". Simulation Time : " + ((endTime - startTime) / 1000.) + " sec.");
+		WisenSimulationWindow.setState("End (WISEN Simulation) at time " + time + ". CPU Time : " + ((endTime - startTime) / 1000.) + " sec.");
 		WisenSimulationWindow.setProgress(0);
 		CupCarbon.lblSimulation.setText(" | Simulation: 0%");
 

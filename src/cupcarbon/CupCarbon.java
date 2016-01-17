@@ -63,6 +63,8 @@ import javax.swing.filechooser.FileFilter;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
+import com.virtualys.cupcarbon.communication.client.socket.VisualisationPorts;
+
 import actions_ui.Historic;
 import arduino.Arduino;
 import buildings.BuildingList;
@@ -93,7 +95,7 @@ import solver.SolverProxyParams;
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
- * @version 2.6 (U-One)
+ * @version 2.7 (U-One)
  */
 
 public class CupCarbon {
@@ -121,6 +123,7 @@ public class CupCarbon {
 	//private FlyingObjParametersWindow flyingObjParametersWindow = new FlyingObjParametersWindow();
 	private InformationWindow infoWindow = new InformationWindow();
 	private WisenSimulationWindow wsnSimWindow = new WisenSimulationWindow();
+	private VisualisationPorts visualisationWindow = new VisualisationPorts();
 
 	private JPanel panel_1;
 	private JLabel lblNodesNumber;
@@ -1339,6 +1342,18 @@ public class CupCarbon {
 				Arduino.generateCode();
 			}
 		});
+		
+		JMenuItem mntmExternalVisualisation = new JMenuItem("External Visualisation");
+		mntmExternalVisualisation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!visualisationWindow.isVisible()) {
+					desktopPane.add(visualisationWindow);
+					visualisationWindow.setVisible(true);
+				}
+				visualisationWindow.toFront();
+			}
+		});
+		mnSimulation.add(mntmExternalVisualisation);
 		mnSimulation.add(mntmGenerateArduinoCode);
 		
 		JMenu mnMap = new JMenu("Map");
@@ -1695,9 +1710,10 @@ public class CupCarbon {
 		toolBar.add(lblSimulation);
 
 		cupCarbonMap = new CupCarbonMap();
+		cupCarbonMap.getContentPane().setBackground(Color.LIGHT_GRAY);
+		cupCarbonMap.getContentPane().setFont(new Font("Arial", Font.PLAIN, 12));
 		cupCarbonMap.setLocation(280, 91);
-		cupCarbonMap.setFrameIcon(new ImageIcon(
-				"images/cupcarbon_logo_small.png"));
+		cupCarbonMap.setFrameIcon(new ImageIcon("images/cupcarbon_logo_small.png"));
 		cupCarbonMap.setVisible(true);
 
 		mainFrame.getContentPane().add(desktopPane, BorderLayout.CENTER);
@@ -1713,14 +1729,14 @@ public class CupCarbon {
 			ex.printStackTrace();
 
 		}
-		// moveToFront(cupCarbonMap);
+		 //moveToFront(cupCarbonMap);
 //		try {
 //			Class.forName("com.virtualys.cupcarbon.communication.Communication");
 //			com.virtualys.cupcarbon.communication.Communication.initialize();
 //		} catch(ClassNotFoundException e) {
 //			System.out.println("Unknowed exception : " + e.getMessage());
 //		}
-//		/_OM_Vlys_end	
+//		//_OM_Vlys_end	
 	}
 
 	private void openDeviceParemeterWindow() {

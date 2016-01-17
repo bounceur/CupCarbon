@@ -389,11 +389,11 @@ public class MarkerList {
 
 		for (Marker m : markers) {
 
-			host += "loc=" + m.getLongitude() + "," + m.getLatitude() + "&";
+			host += "loc=" + m.getLatitude() + "," + m.getLongitude() + "&";
 		}
 
 		host += "output=gpx";
-		System.out.println();
+
 		try {
 			File f = new File("gpx");
 			try {
@@ -436,7 +436,7 @@ public class MarkerList {
 			String[] s2;
 			for (int i = 1; i < s1.length; i++) {
 				s2 = s1[i].split("\"");
-				markers.add(new Marker(Double.valueOf(s2[0]), Double.valueOf(s2[2]), 0, 25));
+				markers.add(new Marker(Double.valueOf(s2[2]), Double.valueOf(s2[0]), 0, 25));
 				MapLayer.getMapViewer().repaint();
 			}
 			br.close();

@@ -176,6 +176,8 @@ public abstract class Device implements Runnable, MouseListener,
 	
 	protected String message = "";
 	
+	Random random = new Random();
+	
 	// ------	
 
 	/**
@@ -1709,16 +1711,9 @@ public abstract class Device implements Runnable, MouseListener,
 	}
 
 	public void gotoTheNextEvent(double min) {
-		event = event - min;
+		if(event != Double.MAX_VALUE)
+			event = event - min;
 	}
-	
-//	public boolean isDistanceMode() {
-//		return distanceMode;
-//	}
-//
-//	public void setDistanceMode(boolean distanceMode) {
-//		this.distanceMode = distanceMode;
-//	}
 
 	public long getDistanceModeDelay() {
 		return distanceModeDelay;
@@ -1760,12 +1755,14 @@ public abstract class Device implements Runnable, MouseListener,
 		this.standard = standard;
 	}
 
-	public void drift() {
-		Random random = new Random();
-		double d = random.nextGaussian();
-		d += this.sigmaOfDriftTime;
+	public void drift() {		
+		double d = random.nextGaussian() * sigmaOfDriftTime;
+		if (d > (3.0*sigmaOfDriftTime))
+			d = 3.0*sigmaOfDriftTime;
+		if (d < (-3.0*sigmaOfDriftTime))
+			d = -3.0*sigmaOfDriftTime;		
 		deltaDriftTime += d;
-		if(!this.getScript().getCurrent().isDelay())
+		if(event != Double.MAX_VALUE)
 			event += deltaDriftTime; 
 	}
 	
@@ -1781,5 +1778,18 @@ public abstract class Device implements Runnable, MouseListener,
 	public abstract void resetPropagations();
 	public abstract void drawRadioPropagations(Graphics g) ;
 	public abstract boolean radioDetect(Device device) ;	
+	
+	
+//	public static void main(String [] args) {
+//		Random random = new Random();
+//		double d = random.nextGaussian();
+//		double sigma = 3; 
+//		double s = 0;
+//		for(int i=0; i<10000; i++) {
+//			d = random.nextGaussian() * sigma;
+//			s += d;
+//		}
+//		System.out.println(s/10000); 
+//	}
 	
 }

@@ -54,8 +54,7 @@ public class OsmOverpass extends Thread {
 	public void run(){
 		isLoading = true;
 		try {
-		    URL url = new URL("http://overpass-api.de/api/map?bbox="+bottomLeftLng+","+bottomLeftLat+","+topRightLng+","+topRightLat);
-		    //System.out.println("http://overpass-api.de/api/map?bbox="+bottomLeftLng+","+bottomLeftLat+","+topRightLng+","+topRightLat);
+		    URL url = new URL("http://overpass-api.de/api/map?bbox="+bottomLeftLat+","+bottomLeftLng+","+topRightLat+","+topRightLng);
 		    System.out.println("[Buildings] File downloading...");
 		    Osm data = (Osm) JAXBContext.newInstance(Osm.class).createUnmarshaller().unmarshal( url );
 		    System.out.println("[Buildings] File downloaded.");

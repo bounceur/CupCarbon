@@ -5,8 +5,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 public class ClientData {
-	static protected String host = "localhost";	
-	static protected int port = 15501;//9901;
+	public static String host = "localhost";	
+	public static int port = 15501;//9901;
 	
 	public static void main(String[] args) throws Exception {
 		try {		

@@ -10,8 +10,9 @@ import java.util.Scanner;
  *
  */
 public class ClientCommand {
-	static protected String host = "localhost";	
-	static protected int port = 15500;//9900;
+		
+	public static String host = "localhost";	
+	public static int port = 15500;//9900;
 	
 	//
 	//
