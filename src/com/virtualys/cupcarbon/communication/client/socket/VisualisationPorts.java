@@ -58,13 +58,13 @@ public class VisualisationPorts extends JInternalFrame {
 		txtHost.setColumns(10);
 		
 		txtPortCom = new JTextField();
-		txtPortCom.setText("15500");
+		txtPortCom.setText("9000");
 		txtPortCom.setFont(new Font("Courier New", Font.PLAIN, 13));
 		panel.add(txtPortCom);
 		txtPortCom.setColumns(10);
 		
 		txtPortData = new JTextField();
-		txtPortData.setText("15501");
+		txtPortData.setText("9001");
 		txtPortData.setFont(new Font("Courier New", Font.PLAIN, 13));
 		panel.add(txtPortData);
 		txtPortData.setColumns(10);

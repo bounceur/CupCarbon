@@ -31,15 +31,17 @@ public class WorldMap extends JXMapKit {
 	private static MapLayer layer;
 	private final int max = 19;
 	public static String tileType = ".png";
-	public static String tileUrl = "http://otile1.mqcdn.com/tiles/1.0.0/osm/";
-
+	//public static String tileUrl = "http://otile1.mqcdn.com/tiles/1.0.0/osm/";
+	//public static String tileUrl = "http://a.basemaps.cartocdn.com/dark_all/";
+	public static String tileUrl = "http://a.basemaps.cartocdn.com/light_all/";	
+	//public static String tileUrl = "http://a.tile.stamen.com/toner/";
 	
 	//http://bcdcspatial.blogspot.fr/2012/01/onlineoffline-mapping-map-tiles-and.html
 	
 	public WorldMap() {
 		// TileFactoryInfo info = new TileFactoryInfo(0,max,max,256, true,
 		// true,"file:/myLocalMapServer/tiles","x","y","z") {
-		TileFactoryInfo info = new TileFactoryInfo(0, max, max, 256, true, true, "http://tile.openseamap.org", "x", "y", "z") {
+		TileFactoryInfo info = new TileFactoryInfo(0, max, max, 256, true, true, "http://tile.openseamap.org", "x", "y", "z") {			
 			// TileFactoryInfo info = new TileFactoryInfo(0,max,max,256, true,
 			// true,"http://www.openseamap.org/map","x","y","z") {
 			// TileFactoryInfo info = new TileFactoryInfo(0,max,max,256, true,
@@ -52,8 +54,10 @@ public class WorldMap extends JXMapKit {
 				//return "http://otile1.mqcdn.com/tiles/1.0.0/osm/" + zoom + "/" + x + "/" + y + ".jpg";
 				if(tileUrl.equals(""))
 					return "http://pagesperso.univ-brest.fr/~bounceur/cuptile.png";
-				else
+				else {
+					//System.out.println(tileUrl+zoom+"/"+x+"/"+y+tileType);
 					return tileUrl+zoom+"/"+x+"/"+y+tileType ;
+				}
 				//return "http://localhost:8888/cupcarbon/tiles/" + zoom + "/" + x + "/" + y + ".png";
 				// return
 				// "http://tile.stamen.com/terrain-background/"+zoom+"/"+x+"/"+y+".png";

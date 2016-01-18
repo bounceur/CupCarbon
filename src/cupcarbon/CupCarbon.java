@@ -1360,7 +1360,7 @@ public class CupCarbon {
 		mnMap.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "logo_cap_carbon.png"));
 		menuBar.add(mnMap);
 		
-		JRadioButtonMenuItem rdbtnmntmClassic = new JRadioButtonMenuItem("Standard");
+		JRadioButtonMenuItem rdbtnmntmClassic = new JRadioButtonMenuItem("Standard (color)");
 		rdbtnmntmClassic.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
 		buttonGroup.add(rdbtnmntmClassic);
 		rdbtnmntmClassic.addActionListener(new ActionListener() {
@@ -1368,6 +1368,16 @@ public class CupCarbon {
 				changeTiles("http://a.tile.openstreetmap.org/");
 			}
 		});
+		
+		JRadioButtonMenuItem rdbtnmntmLight = new JRadioButtonMenuItem("Light");
+		rdbtnmntmLight.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeTiles("http://a.basemaps.cartocdn.com/light_all/");				
+			}
+		});
+		rdbtnmntmLight.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
+		rdbtnmntmLight.setSelected(true);
+		mnMap.add(rdbtnmntmLight);
 		mnMap.add(rdbtnmntmClassic);
 		
 		JRadioButtonMenuItem rdbtnmntmOsm = new JRadioButtonMenuItem("OSM");
@@ -1378,7 +1388,16 @@ public class CupCarbon {
 				changeTiles("http://otile1.mqcdn.com/tiles/1.0.0/osm/");
 			}
 		});
-		rdbtnmntmOsm.setSelected(true);
+		
+		JRadioButtonMenuItem mntmLocal = new JRadioButtonMenuItem("Standard (grayscale)");
+		mntmLocal.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
+		buttonGroup.add(mntmLocal);
+		mntmLocal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeTiles("http://a.tiles.wmflabs.org/bw-mapnik/");
+			}
+		});
+		mnMap.add(mntmLocal);
 		mnMap.add(rdbtnmntmOsm);
 		
 		JRadioButtonMenuItem rdbtnmntmSatellit = new JRadioButtonMenuItem("Satellite");
@@ -1420,16 +1439,6 @@ public class CupCarbon {
 			}
 		});
 		mnMap.add(mntmTerrain);
-		
-		JRadioButtonMenuItem mntmLocal = new JRadioButtonMenuItem("Local");
-		mntmLocal.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
-		buttonGroup.add(mntmLocal);
-		mntmLocal.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				changeTiles("http://localhost:8888/cupcarbon/tiles/");
-			}
-		});
-		mnMap.add(mntmLocal);
 		
 		JRadioButtonMenuItem mntmMapbox = new JRadioButtonMenuItem("MapBox");
 		mntmMapbox.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
