@@ -1,4 +1,4 @@
-package com.virtualys.cupcarbon.communication.client.socket;
+package cupcarbon;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.virtualys.cupcarbon.communication.Communication;
+import com.virtualys.cupcarbon.communication.client.socket.ClientCommand;
+import com.virtualys.cupcarbon.communication.client.socket.ClientData;
 
 public class VisualisationPorts extends JInternalFrame {
 	/**
@@ -58,13 +60,13 @@ public class VisualisationPorts extends JInternalFrame {
 		txtHost.setColumns(10);
 		
 		txtPortCom = new JTextField();
-		txtPortCom.setText("9000");
+		txtPortCom.setText("9900");
 		txtPortCom.setFont(new Font("Courier New", Font.PLAIN, 13));
 		panel.add(txtPortCom);
 		txtPortCom.setColumns(10);
 		
 		txtPortData = new JTextField();
-		txtPortData.setText("9001");
+		txtPortData.setText("9901");
 		txtPortData.setFont(new Font("Courier New", Font.PLAIN, 13));
 		panel.add(txtPortData);
 		txtPortData.setColumns(10);

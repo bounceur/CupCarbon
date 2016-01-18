@@ -63,8 +63,6 @@ import javax.swing.filechooser.FileFilter;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
-import com.virtualys.cupcarbon.communication.client.socket.VisualisationPorts;
-
 import actions_ui.Historic;
 import arduino.Arduino;
 import buildings.BuildingList;
@@ -1370,6 +1368,7 @@ public class CupCarbon {
 		});
 		
 		JRadioButtonMenuItem rdbtnmntmLight = new JRadioButtonMenuItem("Light");
+		buttonGroup.add(rdbtnmntmLight);
 		rdbtnmntmLight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				changeTiles("http://a.basemaps.cartocdn.com/light_all/");				

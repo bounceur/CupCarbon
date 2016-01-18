@@ -18,6 +18,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.event.EventListenerList;
 
+import com.virtualys.cupcarbon.communication.client.socket.ClientCommand;
+import com.virtualys.cupcarbon.communication.client.socket.ClientData;
+
 import cupcarbon.CupCarbon;
 
 public class ChannelSocket extends Channel {
@@ -225,10 +228,10 @@ public class ChannelSocket extends Channel {
 				} 
 			} catch (IOException ex) {System.out.println("IO exception : " + ex.getMessage());}
 			if (ciPortData == 0) {
-				ciPortData = 15501;//9901;
+				ciPortData = ClientData.port;
 			}
 			if (ciPortCommand == 0) {
-				ciPortCommand = 15500;//9900;
+				ciPortCommand = ClientCommand.port;
 			}
 			
 			System.out.println("------------------------------------------------------------------------");

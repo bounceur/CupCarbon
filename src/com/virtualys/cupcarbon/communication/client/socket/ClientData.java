@@ -6,7 +6,7 @@ import java.nio.channels.SocketChannel;
 
 public class ClientData {
 	public static String host = "localhost";	
-	public static int port = 15501;//9901;
+	public static int port = 9901;
 	
 	public static void main(String[] args) throws Exception {
 		try {		
