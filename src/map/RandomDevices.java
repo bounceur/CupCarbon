@@ -25,7 +25,7 @@ public class RandomDevices {
 			r2 = Math.random();
 			x = ((m2x-m1x)*r1)+m1x;
 			y = ((m2y-m1y)*r2)+m1y;				
-			DeviceList.add(new StdSensorNode(x, y,0, 100, 20, -1));
+			DeviceList.add(new StdSensorNode(x, y, 0, 0, 100, 20, -1));
 			MapLayer.getMapViewer().repaint();
 		}
 	}

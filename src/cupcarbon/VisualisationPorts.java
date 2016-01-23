@@ -106,7 +106,8 @@ public class VisualisationPorts extends JInternalFrame {
 				ClientCommand.port = Integer.parseInt(txtPortCom.getText());
 				ClientData.host = txtHost.getText();
 				ClientData.port = Integer.parseInt(txtPortData.getText());
-				Communication.initialize();
+				//Communication.initialize();
+				(new Communication()).start();
 				//_OM_Vlys_end
 				
 			}

@@ -1,4 +1,4 @@
-package buildings;
+package geo_objects;
 
 import java.awt.Graphics;
 import java.awt.Polygon;
@@ -52,7 +52,7 @@ public class BuildingList extends Thread {
 		}
 	}
 	
-	public static void reset() {
+	public static void init() {
 		for(Building building : buildingList) {
 			MapLayer.getMapViewer().removeMouseListener(building);
 			MapLayer.getMapViewer().removeKeyListener(building);
@@ -94,6 +94,7 @@ public class BuildingList extends Thread {
 	}
 	
 	public static void open(String fileName) {
+		init();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			String line;

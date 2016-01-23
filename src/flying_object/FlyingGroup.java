@@ -330,5 +330,10 @@ public class FlyingGroup extends MobileG {
 	public boolean radioDetect(Device device) {
 		return false;
 	}
+
+	@Override
+	public void initGeoZoneList() {
+		
+	}
 }
 

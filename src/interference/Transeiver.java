@@ -120,8 +120,8 @@ public class Transeiver {
 		tx_cp[1] = tx_ifft[tx_ifft.length - 1];
 	
 		//generating alpha-stable random variables
-		double [] alpharnd1 = AlphaDistribution.rAlphaD(alpha, beta, gamma, delta, sizeout);
-		double [] alpharnd2 = AlphaDistribution.rAlphaD(alpha, beta, gamma, delta, sizeout);
+		double [] alpharnd1 = StableDistribution.rStable(alpha, beta, gamma, delta, sizeout);
+		double [] alpharnd2 = StableDistribution.rStable(alpha, beta, gamma, delta, sizeout);
 		Complex [] alpharnd = new Complex[sizeout];
 		for (int i = 0; i < sizeout; i++) {
 			alpharnd[i] = new Complex(alpharnd1[i], alpharnd2[i]);

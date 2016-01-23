@@ -92,6 +92,7 @@ public class MarkerList {
 	}
 
 	public static void open(String fileName) {
+		reset();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			String line;

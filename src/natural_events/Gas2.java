@@ -268,4 +268,9 @@ public class Gas2 extends DeviceWithoutRadio {
 	public boolean radioDetect(Device device) {
 		return false;
 	}
+
+	@Override
+	public void initGeoZoneList() {
+		
+	}
 }

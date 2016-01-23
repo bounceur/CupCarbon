@@ -19,6 +19,8 @@
 
 package map;
 
+import java.io.File;
+
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.mapviewer.DefaultTileFactory;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
@@ -35,6 +37,8 @@ public class WorldMap extends JXMapKit {
 	//public static String tileUrl = "http://a.basemaps.cartocdn.com/dark_all/";
 	public static String tileUrl = "http://a.basemaps.cartocdn.com/light_all/";	
 	//public static String tileUrl = "http://a.tile.stamen.com/toner/";
+	public static boolean local = true;
+	public static String tileName = "cuptile_light_blue.png" ;
 	
 	//http://bcdcspatial.blogspot.fr/2012/01/onlineoffline-mapping-map-tiles-and.html
 	
@@ -52,12 +56,28 @@ public class WorldMap extends JXMapKit {
 				 //return this.baseURL +"/"+zoom+"/"+x+"/"+y+".png";
 				 //return "http://otile1.mqcdn.com/tiles/1.0.0/sat/" + zoom + "/" + x + "/" + y + ".jpg";
 				//return "http://otile1.mqcdn.com/tiles/1.0.0/osm/" + zoom + "/" + x + "/" + y + ".jpg";
-				if(tileUrl.equals(""))
-					return "http://pagesperso.univ-brest.fr/~bounceur/cuptile.png";
+				//System.out.println(tileUrl+zoom+"/"+x+"/"+y+tileType);
+				//String pathStr = File.separator+
+				if(local) {
+					String platform = System.getProperty("user.dir");
+					if(platform.toLowerCase().startsWith("win")) {
+						return tileUrl+zoom+"/"+x+"/"+y+tileType ;
+					}
+					else {
+					//if(platform.toLowerCase().startsWith("mac")) {
+						File file = new File("images"+File.separator+tileName);
+						tileUrl = file.getAbsolutePath();
+						tileUrl = tileUrl.replaceAll(" ", "%20");					
+						return "file://"+tileUrl;
+					}
+				}
 				else {
-					//System.out.println(tileUrl+zoom+"/"+x+"/"+y+tileType);
 					return tileUrl+zoom+"/"+x+"/"+y+tileType ;
 				}
+				//File file = new File("/Users/bounceur/Google Drive/CupCarbon/images/cuptile.png");//"./images/cuptile.png");
+				//return "file://"+file.getAbsolutePath();
+				//return "file:///Users/bounceur/Google Drive/CupCarbon/images/16_square_red.png";
+				
 				//return "http://localhost:8888/cupcarbon/tiles/" + zoom + "/" + x + "/" + y + ".png";
 				// return
 				// "http://tile.stamen.com/terrain-background/"+zoom+"/"+x+"/"+y+".png";

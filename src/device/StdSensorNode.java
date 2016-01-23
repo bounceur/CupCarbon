@@ -135,6 +135,10 @@ public class StdSensorNode extends SensorNode {
 		sensorUnit = new SensorUnit(this.longitude, this.latitude, this.elevation, Double.valueOf(suRadius), this);
 	}
 	
+	public StdSensorNode(SensorNode sensorNode) {
+		super(sensorNode);
+	}
+
 	@Override
 	public void setSensorUnitRadius(double captureRadio) {
 		sensorUnit.setRadius(captureRadio);

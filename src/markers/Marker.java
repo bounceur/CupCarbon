@@ -226,4 +226,9 @@ public class Marker extends Device {
 	public boolean radioDetect(Device device) {
 		return false;
 	}
+
+	@Override
+	public void initGeoZoneList() {
+		
+	}
 }

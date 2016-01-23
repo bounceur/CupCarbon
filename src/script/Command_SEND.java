@@ -18,7 +18,7 @@ public class Command_SEND extends Command {
 	protected String arg4 = "";	
 	protected String arg5 = "";	
 	
-	private boolean ack = false;
+	//private boolean ack = false;
 	
 	public Command_SEND(SensorNode sensor, String arg1, String arg2) {
 		this.sensor = sensor ;
@@ -64,7 +64,7 @@ public class Command_SEND extends Command {
 			}
 			for (SensorNode rnode : sensor.getSensorNodeNeighbors()) {
 				if (sensor.propagationDetect(rnode) && sensor.canCommunicateWith(rnode) && rnode.getId()!=v) {
-					Channels.addPacketEvent(2, packet, message, sensor, rnode);
+					Channels.addPacketEvent(v==0?2:0, packet, message, sensor, rnode);
 				}
 			}
 		}
@@ -126,8 +126,12 @@ public class Command_SEND extends Command {
 		
 	}
 	
+	private int tentative = 0;
+	
 	@Override
-	public double execute() {		
+	public double execute() {	
+		//System.out.println("------------------------------");
+		//System.out.println("--> execute");
 		if (arg1.equals("!color")) {
 			sensor.setRadioLinkColor(UColor.colorTab2[Integer.parseInt(arg2)]);
 			//Visualisation.changeColorOfArrows(Integer.parseInt(arg2));
@@ -139,8 +143,11 @@ public class Command_SEND extends Command {
 		
 		//System.out.println(sensor.getId()+" -> "+" SEND "+sensor.getId());
 		
-		if(!writing) {	
-			ack = false;
+		if(!writing) {
+			//System.out.println("--> writing");
+			sensor.setAckOk(false);
+			tentative = 0;
+			//ack = false;
 			SimLog.add("S" + sensor.getId() + " is writing the message : \"" + message + "\" in its buffer.");
 			writing = true ;
 			executing = true;
@@ -153,40 +160,83 @@ public class Command_SEND extends Command {
 			return (ratio * (messageLength*8)) ;
 		}
 		
-		if (writing && !ack) {					
-			SimLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");	
-			//sensor.setSending(true);
-			sendOperation(message);			
+		if (writing) { // && !ack) {	
+			//System.out.println("--> written");
+			if(sensor.getAckOk()) {
+				//System.out.println("--> ACK reçu");
+				sensor.setAckOk(false);
+				tentative = 0;
+				writing = false;
+				executing = false;
+				return 0 ;
+			}
+						
+			if(tentative < sensor.getNumberOfSends()) {
+				//System.out.println("sendOperation : "+ tentative);
+				SimLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");
+				sendOperation(message);
+			}
 			
-			if (arg2.equals("*") || !SimulationInputs.ack) {
-				ack = false;
-				writing = false ;					
+			if ((arg2.equals("*") && arg3.equals("")) || !SimulationInputs.ack) {
+				//ack = false;
+				writing = false ;
 				executing=false;
 				return 0 ;
 			}
-			else {
-				ack = true;
-				return Double.MAX_VALUE;// (250000*3);
+			//else {
+					if (tentative < sensor.getNumberOfSends()) {
+						//if(tentative > 0 && tentative < sensor.getNumberOfSends()-1) sensor.getScript().previous();
+						if(tentative > 0) {
+							//System.out.println("::: "+sensor.getId()+" -> "+tentative);
+							sensor.getScript().previous();
+						}
+						tentative++;
+						//System.out.println("TENTATIVE : "+tentative);
+						writing = true;
+						executing = true;						
+						return sensor.getTimeToResend();//Double.MAX_VALUE;// (250000*3);
+					}
+					//System.out.println("||| "+sensor.getId()+" -> "+tentative+ " RATE ");
+					tentative = 0;
+					writing = false;
+					executing = false;
+					return 0 ;
+				
+				
+//				if (tentative < 3) {
+//					tentative++;
+//					//if (tentative == 1) remaining = 0.3;
+//					System.out.println("Tentaive :"+tentative);					
+//					return 0.3;//Double.MAX_VALUE;// (250000*3);
+//				}
+//				else {
+//					//ack = true;
+//					ack = false;
+//					writing = false ;
+//					executing=false;
+//					System.out.println("FIN TEN");
+//					return 0;//Double.MAX_VALUE;// (250000*3);
+//				}				
 			}
-		}
-		
-		if(ack) {
-			//System.out.println(sensor.getId()+" ACK Received : "+sensor.getAckOk());
-			ack = false;
-			if(sensor.getAckOk()) {
-				writing = false;
-				executing = false;				
-			} 
-			else {
-				writing = true;
-				executing = true;
-				sensor.getScript().previous();
-			}
-			return 0 ;
-		}
+		//}
+		//System.out.println("--> ?");
+//		if(ack) {
+//			//System.out.println(sensor.getId()+" ACK Received : "+sensor.getAckOk());
+//			ack = false;
+//			if(sensor.getAckOk()) {
+//				writing = false;
+//				executing = false;				
+//			} 
+//			else {
+//				writing = true;
+//				executing = true;
+//				sensor.getScript().previous();
+//			}
+//			return 0 ;
+//		}
 				
 		return 0;
-	}
+	}	
 	
 	@Override
 	public boolean isSend() {

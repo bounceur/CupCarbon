@@ -40,8 +40,6 @@ import org.jdesktop.swingx.painter.Painter;
 
 import actions_ui.AddDevice;
 import actions_ui.AddMarker;
-import buildings.Building;
-import buildings.BuildingList;
 import cupcarbon.CupCarbon;
 import cupcarbon.CupCarbonMap;
 import device.BaseStation;
@@ -53,6 +51,9 @@ import device.MobileWithRadio;
 import device.NetworkLoader;
 import device.StdSensorNode;
 import flying_object.FlyingGroup;
+import geo_objects.Building;
+import geo_objects.BuildingList;
+import geo_objects.GeoZoneList;
 import markers.Marker;
 import markers.MarkerList;
 import natural_events.Gas;
@@ -68,6 +69,7 @@ public class MapLayer implements Painter<Object>, MouseListener,
 	public static DeviceList nodeList = null;
 	public static MarkerList markerList = null;
 	public static BuildingList buildingList = null;
+	public static GeoZoneList geoZoneList = null;
 	public static boolean afficherIndicateur = false;
 	public static double x = 0;
 	public static double y = 0;
@@ -97,9 +99,9 @@ public class MapLayer implements Painter<Object>, MouseListener,
 	public MapLayer(JXMapViewer mapViewer) {
 		MapLayer.mapViewer = mapViewer;
 		buildingList = new BuildingList();
+		geoZoneList = new GeoZoneList();
 		markerList = new MarkerList();
 		nodeList = new DeviceList();
-		
 		//trackingPointsList = new TrackingPointsList();
 		//streetGraph = new StreetGraph();
 		
@@ -188,6 +190,7 @@ public class MapLayer implements Painter<Object>, MouseListener,
 		}
 
 		if (!OsmOverpass.isLoading) buildingList.draw(g);
+		//geoZoneList.draw(g);
 		markerList.draw(g);
 		//trackingPointsList.draw(g);
 		//streetGraph.dessiner(g);
@@ -445,7 +448,7 @@ public class MapLayer implements Painter<Object>, MouseListener,
 		}
 
 		if (lastKey == 'w') {
-			if (selectType++ == 10)
+			if (selectType++ == 11)
 				selectType = 0;
 		}
 		

@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Random;
 
 import battery.Battery;
+import geo_objects.GeoZone;
 import project.Project;
 import script.Script;
 import script.SensorAddCommand;
@@ -64,7 +65,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 
 	protected Color radioRangeColor1 = UColor.PURPLE_TRANSPARENT;
 	protected Color radioRangeColor2 = UColor.PURPLED_TRANSPARENT;	
-	
+		
 	/**
 	 * Constructor 1 Instanciate the sensor unit 
 	 * Instanciate the battery
@@ -77,6 +78,12 @@ public abstract class SensorNode extends DeviceWithRadio {
 		withSensor = true;
 		calculateRadioSpace();
 		initBuffer();
+	}
+	
+	public SensorNode(SensorNode sensorNode) {
+		this.longitude = sensorNode.getLongitude();
+		this.latitude = sensorNode.getLatitude();
+		this.elevation = sensorNode.getElevation();
 	}
 
 	/**
@@ -207,6 +214,11 @@ public abstract class SensorNode extends DeviceWithRadio {
 		if (visible) {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setStroke(new BasicStroke(0.4f));
+			
+			for(GeoZone geoZone : geoZoneList) {
+				geoZone.draw(g);
+			}
+			
 			calculateRadioSpace();
 			initDraw(g);
 			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
@@ -259,9 +271,9 @@ public abstract class SensorNode extends DeviceWithRadio {
 	
 	@Override
 	public void draw(Graphics g) {
-		if (visible) {
-			calculateRadioSpace();
-			initDraw(g);
+		if (visible) {			
+			//calculateRadioSpace();
+			//initDraw(g);
 			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
 			int x = coord[0];
 			int y = coord[1];
@@ -583,7 +595,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	public void setAckOk(boolean ackOk) {
 		this.ackOk = ackOk;
 	}
-	
+		
 	public int getBufferSize() {
 		return bufferSize;
 	}
@@ -594,6 +606,20 @@ public abstract class SensorNode extends DeviceWithRadio {
 	
 	public boolean canCommunicateWith(SensorNode rNode) {
 		return (!rNode.isDead() && sameCh(rNode) && sameNId(rNode) && sameStandard(rNode));
+	}
+
+	public double [] getPosition() {
+		double [] position = new double [3];
+		position[0] = latitude;
+		position[1] = longitude;
+		position[2] = elevation;
+		return position;
+	}
+
+	public void setPosition(double d, double e, double z) {
+		this.longitude = d ;
+		this.latitude = e ;
+		this.elevation = z ;
 	}
 	
 }

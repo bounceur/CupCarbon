@@ -391,4 +391,9 @@ public class FlyingObject extends MobileG {
 	public boolean radioDetect(Device device) {
 		return false;
 	}
+
+	@Override
+	public void initGeoZoneList() {
+		
+	}
 }

@@ -31,9 +31,9 @@ package interference;
 
 import java.util.Random;
 
-public class AlphaDistribution {
+public class StableDistribution {
 
-	public static double [] rAlphaD(double alpha, int beta, double gamma, int delta, int sizeout) {
+	public static double [] rStable(double alpha, int beta, double gamma, int delta, int sizeout) {
 	
 		double [] outsizen = new double[sizeout];
 		double mean = 0.0, std = 1.0;

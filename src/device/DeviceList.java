@@ -210,6 +210,7 @@ public class DeviceList {
 	 * @param fileName
 	 */
 	public static void open(String fileName) {
+		reset();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			String line;
@@ -317,11 +318,11 @@ public class DeviceList {
 	 *            Graphics
 	 */
 	public void draw(Graphics g) {
-		for (Device n : nodes) {			
+		for (Device n : getSensorNodes()) {			
 			n.drawRadioRange(g);
 		}
 		
-		for (Device n : nodes) {
+		for (Device n : getSensorNodes()) {
 			n.drawSensorUnit(g);
 		}
 		
@@ -871,7 +872,7 @@ public class DeviceList {
 	
 	public static void calculatePropagations() {
 		propagationsCalculated = true;
-		for(Device device : nodes) {
+		for(Device device : DeviceList.getSensorNodes()) {
 			device.calculatePropagations();
 		}
 	}
@@ -913,6 +914,14 @@ public class DeviceList {
 			}
 		}
 		MapLayer.getMapViewer().repaint();		
+	}
+
+	public static void setSigmaOfDriftTime(double drift) {
+		for (Device device : nodes) {
+			if (device.isSelected() && (device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION)) {
+				device.setSigmaOfDriftTime(drift);				
+			}
+		}		
 	}
 	
 }

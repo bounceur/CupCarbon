@@ -122,7 +122,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	// ------------------------------------------------------------------------
 	// Simulate
 	// ------------------------------------------------------------------------
-	public void runSimulation() {		
+	public void runSimulation() {
 		loadRouteFromFile();
 		fixori();
 		if (readyForSimulation) {
@@ -143,13 +143,16 @@ public abstract class DeviceWithWithoutRadio extends Device {
 				latitude = routeY.get(routeIndex);
 				elevation = routeZ.get(routeIndex);
 				
+				if (DeviceList.propagationsCalculated)
+					DeviceList.calculatePropagations();
+				
 				MapLayer.getMapViewer().repaint();
 				try {
 					Thread.sleep(toWait * Device.moveSpeed);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				goToNext();
+				goToNext();								
 			} while (hasNext());			
 			try {
 				Thread.sleep(toWait * Device.moveSpeed);
@@ -179,13 +182,12 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	@Override
 	public double getNextTime() {
 		if (routeTime.size() > 0) {
-			int diff = 0;
+			double diff = 0;
 			if (routeIndex <= 0)
-				diff = (int) (1 * routeTime.get(0));
+				diff = routeTime.get(0);
 			else 
-				diff = (int) (routeTime.get(routeIndex) - routeTime.get(routeIndex - 1));
-			return (diff * 1000);
-			//return ((diff * 1000) * WisenSimulation.chDataRate / 1000);
+				diff = routeTime.get(routeIndex) - routeTime.get(routeIndex - 1);
+			return diff;
 		}
 		return 0;
 	}
@@ -209,9 +211,16 @@ public abstract class DeviceWithWithoutRadio extends Device {
 			longitude = routeX.get(routeIndex);
 			latitude = routeY.get(routeIndex);
 			elevation = routeZ.get(routeIndex);
+			if (DeviceList.propagationsCalculated)
+				DeviceList.calculatePropagations();
+//			try {					
+//				TahaVisibility.calculateVisibility((SensorNode)this);
+//			} catch (CloneNotSupportedException e1) {
+//				e1.printStackTrace();
+//			}
 		}
 		if (visual) {
-			try {
+			try {				
 				MapLayer.getMapViewer().repaint();
 				Thread.sleep(visualDelay);
 			} catch (InterruptedException e) {
@@ -232,7 +241,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 					nLoop--;
 					routeIndex = 0;
 				}
-			}
+			}			
 		}
 	}
 

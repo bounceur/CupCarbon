@@ -12,7 +12,7 @@ import device.DeviceList;
 import map.MapLayer;
 import visualisation.Visualisation;
 
-public class Communication implements ICommunicationListener {
+public class Communication extends Thread implements ICommunicationListener {
   
 	/**
 	 * 
@@ -52,7 +52,7 @@ public class Communication implements ICommunicationListener {
 	/**
 	 * 
 	 */
-	private  Communication() {
+	public  Communication() {
 	}
 
 	/**
@@ -65,6 +65,13 @@ public class Communication implements ICommunicationListener {
 	}
 
 	public static void initialize() {
+		getInstance().addChannel(new ChannelSocket());			
+		getInstance().startCommunication();
+		cbInitialize = true;
+	}
+	
+	@Override
+	public void run() {
 		getInstance().addChannel(new ChannelSocket());			
 		getInstance().startCommunication();
 		cbInitialize = true;

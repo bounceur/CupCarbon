@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Random;
 
 import battery.Battery;
+import geo_objects.GeoZone;
 import map.MapLayer;
 import propagation.RadioDetection;
 import utilities.MapCalc;
@@ -69,6 +70,8 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	protected int [][] polyX = new int[nZone][nPoint];
 	protected int [][] polyY = new int[nZone][nPoint];
 	
+	protected LinkedList<GeoZone> geoZoneList = null;
+	
 	/**
 	 * 
 	 */
@@ -86,7 +89,16 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	public DeviceWithRadio(double x, double y, double z, double radius, double radioRangeRadius, int id) {
 		super(x, y, z, radius, id);
 		this.radioRangeRadius = radioRangeRadius ;
-		radioRangeRadiusOri = radioRangeRadius ;		
+		radioRangeRadiusOri = radioRangeRadius ;
+		initGeoZoneList(); 
+	}
+	
+	public void setGeoZoneList(LinkedList<GeoZone> geoZoneList) {
+		this.geoZoneList = geoZoneList ;
+	}
+	
+	public void initGeoZoneList() {
+		this.geoZoneList = new LinkedList<GeoZone>();
 	}
 	
 	public Polygon getRadioPolygon() {

@@ -162,4 +162,9 @@ public class Mobile extends MobileG {
 		return false;
 	}
 
+	@Override
+	public void initGeoZoneList() {
+		
+	}
+
 }

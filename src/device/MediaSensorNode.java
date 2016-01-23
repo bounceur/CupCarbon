@@ -25,7 +25,7 @@ import java.awt.Graphics;
 import sensorunit.MediaSensorUnit;
 import utilities.MapCalc;
 import battery.Battery;
-import buildings.BuildingList;
+import geo_objects.BuildingList;
 
 /**
  * @author Ahcene Bounceur

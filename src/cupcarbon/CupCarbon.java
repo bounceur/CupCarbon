@@ -65,9 +65,9 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import actions_ui.Historic;
 import arduino.Arduino;
-import buildings.BuildingList;
 import device.Device;
 import device.DeviceList;
+import geo_objects.BuildingList;
 import map.MapLayer;
 import map.RandomDevices;
 import map.WorldMap;
@@ -88,12 +88,13 @@ import solver.NetworkPerso;
 import solver.SensorSetCover;
 import solver.SensorTargetCoverageRun;
 import solver.SolverProxyParams;
+import visibility.TahaVisibility;
 
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
- * @version 2.7 (U-One)
+ * @version 2.7.1 (U-One)
  */
 
 public class CupCarbon {
@@ -150,7 +151,7 @@ public class CupCarbon {
 				// //e.printStackTrace();
 				// }
 
-				try {
+				try {					
 					FileInputStream licenceFile = new FileInputStream("cupcarbon_licence.txt");
 					int c;
 					while ((c = licenceFile.read()) != -1) {
@@ -335,8 +336,7 @@ public class CupCarbon {
 				}				
 			}
 		});
-		mntmOpenProject
-				.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "folder.png"));
+		mntmOpenProject.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "folder.png"));
 		mnProject.add(mntmOpenProject);
 
 		JMenuItem mntmSaveProject = new JMenuItem("Save Project");
@@ -346,6 +346,15 @@ public class CupCarbon {
 				Project.saveProject();
 			}
 		});
+		
+		JMenuItem mntmOpenTheLast = new JMenuItem("Open the Last Project");
+		mntmOpenTheLast.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "folder.png"));
+		mntmOpenTheLast.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Project.openRecentProject();
+			}
+		});
+		mnProject.add(mntmOpenTheLast);
 		mntmSaveProject.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "Enregistrer.png"));
 		mnProject.add(mntmSaveProject);
@@ -781,7 +790,7 @@ public class CupCarbon {
 		mntmAddFlyingObjects.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "insects.png"));
 		mnNodes.add(mntmAddFlyingObjects);
-
+		
 		JMenuItem mntmAddGas = new JMenuItem("Add Gas");
 		mntmAddGas.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "circle_orange.png"));
@@ -1223,6 +1232,7 @@ public class CupCarbon {
 				mntmInitialize.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						DeviceList.initAll();
+						//GeoZoneList.init();
 					}
 				});
 				mntmInitialize.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
@@ -1358,115 +1368,152 @@ public class CupCarbon {
 		mnMap.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "logo_cap_carbon.png"));
 		menuBar.add(mnMap);
 		
-		JRadioButtonMenuItem rdbtnmntmClassic = new JRadioButtonMenuItem("Standard (color)");
+		JRadioButtonMenuItem rdbtnmntmClassic = new JRadioButtonMenuItem("OSM Standard (color)");
 		rdbtnmntmClassic.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
 		buttonGroup.add(rdbtnmntmClassic);
 		rdbtnmntmClassic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				changeTiles("http://a.tile.openstreetmap.org/");
+				changeNetTiles("http://a.tile.openstreetmap.org/");
 			}
 		});
 		
-		JRadioButtonMenuItem rdbtnmntmLight = new JRadioButtonMenuItem("Light");
+		JRadioButtonMenuItem rdbtnmntmLocallightBlue = new JRadioButtonMenuItem("Local (Light Blue)");
+		rdbtnmntmLocallightBlue.setSelected(true);
+		buttonGroup.add(rdbtnmntmLocallightBlue);
+		rdbtnmntmLocallightBlue.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
+		rdbtnmntmLocallightBlue.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeLocalTiles("cuptile_light_blue.png");				
+			}
+		});
+		mnMap.add(rdbtnmntmLocallightBlue);
+		
+		JRadioButtonMenuItem rdbtnmntmLight = new JRadioButtonMenuItem("OSM Light");
 		buttonGroup.add(rdbtnmntmLight);
 		rdbtnmntmLight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeTiles("http://a.basemaps.cartocdn.com/light_all/");				
+				changeNetTiles("http://a.basemaps.cartocdn.com/light_all/");			
 			}
 		});
 		rdbtnmntmLight.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
-		rdbtnmntmLight.setSelected(true);
 		mnMap.add(rdbtnmntmLight);
+		
+		JSeparator separator_17 = new JSeparator();
+		mnMap.add(separator_17);
+		
+		JRadioButtonMenuItem rdbtnmntmLocaldarkBlue = new JRadioButtonMenuItem("Local (Dark Blue)");
+		buttonGroup.add(rdbtnmntmLocaldarkBlue);
+		rdbtnmntmLocaldarkBlue.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
+		rdbtnmntmLocaldarkBlue.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeLocalTiles("cuptile_dark_blue.png");
+			}
+		});
+		mnMap.add(rdbtnmntmLocaldarkBlue);
+		
+		JRadioButtonMenuItem rdbtnmntmLocallines = new JRadioButtonMenuItem("Local (Lines)");
+		buttonGroup.add(rdbtnmntmLocallines);
+		rdbtnmntmLocallines.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
+		rdbtnmntmLocallines.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeLocalTiles("cuptile_lines.png");
+			}
+		});
+		mnMap.add(rdbtnmntmLocallines);
+		
+		JRadioButtonMenuItem rdbtnmntmLocaldots = new JRadioButtonMenuItem("Local (Dots)");
+		buttonGroup.add(rdbtnmntmLocaldots);
+		rdbtnmntmLocaldots.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
+		rdbtnmntmLocaldots.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeLocalTiles("cuptile_dots.png");
+			}
+		});
+		mnMap.add(rdbtnmntmLocaldots);
+		
+		JRadioButtonMenuItem rdbtnmntmLocalwhite = new JRadioButtonMenuItem("Local (White)");
+		buttonGroup.add(rdbtnmntmLocalwhite);
+		rdbtnmntmLocalwhite.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
+		rdbtnmntmLocalwhite.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeLocalTiles("cuptile_white.png");
+			}
+		});
+		mnMap.add(rdbtnmntmLocalwhite);
+		
+		JSeparator separator_18 = new JSeparator();
+		mnMap.add(separator_18);
 		mnMap.add(rdbtnmntmClassic);
 		
-		JRadioButtonMenuItem rdbtnmntmOsm = new JRadioButtonMenuItem("OSM");
+		JRadioButtonMenuItem rdbtnmntmOsm = new JRadioButtonMenuItem("OSM 2");
 		rdbtnmntmOsm.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
 		buttonGroup.add(rdbtnmntmOsm);
 		rdbtnmntmOsm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeTiles("http://otile1.mqcdn.com/tiles/1.0.0/osm/");
+				changeNetTiles("http://otile1.mqcdn.com/tiles/1.0.0/osm/");
 			}
 		});
 		
-		JRadioButtonMenuItem mntmLocal = new JRadioButtonMenuItem("Standard (grayscale)");
+		JRadioButtonMenuItem mntmLocal = new JRadioButtonMenuItem("OSM Standard (grayscale)");
 		mntmLocal.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
 		buttonGroup.add(mntmLocal);
 		mntmLocal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeTiles("http://a.tiles.wmflabs.org/bw-mapnik/");
+				changeNetTiles("http://a.tiles.wmflabs.org/bw-mapnik/");
 			}
 		});
 		mnMap.add(mntmLocal);
 		mnMap.add(rdbtnmntmOsm);
 		
-		JRadioButtonMenuItem rdbtnmntmSatellit = new JRadioButtonMenuItem("Satellite");
+		JRadioButtonMenuItem rdbtnmntmSatellit = new JRadioButtonMenuItem("OSM Satellite (USA)");
 		rdbtnmntmSatellit.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
 		buttonGroup.add(rdbtnmntmSatellit);
 		rdbtnmntmSatellit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeTiles("http://otile1.mqcdn.com/tiles/1.0.0/sat/");
+				changeNetTiles("http://otile1.mqcdn.com/tiles/1.0.0/sat/");
 			}
 		});
 		mnMap.add(rdbtnmntmSatellit);
 		
-		JRadioButtonMenuItem rdbtnmntmCyclic = new JRadioButtonMenuItem("Cycle");
+		JRadioButtonMenuItem rdbtnmntmCyclic = new JRadioButtonMenuItem("OSM Cycle");
 		rdbtnmntmCyclic.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
 		buttonGroup.add(rdbtnmntmCyclic);
 		rdbtnmntmCyclic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeTiles("http://a.tile.opencyclemap.org/cycle/");
+				changeNetTiles("http://a.tile.opencyclemap.org/cycle/");
 			}
 		});
 		mnMap.add(rdbtnmntmCyclic);
 		
-		JRadioButtonMenuItem mntmTransport = new JRadioButtonMenuItem("Transport");
+		JRadioButtonMenuItem mntmTransport = new JRadioButtonMenuItem("OSM Transport");
 		mntmTransport.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
 		buttonGroup.add(mntmTransport);
 		mntmTransport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeTiles("http://a.tile2.opencyclemap.org/transport/");
+				changeNetTiles("http://a.tile2.opencyclemap.org/transport/");
 			}
 		});
 		mnMap.add(mntmTransport);
 		
-		JRadioButtonMenuItem mntmTerrain = new JRadioButtonMenuItem("Terrain");
+		JRadioButtonMenuItem mntmTerrain = new JRadioButtonMenuItem("OSM Terrain");
 		mntmTerrain.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
 		buttonGroup.add(mntmTerrain);
 		mntmTerrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeTiles("http://tile.stamen.com/terrain-background/");
+				changeNetTiles("http://tile.stamen.com/terrain-background/");
 			}
 		});
 		mnMap.add(mntmTerrain);
 		
-		JRadioButtonMenuItem mntmMapbox = new JRadioButtonMenuItem("MapBox");
+		JRadioButtonMenuItem mntmMapbox = new JRadioButtonMenuItem("OSM MapBox");
 		mntmMapbox.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
 		buttonGroup.add(mntmMapbox);
 		mntmMapbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				changeTiles("http://a.tiles.mapbox.com/v3/examples.map-zr0njcqy/");
+				changeNetTiles("http://a.tiles.mapbox.com/v3/examples.map-zr0njcqy/");
 			}
 		});
 		mnMap.add(mntmMapbox);		
-		
-		
-		
-		
-		
-		JRadioButtonMenuItem rdbtnmntmWhite = new JRadioButtonMenuItem("White Background");
-		rdbtnmntmWhite.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
-		buttonGroup.add(rdbtnmntmWhite);
-		rdbtnmntmWhite.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				changeTiles("");
-			}
-		});
-		mnMap.add(rdbtnmntmWhite);
-		
-		
-		
-		
-		
 		
 		JSeparator separator_16 = new JSeparator();
 		mnMap.add(separator_16);
@@ -1671,6 +1718,20 @@ public class CupCarbon {
 			}
 		});
 		toolBar.add(btnPropagations);
+		
+		JButton btnVisibility = new JButton("Visibility");
+		btnVisibility.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {				
+				TahaVisibility taha = new TahaVisibility();
+				try {
+					taha.execute();
+				} catch (CloneNotSupportedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		toolBar.add(btnVisibility);
 		toolBar.add(btnQuickSimulation);
 		
 		JButton button = new JButton("");
@@ -1788,9 +1849,17 @@ public class CupCarbon {
 		sspeedLabel.setText("" + Device.moveSpeed + "  ");
 	}
 	
-	public void changeTiles(String s) {
-		WorldMap.tileUrl = s;				
+	public void changeNetTiles(String s) {
+		WorldMap.local = false ;
+		WorldMap.tileUrl = s;						
 		MapLayer.getMapViewer().repaint();
+	}
+	
+	public void changeLocalTiles(String s) {
+		WorldMap.local = true ;
+		WorldMap.tileName = s;
+		Refresher ref = new Refresher();
+		ref.start();
 	}
 	
 	public static void setProxy() {

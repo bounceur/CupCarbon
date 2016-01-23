@@ -72,13 +72,13 @@ public abstract class Device implements Runnable, MouseListener,
 	public static final int MARKER = 8;
 	public static final int VERTEX = 9;
 	public static final int BUILDING = 10;
+	public static final int GEOZONE = 11;
 	
 	public static final boolean DEAD = false;
 	public static final boolean ALIVE = true;
 	public static final boolean SLEEP = false;
 
-	protected double driftTime = 1e-6;
-	protected double sigmaOfDriftTime = driftTime/3.0;
+	protected double sigmaOfDriftTime = 0.00003;
 	protected double deltaDriftTime = 0.0; 
 	
 	public static int moveSpeed = 100;
@@ -96,6 +96,8 @@ public abstract class Device implements Runnable, MouseListener,
 	protected int ch = 0x0;
 	protected int nId = 0x3334;
 	protected String userId = "";
+	protected double timeToResend = 3.0 ;
+	protected int numberOfSends = 3 ;
 	
 	protected int uartDataRate = 9600;
 	protected int radioDataRate = 250000;
@@ -137,14 +139,11 @@ public abstract class Device implements Runnable, MouseListener,
 	protected String targetName = ""; 
 	protected int ledColor = 0;
 
-//	protected double consumptionTx = 0;
-//	protected double consumptionRx = 0;
 	protected double eTx = 0.0000592; //sending energy
 	protected double eRx = 0.0000286; // receiving energy
 	protected double eSlp = 0.0000001;//Sleeping energy
 	protected double eL = 0.000001;//Listening energy
-	protected double eS = 1; // sensing energy
-	//protected double beta = 1;
+	protected double eS = 1; // sensing energy	
 	
 	protected Color radioLinkColor = UColor.RED;
 	protected Color ackLinkColor = Color.BLACK;
@@ -1140,6 +1139,8 @@ public abstract class Device implements Runnable, MouseListener,
 	public void mouseDragged(MouseEvent arg0) {
 	}
 
+	public abstract void initGeoZoneList() ;
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -1167,6 +1168,7 @@ public abstract class Device implements Runnable, MouseListener,
 		}
 
 		if ((move && selected) && hide == 0) {
+			initGeoZoneList() ;
 			longitude = ex - dlongitude;
 			latitude = ey - dlatitude;
 			//calculateNeighbours();
@@ -1777,7 +1779,28 @@ public abstract class Device implements Runnable, MouseListener,
 	public abstract void calculatePropagations();
 	public abstract void resetPropagations();
 	public abstract void drawRadioPropagations(Graphics g) ;
-	public abstract boolean radioDetect(Device device) ;	
+	public abstract boolean radioDetect(Device device) ;
+
+	public void setSigmaOfDriftTime(double sigmaOfDriftTime) {
+		this.sigmaOfDriftTime = sigmaOfDriftTime;
+	}
+
+	public double getTimeToResend() {
+		return timeToResend;
+	}
+
+	public void setTimeToResend(double timeToResend) {
+		this.timeToResend = timeToResend;
+	}
+
+	public int getNumberOfSends() {
+		return numberOfSends;
+	}
+
+	public void setNumberOfSends(int numberOfSends) {
+		this.numberOfSends = numberOfSends;
+	}	
+
 	
 	
 //	public static void main(String [] args) {

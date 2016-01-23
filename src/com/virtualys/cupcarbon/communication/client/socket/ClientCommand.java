@@ -9,7 +9,7 @@ import java.util.Scanner;
  * @author olive
  *
  */
-public class ClientCommand {
+public class ClientCommand extends Thread {
 		
 	public static String host = "localhost";	
 	public static int port = 9900;

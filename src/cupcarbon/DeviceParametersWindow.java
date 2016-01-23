@@ -62,6 +62,7 @@ public class DeviceParametersWindow extends JInternalFrame {
 	public static JTextField tf_eMax;
 	public static JTextField tf_eS;		
 	public static JComboBox<String> cb_uartDataRate;
+	private JTextField tf_drift;
 
 	/**
 	 * Launch the application.
@@ -167,6 +168,10 @@ public class DeviceParametersWindow extends JInternalFrame {
 		JLabel lblUartRate = new JLabel("UART Data Rate (baud)");
 		lblUartRate.setFont(new Font("Arial", Font.PLAIN, 11));
 		panel_9.add(lblUartRate);
+		
+		JLabel lblCpuDrifftsigma = new JLabel("CPU Drifft (Sigma)");
+		lblCpuDrifftsigma.setFont(new Font("Arial", Font.PLAIN, 11));
+		panel_9.add(lblCpuDrifftsigma);
 
 		JPanel panel_10 = new JPanel();
 		panel_8.add(panel_10, BorderLayout.CENTER);
@@ -215,6 +220,11 @@ public class DeviceParametersWindow extends JInternalFrame {
 		cb_uartDataRate.setModel(new DefaultComboBoxModel<String>(new String[] {"-", "2400", "3600", "4800", "9600", "38400", "115200"}));
 		cb_uartDataRate.setSelectedIndex(4);
 		panel_10.add(cb_uartDataRate);
+		
+		tf_drift = new JTextField();
+		tf_drift.setText("0.00003");
+		tf_drift.setColumns(10);
+		panel_10.add(tf_drift);
 
 		JPanel panel_11 = new JPanel();
 		panel_8.add(panel_11, BorderLayout.EAST);
@@ -437,6 +447,21 @@ public class DeviceParametersWindow extends JInternalFrame {
 		});
 		button_10.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
 		panel_5.add(button_10);
+		
+		JPanel panel_Drift = new JPanel();
+		FlowLayout flowLayout_Drift = (FlowLayout) panel_Drift.getLayout();
+		flowLayout_Drift.setVgap(0);
+		flowLayout_Drift.setHgap(0);
+		panel_11.add(panel_Drift);
+		
+		JButton button_Drift = new JButton("");
+		button_Drift.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DeviceList.setSigmaOfDriftTime(Double.parseDouble(tf_drift.getText()));
+			}
+		});
+		button_Drift.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		panel_Drift.add(button_Drift);
 		
 		
 		

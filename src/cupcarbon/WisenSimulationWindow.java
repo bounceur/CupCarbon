@@ -142,13 +142,14 @@ public class WisenSimulationWindow extends JInternalFrame {
 		panel_17.setLayout(new GridLayout(1, 2, 0, 0));
 		
 		chbxSymRadio = new JCheckBox("Symmetrical Radio Links");
+		chbxSymRadio.setToolTipText("Symmetrical Radio Links");
 		chbxSymRadio.setSelected(true);
 		chbxSymRadio.setFont(new Font("Arial", Font.PLAIN, 12));
 		panel_17.add(chbxSymRadio);
 		
-		chckbxCpuDrift = new JCheckBox("CPU Drift");
-		chckbxCpuDrift.setFont(new Font("Arial", Font.PLAIN, 12));
+		chckbxCpuDrift = new JCheckBox("Drift (sigma)");
 		panel_17.add(chckbxCpuDrift);
+		chckbxCpuDrift.setFont(new Font("Arial", Font.PLAIN, 12));
 
 		JPanel panel_7 = new JPanel();
 		panel_7.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -226,7 +227,7 @@ public class WisenSimulationWindow extends JInternalFrame {
 						
 						ackTypeCB = new JComboBox<String>();
 						ackTypeCB.setToolTipText("ACK");
-						ackTypeCB.setModel(new DefaultComboBoxModel<String>(new String[] {"Probability", "Alpha-distribution"}));
+						ackTypeCB.setModel(new DefaultComboBoxModel<String>(new String[] {"Probability", "Stable-distribution"}));
 						ackTypeCB.setSelectedIndex(0);
 						ackTypeCB.setFont(new Font("Arial", Font.PLAIN, 12));
 						panel_9.add(ackTypeCB);

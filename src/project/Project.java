@@ -21,23 +21,24 @@ package project;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 import javax.swing.JOptionPane;
 
-import map.MapLayer;
-import markers.MarkerList;
-
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
-import buildings.BuildingList;
 import cupcarbon.CupCarbon;
 import cupcarbon.Version;
 import device.DeviceList;
+import geo_objects.BuildingList;
+import map.MapLayer;
+import markers.MarkerList;
 
 public final class Project {
 
@@ -111,12 +112,15 @@ public final class Project {
 		DeviceList.initAll();
 		DeviceList.reset();
 		MarkerList.reset();
-		BuildingList.reset();
+		BuildingList.init();
 	}
 	
 	public static void openProject(String path, String name) {
 		reset();
 		setProjectName(path, name);
+		
+		saveRecentPath();
+		
 		loadParameters();
 		DeviceList.open(getProjectNodePathName());
 		MarkerList.open(getProjectMarkerPathName());
@@ -148,9 +152,22 @@ public final class Project {
 			file = new File(path + File.separator + "results");
 			file.mkdir();
 			saveParameters();
+			saveRecentPath();
 		}
 		else {
 			JOptionPane.showMessageDialog(null, "The Project exists!", "New Project", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+	
+	public static void saveRecentPath() {
+		try {
+			FileOutputStream fos = new FileOutputStream("recent.rec");
+			PrintStream ps = new PrintStream(fos);			
+			ps.println(projectPath);
+			ps.println(projectName);
+			ps.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -269,5 +286,17 @@ public final class Project {
 			return name;
 		else
 			return name + ".res";
+	}
+
+	public static void openRecentProject() {
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("recent.rec")));
+			String p = br.readLine();
+			String n = br.readLine();
+			br.close();
+			Project.openProject(p, n);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

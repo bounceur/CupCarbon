@@ -26,8 +26,8 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import buildings.Building;
-import buildings.BuildingList;
+import geo_objects.Building;
+import geo_objects.BuildingList;
 import map.MapLayer;
 
 /**
@@ -59,14 +59,12 @@ public class OsmOverpass extends Thread {
 		    Osm data = (Osm) JAXBContext.newInstance(Osm.class).createUnmarshaller().unmarshal( url );
 		    System.out.println("[Buildings] File downloaded.");
 		    System.out.println("[Buildings] Processing...");
-			
 
 			List<OsmWay> ways= data.getWay();
 			List<OsmNode> nodes= data.getNode();
 			List<OsmNd> nds;
 			Building building;
-
-
+			
 	        for(OsmWay way:ways){ // For each shapes
 	        	if (way.isBuilding()){
 	        		nds = way.getNd();
@@ -75,7 +73,7 @@ public class OsmOverpass extends Thread {
 		        	for (int i=nds.size()-1; i>=0; i--){ // Get all nodes referenced by the shape
 		        		for(OsmNode node:nodes){
 		        			if (nds.get(i).getRef().equals(node.getId())){
-		        				building.set(node.getLat(), node.getLon(), i);
+		        				building.set(node.getLon(), node.getLat(), i);
 		        				break;
 		        			}
 		    	        }
