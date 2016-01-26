@@ -176,6 +176,9 @@ public class Command_SEND extends Command {
 				SimLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");
 				sendOperation(message);
 			}
+			else {
+				System.out.println("PERDU");
+			}
 			
 			if ((arg2.equals("*") && arg3.equals("")) || !SimulationInputs.ack) {
 				//ack = false;
@@ -191,7 +194,7 @@ public class Command_SEND extends Command {
 							sensor.getScript().previous();
 						}
 						tentative++;
-						//System.out.println("TENTATIVE : "+tentative);
+						System.out.println("TENTATIVE : "+tentative);
 						writing = true;
 						executing = true;						
 						return sensor.getTimeToResend();//Double.MAX_VALUE;// (250000*3);

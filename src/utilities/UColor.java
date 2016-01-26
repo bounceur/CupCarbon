@@ -34,6 +34,7 @@ public final class UColor {
 	public static final Color GREEND_TRANSPARENT = new Color(210, 255, 0, 150);
 	public static final Color PURPLE_TRANSPARENT = new Color(134, 20, 143, sen_transparency);
 	public static final Color PURPLED_TRANSPARENT = new Color(134, 20, 143, sen_transparency+30);
+	public static final Color PURPLE_TTRANSPARENT = new Color(134, 20, 143, sen_transparency+10);
 	public static final Color RED_TTRANSPARENT = new Color(255, 200, 103, 20);
 	public static final Color RED_TRANSPARENT = new Color(255, 200, 103, 120);
 	public static final Color REDD_TRANSPARENT = new Color(255, 200, 103, 150);
@@ -42,6 +43,7 @@ public final class UColor {
 	public static final Color GREEN = new Color(180, 225, 22);
 	public static final Color ORANGE = new Color(240, 113, 51);
 	public static final Color ORANGE_TRANSPARENT = new Color(240, 113, 51, 100);
+	public static final Color ORANGE_TRANSPARENT2 = new Color(240, 113, 51, 120);
 	public static final Color YELLOW_SENSOR = new Color(255, 198, 0, 180);
 	public static final Color WHITE_TRANSPARENT = new Color(255, 255, 255, 230);
 	public static final Color WHITE_LTRANSPARENT = new Color(255, 255, 255, 160);

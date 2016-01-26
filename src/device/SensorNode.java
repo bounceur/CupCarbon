@@ -24,6 +24,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -31,8 +33,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import org.jdesktop.swingx.mapviewer.GeoPosition;
+
 import battery.Battery;
-import geo_objects.GeoZone;
+import map.MapLayer;
 import project.Project;
 import script.Script;
 import script.SensorAddCommand;
@@ -161,25 +165,32 @@ public abstract class SensorNode extends DeviceWithRadio {
 	}	
 	
 	public void calculateRadioSpace() {
-		int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
-		int x = coord[0];
-		int y = coord[1];
-		int rayon = MapCalc.radiusInPixels(radioRangeRadius * pl / 100) ; 
-		
-		double r2=0;
-		double r3=0;
-		
-		//variateRadius();
-		double i=0.0;
-		for(int k=0; k<nPoint; k++) {
+		if(geoZoneList.isEmpty()) {
+			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+			int x = coord[0];
+			int y = coord[1];
+			int rayon = MapCalc.radiusInPixels(radioRangeRadius * pl / 100) ; 
+			
+			double r2=0;
+			double r3=0;
+			
 			//variateRadius();
-			r2 = (rayon+variation)*Math.cos(i);
-			r3 = (rayon+variation)*Math.sin(i);
-			for (int j=0; j<nZone; j++) {
-				polyX[j][k]=(int)(x+r2*(nZone-j)/nZone);
-				polyY[j][k]=(int)(y+r3*(nZone-j)/nZone);
-			}	
-			i+=deg;
+			double i=0.0;
+			for(int k=0; k<nPoint; k++) {
+				//variateRadius();
+				r2 = (rayon+variation)*Math.cos(i);
+				r3 = (rayon+variation)*Math.sin(i);
+				for (int j=0; j<nZone; j++) {
+					polyX[j][k]=(int)(x+r2*(nZone-j)/nZone);
+					polyY[j][k]=(int)(y+r3*(nZone-j)/nZone);
+				}	
+				i+=deg;
+			}
+		}
+		else {
+			nPoint = 0;
+			polyX = null;
+			polyY = null;
 		}
 	}
 	
@@ -215,9 +226,9 @@ public abstract class SensorNode extends DeviceWithRadio {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setStroke(new BasicStroke(0.4f));
 			
-			for(GeoZone geoZone : geoZoneList) {
-				geoZone.draw(g);
-			}
+			//for(GeoZone geoZone : geoZoneList) {
+			geoZoneList.draw(g);
+			//}
 			
 			calculateRadioSpace();
 			initDraw(g);
@@ -247,10 +258,10 @@ public abstract class SensorNode extends DeviceWithRadio {
 			}
 			if(!isDead()) {
 				if(hide == 0 || hide == 2 || hide == 3) {
-					//if (!isDead()) {
+					if (nPoint>0) {
 						g.setColor(UColor.BLACK_TTRANSPARENT);
 						g.drawPolygon(polyX[0], polyY[0], nPoint);
-					//}
+					}
 				}
 				
 				g.setColor(Color.DARK_GRAY);
@@ -262,7 +273,8 @@ public abstract class SensorNode extends DeviceWithRadio {
 						g.setColor(radioRangeColor1);
 					}				
 					for (int i=0; i<nZone; i++) 
-						g.fillPolygon(polyX[i], polyY[i], nPoint);
+						if(nPoint>0)
+							g.fillPolygon(polyX[i], polyY[i], nPoint);
 					//drawSendingReceiving(g, x, y);								
 				}
 			}
@@ -299,7 +311,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 				g.setColor(UColor.GREEN);
 				if (battery.getLevel()/battery.getInitialLevel()<0.5) g.setColor(UColor.ORANGE);
 				if (battery.getLevel()/battery.getInitialLevel()<0.2) g.setColor(UColor.RED);
-				System.out.println();
+				//System.out.println();
 				g.fillRect(x-30, y-(int)(battery.getLevel()/battery.getInitialLevel()*100./2.)+25, 6, (int)(battery.getLevel()/battery.getInitialLevel()*100./2.));
 				g.setColor(Color.DARK_GRAY);
 				g.drawRect(x-30, y-25, 6, 50);
@@ -620,6 +632,12 @@ public abstract class SensorNode extends DeviceWithRadio {
 		this.longitude = d ;
 		this.latitude = e ;
 		this.elevation = z ;
+	}
+	
+	public boolean canSee(SensorNode sn) {
+		GeoPosition gp1 = new GeoPosition(sn.getLatitude(), sn.getLongitude());
+		Point2D p = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp1, MapLayer.getMapViewer().getZoom());
+		return geoZoneList.contains((Point) p);
 	}
 	
 }

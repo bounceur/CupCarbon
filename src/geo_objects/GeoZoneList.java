@@ -2,6 +2,7 @@ package geo_objects;
 
 import java.awt.Graphics;
 import java.awt.Polygon;
+import java.awt.geom.Point2D;
 import java.util.LinkedList;
 
 import map.MapLayer;
@@ -13,14 +14,18 @@ import map.MapLayer;
 
 public class GeoZoneList extends Thread {
 
-	public static LinkedList<GeoZone> geoZoneList = null;		
+	public LinkedList<GeoZone> geoZoneList = null;		
 	
 	public GeoZoneList() {
 		geoZoneList = new LinkedList<GeoZone>();
 	}
 	
+	public GeoZoneList(LinkedList<GeoZone> geoZoneList) {
+		this.geoZoneList = geoZoneList ; 
+	}
+	
 	public void add(String str) {
-		GeoZone geoZone = new GeoZone(str);
+		GeoZone geoZone = new GeoZone(str, this);
 		MapLayer.getMapViewer().addMouseListener(geoZone);
 		MapLayer.getMapViewer().addKeyListener(geoZone);
 		geoZoneList.add(geoZone);
@@ -28,11 +33,11 @@ public class GeoZoneList extends Thread {
 	
 	public void add(String [] str) {		
 		for(int i=0; i<str.length; i++) {
-			geoZoneList.add(new GeoZone(str));
+			geoZoneList.add(new GeoZone(str, this));
 		}
 	}
 	
-	public static void add(GeoZone geoZone) {
+	public void add(GeoZone geoZone) {
 		MapLayer.getMapViewer().addMouseListener(geoZone);
 		MapLayer.getMapViewer().addKeyListener(geoZone);
 		geoZoneList.add(geoZone);		
@@ -45,23 +50,18 @@ public class GeoZoneList extends Thread {
 	}
 	
 	public void init() {
+		System.out.println("INIT GZ");
 		for(GeoZone geoZone : geoZoneList) {
-			MapLayer.getMapViewer().removeMouseListener(geoZone);
-			MapLayer.getMapViewer().removeKeyListener(geoZone);
-			geoZone = null;
+			delete(geoZone);
 		}
 		geoZoneList = new LinkedList<GeoZone>();
 	}
 	
-	public void delete(GeoZone geoZone) {
-		for(GeoZone b : geoZoneList) {			
-			if(b==geoZone) {
-				MapLayer.getMapViewer().removeMouseListener(b);
-				MapLayer.getMapViewer().removeKeyListener(b);
-				geoZoneList.remove(b);
-				break;
-			}
-		}
+	public void delete(GeoZone geoZone) {	
+		MapLayer.getMapViewer().removeMouseListener(geoZone);
+		MapLayer.getMapViewer().removeKeyListener(geoZone);
+		geoZone = null;
+		geoZoneList.remove(geoZone);
 	}
 	
 	public boolean intersect(Polygon p) {
@@ -74,5 +74,29 @@ public class GeoZoneList extends Thread {
 
 	public LinkedList<GeoZone> getGeoZoneList() {
 		return geoZoneList;
+	}
+	
+	public boolean contains(Point2D p) {
+		for(GeoZone geoZone : geoZoneList) {
+			if(geoZone.contains(p)) return true;
+		}
+		return false;
+	}
+	
+	public boolean contains(double px, double py) {
+		for(GeoZone geoZone : geoZoneList) {
+			if(geoZone.contains(px, py)) return true;
+		}
+		return false;
+	}
+	
+	public void reduce(double xref, double yref, double zm) {
+		for(GeoZone geo : geoZoneList) {
+			geo.reduce(xref, yref, zm);
+		}
+	}
+	
+	public boolean isEmpty() {
+		return (geoZoneList.size()==0);
 	}
 }

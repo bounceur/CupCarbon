@@ -56,6 +56,9 @@ public class Channels {
 		channelEventList.get(sSensor.getCh()).add(packetEvent);
 	}
 	
+	
+	public static int sommer = 0;
+	public static int sommep = 0;
 	public static void receivedMessages() {
 		for (List<PacketEvent> packetEventList : channelEventList) {
 			boolean stop = false; // For broadcast sending
@@ -83,6 +86,10 @@ public class Channels {
 						// type=2 : Broadcast sending 
 						if ((type == 0) || (type == 2)) {	
 							if (berOk || (type == 2)) {
+								
+								//System.out.println(WisenSimulation.time+" : "+"S"+sSensor.getId()+"->"+"S"+rSensor.getId()+" : Messages Reçus : "+(sommer++)+" | "+" Messages Perdus : "+sommep);
+								//System.out.println("RECU");
+								
 								//System.out.println(">>> "+sSensor.getId() +"->"+rSensor.getId()+ " : "+packetEventList.get(0).getMessage());
 								rSensor.addMessageToBuffer(packetEventList.get(0).getMessage());
 								
@@ -91,12 +98,12 @@ public class Channels {
 								}
 								
 								if((type == 0) && (SimulationInputs.ack)) {									
-									addPacketEvent(1, XBeeFrameGenerator.ackInBin("0", "00", "00", Standard.getSubChannel(rSensor.getStandard())*8), "0", rSensor, sSensor);
+									addPacketEvent(1, XBeeFrameGenerator.ackInBin("0", "00", "00", Standard.getSubChannel(rSensor.getStandard())*8), "0", rSensor, sSensor);																		
 								}
 							}
 							//else {								
 								// Message not received
-								//System.out.println("Message non reçu");
+								//System.out.println(WisenSimulation.time+" : "+"S"+sSensor.getId()+"->"+"S"+rSensor.getId()+" : Messages Reçus : "+sommer+" | "+" Messages Perdus : "+(sommep++));
 								//addPacketEvent(1, XBeeFrameGenerator.ackInBin("1", "00", "00", Standard.getSubChannel(rSensor.getStandard())*8), "1", rSensor, sSensor);
 							//	sSensor.setAckOk(true);
 								//sSensor.setV(sSensor.getEvent());

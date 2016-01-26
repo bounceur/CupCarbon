@@ -37,9 +37,7 @@ import java.util.regex.Pattern;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
-import actions_ui.AddDevice;
 import actions_ui.MoveDevice;
-import actions_ui.MoveMarker;
 import battery.Battery;
 import cupcarbon.DeviceParametersWindow;
 import cupcarbon.RadioParametersWindow;
@@ -96,7 +94,7 @@ public abstract class Device implements Runnable, MouseListener,
 	protected int ch = 0x0;
 	protected int nId = 0x3334;
 	protected String userId = "";
-	protected double timeToResend = 3.0 ;
+	protected double timeToResend = 1.0 ;
 	protected int numberOfSends = 3 ;
 	
 	protected int uartDataRate = 9600;
@@ -943,8 +941,8 @@ public abstract class Device implements Runnable, MouseListener,
 					DeviceList.add(this.clone());
 					move = false;
 					/* For CTRL Z */
-					AddDevice action = new AddDevice(DeviceList.getNodes().get(DeviceList.size()-1), "Clone");
-					action.exec();
+					//AddDevice action = new AddDevice(DeviceList.getNodes().get(DeviceList.size()-1), "Clone");
+					//action.exec();
 					/* ------ */
 				} catch (CloneNotSupportedException e1) {
 					e1.printStackTrace();
@@ -991,23 +989,23 @@ public abstract class Device implements Runnable, MouseListener,
 		}
 
 		if (key == 'm') {			
-			boolean typeDevice = false;
+			//boolean typeDevice = false;
 			if(selected) {
-				for (Device device : DeviceList.getNodes()) {
-					if(getId()==device.getId()) {
-						typeDevice = true;
-						break;
-					}
-				}
+//				for (Device device : DeviceList.getNodes()) {
+//					if(getId()==device.getId()) {
+//						typeDevice = true;
+//						break;
+//					}
+//				}
 				move = true;
 				increaseNode = false;
 				reduceNode = false;
-				if(typeDevice){
-					actionMoveDevice(getNodeIdName());	
-				}
-				else {
-					actionMoveMarker(getNodeIdName());
-				}				
+//				if(typeDevice){
+//					actionMoveDevice(getNodeIdName());	
+//				}
+//				else {
+//					actionMoveMarker(getNodeIdName());
+//				}				
 			}			
 		}
 
@@ -1603,27 +1601,27 @@ public abstract class Device implements Runnable, MouseListener,
 		return newNode;
 	}
 	
-	public void actionMoveDevice(String s) {
-		try {
-			DeviceList.add(this.cloneDeviceWithId());
-			MoveDevice action = new MoveDevice(DeviceList.getNodes().get(DeviceList.size()-1), "Move");
-			action.exec();
-			DeviceList.delete(DeviceList.size()-1);	//	WithClone
-		} catch (CloneNotSupportedException e1) {
-			e1.printStackTrace();
-		}
-	}
+//	public void actionMoveDevice(String s) {
+//		try {
+//			DeviceList.add(this.cloneDeviceWithId());
+//			MoveDevice action = new MoveDevice(DeviceList.getNodes().get(DeviceList.size()-1), "Move");
+//			action.exec();
+//			DeviceList.delete(DeviceList.size()-1);	//	WithClone
+//		} catch (CloneNotSupportedException e1) {
+//			e1.printStackTrace();
+//		}
+//	}
 	
-	public void actionMoveMarker(String s) {
-		try {
-			MarkerList.add((Marker)this.cloneMarker());
-			MoveMarker action = new MoveMarker(MarkerList.getMarkers().get(MarkerList.size()-1), "MoveMarker");
-			action.exec();
-			MarkerList.delete(MarkerList.size()-1);	
-		} catch (CloneNotSupportedException e1) {
-			e1.printStackTrace();
-		}
-	}
+//	public void actionMoveMarker(String s) {
+//		try {
+//			MarkerList.add((Marker)this.cloneMarker());
+//			MoveMarker action = new MoveMarker(MarkerList.getMarkers().get(MarkerList.size()-1), "MoveMarker");
+//			action.exec();
+//			MarkerList.delete(MarkerList.size()-1);	
+//		} catch (CloneNotSupportedException e1) {
+//			e1.printStackTrace();
+//		}
+//	}
 		public Device cloneMarker() throws CloneNotSupportedException {
 			Device newNode = (Marker) super.clone();
 			newNode.move = true;
@@ -1657,6 +1655,7 @@ public abstract class Device implements Runnable, MouseListener,
 			setSending(false);
 			setReceiving(false);
 		}
+		this.initGeoZoneList();
 	}
 	
 	public abstract void initBattery() ;

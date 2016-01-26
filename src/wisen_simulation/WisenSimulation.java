@@ -138,16 +138,16 @@ public class WisenSimulation extends Thread {
 			double min = 0;
 			boolean allDeadSensors = false;
 			
-			if (mobility) {
-				for (Device device : devices) {
-					if(!device.isDead()) {
-						if (device.canMove()) {
-							device.moveToNext(true, 0);
-							device.setEvent2(device.getNextTime());									
-						}
-					}
-				}
-			}			
+//			if (mobility) {
+//				for (Device device : devices) {
+//					if(!device.isDead()) {
+//						if (device.canMove()) {
+//							//device.moveToNext(true, 0);
+//							device.setEvent2(device.getNextTime());									
+//						}
+//					}
+//				}
+//			}			
 						
 			double timeEvt = 1.0;
 			time = 0.0;
@@ -339,6 +339,7 @@ public class WisenSimulation extends Thread {
 		//if (mobility) {
 			for (Device device : devices) {
 				device.toOri();
+				//device.init();
 				device.stopSimulation();
 			}
 			MapLayer.getMapViewer().repaint();

@@ -235,6 +235,26 @@ public class Building implements MouseListener, KeyListener {
 		return vector;
 	}
 	
+	public Polygon getPoly()  {
+		Polygon poly = new Polygon(iCoordX,iCoordY,n);
+		return poly;
+	}
+	
+	public Point getIthPoint(int i) {
+		Point p = new Point(iCoordX[i],iCoordY[i]);
+		return p ;
+	}
+	
+	public boolean contains(Building building) {
+		Polygon poly = getPoly();
+		for(int i=0; i<building.size(); i++) {
+			System.out.println("   "+building.getIthPoint(i));
+			if (poly.contains(building.getIthPoint(i)))
+				return true;
+		}
+		return false;
+	}
+	
 	//public 
 	
 //	public boolean intersect(int cadreX1, int cadreY1, int cadreX2, int cadreY2) {

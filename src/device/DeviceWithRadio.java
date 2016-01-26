@@ -24,16 +24,20 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import org.jdesktop.swingx.mapviewer.GeoPosition;
+
 import battery.Battery;
-import geo_objects.GeoZone;
+import geo_objects.GeoZoneList;
 import map.MapLayer;
 import propagation.RadioDetection;
 import utilities.MapCalc;
@@ -70,7 +74,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	protected int [][] polyX = new int[nZone][nPoint];
 	protected int [][] polyY = new int[nZone][nPoint];
 	
-	protected LinkedList<GeoZone> geoZoneList = null;
+	protected GeoZoneList geoZoneList = null;
 	
 	/**
 	 * 
@@ -93,16 +97,34 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		initGeoZoneList(); 
 	}
 	
-	public void setGeoZoneList(LinkedList<GeoZone> geoZoneList) {
+	public void setGeoZoneList(GeoZoneList geoZoneList) {
 		this.geoZoneList = geoZoneList ;
 	}
 	
 	public void initGeoZoneList() {
-		this.geoZoneList = new LinkedList<GeoZone>();
+		this.geoZoneList = new GeoZoneList();
 	}
 	
 	public Polygon getRadioPolygon() {
-		return new Polygon(polyX[0],polyY[0],nPoint);
+		//if(nPoint>0)
+			return new Polygon(polyX[0],polyY[0],nPoint);	
+		//return null;
+	}
+	
+	public boolean contains(Point2D p) {
+		if(nPoint>0)
+			return (getRadioPolygon().contains(p));
+		return (geoZoneList.contains((Point) p));
+		//return false;
+	}
+	
+	public boolean contains(DeviceWithRadio device) {
+		GeoPosition gp = new GeoPosition(device.getLatitude(), device.getLongitude());
+		Point2D p = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
+		if(nPoint>0)
+			return (getRadioPolygon().contains(p));
+		return (geoZoneList.contains(p));
+		//return false;
 	}
 
 	@Override
@@ -355,11 +377,13 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 	public void drawRadioLinks(Graphics g) {
 		for(Device device : DeviceList.getSensorNodes()) {
-			if(radioDetect(device) && this!=device && !isDead() && !device.isDead()) {
-				Visualisation.arrowDrawing((SensorNode)this, (SensorNode)device, 1, 0, 1);
-				drawRadioLink(device, g, 1);
-				if (MapLayer.displayRLDistance) {
-					drawDistance(longitude, latitude, elevation, device.getLongitude(), device.getLatitude(), device.getElevation(), (int) distance(device), 0/*getPowerReception(device)*/, g);
+			if(this!=device) {
+				if(radioDetect(device) && !isDead() && !device.isDead()) {
+					Visualisation.arrowDrawing((SensorNode)this, (SensorNode)device, 1, 0, 1);
+					drawRadioLink(device, g, 1);
+					if (MapLayer.displayRLDistance) {
+						drawDistance(longitude, latitude, elevation, device.getLongitude(), device.getLatitude(), device.getElevation(), (int) distance(device), 0/*getPowerReception(device)*/, g);
+					}
 				}
 			}
 		}
@@ -472,7 +496,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 * @param device
 	 * @return if a neighbor device is in the radio area of the current device
 	 */
-	public boolean radioDetect(Device device) {		
+	public boolean radioDetect(DeviceWithRadio device) {		
 		if (!DeviceList.propagationsCalculated)
 			return RadioDetection.simpleDetection(this, device);
 		else {
@@ -499,8 +523,10 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		SimulationInputs.radioDetectionType = RadioDetection.POWER_RECEPTION_DETECTION;
 		neighbors = new LinkedList<SensorNode> () ;
 		for(SensorNode device : DeviceList.getSensorNodes()) {
-			if(radioDetect(device) && this!=device && !isDead() && !device.isDead()) {
-				neighbors.add(device);
+			if(this!=device) {
+				if(radioDetect(device) && !isDead() && !device.isDead()) {
+					neighbors.add(device);
+				}
 			}
 			//neighbors.add(device);						
 		}

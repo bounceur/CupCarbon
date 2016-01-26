@@ -351,7 +351,8 @@ public class CupCarbon {
 		mntmOpenTheLast.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "folder.png"));
 		mntmOpenTheLast.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Project.openRecentProject();
+				String name = Project.openRecentProject();
+				cupCarbonMap.setTitle("CupCarbon Map : "+name);
 			}
 		});
 		mnProject.add(mntmOpenTheLast);

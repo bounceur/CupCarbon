@@ -484,7 +484,7 @@ public class DeviceList {
 		envelopeList = new LinkedList<LinkedList<Integer>>();
 		for (Device device : nodes) {
 			device.init();			
-		}
+		}		
 		MapLayer.getMapViewer().repaint();
 	}
 

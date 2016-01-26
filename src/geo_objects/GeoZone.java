@@ -33,21 +33,23 @@ public class GeoZone implements MouseListener, KeyListener {
 	//private int [] iCoordZ ;
 	private int size = 0 ;
 	private boolean selected = false ;
-	private int color = 0; 
+	//private int color = 0; 
+	private GeoZoneList geoZoneList ;
 	
-	public GeoZone(int size, int color) {
+	public GeoZone(int size, int color, GeoZoneList geoZoneList) {
+		this.geoZoneList = geoZoneList ;
 		this.size = size;
-		this.color = color;
+		//this.color = color;
 		coordX = new double [size] ;
 		coordY = new double [size] ;
 		//coordZ = new double [size] ;
 		iCoordX = new int [size] ;
 		iCoordY = new int [size] ;
-		//iCoordZ = new int [size] ;
-		
+		//iCoordZ = new int [size] ;	
 	}
 	
-	public GeoZone(String [] str) {
+	public GeoZone(String [] str, GeoZoneList geoZoneList) {
+		this.geoZoneList = geoZoneList ;
 		size = str.length;
 		coordX = new double [size] ;
 		coordY = new double [size] ;
@@ -62,7 +64,8 @@ public class GeoZone implements MouseListener, KeyListener {
 		}
 	}
 	
-	public GeoZone(String str) {
+	public GeoZone(String str, GeoZoneList geoZoneList) {
+		this.geoZoneList = geoZoneList ;
 		String [] vStr = str.split(" ");
 		size = vStr.length/3;
 		coordX = new double [size] ;
@@ -126,11 +129,11 @@ public class GeoZone implements MouseListener, KeyListener {
 			iCoordY[i]=coord[1];
 		}
 		if(selected)
-			g.setColor(UColor.colorTab[color]);
+			g.setColor(UColor.ORANGE_TRANSPARENT2);
 		else
 			g.setColor(UColor.PURPLE_TRANSPARENT);
 		g.fillPolygon(iCoordX, iCoordY, size);
-		g.setColor(UColor.BLACK_TTTRANSPARENT);
+		g.setColor(UColor.PURPLE_TTRANSPARENT);
 		g.drawPolygon(iCoordX, iCoordY, size);
 	}
 
@@ -179,9 +182,7 @@ public class GeoZone implements MouseListener, KeyListener {
 	public void keyPressed(KeyEvent key) {
 		if(key.getKeyCode()==8 && selected) {
 			selected = false;
-			MapLayer.getMapViewer().removeMouseListener(this);
-			MapLayer.getMapViewer().removeMouseListener(this);	
-			//GeoZoneList.delete(this);
+			geoZoneList.delete(this);
 			MapLayer.getMapViewer().repaint();
 		}
 		
@@ -255,6 +256,16 @@ public class GeoZone implements MouseListener, KeyListener {
 			coordX[i] = coordX[i]/zm+xref ;
 			coordY[i] = coordY[i]/zm+yref ;
 		}
+	}
+	
+	public boolean contains(Point2D p) {
+		Polygon poly = new Polygon(iCoordX, iCoordY, size);
+		return (poly.contains(p));
+	}
+	
+	public boolean contains(double px, double py) {
+		Polygon poly = new Polygon(iCoordX, iCoordY, size);
+		return poly.contains(px, py);
 	}
 	
 	//public 

@@ -288,15 +288,17 @@ public final class Project {
 			return name + ".res";
 	}
 
-	public static void openRecentProject() {
+	public static String openRecentProject() {
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("recent.rec")));
 			String p = br.readLine();
-			String n = br.readLine();
+			String name = br.readLine();
 			br.close();
-			Project.openProject(p, n);
+			Project.openProject(p, name);
+			return name;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 }

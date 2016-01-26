@@ -27,6 +27,7 @@ import java.util.LinkedList;
 
 import map.MapLayer;
 import project.Project;
+import visibility.TahaVisibility;
 
 /**
  * @author Ahcene Bounceur
@@ -213,11 +214,11 @@ public abstract class DeviceWithWithoutRadio extends Device {
 			elevation = routeZ.get(routeIndex);
 			if (DeviceList.propagationsCalculated)
 				DeviceList.calculatePropagations();
-//			try {					
-//				TahaVisibility.calculateVisibility((SensorNode)this);
-//			} catch (CloneNotSupportedException e1) {
-//				e1.printStackTrace();
-//			}
+			try {					
+				TahaVisibility.calculateVisibility((SensorNode)this);
+			} catch (CloneNotSupportedException e1) {
+				e1.printStackTrace();
+			}
 		}
 		if (visual) {
 			try {				

@@ -16,7 +16,7 @@ public class RadioDetection {
 	public static final int THREED_DETECTION = 2;
 	public static double frequency = 2.4e9; // GHz
 	
-	public static boolean simpleDetection(Device device1, Device device2) {
+	public static boolean simpleDetection(DeviceWithRadio device1, DeviceWithRadio device2) {
 		if (device1.withRadio() && device2.withRadio() && 
 				device1.getNId() == device2.getNId() &&
 				device1.getCh() == device2.getCh()
@@ -27,7 +27,9 @@ public class RadioDetection {
 			Point2D p2 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp2, MapLayer.getMapViewer().getZoom());
 			if (SimulationInputs.symmetricalLinks)
 				return (device1.getRadioPolygon().contains(p2) || device2.getRadioPolygon().contains(p1));
+				//return (device1.contains(p2) || device2.contains(p1));
 			else
+				//return (device1.contains(p2));
 				return (device1.getRadioPolygon().contains(p2));
 		}
 		return false;
@@ -44,7 +46,7 @@ public class RadioDetection {
 		return false;
 	}
 	
-	public static boolean powerReceptionDetection(Device device1, Device device2) {
+	public static boolean powerReceptionDetection(DeviceWithRadio device1, DeviceWithRadio device2) {
 		if (	device1.withRadio() && device2.withRadio() && 
 				device1.getNId() == device2.getNId() &&
 				device1.getCh() == device2.getCh()
@@ -52,8 +54,9 @@ public class RadioDetection {
 //			System.out.println(getPowerReception(((DeviceWithRadio)device1), ((DeviceWithRadio)device2)));
 //			System.out.println(((DeviceWithRadio)device2).getRequiredQuality());
 //			System.out.println("-------");
-			if ( getPowerReception(((DeviceWithRadio)device1), ((DeviceWithRadio)device2)) > ((DeviceWithRadio)device2).getRequiredQuality())
-				return true;
+			if ( getPowerReception(device1, device2) > device2.getRequiredQuality())
+				if(device1.contains(device2))
+					return true;
 		}
 		return false;
 	}
