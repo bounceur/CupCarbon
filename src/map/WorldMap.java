@@ -59,17 +59,19 @@ public class WorldMap extends JXMapKit {
 				//System.out.println(tileUrl+zoom+"/"+x+"/"+y+tileType);
 				//String pathStr = File.separator+
 				if(local) {
-					String platform = System.getProperty("user.dir");
+					String as = "";
+					String platform = System.getProperty("os.name");
 					if(platform.toLowerCase().startsWith("win")) {
-						return tileUrl+zoom+"/"+x+"/"+y+tileType ;
+						as = "/";
 					}
-					else {
+//					else {
 					//if(platform.toLowerCase().startsWith("mac")) {
 						File file = new File("images"+File.separator+tileName);
 						tileUrl = file.getAbsolutePath();
-						tileUrl = tileUrl.replaceAll(" ", "%20");					
-						return "file://"+tileUrl;
-					}
+						tileUrl = tileUrl.replaceAll(" ", "%20");
+						tileUrl = tileUrl.replaceAll("\\\\", "/");
+						return "file://"+as+tileUrl;
+//					}
 				}
 				else {
 					return tileUrl+zoom+"/"+x+"/"+y+tileType ;
