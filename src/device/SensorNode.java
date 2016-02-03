@@ -166,7 +166,12 @@ public abstract class SensorNode extends DeviceWithRadio {
 	
 	public void calculateRadioSpace() {
 		if(geoZoneList.isEmpty()) {
-			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+			nPoint = 30;	
+			deg = 2.*Math.PI/nPoint;
+			polyX = new int [nPoint];
+			polyY = new int [nPoint];
+			
+			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int x = coord[0];
 			int y = coord[1];
 			int rayon = MapCalc.radiusInPixels(radioRangeRadius * pl / 100) ; 
@@ -180,10 +185,8 @@ public abstract class SensorNode extends DeviceWithRadio {
 				//variateRadius();
 				r2 = (rayon+variation)*Math.cos(i);
 				r3 = (rayon+variation)*Math.sin(i);
-				for (int j=0; j<nZone; j++) {
-					polyX[j][k]=(int)(x+r2*(nZone-j)/nZone);
-					polyY[j][k]=(int)(y+r3*(nZone-j)/nZone);
-				}	
+				polyX[k]=(int)(x+r2);
+				polyY[k]=(int)(y+r3);
 				i+=deg;
 			}
 		}
@@ -209,10 +212,10 @@ public abstract class SensorNode extends DeviceWithRadio {
 	 *            Graphics
 	 */
 	public void drawDetectionLink(Device device, Graphics g) {
-		int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+		int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 		int lx1 = coord[0];
 		int ly1 = coord[1];
-		coord = MapCalc.geoToIntPixelMapXY(device.getLatitude(), device.getLongitude());
+		coord = MapCalc.geoToPixelMapA(device.getLatitude(), device.getLongitude());
 		int lx2 = coord[0];
 		int ly2 = coord[1];
 
@@ -225,20 +228,19 @@ public abstract class SensorNode extends DeviceWithRadio {
 		if (visible) {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setStroke(new BasicStroke(0.4f));
-			
-			//for(GeoZone geoZone : geoZoneList) {
-			geoZoneList.draw(g);
-			//}
+
+			if(hide == 0) 
+				geoZoneList.draw(g);
 			
 			calculateRadioSpace();
 			initDraw(g);
-			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int x = coord[0];
 			int y = coord[1];
 			int rayon = MapCalc.radiusInPixels(radioRangeRadius) ; 
 	
 			if (inside || selected) {
-				g.setColor(UColor.BLACK_TRANSPARENT);
+				g.setColor(UColor.BLUE);//.BLACK_TRANSPARENT);
 				g.drawLine(x - rayon - 3, y - rayon - 3, x - rayon + 2, y
 						- rayon - 3);
 				g.drawLine(x - rayon - 3, y - rayon - 3, x - rayon - 3, y
@@ -260,7 +262,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 				if(hide == 0 || hide == 2 || hide == 3) {
 					if (nPoint>0) {
 						g.setColor(UColor.BLACK_TTRANSPARENT);
-						g.drawPolygon(polyX[0], polyY[0], nPoint);
+						g.drawPolygon(polyX, polyY, nPoint);
 					}
 				}
 				
@@ -271,10 +273,9 @@ public abstract class SensorNode extends DeviceWithRadio {
 					} 
 					else {
 						g.setColor(radioRangeColor1);
-					}				
-					for (int i=0; i<nZone; i++) 
-						if(nPoint>0)
-							g.fillPolygon(polyX[i], polyY[i], nPoint);
+					}				 
+					if(nPoint>0)
+						g.fillPolygon(polyX, polyY, nPoint);
 					//drawSendingReceiving(g, x, y);								
 				}
 			}
@@ -286,14 +287,14 @@ public abstract class SensorNode extends DeviceWithRadio {
 		if (visible) {			
 			//calculateRadioSpace();
 			//initDraw(g);
-			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int x = coord[0];
 			int y = coord[1];
 			int rayon = MapCalc.radiusInPixels(radioRangeRadius) ; 
 			int rayon2 = MapCalc.radiusInPixels(this.radius);
 
 			if (selected) {
-				g.setColor(UColor.BLACK_TTRANSPARENT);
+				g.setColor(UColor.PURPLE);//.BLACK_TTRANSPARENT);
 				g.drawOval(x - rayon - 8, y - rayon - 8, (rayon + 8) * 2, (rayon + 8) * 2);
 			}
 
@@ -488,7 +489,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	
 	
 	public boolean isRadioDetecting() {
-		for(Device d : DeviceList.getNodes()) {
+		for(DeviceWithRadio d : DeviceList.getSensorNodes()) {
 			if(radioDetect(d) && this!=d) return true;
 		}
 		return false ;
@@ -548,16 +549,24 @@ public abstract class SensorNode extends DeviceWithRadio {
 	}*/
 	
 	@Override
-	public void initForSimulation() {
+	public void initForSimulation() {		
+		super.initForSimulation();
+		
 		this.deltaDriftTime = 0.0;
-		DeviceList.initAll();
+		//DeviceList.initAll();
 		initBuffer();
 		setDead(false);		
 		//getBattery().init(SimulationInputs.energyMax);
 		loadScript();
 		getScript().init();
 		setEvent(0);		
-		super.initForSimulation();
+//		if(SimulationInputs.visibility) {
+//			VisibilityZones vz = new VisibilityZones(this);
+//			vz.start();
+//		}
+//		else {
+//			initGeoZoneList();
+//		}
 	}
 
 	public int getBufferIndex() {
@@ -620,6 +629,15 @@ public abstract class SensorNode extends DeviceWithRadio {
 		return (!rNode.isDead() && sameCh(rNode) && sameNId(rNode) && sameStandard(rNode));
 	}
 
+	public double [] getIntPosition() {
+		double [] position = new double [3];
+		int [] coord = MapCalc.geoToPixelMapA(latitude, longitude);
+		position[0] = coord[0];
+		position[1] = coord[1];
+		position[2] = 10;
+		return position;
+	}
+	
 	public double [] getPosition() {
 		double [] position = new double [3];
 		position[0] = latitude;

@@ -19,9 +19,9 @@
 
 package solver;
 
-import map.MapLayer;
-import device.Device;
 import device.DeviceList;
+import device.SensorNode;
+import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur
@@ -71,8 +71,8 @@ public class OfNetworkEnvelopeCtmp extends Thread {
 		} catch (InterruptedException e) {}		
 		//DeviceList.getNodes().get(imin).setAlgoSelect(false);
 		int cur = imin;		
-		Device n1 = DeviceList.getNodes().get(cur);
-		Device n2 ;
+		SensorNode n1 = DeviceList.getSensorNodes().get(cur);
+		SensorNode n2 ;
 		double x1 = n1.getLatitude();
 		double y1 = n1.getLongitude();
 		double x2 = 0;
@@ -87,7 +87,7 @@ public class OfNetworkEnvelopeCtmp extends Thread {
 			min = 10000000;
 			imin = -1;
 			for(int j=0; j<DeviceList.getNodes().size(); j++) {
-				n2 = DeviceList.getNodes().get(j);
+				n2 = DeviceList.getSensorNodes().get(j);
 				if((j!=cur) && (!n2.isMarked()) && n1.radioDetect(n2)) {
 					x2 = n2.getLatitude();
 					y2 = n2.getLongitude();
@@ -108,13 +108,13 @@ public class OfNetworkEnvelopeCtmp extends Thread {
 			p2 = cur ;
 			//px2 = x2;
 			//py2 = y2;
-			n1 = DeviceList.getNodes().get(cur);
+			n1 = DeviceList.getSensorNodes().get(cur);
 			
 			System.out.println(cur);
 			min = 10000000;
 			imin = -1;
 			for(int j=0; j<DeviceList.getNodes().size(); j++) {
-				n2 = DeviceList.getNodes().get(j);
+				n2 = DeviceList.getSensorNodes().get(j);
 				if((j!=cur) && (!n2.isMarked()) && n1.radioDetect(n2)) {
 					x2 = n2.getLatitude();
 					y2 = n2.getLongitude();

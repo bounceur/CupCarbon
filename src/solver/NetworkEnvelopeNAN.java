@@ -21,9 +21,9 @@ package solver;
 
 import java.util.List;
 
-import map.MapLayer;
-import device.Device;
 import device.DeviceList;
+import device.SensorNode;
+import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur
@@ -41,9 +41,9 @@ public class NetworkEnvelopeNAN extends Thread {
 	@Override	
 	public void run() {
 
-		List<Device> nodes = DeviceList.getNodes();
+		List<SensorNode> nodes = DeviceList.getSensorNodes();
 
-		Device n1, n2, n3, n4;
+		SensorNode n1, n2, n3, n4;
 
 		double x0 = 0;
 		double y0 = 0;

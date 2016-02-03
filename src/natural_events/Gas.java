@@ -25,6 +25,7 @@ import java.awt.Polygon;
 import java.util.Random;
 
 import device.Device;
+import device.DeviceWithRadio;
 import device.DeviceWithoutRadio;
 import map.MapLayer;
 import utilities.MapCalc;
@@ -56,7 +57,7 @@ public class Gas extends DeviceWithoutRadio {
 	public void draw(Graphics g) {
 		if(visible) {
 			initDraw(g) ;
-			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int x = coord[0];
 			int y = coord[1];
 			int rayon = MapCalc.radiusInPixels(this.radius) ;		
@@ -250,7 +251,7 @@ public class Gas extends DeviceWithoutRadio {
 	}
 
 	@Override
-	public boolean radioDetect(Device device) {
+	public boolean radioDetect(DeviceWithRadio device) {
 		return false;
 	}
 

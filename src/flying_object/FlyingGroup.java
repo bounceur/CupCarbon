@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import device.Device;
+import device.DeviceWithRadio;
 import device.MobileG;
 import utilities.MapCalc;
 import utilities.UColor;
@@ -139,7 +140,7 @@ public class FlyingGroup extends MobileG {
 	public void draw(Graphics g) {
 		if (visible) {
 			initDraw(g);
-			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int x = coord[0];
 			int y = coord[1];
 			//int x = MapCalc.geoToIntPixelMapX(this.x, this.y);
@@ -327,7 +328,7 @@ public class FlyingGroup extends MobileG {
 	}
 	
 	@Override
-	public boolean radioDetect(Device device) {
+	public boolean radioDetect(DeviceWithRadio device) {
 		return false;
 	}
 

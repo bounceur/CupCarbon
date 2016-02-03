@@ -21,9 +21,9 @@ package solver;
 
 import java.util.List;
 
-import map.MapLayer;
-import device.Device;
 import device.DeviceList;
+import device.SensorNode;
+import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur
@@ -37,9 +37,9 @@ protected boolean loop = true ;
 	@Override	
 	public void run() {
 
-		List<Device> nodes = DeviceList.getNodes();
+		List<SensorNode> nodes = DeviceList.getSensorNodes();
 
-		Device n1, n2;
+		SensorNode n1, n2;
 		
 		double x, y;
 

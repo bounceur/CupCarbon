@@ -71,8 +71,8 @@ public class MapLayer implements Painter<Object>, MouseListener,
 	public static BuildingList buildingList = null;
 	public static GeoZoneList geoZoneList = null;
 	public static boolean afficherIndicateur = false;
-	public static double x = 0;
-	public static double y = 0;
+	public static int x = 0;
+	public static int y = 0;
 	public static char lastKey = 0;
 	public static int lastKeyCode = 0;
 	public static boolean dessinerCadre = false;
@@ -90,6 +90,10 @@ public class MapLayer implements Painter<Object>, MouseListener,
 	public static String projectName = "";
 
 	private boolean debutSelection = false;
+	
+	public static boolean magnetic = false;
+	private int prev_vp_x ;
+	private int prev_vp_y ;
 
 	public static boolean displayRLDistance = false; // RadioLink distance
 	
@@ -149,9 +153,15 @@ public class MapLayer implements Painter<Object>, MouseListener,
 		Rectangle rect = mapViewer.getViewportBounds();
 		g.translate(-rect.x, -rect.y);		
 		
+		prev_vp_x = mapViewer.getViewportBounds().x;
+		prev_vp_y = mapViewer.getViewportBounds().y;
+		
+		//x = x - (x%32);
+		//y = y - (y%32);
+		
 		if (afficherIndicateur) {
 			g.setColor(UColor.RED);
-			if (lastKey == '1') {
+			if (lastKey == '1') {					
 				g.drawString("   Sensor", (float) x, (float) y);
 			}
 			if (lastKey == '2') {
@@ -178,8 +188,9 @@ public class MapLayer implements Painter<Object>, MouseListener,
 			if (lastKey == '9') {
 				g.drawString("   Vertex", (float) x, (float) y);
 			}
-			g.drawOval((int) (x - 8), (int) (y - 8), 16, 16);
-
+			//g.drawOval(x - 8, y - 8, 16, 16);
+			g.drawLine(x-6, y, x+6, y);
+			g.drawLine(x, y-6, x, y+6);
 			// g.fillArc((int) (x - 10), (int) (y - 10), 20, 20, 75, 30);
 			//
 			// g.fillArc((int) (x - 10), (int) (y - 10), 20, 20, 165, 30);
@@ -189,12 +200,16 @@ public class MapLayer implements Painter<Object>, MouseListener,
 			// g.fillArc((int) (x - 10), (int) (y - 10), 20, 20, -15, 30);
 		}
 
-		if (!OsmOverpass.isLoading) buildingList.draw(g);
-		//geoZoneList.draw(g);
-		markerList.draw(g);
-		//trackingPointsList.draw(g);
-		//streetGraph.dessiner(g);
+		
 		nodeList.draw(g);
+		
+		markerList.draw(g);
+		
+		if (!OsmOverpass.isLoading) {
+			buildingList.draw(g);
+		}
+
+		
 		nodeList.drawEnvelopeList(g);
 		
 
@@ -220,6 +235,23 @@ public class MapLayer implements Painter<Object>, MouseListener,
 
 		g.dispose();
 	}
+	
+//	public void test() {
+//		int[] pixels = new int[16 * 16];
+//		Image image = Toolkit.getDefaultToolkit().createImage(
+//		        new MemoryImageSource(16, 16, pixels, 0, 16));
+//		Cursor monCurseur =
+//		        Toolkit.getDefaultToolkit().createCustomCursor
+//		             (image, new Point(0, 0), "invisibleCursor");
+//		
+//		//Toolkit tk = Toolkit.getDefaultToolkit();
+//		//new ImageIcon("images/cupcarbon_logo_small.png")
+//		//Image img = tk.getImage("images/16_square_green_add.png");
+//		//Cursor monCurseur = tk.createCustomCursor(img, new Point(16, 16), "mon oeil");
+//		//MapLayer.getMapViewer().setCursor(tk.createCustomCursor(new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), null));
+//		MapLayer.getMapViewer().setCursor(monCurseur);
+		
+//	}
 
 	public static DeviceList getDeviceList() {
 		return nodeList;
@@ -254,14 +286,13 @@ public class MapLayer implements Painter<Object>, MouseListener,
 	
 	@Override
 	public void mouseClicked(MouseEvent arg) {
-		if (arg.getClickCount() == 2) {						
-			Point p = new Point(arg.getX(), arg.getY());
-			GeoPosition gp = mapViewer.convertPointToGeoPosition(p);
-			CupCarbonMap.getMap().setCenterPosition(new GeoPosition(gp.getLatitude(), gp.getLongitude()));
-		} else if (afficherIndicateur) {
-			Point p = new Point(arg.getX(), arg.getY());
-			GeoPosition gp = mapViewer.convertPointToGeoPosition(p);
+		Point p = new Point(cx, cy);
+		GeoPosition gp = mapViewer.convertPointToGeoPosition(p);	
+		
+		if (arg.getClickCount() == 2) {			
 			
+			CupCarbonMap.getMap().setCenterPosition(new GeoPosition(gp.getLatitude(), gp.getLongitude()));
+		} else if (afficherIndicateur) {			
 			if (lastKey == '1') {
 				StdSensorNode sn = new StdSensorNode(gp.getLongitude(), gp.getLatitude(), 0, 0, 100, 20, -1); 
 				DeviceList.add(sn);
@@ -386,8 +417,12 @@ public class MapLayer implements Painter<Object>, MouseListener,
 
 	@Override
 	public void keyPressed(KeyEvent key) {
-		
+
 		//System.out.println(key.getKeyCode());
+		
+		if (key.getKeyChar() == 'M') {
+			magnetic = !magnetic;
+		}
 		
 		if (key.isShiftDown()) {
 			shiftDown = true;
@@ -448,8 +483,19 @@ public class MapLayer implements Painter<Object>, MouseListener,
 		}
 
 		if (lastKey == 'w') {
-			if (selectType++ == 11)
+			//if (selectType++ == 11)
+			//selectType = 0;
+			if(selectType==10)
 				selectType = 0;
+			else {
+				if(selectType==8)
+					selectType = 10;
+				if(selectType==1)
+					selectType = 8;
+				if(selectType==0)
+					selectType = 1;
+			}
+
 		}
 		
 		if (lastKey == ':') {
@@ -463,6 +509,7 @@ public class MapLayer implements Painter<Object>, MouseListener,
         	MapLayer.getMapViewer().addMouseListener(building);
     		MapLayer.getMapViewer().addKeyListener(building);
         	BuildingList.add(building);
+        	
 	        MapLayer.mapViewer.repaint();
 		}
 		
@@ -552,6 +599,7 @@ public class MapLayer implements Painter<Object>, MouseListener,
 
 	@Override
 	public void mouseDragged(MouseEvent arg) {
+		
 		//if (lastKeyCode == 16) {
 		if (shiftDown) {
 			cadreX2 = arg.getX();
@@ -561,11 +609,26 @@ public class MapLayer implements Painter<Object>, MouseListener,
 		}
 	}
 
+	private int cx ;
+	private int cy ;
 	@Override
 	public void mouseMoved(MouseEvent me) {
-		Point2D pd = MapCalc.pixelPanelToPixelMap(me.getX(), me.getY());
-		x = pd.getX();
-		y = pd.getY();
+	
+		cx = me.getX();
+		cy = me.getY();
+
+		if (magnetic) {
+			cx = cx - (cx%32) + 12 - (mapViewer.getViewportBounds().x-prev_vp_x);
+			cy = cy - (cy%32) + 18 - (mapViewer.getViewportBounds().y-prev_vp_y);
+			
+			//prev_vp_x = mapViewer.getViewportBounds().x;
+			//prev_vp_y = mapViewer.getViewportBounds().y;
+		}
+		
+		//Point2D pd = MapCalc.pixelPanelToPixelMap(me.getX(), me.getY());
+		Point2D pd = MapCalc.pixelPanelToPixelMap(cx, cy);
+		x = (int) pd.getX();
+		y = (int) pd.getY();
 		if (afficherIndicateur) {
 			mapViewer.repaint();
 		}

@@ -27,7 +27,7 @@ import java.util.LinkedList;
 
 import map.MapLayer;
 import project.Project;
-import visibility.TahaVisibility;
+import wisen_simulation.SimulationInputs;
 
 /**
  * @author Ahcene Bounceur
@@ -214,10 +214,9 @@ public abstract class DeviceWithWithoutRadio extends Device {
 			elevation = routeZ.get(routeIndex);
 			if (DeviceList.propagationsCalculated)
 				DeviceList.calculatePropagations();
-			try {					
-				TahaVisibility.calculateVisibility((SensorNode)this);
-			} catch (CloneNotSupportedException e1) {
-				e1.printStackTrace();
+			if (SimulationInputs.visibility) {
+				//VisibilityZones vz = new VisibilityZones((SensorNode) this);
+				//vz.run();
 			}
 		}
 		if (visual) {
@@ -294,7 +293,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	 * @param device
 	 * @return if a neighbor device is in the radio area of the current device
 	 */
-	public boolean radioDetect(Device device) {
+	public boolean radioDetect(DeviceWithRadio device) {
 		return false;
 	}
 	

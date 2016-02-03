@@ -19,7 +19,7 @@ public class Command_MOVE extends Command {
 			sensor.moveToNext(true, 0);									
 		}
 		//MapLayer.getMapViewer().repaint();	
-		return t ;
+		return t/1000. ;
 	}
 
 	@Override

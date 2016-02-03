@@ -32,14 +32,16 @@ public final class UColor {
 	public static final Color YELLOWD_TRANSPARENT = new Color(255, 198, 0, 50);
 	public static final Color PINK_TRANSPARENT = new Color(210, 255, 0, 100);
 	public static final Color GREEND_TRANSPARENT = new Color(210, 255, 0, 150);
+	public static final Color PURPLE = new Color(134, 20, 143);
 	public static final Color PURPLE_TRANSPARENT = new Color(134, 20, 143, sen_transparency);
 	public static final Color PURPLED_TRANSPARENT = new Color(134, 20, 143, sen_transparency+30);
 	public static final Color PURPLE_TTRANSPARENT = new Color(134, 20, 143, sen_transparency+10);
-	public static final Color RED_TTRANSPARENT = new Color(255, 200, 103, 20);
-	public static final Color RED_TRANSPARENT = new Color(255, 200, 103, 120);
-	public static final Color REDD_TRANSPARENT = new Color(255, 200, 103, 150);
+	public static final Color RED_TTRANSPARENT = new Color(255, 0, 0, 35);
+	public static final Color RED_TRANSPARENT = new Color(255, 0, 0, 120);
+	public static final Color REDD_TRANSPARENT = new Color(255, 0, 0, 150);
 	public static final Color RED = new Color(216, 0, 0);
 	public static final Color BLUE = new Color(81, 127, 174);
+	public static final Color BLUE2 = new Color(89, 154, 178, 150);
 	public static final Color GREEN = new Color(180, 225, 22);
 	public static final Color ORANGE = new Color(240, 113, 51);
 	public static final Color ORANGE_TRANSPARENT = new Color(240, 113, 51, 100);
@@ -48,6 +50,7 @@ public final class UColor {
 	public static final Color WHITE_TRANSPARENT = new Color(255, 255, 255, 230);
 	public static final Color WHITE_LTRANSPARENT = new Color(255, 255, 255, 160);
 	public static final Color WHITE_LLTRANSPARENT = new Color(255, 255, 255, 60);
+	public static final Color TRANSPARENT = new Color(255, 255, 255, 0);
 	public static final Color BLACK_TRANSPARENT = new Color(0, 0, 0, 150);
 	public static final Color BLACK_TTRANSPARENT = new Color(0, 0, 0, 100);
 	public static final Color BLACK_TTTRANSPARENT = new Color(0, 0, 0, 70);

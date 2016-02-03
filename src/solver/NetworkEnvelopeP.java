@@ -21,9 +21,9 @@ package solver;
 
 import java.util.List;
 
-import map.MapLayer;
-import device.Device;
 import device.DeviceList;
+import device.SensorNode;
+import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur
@@ -50,7 +50,7 @@ public class NetworkEnvelopeP extends Thread {
 		int k = 1 ; // Number of visible sensors
 		double m = 1 ; // Angle of the zone (1=90�, 2=45� ...)
 		
-		Device n1, n2;
+		SensorNode n1, n2;
 		
 		int rank1 = 0;
 		int rank2 = 0;
@@ -70,7 +70,7 @@ public class NetworkEnvelopeP extends Thread {
 		double by1;
 		double by2;
 		
-		List<Device> nodes = DeviceList.getNodes();
+		List<SensorNode> nodes = DeviceList.getSensorNodes();
 
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).setValue(0);

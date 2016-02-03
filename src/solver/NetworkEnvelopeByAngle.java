@@ -19,9 +19,9 @@
 
 package solver;
 
-import map.MapLayer;
-import device.Device;
 import device.DeviceList;
+import device.DeviceWithRadio;
+import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur
@@ -35,7 +35,7 @@ public class NetworkEnvelopeByAngle extends Thread {
 	@Override
 	public void run() {
 		
-		Device n1, n2, nv;
+		DeviceWithRadio n1, n2, nv;
 		
 		double x1 = 0;
 		double y1 = 0;
@@ -77,7 +77,7 @@ public class NetworkEnvelopeByAngle extends Thread {
 			
 			delay();
 			
-			n1 = DeviceList.getNodes().get(cur);
+			n1 = DeviceList.getSensorNodes().get(cur);
 			xc = n1.getLatitude();
 			yc = n1.getLongitude();
 			x1 = xc-0.1;
@@ -89,7 +89,7 @@ public class NetworkEnvelopeByAngle extends Thread {
 					min = 10000000;
 					trouve = false;
 					for (int j = 0; j < DeviceList.getNodes().size(); j++) {
-						n2 = DeviceList.getNodes().get(j);
+						n2 = DeviceList.getSensorNodes().get(j);
 						if(!DeviceList.getNodes().get(j).isDead())							
 							if ((cur!=j) && n1.radioDetect(n2)) {
 								if(!n2.isVisited()) {
@@ -110,7 +110,7 @@ public class NetworkEnvelopeByAngle extends Thread {
 						MapLayer.getMapViewer().repaint();
 						DeviceList.addToLastEnvelope(imin);
 						
-						n1 = DeviceList.getNodes().get(imin);
+						n1 = DeviceList.getSensorNodes().get(imin);
 						cur = imin;
 						x1=xc;
 						y1=yc;
@@ -120,7 +120,7 @@ public class NetworkEnvelopeByAngle extends Thread {
 					}
 					else {
 						for(int k=0; k<DeviceList.getNodes().size(); k++) {
-							nv = DeviceList.getNodes().get(k);
+							nv = DeviceList.getSensorNodes().get(k);
 							if(n1.radioDetect(nv) && nv.isMarked()) {
 								nv.setVisited(false);
 							}
@@ -128,7 +128,7 @@ public class NetworkEnvelopeByAngle extends Thread {
 					}
 					sm = 0;
 					for(int k=0; k<DeviceList.getNodes().size(); k++) {
-						if((k != prem) && DeviceList.getNodes().get(k).radioDetect(DeviceList.getNodes().get(prem))) {
+						if((k != prem) && DeviceList.getSensorNodes().get(k).radioDetect(DeviceList.getSensorNodes().get(prem))) {
 							if(DeviceList.getNodes().get(k).isMarked()) sm++;
 						}
 					}

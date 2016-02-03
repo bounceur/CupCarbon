@@ -28,15 +28,15 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 
-import map.MapLayer;
-
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
+import device.Device;
+import device.DeviceWithRadio;
+import device.MobileG;
+import map.MapLayer;
 import project.Project;
 import utilities.MapCalc;
 import utilities.UColor;
-import device.Device;
-import device.MobileG;
 
 /**
  * @author Ahcene Bounceur
@@ -117,7 +117,7 @@ public class FlyingObject extends MobileG {
 		// Graphics2D g = (Graphics2D) gg;
 		// g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 		// RenderingHints.VALUE_ANTIALIAS_ON);
-		int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+		int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 		int x = coord[0];
 		int y = coord[1];
 		// int x = MapCalc.geoToIntPixelMapX(this.x, this.y);
@@ -388,7 +388,7 @@ public class FlyingObject extends MobileG {
 	}
 
 	@Override
-	public boolean radioDetect(Device device) {
+	public boolean radioDetect(DeviceWithRadio device) {
 		return false;
 	}
 

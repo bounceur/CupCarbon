@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -157,7 +158,7 @@ public class MarkerList {
 						firstTime = false;
 						x1 = marker.getLongitude();
 						y1 = marker.getLatitude();
-						coord = MapCalc.geoToIntPixelMapXY(y1, x1);
+						coord = MapCalc.geoToPixelMapA(y1, x1);
 						lx1 = coord[0];
 						ly1 = coord[1];								
 						//lx1 = MapCalc.geoToIntPixelMapX(x1, y1);
@@ -168,7 +169,7 @@ public class MarkerList {
 					} else {
 						x2 = marker.getLongitude();
 						y2 = marker.getLatitude();
-						coord = MapCalc.geoToIntPixelMapXY(y2, x2);
+						coord = MapCalc.geoToPixelMapA(y2, x2);
 						lx2 = coord[0];
 						ly2 = coord[1];
 						//lx2 = MapCalc.geoToIntPixelMapX(x2, y2);
@@ -197,7 +198,7 @@ public class MarkerList {
 						}
 						x1 = marker.getLongitude();
 						y1 = marker.getLatitude();
-						coord = MapCalc.geoToIntPixelMapXY(y1, x1);
+						coord = MapCalc.geoToPixelMapA(y1, x1);
 						lx1 = coord[0];
 						ly1 = coord[1];	
 						//lx1 = MapCalc.geoToIntPixelMapX(x1, y1);
@@ -393,29 +394,34 @@ public class MarkerList {
 			host += "loc=" + m.getLatitude() + "," + m.getLongitude() + "&";
 		}
 
-		host += "output=gpx";
-
+		host += "output=json";
+		System.out.println(host);
 		try {
-			File f = new File("gpx");
-			try {
-				f.mkdir();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			File f = new File("gpx");
+//			try {
+//				f.mkdir();
+//
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 			URL url = new URL(host);
-			URLConnection uc = url.openConnection();
+			URLConnection uc = url.openConnection();			
 			
 			uc.setRequestProperty("User-Agent", "CupCarbon");
 			
 			InputStream in = uc.getInputStream();
-			FileOutputStream file = new FileOutputStream("gpx/tmp.gpx");
-			int l = 0;
-			while ((l = in.read()) != -1) {
-				file.write(l);
-				file.flush();
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			//FileOutputStream file = new FileOutputStream("gpx/tmp.gpx");
+			//int l = 0;
+			String line = "";
+			//while ((l = in.read()) != -1) {
+			while((line=br.readLine()) != null) {
+				System.out.print(line);
+				//file.write(l);
+				//file.flush();
 			}
-			file.close();
+			in.close();
+			//file.close();
 			gpxToMarkers();
 		} catch (MalformedURLException e) {
 			System.err.println(host + " : URL problem.");
@@ -446,7 +452,7 @@ public class MarkerList {
 			f = new File("gpx");
 			f.delete();
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	

@@ -3,10 +3,6 @@ package geo_objects;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
@@ -21,7 +17,7 @@ import utilities.UColor;
  * @version 1.0
  */
 
-public class GeoZone implements MouseListener, KeyListener {
+public class GeoZone {
 	
 	protected int type = Device.GEOZONE;
 	
@@ -33,13 +29,13 @@ public class GeoZone implements MouseListener, KeyListener {
 	//private int [] iCoordZ ;
 	private int size = 0 ;
 	private boolean selected = false ;
-	//private int color = 0; 
-	private GeoZoneList geoZoneList ;
+	private int color = 0; 
+	private int mapZoom = 0;
 	
-	public GeoZone(int size, int color, GeoZoneList geoZoneList) {
-		this.geoZoneList = geoZoneList ;
+	public GeoZone(int size, int color) {
+		mapZoom = MapLayer.mapViewer.getZoom();
 		this.size = size;
-		//this.color = color;
+		this.color = color;
 		coordX = new double [size] ;
 		coordY = new double [size] ;
 		//coordZ = new double [size] ;
@@ -48,8 +44,8 @@ public class GeoZone implements MouseListener, KeyListener {
 		//iCoordZ = new int [size] ;	
 	}
 	
-	public GeoZone(String [] str, GeoZoneList geoZoneList) {
-		this.geoZoneList = geoZoneList ;
+	public GeoZone(String [] str) {
+		mapZoom = MapLayer.mapViewer.getZoom();
 		size = str.length;
 		coordX = new double [size] ;
 		coordY = new double [size] ;
@@ -61,11 +57,12 @@ public class GeoZone implements MouseListener, KeyListener {
 			coordX[i]=Double.valueOf(str[i*2]);
 			coordY[i]=Double.valueOf(str[i*2+1]);
 			//coordZ[i]=Double.valueOf(str[i*2+2]);
+			computeIntCoord(i);
 		}
 	}
 	
-	public GeoZone(String str, GeoZoneList geoZoneList) {
-		this.geoZoneList = geoZoneList ;
+	public GeoZone(String str) {
+		mapZoom = MapLayer.mapViewer.getZoom();
 		String [] vStr = str.split(" ");
 		size = vStr.length/3;
 		coordX = new double [size] ;
@@ -78,6 +75,7 @@ public class GeoZone implements MouseListener, KeyListener {
 			coordX[i]=Double.valueOf(vStr[i*2]);
 			coordY[i]=Double.valueOf(vStr[i*2+1]);
 			//coordZ[i]=Double.valueOf(vStr[i*2+2]);
+			computeIntCoord(i);
 		}
 	}
 
@@ -85,12 +83,14 @@ public class GeoZone implements MouseListener, KeyListener {
 		coordX[i] = x;
 		coordY[i] = y;
 		//coordZ[i] = z;
+		computeIntCoord(i);
 	}
 	
 	public void set(String x, String y, String z, int i) {
 		coordX[i] = Double.valueOf(x);
 		coordY[i] = Double.valueOf(y);
 		//coordZ[i] = Double.valueOf(z);
+		computeIntCoord(i);
 	}
 	
 	public double getXCoords(int i) {
@@ -121,53 +121,48 @@ public class GeoZone implements MouseListener, KeyListener {
 		return size;
 	}
 	
-	public void draw(Graphics g) {
+	public void computeIntCoord(int i) {
+		int [] coord = MapCalc.geoToPixelMapA(Double.valueOf(coordX[i]), Double.valueOf(coordY[i]));
+		iCoordX[i]=coord[0];
+		iCoordY[i]=coord[1];
+	}
+	
+	public void computeIntCoords() {
 		int [] coord = null ;	
 		for(int i=0; i<size; i++) {
-			coord = MapCalc.geoToIntPixelMapXY(Double.valueOf(coordX[i]), Double.valueOf(coordY[i]));
+			coord = MapCalc.geoToPixelMapA(Double.valueOf(coordX[i]), Double.valueOf(coordY[i]));
 			iCoordX[i]=coord[0];
 			iCoordY[i]=coord[1];
 		}
-		if(selected)
-			g.setColor(UColor.ORANGE_TRANSPARENT2);
-		else
+	}
+	
+	public void draw(Graphics g) {
+		int newZoom = MapLayer.mapViewer.getZoom();
+		if(newZoom != mapZoom) {
+			mapZoom = newZoom;
+			computeIntCoords() ;
+		}	
+		if (color==0)
+			g.setColor(UColor.RED_TTRANSPARENT);//.ORANGE_TRANSPARENT2);
+		if (color==1)
+			g.setColor(UColor.GREEND_TRANSPARENT);
+		if (color==2)
 			g.setColor(UColor.PURPLE_TRANSPARENT);
+
+//		Graphics2D g2 = (Graphics2D) g;
+//		Point2D center = new Point2D.Float(iCoordX[0], iCoordY[0]);
+//		float radius = 400;
+//		float[] dist = {0.0f, 0.5f};
+//		Color[] colors = {UColor.RED_TRANSPARENT, UColor.TRANSPARENT};
+//		RadialGradientPaint p = new RadialGradientPaint(center, radius, dist, colors);
+//		g2.setPaint(p);
+		
+		//g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+		//Paint p = new GradientPaint(0, 0, UColor.RED_TRANSPARENT, 100, 100, UColor.ORANGE_TRANSPARENT2, true);
+
+		//g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		g.fillPolygon(iCoordX, iCoordY, size);
-		g.setColor(UColor.PURPLE_TTRANSPARENT);
-		g.drawPolygon(iCoordX, iCoordY, size);
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent arg) {
-		if(inside(arg.getX(),arg.getY())) {
-			selected = !selected;
-			MapLayer.getMapViewer().repaint();
-		}
-		//if(shape.contains(x, y))
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		//g.drawPolygon(iCoordX, iCoordY, size);
 	}
 	
 	public boolean inside(int xs, int ys) {
@@ -178,47 +173,6 @@ public class GeoZone implements MouseListener, KeyListener {
 		return (poly.contains(p1));
 	}
 
-	@Override
-	public void keyPressed(KeyEvent key) {
-		if(key.getKeyCode()==8 && selected) {
-			selected = false;
-			geoZoneList.delete(this);
-			MapLayer.getMapViewer().repaint();
-		}
-		
-		if(key.getKeyCode() == 27) {
-			selected = false;
-		}
-		
-		if (key.getKeyCode() == 65 && key.isControlDown()) {
-			selected = true;
-		}
-		
-		if (key.getKeyChar() == 'i') {
-			selected = !selected;
-		}
-		
-		if (key.getKeyChar() == 'w') {
-			if (type == MapLayer.selectType)
-				selected = true;
-			else 
-				selected = false;
-		}
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public void setSelection(boolean b) {
 		selected = b ;
 	}
@@ -255,6 +209,7 @@ public class GeoZone implements MouseListener, KeyListener {
 		for(int i=0; i<size; i++) {
 			coordX[i] = coordX[i]/zm+xref ;
 			coordY[i] = coordY[i]/zm+yref ;
+			computeIntCoord(i);
 		}
 	}
 	
@@ -268,10 +223,10 @@ public class GeoZone implements MouseListener, KeyListener {
 		return poly.contains(px, py);
 	}
 	
-	//public 
+	public void display() {
+		for(int i=0; i<size; i++) {
+			System.out.print("("+iCoordX[i]+", "+iCoordY[i]+") ");
+		}
+	}
 	
-//	public boolean intersect(int cadreX1, int cadreY1, int cadreX2, int cadreY2) {
-//		Polygon poly = new Polygon(iCoordX,iCoordY,n);
-//		return poly.intersects((double) cadreX1, (double) cadreY1, (double) cadreX2, (double) cadreY2);
-//	}
 }

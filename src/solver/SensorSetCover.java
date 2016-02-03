@@ -19,21 +19,21 @@
 
 package solver;
 
-import graph.Graph;
-import graph.GraphStd;
-
 import java.util.List;
 
-import map.MapLayer;
 import device.Device;
 import device.DeviceList;
+import device.SensorNode;
+import graph.Graph;
+import graph.GraphStd;
+import map.MapLayer;
 
 public class SensorSetCover {	
 
 	public static void sensorSetCover() {
 		GraphStd graphe = null;
 		
-		List<Device> nodes = DeviceList.getNodes();
+		List<SensorNode> nodes = DeviceList.getSensorNodes();
 		
 		graphe = SensorGraph.toSensorGraph(nodes, DeviceList.size());
 		

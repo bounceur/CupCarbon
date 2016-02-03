@@ -44,7 +44,7 @@ import cupcarbon.RadioParametersWindow;
 import map.MapLayer;
 import markers.Marker;
 import markers.MarkerList;
-import radio.Standard;
+import radio_module.Standard;
 import script.Script;
 import utilities.MapCalc;
 import utilities.UColor;
@@ -702,7 +702,7 @@ public abstract class Device implements Runnable, MouseListener,
 	public double distanceInPixel(Device device) {
 		double x2 = device.getLongitude();
 		double y2 = device.getLatitude();
-		return MapCalc.distanceEnPixels(longitude, latitude, x2, y2);
+		return MapCalc.distanceInPixels(longitude, latitude, x2, y2);
 	}
 
 	/**
@@ -717,7 +717,7 @@ public abstract class Device implements Runnable, MouseListener,
 	}
 	
 	public double distance(int id) {
-		Device device = DeviceList.getNodeById(id);
+		DeviceWithRadio device = (DeviceWithRadio) DeviceList.getNodeById(id);
 		if (!radioDetect(device)) return -1;
 		double x2 = device.getLongitude();
 		double y2 = device.getLatitude();
@@ -1147,13 +1147,22 @@ public abstract class Device implements Runnable, MouseListener,
 	 */
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		Point p = new Point(e.getX(), e.getY());
+		int cx = e.getX();
+		int cy = e.getY();
+		
+		if (MapLayer.magnetic) {
+			cx = cx - (cx%32) + 12;
+			cy = cy - (cy%32) + 18;
+		}
+		//Point p = new Point(e.getX(), e.getY());
+		Point p = new Point(cx, cy);
 		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
 		double ex = gp.getLongitude();
 		double ey = gp.getLatitude();
 
-		if (!move) {
-			calculateDxDy(e.getX(), e.getY());
+		if (!move) {			
+			//calculateDxDy(e.getX(), e.getY());
+			calculateDxDy(cx, cy);
 		}
 
 		boolean tmp_inside = inside;
@@ -1313,7 +1322,7 @@ public abstract class Device implements Runnable, MouseListener,
 		int[] coord;
 		if (displayInfos && selected && infos != null) {
 			g.setFont(new Font("arial", 1, 10));
-			coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+			coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int lx1 = coord[0];
 			int ly1 = coord[1];
 			g.setColor(UColor.WHITE_TRANSPARENT);
@@ -1654,8 +1663,7 @@ public abstract class Device implements Runnable, MouseListener,
 		if(getType()==Device.SENSOR) {
 			setSending(false);
 			setReceiving(false);
-		}
-		this.initGeoZoneList();
+		}		
 	}
 	
 	public abstract void initBattery() ;
@@ -1778,7 +1786,7 @@ public abstract class Device implements Runnable, MouseListener,
 	public abstract void calculatePropagations();
 	public abstract void resetPropagations();
 	public abstract void drawRadioPropagations(Graphics g) ;
-	public abstract boolean radioDetect(Device device) ;
+	public abstract boolean radioDetect(DeviceWithRadio device) ;
 
 	public void setSigmaOfDriftTime(double sigmaOfDriftTime) {
 		this.sigmaOfDriftTime = sigmaOfDriftTime;

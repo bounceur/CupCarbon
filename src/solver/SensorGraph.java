@@ -13,15 +13,15 @@ import device.SensorNode;
 
 public class SensorGraph {
 
-	public static GraphStd toSensorGraph(List<Device> nodes, int size) {
-		Device n1 = null;
-		Device n2 = null;
+	public static GraphStd toSensorGraph(List<SensorNode> nodes, int size) {
+		SensorNode n1 = null;
+		SensorNode n2 = null;
 		double distance = 0;
 		GraphStd graphe = new GraphStd();
 		int i = 0;
 		int j = 0;
-		ListIterator<Device> iterator = nodes.listIterator();
-		ListIterator<Device> iterator2;
+		ListIterator<SensorNode> iterator = nodes.listIterator();
+		ListIterator<SensorNode> iterator2;
 		while (iterator.hasNext()) {
 			n1 = iterator.next();
 			if (n1.getType() == Device.SENSOR) {

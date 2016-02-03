@@ -67,6 +67,7 @@ import actions_ui.Historic;
 import arduino.Arduino;
 import device.Device;
 import device.DeviceList;
+import device.SensorNode;
 import geo_objects.BuildingList;
 import map.MapLayer;
 import map.RandomDevices;
@@ -88,13 +89,12 @@ import solver.NetworkPerso;
 import solver.SensorSetCover;
 import solver.SensorTargetCoverageRun;
 import solver.SolverProxyParams;
-import visibility.TahaVisibility;
 
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
- * @version 2.7.1 (U-One)
+ * @version 2.7.2 (U-One)
  */
 
 public class CupCarbon {
@@ -330,8 +330,7 @@ public class CupCarbon {
 				fc.setFileFilter(projectFilter);
 				int val = fc.showDialog(fc, "Open Project");
 				if (val == 0) {
-					Project.openProject(fc.getSelectedFile().getParent(), fc
-							.getSelectedFile().getName());
+					Project.openProject(fc.getSelectedFile().getParent(), fc.getSelectedFile().getName());
 					cupCarbonMap.setTitle("CupCarbon Map : "+fc.getSelectedFile().getName());
 				}				
 			}
@@ -939,6 +938,7 @@ public class CupCarbon {
 		mntmInitializeAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DeviceList.initAll();
+				DeviceList.initAllGeoZones();
 			}
 		});
 		mntmInitializeAll.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
@@ -1455,12 +1455,13 @@ public class CupCarbon {
 			}
 		});
 		
-		JRadioButtonMenuItem mntmLocal = new JRadioButtonMenuItem("OSM Standard (grayscale)");
+		JRadioButtonMenuItem mntmLocal = new JRadioButtonMenuItem("OSM Dark");
 		mntmLocal.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
 		buttonGroup.add(mntmLocal);
 		mntmLocal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeNetTiles("http://a.tiles.wmflabs.org/bw-mapnik/");
+				//changeNetTiles("http://a.tiles.wmflabs.org/bw-mapnik/");
+				changeNetTiles("http://a.basemaps.cartocdn.com/dark_all/");
 			}
 		});
 		mnMap.add(mntmLocal);
@@ -1721,14 +1722,15 @@ public class CupCarbon {
 		toolBar.add(btnPropagations);
 		
 		JButton btnVisibility = new JButton("Visibility");
+		btnVisibility.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "visibility.png"));
 		btnVisibility.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {				
-				TahaVisibility taha = new TahaVisibility();
-				try {
-					taha.execute();
-				} catch (CloneNotSupportedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Number of Buildings : "+BuildingList.size());
+				for(SensorNode sn : DeviceList.getSensorNodes()) {
+					if(sn.isSelected()) {	
+//						VisibilityZones vz = new VisibilityZones(sn);
+//						vz.run();
+					}
 				}
 			}
 		});

@@ -3,14 +3,14 @@ package device;
 import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import map.MapLayer;
-import radio.Ber;
-import radio.Standard;
-import radio.XBeeFrameGenerator;
+import radio_module.Ber;
+import radio_module.Standard;
+import radio_module.XBeeFrameGenerator;
 import utilities.MapCalc;
 import utilities.UColor;
 import visualisation.Visualisation;
@@ -54,11 +54,9 @@ public class Channels {
 		
 		PacketEvent packetEvent = new PacketEvent(type, sSensor, rSensor, packet, message, lastTime+duration);		
 		channelEventList.get(sSensor.getCh()).add(packetEvent);
+		Collections.sort(channelEventList.get(sSensor.getCh()));
 	}
-	
-	
-	public static int sommer = 0;
-	public static int sommep = 0;
+		
 	public static void receivedMessages() {
 		for (List<PacketEvent> packetEventList : channelEventList) {
 			boolean stop = false; // For broadcast sending
@@ -155,13 +153,14 @@ public class Channels {
 		return min;
 	}
 	
-	public static void drawChannelLinks(Graphics g) {
-		Iterator<List<PacketEvent>> it1 = channelEventList.iterator();
+	public static void drawChannelLinks(Graphics g) {			
+		//Iterator<List<PacketEvent>> it1 = channelEventList.iterator();
 		//for (List<PacketEvent> packetEventList : channelEventList) {
-		List<PacketEvent> packetEventList;
-		PacketEvent pev;
-		while(it1.hasNext()) {
-			packetEventList = it1.next();
+		//List<PacketEvent> packetEventList;
+		//PacketEvent pev;
+		//while(it1.hasNext()) {		
+		for(List<PacketEvent> packetEventList : channelEventList) {
+			//packetEventList = it1.next();
 			if(packetEventList.size()>0) {
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setStroke(new BasicStroke(2.5f));
@@ -178,10 +177,10 @@ public class Channels {
 				double dy = 0;
 				double alpha = 0;
 				int arrColor = 0;
-				Iterator<PacketEvent> it2 = packetEventList.iterator();				
+				//Iterator<PacketEvent> it2 = packetEventList.iterator();				
 				//for(PacketEvent pev : packetEventList) {
-				while(it2.hasNext()) {
-					pev = it2.next();
+				for(PacketEvent pev : packetEventList) {
+					//pev = it2.next();
 					if(pev.getSSensor().isSending() && pev.getRSensor().isReceiving()) {
 						if(pev.getType()==0 || pev.getType()==2 || ((pev.getType()==1) && SimulationInputs.showAckLinks)) {
 							g.setColor(pev.getSSensor().getRadioLinkColor());
@@ -196,17 +195,17 @@ public class Channels {
 							
 							Visualisation.comAddArrow((SensorNode)pev.getSSensor(), (SensorNode)pev.getRSensor(), 2, arrColor, 2);
 							
-							coord = MapCalc.geoToIntPixelMapXY(pev.getSSensor().getLatitude(), pev.getSSensor().getLongitude());
+							coord = MapCalc.geoToPixelMapA(pev.getSSensor().getLatitude(), pev.getSSensor().getLongitude());
 							lx1 = coord[0];
 							ly1 = coord[1];		
-							coord = MapCalc.geoToIntPixelMapXY(pev.getRSensor().getLatitude(), pev.getRSensor().getLongitude());
+							coord = MapCalc.geoToPixelMapA(pev.getRSensor().getLatitude(), pev.getRSensor().getLongitude());
 							lx2 = coord[0];
 							ly2 = coord[1];
 							dx = lx2 - lx1;
 							dy = ly2 - ly1;
 							
 							g.drawLine(lx1, ly1, lx2, ly2);
-							
+
 							alpha = Math.atan(dy / dx);
 							alpha = 180 * alpha / Math.PI;
 							int as = 16;
@@ -243,7 +242,8 @@ public class Channels {
 //		liste.add(3);
 //		liste.add(34);
 //		liste.add(7);
-//		liste.sort(null);
+//		Collections.sort(liste);
+//		//liste.sort(null);
 //		System.out.println(liste);
 //	}
 }

@@ -93,7 +93,7 @@ public class AboutCupCarbon extends JDialog {
 				panel.add(lblLabsticc);
 			}
 			{
-				JLabel lblUniversitDeBretagne = new JLabel("UBO - UBS - Telecom Bretagne - IEMN - Xlim - Virtualys - LIMED - UCD");
+				JLabel lblUniversitDeBretagne = new JLabel("UBO - IEMN - Xlim - Virtualys");
 				lblUniversitDeBretagne.setHorizontalAlignment(SwingConstants.CENTER);
 				panel.add(lblUniversitDeBretagne);
 			}

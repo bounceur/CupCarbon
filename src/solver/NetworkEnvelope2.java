@@ -21,9 +21,10 @@ package solver;
 
 import java.util.List;
 
-import map.MapLayer;
-import device.Device;
 import device.DeviceList;
+import device.DeviceWithRadio;
+import device.SensorNode;
+import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur
@@ -48,7 +49,7 @@ public class NetworkEnvelope2 extends Thread {
 	public void run() {
 
 		int k = 1;
-		Device n1, n2;
+		DeviceWithRadio n1, n2;
 		int rank1 = 0;
 		int rank2 = 0;
 		int rank3 = 0;
@@ -65,7 +66,7 @@ public class NetworkEnvelope2 extends Thread {
 		double ay1;
 		double ay2;		
 
-		List<Device> nodes = DeviceList.getNodes();
+		List<SensorNode> nodes = DeviceList.getSensorNodes();
 
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).setValue(0);

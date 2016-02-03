@@ -19,13 +19,16 @@
 
 package markers;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.event.KeyEvent;
 
 import device.Device;
 import device.DeviceList;
+import device.DeviceWithRadio;
 import device.StdSensorNode;
 import map.MapLayer;
 import utilities.MapCalc;
@@ -45,9 +48,11 @@ public class Marker extends Device {
 		
 	@Override
 	public void draw(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setStroke(new BasicStroke(0.5f));
 		if(visible) {
 			initDraw(g) ;
-			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int x = coord[0];
 			int y = coord[1];
 			//int x = MapCalc.geoToIntPixelMapX(this.x,this.y) ;
@@ -223,7 +228,7 @@ public class Marker extends Device {
 	}
 
 	@Override
-	public boolean radioDetect(Device device) {
+	public boolean radioDetect(DeviceWithRadio device) {
 		return false;
 	}
 

@@ -1,9 +1,9 @@
 package script;
 
 import device.SensorNode;
-import radio.Standard;
-import radio.XBeeFrameGenerator;
-import radio.XBeeToArduinoFrameGenerator;
+import radio_module.Standard;
+import radio_module.XBeeFrameGenerator;
+import radio_module.XBeeToArduinoFrameGenerator;
 import wisen_simulation.SimLog;
 
 public class Command_ATMY extends Command {

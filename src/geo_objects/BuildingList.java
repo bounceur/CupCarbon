@@ -81,7 +81,7 @@ public class BuildingList extends Thread {
 			fos.print("# -----------------------\n");
 			fos.print("# -----------------------\n");
 			for (Building building : buildingList) {
-				for(int i=0; i<building.getN(); i++) {
+				for(int i=0; i<building.getNPoints(); i++) {
 					fos.print(building.getXCoords(i)+" ");
 					fos.print(building.getYCoords(i)+" ");					
 				}
@@ -131,5 +131,9 @@ public class BuildingList extends Thread {
 				return true;
 		}
 		return false;
+	}
+	
+	public static int size() {
+		return buildingList.size();
 	}
 }

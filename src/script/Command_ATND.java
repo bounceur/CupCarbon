@@ -1,8 +1,8 @@
 package script;
 
 import device.SensorNode;
-import radio.Standard;
-import radio.XBeeFrameGenerator;
+import radio_module.Standard;
+import radio_module.XBeeFrameGenerator;
 
 public class Command_ATND extends Command {
 

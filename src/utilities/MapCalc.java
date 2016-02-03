@@ -22,14 +22,20 @@ package utilities;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
-import map.MapLayer;
-
 import org.jdesktop.swingx.mapviewer.GeoPosition;
+
+import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur
  * 
  */
+
+// MapLayer.getMapViewer().convertGeoPositionToPoint(gp) -> de GeoPosition au pixel de la fenêtre
+// MapLayer.getMapViewer().convertPointToGeoPosition(pt) -> du pixel de la fenêtre à GeoPosition
+// MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom()); -> De GeoPosition au pixel de la carte
+// MapLayer.getMapViewer().getTileFactory().pixelToGeo(pc, MapLayer.getMapViewer().getZoom()); -> Du pixel de la carte à GeoPosition
+
 public class MapCalc {
 
 	/**
@@ -46,7 +52,7 @@ public class MapCalc {
 	 * @return The pixel coordinates (Point2D) corresponding to the GPS
 	 *         coordinates (x, y)
 	 */
-	public static Point2D geoXYToPixelMap(double x, double y) {
+	public static Point2D geoToPixelMap(double x, double y) {
 		return MapLayer
 				.getMapViewer()
 				.getTileFactory()
@@ -58,6 +64,10 @@ public class MapCalc {
 	// return Layer.getMapViewer().getTileFactory()
 	// .pixelToGeo(new Point(x, y), Layer.getMapViewer().getZoom());
 	// }
+	
+	public static GeoPosition pixelMapToGeo(int x, int y) {
+		return MapLayer.getMapViewer().getTileFactory().pixelToGeo (new Point(x, y), MapLayer.getMapViewer().getZoom()); 
+	}
 
 	/**
 	 * Calculate the pixel of the map from a given pixel of the window (JFrame,
@@ -103,8 +113,9 @@ public class MapCalc {
 	 * @return the integer coordinates of the pixel of the map that corresponds
 	 *         to a given GPS coordinates (x, y).
 	 */
-	public static int[] geoToIntPixelMapXY(double x, double y) {
-		Point2D p = geoXYToPixelMap(x, y);
+	
+	public static int[] geoToPixelMapA(double x, double y) {
+		Point2D p = geoToPixelMap(x, y);
 		int[] v = { (int) p.getX(), (int) p.getY() };
 		return v;
 	}
@@ -122,10 +133,10 @@ public class MapCalc {
 	 *            Latitude of the second point
 	 * @return The distance in meters between two GPS coordinates.
 	 */
-	public static double distanceEnPixels(double x1, double y1, double x2,
+	public static double distanceInPixels(double x1, double y1, double x2,
 			double y2) {
-		Point2D p1 = geoXYToPixelMap(x1, y1);
-		Point2D p2 = geoXYToPixelMap(x2, y2);
+		Point2D p1 = geoToPixelMap(x1, y1);
+		Point2D p2 = geoToPixelMap(x2, y2);
 		return p1.distance(p2);
 	}
 
@@ -142,7 +153,7 @@ public class MapCalc {
 	 *            Latitude of the second point
 	 * @return The distance in meters between two GPS coordinates.
 	 */
-	public static double distance(double x1, double y1, double x2, double y2) {
+	public static double distance(double x1, double y1, double x2, double y2) {		
 		double earth_radius = 6378137; // Earth sphere radius: 6378km
 		double rlo1 = Math.toRadians(x1);
 		double rla1 = Math.toRadians(y1);

@@ -20,11 +20,11 @@ public class Command_COORD extends Command {
 		String vArg1 = sensor.getScript().getVariableValue(arg1);
 		String vArg2 = sensor.getScript().getVariableValue(arg2);
 		String vArg3 = sensor.getScript().getVariableValue(arg3);
-		sensor.setLatitude(Double.valueOf(vArg1));
-		sensor.setLongitude(Double.valueOf(vArg2));
+		sensor.setLongitude(Double.valueOf(vArg1));
+		sensor.setLatitude(Double.valueOf(vArg2));		
 		double t = Integer.valueOf(vArg3);
 		//MapLayer.getMapViewer().repaint();	
-		return t ;
+		return t/1000. ;
 	}
 
 	@Override

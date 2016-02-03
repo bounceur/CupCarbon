@@ -218,7 +218,6 @@ public class DeviceList {
 			int idMax = 0 ;
 			while ((line = br.readLine()) != null) {
 				str = line.split(" ");
-				
 				switch (str.length) {
 				case 6:
 					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5]);
@@ -231,6 +230,9 @@ public class DeviceList {
 					break;
 				case 9:
 					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8]);
+					break;
+				case 10:
+					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[8]);
 					break;
 				case 11:
 					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[9], str[10]);
@@ -274,7 +276,11 @@ public class DeviceList {
 		int id = Integer.valueOf(type[1]);
 		switch (Integer.valueOf(type[0])) {
 		case Device.SENSOR:
-			add(new StdSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10]));
+			if(type.length==10)
+				add(new StdSensorNode(type[1], type[2], type[4], type[3], "0.0", type[5], type[6], type[7], type[8], type[9]));
+			else
+				add(new StdSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10]));
+			
 			break;
 		case Device.GAS:
 			add(new Gas(type[3], type[4], type[5], type[6], id));
@@ -332,7 +338,6 @@ public class DeviceList {
 		}
 		
 		for (Device n : getSensorNodes()) {
-			//Visualisation.updateStdSensorNode((SensorNode) n);
 			if(propagationsCalculated)
 				n.drawRadioPropagations(g);
 			else
@@ -386,7 +391,7 @@ public class DeviceList {
 	}
 
 	public static StringBuilder displaySensorGraph() {
-		return SensorGraph.toSensorGraph(nodes, nodes.size()).displayNames();
+		return SensorGraph.toSensorGraph(DeviceList.getSensorNodes(), nodes.size()).displayNames();
 	}
 
 	public static StringBuilder displaySensorTargetGraph() {
@@ -487,6 +492,13 @@ public class DeviceList {
 		}		
 		MapLayer.getMapViewer().repaint();
 	}
+	
+	public static void initAllGeoZones() {
+		for (Device device : nodes) {
+			device.initGeoZoneList();			
+		}		
+		MapLayer.getMapViewer().repaint();
+	}
 
 	public static void initAlgoSelectedNodes() {
 		for (Device device : nodes) {
@@ -525,10 +537,10 @@ public class DeviceList {
 	}
 
 	public Point[] getCouple(Device n1, Device n2) {
-		int[] coord = MapCalc.geoToIntPixelMapXY(n1.getLongitude(), n1.getLatitude());
+		int[] coord = MapCalc.geoToPixelMapA(n1.getLongitude(), n1.getLatitude());
 		int lx1 = coord[0];
 		int ly1 = coord[1];
-		coord = MapCalc.geoToIntPixelMapXY(n2.getLongitude(), n2.getLatitude());
+		coord = MapCalc.geoToPixelMapA(n2.getLongitude(), n2.getLatitude());
 		int lx2 = coord[0];
 		int ly2 = coord[1];
 		Point[] p = new Point[2];
@@ -621,10 +633,10 @@ public class DeviceList {
 			int ly2=0;
 			int[] coord ;
 			for(int i=1; i<envelope.size(); i++) {
-				coord = MapCalc.geoToIntPixelMapXY(x, y);
+				coord = MapCalc.geoToPixelMapA(x, y);
 				lx1 = coord[0];
 				ly1 = coord[1];
-				coord = MapCalc.geoToIntPixelMapXY(nodes.get(envelope.get(i)).getLongitude(), nodes.get(envelope.get(i)).getLatitude());
+				coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(i)).getLongitude(), nodes.get(envelope.get(i)).getLatitude());
 				lx2 = coord[0];
 				ly2 = coord[1];
 				g.setColor(Color.BLUE);
@@ -632,7 +644,7 @@ public class DeviceList {
 				x = nodes.get(envelope.get(i)).getLongitude();
 				y = nodes.get(envelope.get(i)).getLatitude();		
 			}
-			coord = MapCalc.geoToIntPixelMapXY(nodes.get(envelope.get(0)).getLongitude(), nodes.get(envelope.get(0)).getLatitude());
+			coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(0)).getLongitude(), nodes.get(envelope.get(0)).getLatitude());
 			lx1 = coord[0];
 			ly1 = coord[1];
 			g.drawLine(lx2, ly2, lx1, ly1);

@@ -62,17 +62,15 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 	// ------ Simple Propagation
 	public double requiredQuality = -80.0; // dB
-	public double transmitPower = 0 ; // dBm
-	
-	protected int nZone = 1;	
+	public double transmitPower = 0 ; // dBm	
 	
 	protected LinkedList<SensorNode> neighbors = new LinkedList<SensorNode> () ;
 	
-	protected int nPoint = 30;;	
+	protected int nPoint = 30;	
 	protected double deg = 2.*Math.PI/nPoint;
 	
-	protected int [][] polyX = new int[nZone][nPoint];
-	protected int [][] polyY = new int[nZone][nPoint];
+	protected int [] polyX = new int [nPoint];
+	protected int [] polyY = new int [nPoint];
 	
 	protected GeoZoneList geoZoneList = null;
 	
@@ -107,7 +105,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 	public Polygon getRadioPolygon() {
 		//if(nPoint>0)
-			return new Polygon(polyX[0],polyY[0],nPoint);	
+			return new Polygon(polyX, polyY, nPoint);	
 		//return null;
 	}
 	
@@ -122,7 +120,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		GeoPosition gp = new GeoPosition(device.getLatitude(), device.getLongitude());
 		Point2D p = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
 		if(nPoint>0)
-			return (getRadioPolygon().contains(p));
+			return ((new Polygon(polyX, polyY, nPoint)).contains(p));
 		return (geoZoneList.contains(p));
 		//return false;
 	}
@@ -276,7 +274,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	public void drawMarked(Graphics g) {
 		if (!isDead()) {
 			if (ledColor==1) {	
-				int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+				int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 				int x = coord[0];
 				int y = coord[1];
 				g.setColor(Color.ORANGE);			
@@ -294,7 +292,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			}
 
 			if(ledColor>1) {				
-				int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+				int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 				int x = coord[0];
 				int y = coord[1];
 				g.setColor(Color.ORANGE);			
@@ -368,7 +366,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		System.out.print(id+" : ");
 		for (int i = 0; i < DeviceList.size(); i++) {
 			if(this != DeviceList.getNodes().get(i)) 
-				if((DeviceList.getNodes().get(i).radioDetect(this)) || (radioDetect(DeviceList.getNodes().get(i)))) {
+				if((DeviceList.getNodes().get(i).radioDetect(this)) || (radioDetect((DeviceWithRadio)DeviceList.getNodes().get(i)))) {
 					System.out.print(DeviceList.getNodes().get(i)+" ");
 				}
 		}
@@ -376,7 +374,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	}
 	
 	public void drawRadioLinks(Graphics g) {
-		for(Device device : DeviceList.getSensorNodes()) {
+		for(DeviceWithRadio device : DeviceList.getSensorNodes()) {
 			if(this!=device) {
 				if(radioDetect(device) && !isDead() && !device.isDead()) {
 					Visualisation.arrowDrawing((SensorNode)this, (SensorNode)device, 1, 0, 1);
@@ -411,10 +409,10 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	public void drawRadioLink(Device device, Graphics g, int type) {		
 		
 		if(drawRadioLinks) {	
-			int[] coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int lx1 = coord[0];
 			int ly1 = coord[1];
-			coord = MapCalc.geoToIntPixelMapXY(device.getLatitude(), device.getLongitude());
+			coord = MapCalc.geoToPixelMapA(device.getLatitude(), device.getLongitude());
 			int lx2 = coord[0];
 			int ly2 = coord[1];
 			
@@ -422,14 +420,14 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			case 0 : g.setColor(Color.DARK_GRAY); break;
 			case 1 : g.setColor(Color.DARK_GRAY); break;
 			case 2 : g.setColor(Color.LIGHT_GRAY); break;
-			case 3 : g.setColor(Color.RED); break;
-			case 4 : g.setColor(Color.BLUE); break;
+			case 3 : g.setColor(UColor.RED); break;
+			case 4 : g.setColor(UColor.BLUE); break;
 			}
 			
 			Graphics2D g2 = (Graphics2D) g;
-			Stroke dashed = new BasicStroke(0.6f);
+			Stroke dashed = new BasicStroke(0.5f);
 			if(type==1)
-				dashed = new BasicStroke(0.6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{4}, 0);
+				dashed = new BasicStroke(0.6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2,4,2,4}, 0);
 	        g2.setStroke(dashed);
 			g.drawLine(lx1, ly1, lx2, ly2);
 		
@@ -440,10 +438,10 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				double dx = 0;
 				double dy = 0;
 				double alpha = 0;
-				coord = MapCalc.geoToIntPixelMapXY(latitude, longitude);
+				coord = MapCalc.geoToPixelMapA(latitude, longitude);
 				lx1 = coord[0];
 				ly1 = coord[1];		
-				coord = MapCalc.geoToIntPixelMapXY(device.getLatitude(), device.getLongitude());
+				coord = MapCalc.geoToPixelMapA(device.getLatitude(), device.getLongitude());
 				lx2 = coord[0];
 				ly2 = coord[1];
 				dx = lx2 - lx1;
@@ -460,14 +458,14 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	}
 
 	public void drawDistance(double longitude1, double latitude1, double elevation1, double longitude2, double latitude2, double elevation2, int d, double pr, Graphics g) {
-		int[] coord = MapCalc.geoToIntPixelMapXY(latitude1, longitude1);
+		int[] coord = MapCalc.geoToPixelMapA(latitude1, longitude1);
 		int lx1 = coord[0];
 		int ly1 = coord[1];
-		coord = MapCalc.geoToIntPixelMapXY(latitude2, longitude2);
+		coord = MapCalc.geoToPixelMapA(latitude2, longitude2);
 		int lx2 = coord[0];
 		int ly2 = coord[1];
 		g.setColor(Color.DARK_GRAY);		
-		g.drawString("" + d + " ["+(int)pr+"]", ((lx1 + lx2) / 2), ((ly1 + ly2) / 2));
+		g.drawString("" + d, ((lx1 + lx2) / 2), ((ly1 + ly2) / 2));
 		Visualisation.drawText(((lx1 + lx2) / 2.), ((ly1 + ly2) / 2.), (elevation+elevation2)/2.);
 	}
 	
@@ -512,7 +510,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 * @param device
 	 * @return if a neighbor device is in the propagation area of the current device
 	 */
-	public boolean propagationDetect(Device device) {
+	public boolean propagationDetect(DeviceWithRadio device) {
 		if (DeviceList.propagationsCalculated)
 			return neighbors.contains(device);
 		else

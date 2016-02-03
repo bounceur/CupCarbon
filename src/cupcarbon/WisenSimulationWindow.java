@@ -51,6 +51,7 @@ public class WisenSimulationWindow extends JInternalFrame {
 	private JCheckBox chbxSymRadio;
 	private JCheckBox chckbxCpuDrift;
 	private JTextField tf_arrowsSpeed;
+	private JCheckBox visibilityCB ;
 	
 	/**
 	 * Launch the application.
@@ -147,9 +148,9 @@ public class WisenSimulationWindow extends JInternalFrame {
 		chbxSymRadio.setFont(new Font("Arial", Font.PLAIN, 12));
 		panel_17.add(chbxSymRadio);
 		
-		chckbxCpuDrift = new JCheckBox("Drift (sigma)");
-		panel_17.add(chckbxCpuDrift);
-		chckbxCpuDrift.setFont(new Font("Arial", Font.PLAIN, 12));
+		visibilityCB = new JCheckBox("Visibility");
+		visibilityCB.setFont(new Font("Arial", Font.PLAIN, 12));
+		panel_17.add(visibilityCB);
 
 		JPanel panel_7 = new JPanel();
 		panel_7.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -199,6 +200,10 @@ public class WisenSimulationWindow extends JInternalFrame {
 						cboxMobility = new JCheckBox("Mobility / Sensor Events");
 						panel_19.add(cboxMobility);
 						cboxMobility.setFont(new Font("Arial", Font.PLAIN, 12));
+						
+						chckbxCpuDrift = new JCheckBox("Drift (sigma)");
+						panel_19.add(chckbxCpuDrift);
+						chckbxCpuDrift.setFont(new Font("Arial", Font.PLAIN, 12));
 						
 						JPanel panel_2 = new JPanel();
 						panel_2.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -363,6 +368,7 @@ public class WisenSimulationWindow extends JInternalFrame {
 		SimulationInputs.ack = checkBoxAck.isSelected();
 		SimulationInputs.symmetricalLinks = chbxSymRadio.isSelected();
 		SimulationInputs.cpuDrift = chckbxCpuDrift.isSelected();
+		SimulationInputs.visibility = visibilityCB.isSelected();
 		MapLayer.getMapViewer().repaint();
 	}
 	

@@ -20,7 +20,7 @@
 package wisen_simulation;
 
 import propagation.RadioDetection;
-import radio.Ber;
+import radio_module.Ber;
 
 /**
  * @author Ahcene Bounceur
@@ -32,7 +32,7 @@ import radio.Ber;
 public class SimulationInputs {
 	
 	public static final int NONE = 0;
-	public static final int CSMA = 1;
+	public static final int CSMA = 1;	
 	
 	public static boolean cpuDrift = false;
 	
@@ -53,4 +53,5 @@ public class SimulationInputs {
 	
 	public static boolean symmetricalLinks = true;
 	public static int radioDetectionType = RadioDetection.SIMPLE_DETECTION;
+	public static boolean visibility = false; 
 }

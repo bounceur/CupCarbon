@@ -31,7 +31,7 @@ package interference;
 
 import device.Device;
 import math.Complex;
-import radio.Standard;
+import radio_module.Standard;
 
 public class Transeiver {
 

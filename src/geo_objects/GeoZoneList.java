@@ -5,8 +5,6 @@ import java.awt.Polygon;
 import java.awt.geom.Point2D;
 import java.util.LinkedList;
 
-import map.MapLayer;
-
 /**
  * @author Ahcene Bounceur
  * @version 1.0
@@ -25,21 +23,17 @@ public class GeoZoneList extends Thread {
 	}
 	
 	public void add(String str) {
-		GeoZone geoZone = new GeoZone(str, this);
-		MapLayer.getMapViewer().addMouseListener(geoZone);
-		MapLayer.getMapViewer().addKeyListener(geoZone);
+		GeoZone geoZone = new GeoZone(str);
 		geoZoneList.add(geoZone);
 	}
 	
 	public void add(String [] str) {		
 		for(int i=0; i<str.length; i++) {
-			geoZoneList.add(new GeoZone(str, this));
+			geoZoneList.add(new GeoZone(str));
 		}
 	}
 	
 	public void add(GeoZone geoZone) {
-		MapLayer.getMapViewer().addMouseListener(geoZone);
-		MapLayer.getMapViewer().addKeyListener(geoZone);
 		geoZoneList.add(geoZone);		
 	}
 	
@@ -58,8 +52,6 @@ public class GeoZoneList extends Thread {
 	}
 	
 	public void delete(GeoZone geoZone) {	
-		MapLayer.getMapViewer().removeMouseListener(geoZone);
-		MapLayer.getMapViewer().removeKeyListener(geoZone);
 		geoZone = null;
 		geoZoneList.remove(geoZone);
 	}
@@ -96,7 +88,18 @@ public class GeoZoneList extends Thread {
 		}
 	}
 	
+	public int size() {
+		return geoZoneList.size(); 
+	}
+	
 	public boolean isEmpty() {
 		return (geoZoneList.size()==0);
 	}
+	
+	public void display() {
+		for(GeoZone gz : geoZoneList) {
+			gz.display();
+			System.out.println();
+		}
+ 	}
 }

@@ -41,7 +41,7 @@ public class OsmTest {
 	
 	public void drawFromGPS(Graphics g) {
 		g.setColor(Color.red);
-		int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
+		int[] coord = MapCalc.geoToPixelMapA(longitude, latitude);
 		int x = coord[0];
 		int y = coord[1];
 		g.fillOval(x, y, 50, 50);

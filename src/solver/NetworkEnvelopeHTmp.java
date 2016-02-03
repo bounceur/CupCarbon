@@ -19,10 +19,10 @@
 
 package solver;
 
-import map.MapLayer;
-import device.Device;
 import device.DeviceList;
+import device.SensorNode;
 import device.StdSensorNode;
+import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur
@@ -36,7 +36,7 @@ public class NetworkEnvelopeHTmp extends Thread {
 	@Override
 	public void run() {	
 		
-		Device n1, n2, n3, n4;
+		SensorNode n1, n2, n3, n4;
 		
 		double x0 = 0;
 		double y0 = 0;
@@ -83,7 +83,7 @@ public class NetworkEnvelopeHTmp extends Thread {
 			
 			delay();
 			
-			n1 = DeviceList.getNodes().get(cur);
+			n1 = DeviceList.getSensorNodes().get(cur);
 			xc = n1.getLatitude();
 			yc = n1.getLongitude();
 			x0 = xc-0.2;
@@ -106,7 +106,7 @@ public class NetworkEnvelopeHTmp extends Thread {
 					min = 10000000;
 					//trouve = false;
 					for (int j = 0; j < DeviceList.getNodes().size(); j++) {
-						n2 = DeviceList.getNodes().get(j);
+						n2 = DeviceList.getSensorNodes().get(j);
 						if(!DeviceList.getNodes().get(j).isDead())							
 							if ((cur!=j) && n1.radioDetect(n2)) {
 								//if(!n2.isVisited()) {
@@ -138,7 +138,7 @@ public class NetworkEnvelopeHTmp extends Thread {
 						
 						n3 = n4;
 						n4 = n1;			
-						n1 = DeviceList.getNodes().get(imin);
+						n1 = DeviceList.getSensorNodes().get(imin);
 						cur = imin;
 						
 						x0=x1;

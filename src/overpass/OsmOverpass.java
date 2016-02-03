@@ -86,7 +86,7 @@ public class OsmOverpass extends Thread {
 	        }
 	        isLoading = false;
 	        MapLayer.mapViewer.repaint();
-	        System.out.println("[Buildings] Building maker finished.");	        
+	        System.out.println("[Buildings] Building loaded: SECCESS!");	        
 		} catch (JAXBException e) {
 			e.printStackTrace();
 			

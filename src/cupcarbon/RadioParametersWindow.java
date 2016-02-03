@@ -36,7 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import device.DeviceList;
-import radio.Standard;
+import radio_module.Standard;
 
 import javax.swing.JComboBox;
 

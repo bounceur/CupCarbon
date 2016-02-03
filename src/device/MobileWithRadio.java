@@ -48,7 +48,7 @@ public class MobileWithRadio extends MobileGWR {
 	public void draw(Graphics g) {		
 		if(visible) {
 			initDraw(g) ;
-			int[] coord = MapCalc.geoToIntPixelMapXY(longitude, latitude);
+			int[] coord = MapCalc.geoToPixelMapA(longitude, latitude);
 			int x = coord[0];
 			int y = coord[1];	
 			//int x = MapCalc.geoToIntPixelMapX(this.x,this.y) ;

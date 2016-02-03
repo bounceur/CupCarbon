@@ -77,15 +77,13 @@ public class WisenSimulation extends Thread {
 		
 		SimLog.add("===========================");
 		SimLog.add("Initialization");
-				
+		
+		DeviceList.initAll();
 		Channels.init();
 		
 		for (Device device : devices) {
-			if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
-				device.initForSimulation();
-			}
-			if (mobility) {
-				device.initForSimulation();
+			device.initForSimulation();
+			if (mobility) {				
 				if (device.canMove())
 					device.setEvent2(device.getNextTime());
 				else

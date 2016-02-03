@@ -21,9 +21,9 @@ package solver;
 
 import java.util.LinkedList;
 
-import map.MapLayer;
-import device.Device;
 import device.DeviceList;
+import device.DeviceWithRadio;
+import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur
@@ -48,12 +48,12 @@ public class NetworkCenter extends Thread {
 		MapLayer.getMapViewer().repaint();
 
 		double sum = 0 ;
-		Device n1, n2;
+		DeviceWithRadio n1, n2;
 		for (int i = 0; i < DeviceList.getNodes().size(); i++) {
 			sum = 0 ;
-			n1 = DeviceList.getNodes().get(i);
+			n1 = DeviceList.getSensorNodes().get(i);
 			for (int j = 0; j < DeviceList.getNodes().size(); j++) {
-				n2 = DeviceList.getNodes().get(j);
+				n2 = DeviceList.getSensorNodes().get(j);
 				if((i!=j) && n1.radioDetect(n2)) {
 					sum++;
 				}
@@ -68,9 +68,9 @@ public class NetworkCenter extends Thread {
 		for (int iter = 0; iter < 5; iter++) {			
 			for (int i = 0; i < DeviceList.getNodes().size(); i++) {
 				sum = 0 ;
-				n1 = DeviceList.getNodes().get(i);
+				n1 = DeviceList.getSensorNodes().get(i);
 				for (int j = 0; j < DeviceList.getNodes().size(); j++) {
-					n2 = DeviceList.getNodes().get(j);
+					n2 = DeviceList.getSensorNodes().get(j);
 					if(n1.radioDetect(n2)) {
 						sum += DeviceList.getNodes().get(j).getValue();
 					}					

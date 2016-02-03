@@ -19,13 +19,13 @@
 
 package solver;
 
-import graph.GraphStd;
-
 import java.util.List;
 
-import map.MapLayer;
 import device.Device;
 import device.DeviceList;
+import device.SensorNode;
+import graph.GraphStd;
+import map.MapLayer;
 
 
 /**
@@ -41,7 +41,7 @@ public class NetworkBorder {
 //		System.out.println("---------------------------");
 		// From sensors to Graph
 		GraphStd graphe = null;		
-		List<Device> nodes = DeviceList.getNodes();		
+		List<SensorNode> nodes = DeviceList.getSensorNodes();		
 		graphe = SensorGraph.toSensorGraph(nodes, DeviceList.size());		
 		
 		for (int i = 0; i < graphe.size(); i++) {

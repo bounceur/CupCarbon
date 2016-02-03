@@ -1,6 +1,9 @@
 package geo_objects;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.KeyEvent;
@@ -31,50 +34,71 @@ public class Building implements MouseListener, KeyListener {
 	private double[] coordY ;
 	private int[] iCoordX ;
 	private int[] iCoordY ;
-	private int n = 0 ;
+	private int nPoints = 0 ;
 	private boolean selected = false ;
+	private boolean hide = false ;
+	private int mapZoom = 0;
 	
-	public Building(int n) {
-		this.n=n;
-		coordX = new double [n] ;
-		coordY = new double [n] ;
-		iCoordX = new int [n] ;
-		iCoordY = new int [n] ;
+	
+	public Building(int nPoints) {
+		mapZoom = MapLayer.mapViewer.getZoom();
+		this.nPoints = nPoints;
+		coordX = new double [nPoints] ;
+		coordY = new double [nPoints] ;
+		iCoordX = new int [nPoints] ;
+		iCoordY = new int [nPoints] ;
 	}
 	
-	public Building(String [] str) {
-		n = str.length;
-		coordX = new double [n] ;
-		coordY = new double [n] ;
-		iCoordX = new int [n] ;
-		iCoordY = new int [n] ;
-		for(int i=0; i<n; i++) {
+	public Building(String [] str) {	
+		nPoints = str.length;
+		coordX = new double [nPoints] ;
+		coordY = new double [nPoints] ;
+		iCoordX = new int [nPoints] ;
+		iCoordY = new int [nPoints] ;
+		for(int i=0; i<nPoints; i++) {
 			coordX[i]=Double.valueOf(str[i*2]);
 			coordY[i]=Double.valueOf(str[i*2+1]);
+			computeIntCoord(i);
 		}
 	}
 	
 	public Building(String str) {
 		String [] vStr = str.split(" ");
-		n = vStr.length/2;
-		coordX = new double [n] ;
-		coordY = new double [n] ;
-		iCoordX = new int [n] ;
-		iCoordY = new int [n] ;
-		for(int i=0; i<n; i++) {
+		nPoints = vStr.length/2;
+		coordX = new double [nPoints] ;
+		coordY = new double [nPoints] ;
+		iCoordX = new int [nPoints] ;
+		iCoordY = new int [nPoints] ;
+		for(int i=0; i<nPoints; i++) {
 			coordX[i]=Double.valueOf(vStr[i*2]);
 			coordY[i]=Double.valueOf(vStr[i*2+1]);
+			computeIntCoord(i);
 		}
 	}
 	
-	public void set(double x, double y, int i) {
+	public void set(double x, double y, int i) {		
 		coordX[i]=x;
 		coordY[i]=y;
+		computeIntCoord(i);
+//		System.out.println(iCoordX[i]);
+//		System.out.println(iCoordY[i]);
+	}
+	
+	public void setInt(int x, int y, int i) {
+//		System.out.println(x);
+//		System.out.println(y);
+		iCoordX[i]=x;
+		iCoordY[i]=y;
+		
+		coordX[i] = MapCalc.pixelMapToGeo(x, y).getLongitude();
+		coordY[i] = MapCalc.pixelMapToGeo(x, y).getLatitude();
+		
 	}
 	
 	public void set(String x, String y, int i) {
 		coordX[i] = Double.valueOf(x);
 		coordY[i] = Double.valueOf(y);
+		computeIntCoord(i);
 	}
 	
 	public double getXCoords(int i) {
@@ -93,26 +117,47 @@ public class Building implements MouseListener, KeyListener {
 		return coordY[i];
 	}
 	
-	public int getN() {
-		return n;
+	public int getNPoints() {
+		return nPoints;
+	}
+	
+	public void computeIntCoord(int i) {
+		int [] coord = MapCalc.geoToPixelMapA(Double.valueOf(coordY[i]), Double.valueOf(coordX[i]));
+		iCoordX[i]=coord[0];
+		iCoordY[i]=coord[1];
+	}
+	
+	public void computeIntCoords() {
+		int [] coord = null ;	
+		for(int i=0; i<nPoints; i++) {
+			coord = MapCalc.geoToPixelMapA(Double.valueOf(coordY[i]), Double.valueOf(coordX[i]));
+			iCoordX[i]=coord[0];
+			iCoordY[i]=coord[1];
+		}
 	}
 	
 	public void draw(Graphics g) {
-		int[] coord = null ;	
-		for(int i=0; i<n; i++) {
-			coord = MapCalc.geoToIntPixelMapXY(Double.valueOf(coordY[i]), Double.valueOf(coordX[i]));
-			iCoordX[i] = coord[0];
-			iCoordY[i] = coord[1];
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setStroke(new BasicStroke(0.4f));
+		//g2.setStroke(new BasicStroke());
+		//g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		if(!hide) {
+			int newZoom = MapLayer.mapViewer.getZoom();
+			if(newZoom != mapZoom) {
+				mapZoom = newZoom;
+				computeIntCoords() ;
+			}
+			if(selected) {			
+				g2.setColor(UColor.BLUE2);				
+			}
+			else {
+				g2.setColor(UColor.BLACK_TTTTRANSPARENT);
+			}
+			g2.fillPolygon(iCoordX, iCoordY, nPoints);
+			//g.setColor(UColor.BLACK_TTRANSPARENT);
+			g2.setColor(Color.darkGray);
+			g2.drawPolygon(iCoordX, iCoordY, nPoints);
 		}
-		if(selected) {			
-			g.setColor(UColor.BLACK_TTTRANSPARENT);				
-		}
-		else {
-			g.setColor(UColor.BLACK_TTTTRANSPARENT);
-		}
-		g.fillPolygon(iCoordX, iCoordY, n);
-		g.setColor(UColor.BLACK_TTRANSPARENT);
-		g.drawPolygon(iCoordX, iCoordY, n);
 	}
 
 	@Override
@@ -152,7 +197,7 @@ public class Building implements MouseListener, KeyListener {
 		Point p = new Point(xs, ys);
 		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
 		Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
-		Polygon poly = new Polygon(iCoordX,iCoordY,n);
+		Polygon poly = new Polygon(iCoordX,iCoordY,nPoints);
 		return (poly.contains(p1));
 	}
 
@@ -176,6 +221,11 @@ public class Building implements MouseListener, KeyListener {
 		
 		if (key.getKeyChar() == 'i') {
 			selected = !selected;
+		}
+		
+		if (key.getKeyChar() == 'H') {
+			//if(selected)
+				hide = !hide;
 		}
 		
 		if (key.getKeyChar() == 'w') {
@@ -208,7 +258,7 @@ public class Building implements MouseListener, KeyListener {
 	}
 	
 	public boolean intersect(Polygon p) {
-		for (int i=0; i<n; i++){
+		for (int i=0; i<nPoints; i++){
 			if(p.contains(iCoordX[i], iCoordY[i]))
 				return true;
 		}
@@ -216,49 +266,56 @@ public class Building implements MouseListener, KeyListener {
 	}
 
 	public int size() {
-		return n;
+		return nPoints;
 	}
 	
-	public Vector3d [] toVector3d() {
-		Vector3d [] vector = new Vector3d [n] ;
-		for(int i=0; i<n; i++) {
-			vector[i] = new Vector3d(coordY[i], coordX[i], 10.0);
+	public Vector3d [] toIntVector3d() {
+		Vector3d [] vector = new Vector3d [nPoints] ;
+		for(int i=0; i<nPoints; i++) {
+			vector[i] = new Vector3d(iCoordY[i], iCoordX[i], 10.0);
+			System.out.println(vector[i]);
 		}
 		return vector;
 	}
 	
+	public Vector3d [] toVector3d() {
+		Vector3d [] vector = new Vector3d [nPoints] ;
+		for(int i=0; i<nPoints; i++) {
+			vector[i] = new Vector3d(coordY[i], coordX[i], 10.0);
+		}
+		return vector;
+	}	
+	
 	public Vector3d [] toVector3d(double xref, double yref, double zm) {
-		Vector3d [] vector = new Vector3d [n] ;
-		for(int i=0; i<n; i++) {
+		Vector3d [] vector = new Vector3d [nPoints] ;
+		for(int i=0; i<nPoints; i++) {
+			//System.out.println((coordY[i]-xref)*zm);
+			//System.out.println((coordX[i]-yref)*zm);
 			vector[i] = new Vector3d((coordY[i]-xref)*zm, (coordX[i]-yref)*zm, 10.0);
 		}
 		return vector;
 	}
 	
 	public Polygon getPoly()  {
-		Polygon poly = new Polygon(iCoordX,iCoordY,n);
+		Polygon poly = new Polygon(iCoordX,iCoordY,nPoints);
 		return poly;
 	}
 	
-	public Point getIthPoint(int i) {
-		Point p = new Point(iCoordX[i],iCoordY[i]);
-		return p ;
+	public void display() {
+		for(int i=0; i<nPoints; i++) {
+			System.out.println("("+iCoordX[i]+", "+iCoordY[i]+")");
+		}		
 	}
 	
-	public boolean contains(Building building) {
-		Polygon poly = getPoly();
-		for(int i=0; i<building.size(); i++) {
-			System.out.println("   "+building.getIthPoint(i));
-			if (poly.contains(building.getIthPoint(i)))
-				return true;
+	public boolean intersect(Building building) {
+		Polygon poly = new Polygon(iCoordX,iCoordY,nPoints);
+		for(int i=0; i<building.getNPoints(); i++) {
+			int[] coord = MapCalc.geoToPixelMapA(building.getYCoords(i), building.getXCoords(i));
+			Point p1 = new Point(coord[0], coord[1]);
+			if(poly.contains(p1)) return true;
 		}
 		return false;
 	}
+
 	
-	//public 
-	
-//	public boolean intersect(int cadreX1, int cadreY1, int cadreX2, int cadreY2) {
-//		Polygon poly = new Polygon(iCoordX,iCoordY,n);
-//		return poly.intersects((double) cadreX1, (double) cadreY1, (double) cadreX2, (double) cadreY2);
-//	}
 }
