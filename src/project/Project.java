@@ -108,6 +108,8 @@ public final class Project {
 	}
 
 	public static void reset() {
+		projectPath = "";
+		projectName = "";
 		DeviceList.number=1;
 		DeviceList.initAll();
 		DeviceList.reset();
@@ -171,27 +173,33 @@ public final class Project {
 		}
 	}
 	
-	public static void newProjectFc(String path, String name) {
-		setProjectName(path, name + ".cup");
+	public static void newProjectFC(String path, String name) {		
 		File file = new File(path);
-		file.mkdir();
-		file = new File(path + File.separator + "gps");
-		file.mkdir();
-		file = new File(path + File.separator + "tmp");
-		file.mkdir();
-		file = new File(path + File.separator + "config");
-		file.mkdir();
-		file = new File(path + File.separator + "omnet");
-		file.mkdir();
-		file = new File(path + File.separator + "scripts");
-		file.mkdir();
-		file = new File(path + File.separator + "network");
-		file.mkdir();
-		file = new File(path + File.separator + "logs");
-		file.mkdir();
-		file = new File(path + File.separator + "results");
-		file.mkdir();
-		saveParameters();
+		if(!file.exists()) {
+			setProjectName(path, name + ".cup");
+			file.mkdir();
+			file = new File(path + File.separator + "gps");
+			file.mkdir();
+			file = new File(path + File.separator + "tmp");
+			file.mkdir();
+			file = new File(path + File.separator + "config");
+			file.mkdir();
+			file = new File(path + File.separator + "omnet");
+			file.mkdir();
+			file = new File(path + File.separator + "scripts");
+			file.mkdir();
+			file = new File(path + File.separator + "network");
+			file.mkdir();
+			file = new File(path + File.separator + "logs");
+			file.mkdir();
+			file = new File(path + File.separator + "results");
+			file.mkdir();
+			saveParameters();
+			saveRecentPath();
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "The Project exists!", "New Project", JOptionPane.WARNING_MESSAGE);
+		}
 	}
 
 	public static void loadParameters() {

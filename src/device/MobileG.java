@@ -66,5 +66,9 @@ public abstract class MobileG extends DeviceWithoutRadio {
 	public void setSensorUnitRadius(double captureRadius) {
 		
 	}
-	
+
+	@Override
+	public void initBuffer() {
+		
+	}
 }

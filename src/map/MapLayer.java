@@ -45,6 +45,7 @@ import cupcarbon.CupCarbonMap;
 import device.BaseStation;
 import device.Device;
 import device.DeviceList;
+import device.DeviceParameters;
 import device.MediaSensorNode;
 import device.Mobile;
 import device.MobileWithRadio;
@@ -92,10 +93,7 @@ public class MapLayer implements Painter<Object>, MouseListener,
 	private boolean debutSelection = false;
 	
 	public static boolean magnetic = false;
-	private int prev_vp_x ;
-	private int prev_vp_y ;
-
-	public static boolean displayRLDistance = false; // RadioLink distance
+	public static int magnetic_step = 16;	
 	
 	public MapLayer() {
 	}
@@ -106,31 +104,10 @@ public class MapLayer implements Painter<Object>, MouseListener,
 		geoZoneList = new GeoZoneList();
 		markerList = new MarkerList();
 		nodeList = new DeviceList();
-		//trackingPointsList = new TrackingPointsList();
-		//streetGraph = new StreetGraph();
-		
-		/*
-		 * noeuds.add(new Sensor(47.71403518643726,-3.4284210205078125, 0,
-		 * 1000)); noeuds.add(new
-		 * BaseStation(47.705256511726034,-3.3805274963378906, 0, 500));
-		 * noeuds.add(new Router(47.71726906227617,-3.3673095703125, 0, 1000));
-		 * noeuds.add(new Sensor(47.709299506131345,-3.3626747131347656, 0,
-		 * 1000)); noeuds.add(new Sensor(47.724313596879625,-3.3518600463867188,
-		 * 0, 600)); noeuds.add(new Sensor(47.7263921299974,-3.3664512634277344,
-		 * 0, 500)); noeuds.add(new
-		 * Mobile(47.69127688626756,-3.3623313903808594, 100)); noeuds.add(new
-		 * Gas(47.70075109139772,-3.420696258544922,40)); noeuds.add(new
-		 * Router(47.715536653750945,-3.412628173828125, 0, 1000));
-		 * noeuds.add(new Sensor(47.71345768748889,-3.395977020263672, 0,
-		 * 1000)); noeuds.add(new
-		 * FlyingObject(47.693703371072026,-3.376750946044922,1000));
-		 */
-
 		mapViewer.setOverlayPainter(this);
 		mapViewer.addMouseListener(this);
 		mapViewer.addMouseMotionListener(this);
 		mapViewer.addKeyListener(this);
-
 	}
 
 	public boolean isDebutSelection() {
@@ -151,13 +128,8 @@ public class MapLayer implements Painter<Object>, MouseListener,
 	public void paint(Graphics2D g, Object arg1, int arg2, int arg3) {
 		g.setFont(new Font("arial", 0, 12));
 		Rectangle rect = mapViewer.getViewportBounds();
+		
 		g.translate(-rect.x, -rect.y);		
-		
-		prev_vp_x = mapViewer.getViewportBounds().x;
-		prev_vp_y = mapViewer.getViewportBounds().y;
-		
-		//x = x - (x%32);
-		//y = y - (y%32);
 		
 		if (afficherIndicateur) {
 			g.setColor(UColor.RED);
@@ -179,18 +151,21 @@ public class MapLayer implements Painter<Object>, MouseListener,
 			if (lastKey == '6') {
 				g.drawString("   Mobile", (float) x, (float) y);
 			}
-			if (lastKey == '7') {
-				g.drawString("   Mobile With Radio", (float) x, (float) y);
-			}
+//			if (lastKey == '7') {
+//				g.drawString("   Mobile With Radio", (float) x, (float) y);
+//			}
 			if (lastKey == '8') {
 				g.drawString("   Marker", (float) x, (float) y);
 			}
-			if (lastKey == '9') {
-				g.drawString("   Vertex", (float) x, (float) y);
+//			if (lastKey == '9') {
+//				g.drawString("   Vertex", (float) x, (float) y);
+//			}
+			//g.drawOval(x - 8, y - 8, 16, 16);			
+			if(magnetic) {
+				g.drawLine(x-6, y, x+6, y);
+				g.drawLine(x, y-6, x, y+6);
+				//g.drawRect(x-16, y-16, 32, 32);
 			}
-			//g.drawOval(x - 8, y - 8, 16, 16);
-			g.drawLine(x-6, y, x+6, y);
-			g.drawLine(x, y-6, x, y+6);
 			// g.fillArc((int) (x - 10), (int) (y - 10), 20, 20, 75, 30);
 			//
 			// g.fillArc((int) (x - 10), (int) (y - 10), 20, 20, 165, 30);
@@ -208,10 +183,8 @@ public class MapLayer implements Painter<Object>, MouseListener,
 		if (!OsmOverpass.isLoading) {
 			buildingList.draw(g);
 		}
-
 		
-		nodeList.drawEnvelopeList(g);
-		
+		nodeList.drawEnvelopeList(g);		
 
 		if (dessinerCadre) {
 			Point2D p1 = MapCalc.pixelPanelToPixelMap(cadreX1, cadreY1);
@@ -290,7 +263,6 @@ public class MapLayer implements Painter<Object>, MouseListener,
 		GeoPosition gp = mapViewer.convertPointToGeoPosition(p);	
 		
 		if (arg.getClickCount() == 2) {			
-			
 			CupCarbonMap.getMap().setCenterPosition(new GeoPosition(gp.getLatitude(), gp.getLongitude()));
 		} else if (afficherIndicateur) {			
 			if (lastKey == '1') {
@@ -343,7 +315,7 @@ public class MapLayer implements Painter<Object>, MouseListener,
 				addDeviceAction("MobileWithRadio");
 			}
 			if (lastKey == '8') {
-				Marker marker = new Marker(gp.getLongitude(), gp.getLatitude(), 0, 10);
+				Marker marker = new Marker(gp.getLongitude(), gp.getLatitude(), 0, 4);
 				MarkerList.add(marker);
 				mapViewer.repaint();
 				addMarkerAction("Marker");
@@ -391,6 +363,7 @@ public class MapLayer implements Painter<Object>, MouseListener,
 	@Override
 	public void mouseReleased(MouseEvent arg) {
 		if (shiftDown && mousePressed) {
+
 			mousePressed = false;
 			lastKeyCode = 0;
 			mapViewer.setPanEnabled(true);
@@ -399,20 +372,19 @@ public class MapLayer implements Painter<Object>, MouseListener,
 
 			nodeList.selectInNodeSelection(cadreX1, cadreX2, cadreY1, cadreY2);
 			markerList.selectInNodeSelection(cadreX1, cadreX2, cadreY1, cadreY2);
-			//buildingList.selectNodeInSelection(cadreX1, cadreY1, cadreX2, cadreY2);
+			buildingList.selectInNodeSelection(cadreX1, cadreY1, cadreX2, cadreY2);
 			
 			mapViewer.repaint();
 		}
 	}
 
-	public static boolean inMultipleSelection(double x, double y, int cadreX1,
-			int cadreY1, int cadreX2, int cadreY2) {
+	public static boolean insideSelection(double x, double y, int cadreX1, int cadreY1, int cadreX2, int cadreY2) {
 		GeoPosition gp1 = MapLayer.getMapViewer().convertPointToGeoPosition(
 				new Point(cadreX1, cadreY1));
 		GeoPosition gp2 = MapLayer.getMapViewer().convertPointToGeoPosition(
 				new Point(cadreX2, cadreY2));
-		return x < gp1.getLatitude() && y > gp1.getLongitude()
-				&& x > gp2.getLatitude() && y < gp2.getLongitude();
+		return y < gp1.getLatitude() && x > gp1.getLongitude()
+				&& y > gp2.getLatitude() && x < gp2.getLongitude();
 	}
 
 	@Override
@@ -420,8 +392,23 @@ public class MapLayer implements Painter<Object>, MouseListener,
 
 		//System.out.println(key.getKeyCode());
 		
+		if(key.getKeyChar() == 'a') {
+			DeviceParameters.drawArrows = !DeviceParameters.drawArrows;
+		}
+		
+		if (key.getKeyChar() == 'd') {
+			DeviceParameters.displayDetails = !DeviceParameters.displayDetails;
+		}
+		
 		if (key.getKeyChar() == 'M') {
 			magnetic = !magnetic;
+			mapViewer.repaint();
+			if(magnetic) {
+				CupCarbon.labelMag.setText(" [M] ");
+			}
+			else {
+				CupCarbon.labelMag.setText("    ");
+			}
 		}
 		
 		if (key.isShiftDown()) {
@@ -476,10 +463,17 @@ public class MapLayer implements Painter<Object>, MouseListener,
 		if (lastKey == 'v') {
 			nodeList.setDrawLinks(!nodeList.getDrawLinks());
 			markerList.setLinks(!markerList.getLinks());
+			
+			DeviceParameters.drawRadioLinks = true;
+			DeviceParameters.drawRadioLinksColor++;
+				if(DeviceParameters.drawRadioLinksColor>4)
+					DeviceParameters.drawRadioLinksColor = 0;
+				if (DeviceParameters.drawRadioLinksColor==1)
+					DeviceParameters.drawRadioLinks = false;
 		}
 
 		if (lastKey == 'A') {
-			markerList.setArrows(!markerList.getArrows());
+			DeviceParameters.drawMarkerArrows = !DeviceParameters.drawMarkerArrows;
 		}
 
 		if (lastKey == 'w') {
@@ -569,7 +563,7 @@ public class MapLayer implements Painter<Object>, MouseListener,
 			CupCarbon.updateInfos();
 		}
 
-		if (lastKeyCode == 8) {
+		if ((lastKeyCode == 8) || (lastKeyCode == 127)) {
 			nodeList.deleteIfSelected();
 			markerList.deleteIfSelected();
 			CupCarbon.updateInfos();
@@ -581,7 +575,7 @@ public class MapLayer implements Painter<Object>, MouseListener,
 		}
 		
 		if (key.getKeyChar() == 'x') {			
-			displayRLDistance = !displayRLDistance;
+			DeviceParameters.displayRLDistance = !DeviceParameters.displayRLDistance;
 			mapViewer.repaint();
 		}
 		
@@ -618,11 +612,8 @@ public class MapLayer implements Painter<Object>, MouseListener,
 		cy = me.getY();
 
 		if (magnetic) {
-			cx = cx - (cx%32) + 12 - (mapViewer.getViewportBounds().x-prev_vp_x);
-			cy = cy - (cy%32) + 18 - (mapViewer.getViewportBounds().y-prev_vp_y);
-			
-			//prev_vp_x = mapViewer.getViewportBounds().x;
-			//prev_vp_y = mapViewer.getViewportBounds().y;
+			cx = cx - (cx % magnetic_step) - (mapViewer.getViewportBounds().x % magnetic_step);
+			cy = cy - (cy % magnetic_step) - (mapViewer.getViewportBounds().y % magnetic_step);			
 		}
 		
 		//Point2D pd = MapCalc.pixelPanelToPixelMap(me.getX(), me.getY());

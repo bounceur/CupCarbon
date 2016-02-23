@@ -5,9 +5,9 @@ import radio_module.Standard;
 import radio_module.XBeeFrameGenerator;
 
 public class Command_ATND extends Command {
-
+	// ND: 
 	protected String arg1 = "";
-	protected double arg2 = 3.0;//3 seconds ;
+	protected double arg2 = 0.5;//6 seconds (6=0x3C) is the value of the parameter NT: Node Discovery Timeout;
 	
 	public Command_ATND(SensorNode sensor, String arg1) {
 		this.sensor = sensor ;

@@ -106,8 +106,9 @@ public final class SensorAddCommand {
 		if (inst[0].toLowerCase().equals("buffer")) {
 			command = new Command_BUFFER(sensorNode, inst[1]);
 		}
-		if (inst[0].toLowerCase().equals("battery")) {
-			command = new Command_BATTERY(sensorNode, inst[1]);
+		if (inst[0].toLowerCase().equals("battery")) {			
+			if(inst.length==2) command = new Command_BATTERY(sensorNode, inst[1]);
+			if(inst.length==3) command = new Command_BATTERY(sensorNode, inst[1], inst[2]);
 		}
 		if (inst[0].toLowerCase().equals("getpos")) {
 			command = new Command_GETPOS(sensorNode, inst[1]);

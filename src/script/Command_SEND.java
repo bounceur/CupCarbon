@@ -163,7 +163,7 @@ public class Command_SEND extends Command {
 		if (writing) { // && !ack) {	
 			//System.out.println("--> written");
 			if(sensor.getAckOk()) {
-				//System.out.println("--> ACK reçu");
+				System.out.println("ACK RECEIVED");
 				sensor.setAckOk(false);
 				tentative = 0;
 				writing = false;
@@ -172,12 +172,12 @@ public class Command_SEND extends Command {
 			}
 						
 			if(tentative < sensor.getNumberOfSends()) {
-				//System.out.println("sendOperation : "+ tentative);
+				//System.out.println("SEND "+ tentative);
 				SimLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");
 				sendOperation(message);
 			}
 			else {
-				System.out.println("PERDU");
+				System.out.println("MESSAGE LOST");
 			}
 			
 			if ((arg2.equals("*") && arg3.equals("")) || !SimulationInputs.ack) {
@@ -187,23 +187,23 @@ public class Command_SEND extends Command {
 				return 0 ;
 			}
 			//else {
-					if (tentative < sensor.getNumberOfSends()) {
-						//if(tentative > 0 && tentative < sensor.getNumberOfSends()-1) sensor.getScript().previous();
-						if(tentative > 0) {
-							//System.out.println("::: "+sensor.getId()+" -> "+tentative);
-							sensor.getScript().previous();
-						}
-						tentative++;
-						System.out.println("TENTATIVE : "+tentative);
-						writing = true;
-						executing = true;						
-						return sensor.getTimeToResend();//Double.MAX_VALUE;// (250000*3);
-					}
-					//System.out.println("||| "+sensor.getId()+" -> "+tentative+ " RATE ");
-					tentative = 0;
-					writing = false;
-					executing = false;
-					return 0 ;
+			if (tentative < sensor.getNumberOfSends()) {
+				//if(tentative > 0 && tentative < sensor.getNumberOfSends()-1) sensor.getScript().previous();
+				if(tentative > 0) {
+					//System.out.println("::: "+sensor.getId()+" -> "+tentative);
+					sensor.getScript().previous();
+				}
+				tentative++;
+				System.out.println("SEND "+ tentative);
+				writing = true;
+				executing = true;						
+				return sensor.getTimeToResend();//Double.MAX_VALUE;// (250000*3);
+			}
+			//System.out.println("||| "+sensor.getId()+" -> "+tentative+ " RATE ");
+			tentative = 0;
+			writing = false;
+			executing = false;
+			return 0 ;
 				
 				
 //				if (tentative < 3) {

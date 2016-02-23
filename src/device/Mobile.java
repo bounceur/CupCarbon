@@ -65,7 +65,7 @@ public class Mobile extends MobileG {
 	
 			switch(hide) {
 			case 0 : {
-				g.setColor(UColor.BLACK_TTRANSPARENT);
+				g.setColor(UColor.BLACK_TTTRANSPARENT);
 				g.fillRect(x - rayon, y - rayon, rayon * 2, rayon * 2);
 			}
 			case 1 : 
@@ -164,6 +164,11 @@ public class Mobile extends MobileG {
 
 	@Override
 	public void initGeoZoneList() {
+		
+	}
+	
+	@Override
+	public void initBuffer() {
 		
 	}
 

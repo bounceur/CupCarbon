@@ -57,4 +57,12 @@ public class Geometry {
 		return false;
 	}
 	
+	public static int [] getCentre(int x1, int y1, int z1, int x2, int y2, int z2) {
+		int x = (int) (x2+((x1-x2)/2.0));
+		int y = (int) (y2+((y1-y2)/2.0));
+		int z = (int) (z1+((z2-z1)/2.0));
+		int [] r = {x, y, z};
+		return r;
+	}
+	
 }

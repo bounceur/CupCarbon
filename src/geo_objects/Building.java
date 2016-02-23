@@ -19,7 +19,6 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import device.Device;
 import map.MapLayer;
 import utilities.MapCalc;
-import utilities.UColor;
 
 /**
  * @author Ahcene Bounceur
@@ -138,7 +137,7 @@ public class Building implements MouseListener, KeyListener {
 	
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setStroke(new BasicStroke(0.4f));
+		g2.setStroke(new BasicStroke(0.6f));
 		//g2.setStroke(new BasicStroke());
 		//g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		if(!hide) {
@@ -147,15 +146,14 @@ public class Building implements MouseListener, KeyListener {
 				mapZoom = newZoom;
 				computeIntCoords() ;
 			}
-			if(selected) {			
-				g2.setColor(UColor.BLUE2);				
-			}
-			else {
-				g2.setColor(UColor.BLACK_TTTTRANSPARENT);
-			}
+			g2.setColor(new Color(194, 182, 164, 50));
+			if (selected)
+				g2.setColor(new Color(194, 182, 164, 120));				
 			g2.fillPolygon(iCoordX, iCoordY, nPoints);
 			//g.setColor(UColor.BLACK_TTRANSPARENT);
-			g2.setColor(Color.darkGray);
+			g2.setColor(Color.GRAY);
+			if (selected)
+				g2.setColor(Color.DARK_GRAY);
 			g2.drawPolygon(iCoordX, iCoordY, nPoints);
 		}
 	}
@@ -203,7 +201,7 @@ public class Building implements MouseListener, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent key) {
-		if(key.getKeyCode()==8 && selected) {
+		if((key.getKeyCode()==8 || key.getKeyCode()==127) && selected && !hide) {
 			selected = false;
 			MapLayer.getMapViewer().removeMouseListener(this);
 			MapLayer.getMapViewer().removeMouseListener(this);	
@@ -224,8 +222,9 @@ public class Building implements MouseListener, KeyListener {
 		}
 		
 		if (key.getKeyChar() == 'H') {
-			//if(selected)
+			if(!selected)
 				hide = !hide;
+			MapLayer.getMapViewer().repaint();
 		}
 		
 		if (key.getKeyChar() == 'w') {
@@ -316,6 +315,8 @@ public class Building implements MouseListener, KeyListener {
 		}
 		return false;
 	}
-
 	
+	public boolean isHide() {
+		return hide;
+	}
 }

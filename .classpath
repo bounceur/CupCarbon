@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="lib/java3d/j3dcore.jar"/>
 	<classpathentry kind="lib" path="lib/java3d/j3dutils.jar"/>
 	<classpathentry kind="lib" path="lib/java3d/vecmath.jar"/>
+	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

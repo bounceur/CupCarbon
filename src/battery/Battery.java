@@ -27,7 +27,7 @@ package battery;
  */
 public class Battery implements Cloneable {
 
-	public double eMax = 9580;
+	public double eMax = 9580*2;
 
 	//private SensorUnit sensorUnit;
 	private double level = eMax;

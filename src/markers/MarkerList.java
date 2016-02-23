@@ -39,6 +39,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import cupcarbon.Version;
+import device.DeviceParameters;
 import map.MapLayer;
 import project.Project;
 import utilities.MapCalc;
@@ -48,12 +49,10 @@ public class MarkerList {
 
 	private static List<Marker> markers;
 	private static boolean drawLinks = true;
-	private static boolean drawArrows = false;
 
 	public MarkerList() {
 		markers = new ArrayList<Marker>();
 		drawLinks = true;
-		drawArrows = false;
 	}
 	
 	public static void reset() {
@@ -65,7 +64,6 @@ public class MarkerList {
 		}
 		markers = new ArrayList<Marker>();
 		drawLinks = true;
-		drawArrows = false;
 	}
 
 	public static void save(String fileName) {
@@ -180,7 +178,7 @@ public class MarkerList {
 						// Draw the link between markers
 						g.drawLine((int) lx1, (int) ly1, (int) lx2, (int) ly2);
 						// Draw arrows
-						if(drawArrows) {							
+						if(DeviceParameters.drawMarkerArrows) {							
 							dx = lx2 - lx1;
 							dy = ly2 - ly1;
 							alpha = Math.atan(dy / dx);
@@ -230,14 +228,6 @@ public class MarkerList {
 		return drawLinks;
 	}
 	
-	public void setArrows(boolean b) {
-		drawArrows = b;
-	}
-
-	public boolean getArrows() {
-		return drawArrows;
-	}
-
 	public static int size() {
 		return markers.size();
 	}
@@ -335,7 +325,7 @@ public class MarkerList {
 			marker = iterator.next();
 			marker.setMove(false);
 			marker.setSelection(false);
-			if (MapLayer.inMultipleSelection(marker.getLongitude(), marker.getLatitude(),
+			if (MapLayer.insideSelection(marker.getLongitude(), marker.getLatitude(),
 					cadreX1, cadreX2, cadreY1, cadreY2)) {
 				marker.setSelection(true);
 			}

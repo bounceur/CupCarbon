@@ -28,13 +28,13 @@ public final class UColor {
 	public static final Color BLUE_TRANSPARENT = new Color(18, 188, 228, 50);
 	public static final Color BLUED_TRANSPARENT = new Color(18, 188, 228, 150);
 	public static final Color CYAN_TRANSPARENT = new Color(18, 128, 230, 100);
-	public static final Color YELLOW_TRANSPARENT = new Color(255, 198, 0, 20);
-	public static final Color YELLOWD_TRANSPARENT = new Color(255, 198, 0, 50);
+	public static final Color YELLOW_TRANSPARENT = new Color(255, 198, 0, 90);
+	public static final Color YELLOWD_TRANSPARENT = new Color(255, 198, 0, 110);
 	public static final Color PINK_TRANSPARENT = new Color(210, 255, 0, 100);
 	public static final Color GREEND_TRANSPARENT = new Color(210, 255, 0, 150);
 	public static final Color PURPLE = new Color(134, 20, 143);
-	public static final Color PURPLE_TRANSPARENT = new Color(134, 20, 143, sen_transparency);
-	public static final Color PURPLED_TRANSPARENT = new Color(134, 20, 143, sen_transparency+30);
+	public static final Color PURPLE_TRANSPARENT = new Color(134, 20, 143, sen_transparency+30);
+	public static final Color PURPLE_DARK_TRANSPARENT = new Color(134, 20, 143, sen_transparency+50);
 	public static final Color PURPLE_TTRANSPARENT = new Color(134, 20, 143, sen_transparency+10);
 	public static final Color RED_TTRANSPARENT = new Color(255, 0, 0, 35);
 	public static final Color RED_TRANSPARENT = new Color(255, 0, 0, 120);

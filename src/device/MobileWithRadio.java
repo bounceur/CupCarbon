@@ -152,5 +152,10 @@ public class MobileWithRadio extends MobileGWR {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void initBuffer() {
+
+	}
 
 }

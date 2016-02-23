@@ -111,7 +111,7 @@ public class GpsWindow extends JInternalFrame {
 		panel_7.setLayout(new BorderLayout(0, 0));
 
 		txtFileName = new JTextField();
-		txtFileName.setText("route1");
+		txtFileName.setText("route1.gps");
 		txtFileName.setFont(new Font("Arial", Font.PLAIN, 12));
 		txtFileName.setColumns(15);
 		panel_7.add(txtFileName);
@@ -181,8 +181,8 @@ public class GpsWindow extends JInternalFrame {
 		btnLoad.setFont(new Font("Arial", Font.PLAIN, 12));
 		btnLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println(txtFileName.getText());
-				MarkerList.open(txtFileName.getText());
+				System.out.println(Project.getProjectGpsPath()+File.separator+txtFileName.getText());
+				MarkerList.open(Project.getProjectGpsPath()+File.separator+txtFileName.getText());
 			}
 		});
 		btnLoad.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));

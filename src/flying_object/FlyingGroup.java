@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import device.Device;
+import device.DeviceParameters;
 import device.DeviceWithRadio;
 import device.MobileG;
 import utilities.MapCalc;
@@ -183,7 +184,7 @@ public class FlyingGroup extends MobileG {
 			drawIncRedDimNode(x, y, g);
 			drawRadius(x, y, rayon, g);
 
-			if (displayDetails) {
+			if (DeviceParameters.displayDetails) {
 				g.setColor(Color.RED);
 			}
 
@@ -335,6 +336,6 @@ public class FlyingGroup extends MobileG {
 	@Override
 	public void initGeoZoneList() {
 		
-	}
+	}	
 }
 

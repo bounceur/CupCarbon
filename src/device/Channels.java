@@ -41,7 +41,7 @@ public class Channels {
 		SimLog.add("S" + rSensor.getId() + " is receiving the message : \"" + message + "\" in its buffer.");
 		double ratio1 = 1.0/sSensor.getRadioDataRate();
 		double ratio2 = 1.0/sSensor.getUartDataRate();
-		double duration =  (ratio1*(packet.length())) + (ratio2*(message.length()*8)) ;
+		double duration = (ratio1*(packet.length())) + (ratio2*(message.length()*8)) ;
 		
 		double lastTime = 0;
 		if (channelEventList.get(sSensor.getCh()).size()>0 && type != 2) { 
@@ -59,10 +59,11 @@ public class Channels {
 		
 	public static void receivedMessages() {
 		for (List<PacketEvent> packetEventList : channelEventList) {
-			boolean stop = false; // For broadcast sending
-			while(!stop) {
-				if(packetEventList.size()>0) {
-					if(packetEventList.get(0).getTime()==0) {
+			//boolean stop = false; // For broadcast sending
+			//while(!stop) {
+				//if(packetEventList.size()>0) {
+				//	if(packetEventList.get(0).getTime()==0) {
+				while(packetEventList.size()>0 && packetEventList.get(0).getTime()==0) {
 						int type = packetEventList.get(0).getType();
 						String packet = packetEventList.get(0).getPacket();
 						//String message = packetEventList.get(0).getMessage();
@@ -127,10 +128,10 @@ public class Channels {
 						}
 						//Layer.getMapViewer().repaint();
 					}
-					else stop = true;
-				}
-				else stop = true;
-			}
+					//else stop = true;
+				//}
+				//else stop = true;
+			//}
 		}
 	}
 	
@@ -205,6 +206,11 @@ public class Channels {
 							dy = ly2 - ly1;
 							
 							g.drawLine(lx1, ly1, lx2, ly2);
+							
+							
+							
+							//g.setColor(Color.BLACK);
+							//g.drawString(pev.getRSensor().getMessage(), (lx1+lx2)/2, (ly1+ly2)/2);
 
 							alpha = Math.atan(dy / dx);
 							alpha = 180 * alpha / Math.PI;

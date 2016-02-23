@@ -27,11 +27,11 @@ import java.util.LinkedList;
 
 import map.MapLayer;
 import project.Project;
+import visibility.VisibilityZones;
 import wisen_simulation.SimulationInputs;
 
 /**
  * @author Ahcene Bounceur
- * @author Kamal Mehdi
  * @author Lounis Massinissa
  * @version 1.0
  */
@@ -129,7 +129,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 		if (readyForSimulation) {
 			underSimulation = true;
 			routeIndex = 0;
-			selected = false;
+			//selected = false;
 			long tmpTime = 0;
 			long cTime = 0;
 			long toWait = 0;			
@@ -161,14 +161,14 @@ public abstract class DeviceWithWithoutRadio extends Device {
 				e.printStackTrace();
 			}
 			routeIndex = 0;
-			selected = false;
+			//selected = false;
 			toOri();
 			thread = null;
 			underSimulation = false;
 			MapLayer.getMapViewer().repaint();
 		}
 	}
-
+	
 	// ------------------------------------------------------------------------
 	// Run
 	// ------------------------------------------------------------------------
@@ -215,8 +215,8 @@ public abstract class DeviceWithWithoutRadio extends Device {
 			if (DeviceList.propagationsCalculated)
 				DeviceList.calculatePropagations();
 			if (SimulationInputs.visibility) {
-				//VisibilityZones vz = new VisibilityZones((SensorNode) this);
-				//vz.run();
+				VisibilityZones vz = new VisibilityZones((SensorNode) this);
+				vz.calculate();
 			}
 		}
 		if (visual) {

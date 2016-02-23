@@ -19,6 +19,7 @@
 
 package device;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -122,6 +123,18 @@ public class DeviceList {
 		List<SensorNode> snodes = new LinkedList<SensorNode>();
 		for(Device device : nodes) {
 			if(device.getType() == Device.SENSOR || device.getType() == Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION)
+				snodes.add((SensorNode) device);
+		}
+		return snodes;
+	}
+	
+	/**
+	 * @return the selected sensor nodes
+	 */
+	public static List<SensorNode> getSelectedSensorNodes() {
+		List<SensorNode> snodes = new LinkedList<SensorNode>();
+		for(Device device : nodes) {
+			if((device.getType() == Device.SENSOR || device.getType() == Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) && device.isSelected())
 				snodes.add((SensorNode) device);
 		}
 		return snodes;
@@ -398,15 +411,11 @@ public class DeviceList {
 		return SensorGraph.toSensorTargetGraph(nodes, nodes.size()).displayNames();
 	}
 
-	public void selectInNodeSelection(int cadreX1, int cadreY1, int cadreX2,
-			int cadreY2) {
-		Device node;
-		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
-			node = iterator.next();
+	public void selectInNodeSelection(int cadreX1, int cadreY1, int cadreX2, int cadreY2) {
+		for (Device node : nodes) {
 			node.setMove(false);
 			node.setSelection(false);
-			if (MapLayer.inMultipleSelection(node.getLongitude(), node.getLatitude(), cadreX1,
-					cadreX2, cadreY1, cadreY2)) {
+			if (MapLayer.insideSelection(node.getLongitude(), node.getLatitude(), cadreX1, cadreX2, cadreY1, cadreY2)) {
 				node.setSelection(true);
 			}
 		}
@@ -488,14 +497,15 @@ public class DeviceList {
 	public static void initAll() {
 		envelopeList = new LinkedList<LinkedList<Integer>>();
 		for (Device device : nodes) {
-			device.init();			
+			device.init();
+			device.initGeoZoneList(); 
 		}		
 		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void initAllGeoZones() {
 		for (Device device : nodes) {
-			device.initGeoZoneList();			
+			device.initGeoZoneList();
 		}		
 		MapLayer.getMapViewer().repaint();
 	}
@@ -624,9 +634,10 @@ public class DeviceList {
 	}
 	
 	public void drawEnvelope(LinkedList<Integer> envelope, Graphics2D g) {
+		g.setStroke(new BasicStroke(2.0f));
 		if(envelope.size()>0) {
-			double x = nodes.get(envelope.get(0)).getLongitude();
-			double y = nodes.get(envelope.get(0)).getLatitude();
+			double x = nodes.get(envelope.get(0)).getLatitude();
+			double y = nodes.get(envelope.get(0)).getLongitude();
 			int lx1=0;
 			int ly1=0;
 			int lx2=0;
@@ -636,18 +647,20 @@ public class DeviceList {
 				coord = MapCalc.geoToPixelMapA(x, y);
 				lx1 = coord[0];
 				ly1 = coord[1];
-				coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(i)).getLongitude(), nodes.get(envelope.get(i)).getLatitude());
+				//coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(i)).getLongitude(), nodes.get(envelope.get(i)).getLatitude());
+				coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(i)).getLatitude(), nodes.get(envelope.get(i)).getLongitude());
 				lx2 = coord[0];
 				ly2 = coord[1];
 				g.setColor(Color.BLUE);
 				g.drawLine(lx1, ly1, lx2, ly2);
-				x = nodes.get(envelope.get(i)).getLongitude();
-				y = nodes.get(envelope.get(i)).getLatitude();		
+				x = nodes.get(envelope.get(i)).getLatitude();
+				y = nodes.get(envelope.get(i)).getLongitude();		
 			}
-			coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(0)).getLongitude(), nodes.get(envelope.get(0)).getLatitude());
-			lx1 = coord[0];
-			ly1 = coord[1];
-			g.drawLine(lx2, ly2, lx1, ly1);
+			//coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(0)).getLongitude(), nodes.get(envelope.get(0)).getLatitude());
+//			coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(0)).getLatitude(), nodes.get(envelope.get(0)).getLongitude());
+//			lx1 = coord[0];
+//			ly1 = coord[1];
+//			g.drawLine(lx2, ly2, lx1, ly1);
 		}
 	}
 	

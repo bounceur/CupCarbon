@@ -25,6 +25,7 @@ import java.awt.Polygon;
 import java.util.Random;
 
 import device.Device;
+import device.DeviceParameters;
 import device.DeviceWithRadio;
 import device.DeviceWithoutRadio;
 import map.MapLayer;
@@ -114,7 +115,7 @@ public class Gas extends DeviceWithoutRadio {
 				drawRadius(x, y, rayon, g);
 			}
 			
-			if(displayDetails) {
+			if(DeviceParameters.displayDetails) {
 				g.setColor(Color.RED);
 				g.drawString("["+getValue()+"]", x+15, y+20);
 			}
@@ -257,6 +258,11 @@ public class Gas extends DeviceWithoutRadio {
 
 	@Override
 	public void initGeoZoneList() {
+		
+	}
+	
+	@Override
+	public void initBuffer() {
 		
 	}
 }

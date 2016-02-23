@@ -74,11 +74,12 @@ public class WisenSimulation extends Thread {
 		WisenSimulationWindow.setState("Simulation : initialization ...");
 		System.out.println("Initialization ... ");
 		List<Device> devices = DeviceList.getNodes();
+		//List<SensorNode> sensorNodes = DeviceList.getSensorNodes();
 		
 		SimLog.add("===========================");
 		SimLog.add("Initialization");
 		
-		DeviceList.initAll();
+		//DeviceList.initAll();
 		Channels.init();
 		
 		for (Device device : devices) {
@@ -108,6 +109,7 @@ public class WisenSimulation extends Thread {
 			PrintStream ps = new PrintStream(new FileOutputStream(Project.getProjectResultsPath() + "/wisen_simulation" + as + ".csv"));
 			if (generateResults) {
 				ps.print("Time (Sec);");
+				//for (SensorNode device : sensorNodes) {
 				for (Device device : devices) {					
 					if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {						
 						ps.print("S"+device.getId() + ";");
@@ -338,8 +340,10 @@ public class WisenSimulation extends Thread {
 			for (Device device : devices) {
 				device.toOri();
 				//device.init();
-				device.stopSimulation();
+				device.stopSimulation();				
 			}
+			if(DeviceList.propagationsCalculated)
+				DeviceList.calculatePropagations();
 			MapLayer.getMapViewer().repaint();
 		//}
 	}

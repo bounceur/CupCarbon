@@ -19,9 +19,11 @@
 
 package device;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.KeyEvent;
@@ -41,6 +43,7 @@ import actions_ui.MoveDevice;
 import battery.Battery;
 import cupcarbon.DeviceParametersWindow;
 import cupcarbon.RadioParametersWindow;
+import geo_objects.GeoZoneList;
 import map.MapLayer;
 import markers.Marker;
 import markers.MarkerList;
@@ -49,7 +52,9 @@ import script.Script;
 import utilities.MapCalc;
 import utilities.UColor;
 import utilities._Constantes;
+import visibility.VisibilityZones;
 import visualisation.Visualisation;
+import wisen_simulation.SimulationInputs;
 
 /**
  * @author Ahcene Bounceur
@@ -111,8 +116,7 @@ public abstract class Device implements Runnable, MouseListener,
 	protected boolean selected = false;
 	protected char key = 0;
 	protected boolean move = false;
-	protected boolean inside = false;
-	protected boolean displayDetails = true;
+	protected boolean inside = false;	
 	protected boolean underSimulation = false;
 	protected int hide = 0;
 	protected boolean increaseNode = false;
@@ -123,8 +127,6 @@ public abstract class Device implements Runnable, MouseListener,
 	protected boolean displayRadius = false;	
 	protected boolean visited = false;
 	protected boolean visible = true;
-	protected boolean drawRadioLinks = true;
-	protected int drawRadioLinksColor = 0;
 	protected boolean drawBatteryLevel = false;
 	protected boolean drawTxRx = false;
 
@@ -152,6 +154,8 @@ public abstract class Device implements Runnable, MouseListener,
 	//protected boolean distanceMode = false ;
 	protected long distanceModeDelay = 2000 ;
 
+	protected GeoZoneList geoZoneList = null;
+	
 	protected boolean state = ALIVE; 
 	
 	//----------------------------------
@@ -168,8 +172,6 @@ public abstract class Device implements Runnable, MouseListener,
 	//protected int mrEvent = Integer.MAX_VALUE;		// Event relied to the message reception	
 	
 	protected Thread thread;	
-	
-	protected boolean drawArrows = true ;
 	
 	protected String message = "";
 	
@@ -681,9 +683,13 @@ public abstract class Device implements Runnable, MouseListener,
 		double d2 = p1.getY() - p2.getY();
 		inside = false;
 		double v = Math.sqrt(d1 * d1 + d2 * d2);
-		if (v < MapCalc.radiusInPixels(getMaxRadius())) {
+		if (v < getInsideRadius()) { //MapCalc.radiusInPixels(getMaxRadius())) {
 			inside = true;
 		}
+	}
+	
+	public int getInsideRadius() {
+		return 10;
 	}
 
 	/**
@@ -808,6 +814,8 @@ public abstract class Device implements Runnable, MouseListener,
 	 *            Latitude of the mouse cursor
 	 */
 	public void calculateDxDy(int evx, int evy) {
+		evx = evx - (evx % MapLayer.magnetic_step);
+		evy = evy - (evy % MapLayer.magnetic_step);
 		Point p = new Point(evx, evy);
 		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
 		double ex = gp.getLongitude();
@@ -976,10 +984,6 @@ public abstract class Device implements Runnable, MouseListener,
 			}
 		}		
 
-		if (key == 'd') {
-			displayDetails = !displayDetails;
-		}
-
 		if (key == 'S') {// && (!ctrlDown && !cmdDown)) {
 			simulate();
 		}
@@ -1027,17 +1031,7 @@ public abstract class Device implements Runnable, MouseListener,
 
 		if (key == 'r') {
 			displayInfos = !displayInfos;
-		}
-		
-		if (key == 'v') {
-			drawRadioLinks = true;
-			drawRadioLinksColor++;
-			if(drawRadioLinksColor>4)
-				drawRadioLinksColor = 0;
-			if (drawRadioLinksColor==1)
-				drawRadioLinks = false;
-			//drawRadioLinks = !drawRadioLinks;
-		}
+		}		
 		
 		if (key == 'g') {
 			if(selected)
@@ -1051,11 +1045,13 @@ public abstract class Device implements Runnable, MouseListener,
 		
 		if (key == 'n') {
 			if (selected) {				
-				if (this.getBatteryLevel()>0)
-					getBattery().setLevel(0);
+				if (getBatteryLevel()>0) {
+					getBattery().setLevel(0);					
+				}
 				else
 					getBattery().init();
-				//calculateNeighbours();
+				if(DeviceList.propagationsCalculated)
+					DeviceList.calculatePropagations();
 			}
 		}
 
@@ -1151,8 +1147,8 @@ public abstract class Device implements Runnable, MouseListener,
 		int cy = e.getY();
 		
 		if (MapLayer.magnetic) {
-			cx = cx - (cx%32) + 12;
-			cy = cy - (cy%32) + 18;
+			cx = cx - (cx % MapLayer.magnetic_step);
+			cy = cy - (cy % MapLayer.magnetic_step);
 		}
 		//Point p = new Point(e.getX(), e.getY());
 		Point p = new Point(cx, cy);
@@ -1175,7 +1171,9 @@ public abstract class Device implements Runnable, MouseListener,
 		}
 
 		if ((move && selected) && hide == 0) {
-			initGeoZoneList() ;
+			
+			if(geoZoneList!=null && geoZoneList.size()>0)
+				initGeoZoneList() ;
 			longitude = ex - dlongitude;
 			latitude = ey - dlatitude;
 			//calculateNeighbours();
@@ -1260,7 +1258,7 @@ public abstract class Device implements Runnable, MouseListener,
 	 *            Graphics
 	 */
 	public void drawId(int x, int y, Graphics g) {
-		if (displayDetails) {
+		if (DeviceParameters.displayDetails) {
 			g.setColor(Color.BLACK);
 			g.drawString(getNodeIdName()+" ["+my+"]", (int) (x + 10), (int) (y + 5));
 			if(!message.equals("")) {
@@ -1271,7 +1269,7 @@ public abstract class Device implements Runnable, MouseListener,
 	}
 	
 	public void drawId2(int x, int y, Graphics g) {
-		if (displayDetails) {
+		if (DeviceParameters.displayDetails) {
 			g.setColor(Color.BLACK);
 			g.drawString(getNodeIdName(), (int) (x + 10), (int) (y + 10));
 		}
@@ -1319,6 +1317,8 @@ public abstract class Device implements Runnable, MouseListener,
 	 *            Graphics
 	 */
 	public void drawInfos(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setStroke(new BasicStroke(0.6f));
 		int[] coord;
 		if (displayInfos && selected && infos != null) {
 			g.setFont(new Font("arial", 1, 10));
@@ -1378,6 +1378,14 @@ public abstract class Device implements Runnable, MouseListener,
 		if(getBattery() != null)
 			return getBattery().getLevel();
 		return 0;
+	}
+	
+	/**
+	 * Set the battery level
+	 */
+	public void setBatteryLevel(double level) {
+		if(getBattery() != null)
+			getBattery().setLevel(level);
 	}
 	
 	/**
@@ -1443,6 +1451,10 @@ public abstract class Device implements Runnable, MouseListener,
 		longitude = longitude_ori;
 		latitude = latitude_ori;
 		elevation = elevation_ori;
+		if (SimulationInputs.visibility && isMobile()) {
+			VisibilityZones vz = new VisibilityZones((SensorNode) this);
+			vz.calculate();
+		}
 	}
 	
 	public int getHide() {
@@ -1573,7 +1585,7 @@ public abstract class Device implements Runnable, MouseListener,
 
 	public abstract void loadScript();
 	
-	public void initBuffer() {}
+	public abstract void initBuffer() ;
 	
 	public abstract void initForSimulation();
 	
@@ -1658,6 +1670,7 @@ public abstract class Device implements Runnable, MouseListener,
 		setDead(false);			
 		setLedColor(0);
 		initBattery();
+		initBuffer();
 		pl = 100;
 		//getBattery().init();
 		if(getType()==Device.SENSOR) {
@@ -1691,15 +1704,7 @@ public abstract class Device implements Runnable, MouseListener,
 	public void setReceiving(boolean b) {
 		receiving = b;
 	}	
-	
-	public void setDrawArrows(boolean b) {
-		drawArrows = b;
-	}
-	
-	public boolean getDrawArrows() {
-		return drawArrows ;
-	}	
-	
+		
 	public Color getRadioLinkColor() {
 		return radioLinkColor;
 	}
@@ -1821,5 +1826,9 @@ public abstract class Device implements Runnable, MouseListener,
 //		}
 //		System.out.println(s/10000); 
 //	}
+
+	public boolean isMobile() {
+		return !gpsFileName.equals("");
+	}
 	
 }

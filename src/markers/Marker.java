@@ -73,14 +73,14 @@ public class Marker extends Device {
 			
 			if (selected) {
 				g.setColor(Color.gray);
-				g.drawOval(x - rayon-4, y - rayon-4, (rayon+4) * 2, (rayon+4) * 2);
+				g.drawOval(x - rayon-2, y - rayon-2, (rayon+2) * 2, (rayon+2) * 2);
 			}	
 			
 			drawMoveArrows(x,y,g) ;
 			
 			if(hide==0) {
 				g.setColor(UColor.RED);
-				g.fillOval(x-3, y-3, 6, 6);
+				g.fillOval(x-2, y-2, 4, 4);
 			}
 		}
 	}	
@@ -97,7 +97,7 @@ public class Marker extends Device {
 		double x = x1+((x2-x1)/2.0);
 		double y = y1+((y2-y1)/2.0);
 		double z = z1+((z2-z1)/2.0);
-		Marker marker = new Marker(x, y, z, 10) ; 
+		Marker marker = new Marker(x, y, z, 4) ; 
 		if(b) marker.setSelection(true);
 		return marker;
 	}
@@ -138,7 +138,7 @@ public class Marker extends Device {
 		if(selected) {
 			int ix = MarkerList.getIndex(this)+1 ;
 			if(ix<MarkerList.size()) {
-				MapLayer.addMarker(ix,getCentre(this,MarkerList.get(ix),true));
+				MapLayer.addMarker(ix, getCentre(this, MarkerList.get(ix), true));
 			}
 		}
 	}	
@@ -147,6 +147,10 @@ public class Marker extends Device {
 		if(selected) {
 			DeviceList.add(new StdSensorNode(longitude, latitude, elevation, 0, 100, -1));
 		}
+	}
+	
+	public int getInsideRadius() {
+		return 6;
 	}
 
 	@Override
@@ -234,6 +238,11 @@ public class Marker extends Device {
 
 	@Override
 	public void initGeoZoneList() {
+		
+	}
+	
+	@Override
+	public void initBuffer() {
 		
 	}
 }

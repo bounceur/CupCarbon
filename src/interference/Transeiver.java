@@ -34,28 +34,6 @@ import math.Complex;
 import radio_module.Standard;
 
 public class Transeiver {
-
-	public static void main(String[] args) {
-		
-//		String data = "AAAAAA";
-//		
-//		System.out.println(data);
-//		
-//		int std = Standard.ZIGBEE_802_15_4;
-//		
-//		System.out.println(std);
-//		
-//		int subch = Standard.getSubChannel(std);
-//		
-//		System.out.println(subch);
-//		
-//		String packet = XBeeFrameGenerator.data16InBin(data, "00", "00", subch*8);
-//		System.out.println(packet);
-//		String [] received = receviedPacketWithAlphaD(packet, subch);
-//		System.out.println(received[0]);
-//		System.out.println(received[1]);
-
-	}
 	
 	public static String [] receviedPacketWithAlphaD(String packet, Device device) {
 		// We use device here in order to get the standard which allows to calculate the sub-channel
@@ -120,8 +98,8 @@ public class Transeiver {
 		tx_cp[1] = tx_ifft[tx_ifft.length - 1];
 	
 		//generating alpha-stable random variables
-		double [] alpharnd1 = StableDistribution.rStable(alpha, beta, gamma, delta, sizeout);
-		double [] alpharnd2 = StableDistribution.rStable(alpha, beta, gamma, delta, sizeout);
+		double [] alpharnd1 = AlphaStable.rAStable(alpha, beta, gamma, delta, sizeout);
+		double [] alpharnd2 = AlphaStable.rAStable(alpha, beta, gamma, delta, sizeout);
 		Complex [] alpharnd = new Complex[sizeout];
 		for (int i = 0; i < sizeout; i++) {
 			alpharnd[i] = new Complex(alpharnd1[i], alpharnd2[i]);

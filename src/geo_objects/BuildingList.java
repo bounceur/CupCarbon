@@ -2,6 +2,8 @@ package geo_objects;
 
 import java.awt.Graphics;
 import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,6 +16,7 @@ import map.MapLayer;
 import markers.Marker;
 import markers.MarkerList;
 import overpass.OsmOverpass;
+import utilities.MapCalc;
 
 /**
  * @author Ahcene Bounceur
@@ -135,5 +138,22 @@ public class BuildingList extends Thread {
 	
 	public static int size() {
 		return buildingList.size();
+	}
+	
+	public void selectInNodeSelection(int cadreX1, int cadreY1, int cadreX2, int cadreY2) {		
+		Point2D p1 = MapCalc.pixelPanelToPixelMap(cadreX1, cadreY1);
+		Point2D p2 = MapCalc.pixelPanelToPixelMap(cadreX2, cadreY2);
+		Building b = new Building(4);
+		b.setInt((int)p1.getX(), (int)p1.getY(), 0);
+		b.setInt((int)p2.getX(), (int)p1.getY(), 1);
+		b.setInt((int)p2.getX(), (int)p2.getY(), 2);
+		b.setInt((int)p1.getX(), (int)p2.getY(), 3);
+		Rectangle rec = new Rectangle((int)p1.getX(), (int)p1.getY(), (int)(p2.getX()-p1.getX()), (int)(p2.getY()-p1.getY()));
+		
+		for (Building building : buildingList) {			
+			building.setSelection(false);
+			if(!building.isHide() && building.getPoly().intersects(rec))
+				building.setSelection(true);
+		}
 	}
 }

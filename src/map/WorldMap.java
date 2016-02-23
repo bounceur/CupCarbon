@@ -38,7 +38,7 @@ public class WorldMap extends JXMapKit {
 	public static String tileUrl = "http://a.basemaps.cartocdn.com/light_all/";	
 	//public static String tileUrl = "http://a.tile.stamen.com/toner/";
 	public static boolean local = true;
-	public static String tileName = "cuptile_light_blue.png" ;
+	public static String tileName = "cuptile_std.png" ;
 	
 	//http://bcdcspatial.blogspot.fr/2012/01/onlineoffline-mapping-map-tiles-and.html
 	
@@ -59,18 +59,18 @@ public class WorldMap extends JXMapKit {
 				//System.out.println(tileUrl+zoom+"/"+x+"/"+y+tileType);
 				//String pathStr = File.separator+
 				if(local) {
-					String as = "";
-					String platform = System.getProperty("os.name");
-					if(platform.toLowerCase().startsWith("win")) {
-						as = "/";
-					}
+//					String as = "";
+//					String platform = System.getProperty("os.name");
+//					if(platform.toLowerCase().startsWith("win")) {
+//						as = "/";
+//					}
 //					else {
 					//if(platform.toLowerCase().startsWith("mac")) {
 						File file = new File("images"+File.separator+tileName);
 						tileUrl = file.getAbsolutePath();
 						tileUrl = tileUrl.replaceAll(" ", "%20");
 						tileUrl = tileUrl.replaceAll("\\\\", "/");
-						return "file://"+as+tileUrl;
+						return "file:///"+tileUrl;
 //					}
 				}
 				else {

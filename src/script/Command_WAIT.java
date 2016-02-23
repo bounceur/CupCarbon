@@ -14,7 +14,8 @@ public class Command_WAIT extends Command {
 	
 	public Command_WAIT(SensorNode sensor, String arg) {
 		this.sensor = sensor ;
-		this.arg = ""+ ((long)(Long.parseLong(sensor.getScript().getVariableValue(arg)) * sensor.getRadioDataRate() / 1000.)) ;
+		//this.arg = ""+ ((long)(Long.parseLong(sensor.getScript().getVariableValue(arg)) * sensor.getRadioDataRate() / 1000.)) ;
+		this.arg = arg;
 	}
 
 	@Override
@@ -33,8 +34,9 @@ public class Command_WAIT extends Command {
 			
 			if (arg.equals(""))
 				event = Double.MAX_VALUE;
-			else
-				event = (Double.parseDouble(sensor.getScript().getVariableValue(arg)));
+			else {
+				event = (Double.parseDouble(sensor.getScript().getVariableValue(arg))/1000.);
+			}
 		}
 		
 		return event;

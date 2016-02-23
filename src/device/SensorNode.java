@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RadialGradientPaint;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.File;
@@ -68,7 +69,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	protected boolean bufferReady = false;	
 
 	protected Color radioRangeColor1 = UColor.PURPLE_TRANSPARENT;
-	protected Color radioRangeColor2 = UColor.PURPLED_TRANSPARENT;	
+	protected Color radioRangeColor2 = UColor.PURPLE_DARK_TRANSPARENT;	
 		
 	/**
 	 * Constructor 1 Instanciate the sensor unit 
@@ -229,15 +230,17 @@ public abstract class SensorNode extends DeviceWithRadio {
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setStroke(new BasicStroke(0.4f));
 
-			if(hide == 0) 
+			if(hide == 0) {
+				geoZoneList.setSelected(selected);
 				geoZoneList.draw(g);
+			}
 			
 			calculateRadioSpace();
 			initDraw(g);
 			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int x = coord[0];
 			int y = coord[1];
-			int rayon = MapCalc.radiusInPixels(radioRangeRadius) ; 
+			int rayon = 10;//MapCalc.radiusInPixels(radioRangeRadius) ; 
 	
 			if (inside || selected) {
 				g.setColor(UColor.BLUE);//.BLACK_TRANSPARENT);
@@ -268,12 +271,20 @@ public abstract class SensorNode extends DeviceWithRadio {
 				
 				g.setColor(Color.DARK_GRAY);
 				if(hide == 0 || hide==5) {	
+					Point2D center = new Point2D.Float(x, y);
+					float radius = 300;
+					float[] dist = {0.0f, 0.5f};
+					Color[] colors = {radioRangeColor1, UColor.TRANSPARENT};				
 					if (inside) {
-						g.setColor(radioRangeColor2);
+						colors[0] = radioRangeColor2;
+						//g.setColor(radioRangeColor2);
 					} 
-					else {
-						g.setColor(radioRangeColor1);
-					}				 
+//					else {
+//						
+//						//g.setColor(radioRangeColor1);
+//					}
+					RadialGradientPaint p = new RadialGradientPaint(center, radius, dist, colors);
+					g2.setPaint(p);
 					if(nPoint>0)
 						g.fillPolygon(polyX, polyY, nPoint);
 					//drawSendingReceiving(g, x, y);								
@@ -295,7 +306,11 @@ public abstract class SensorNode extends DeviceWithRadio {
 
 			if (selected) {
 				g.setColor(UColor.PURPLE);//.BLACK_TTRANSPARENT);
-				g.drawOval(x - rayon - 8, y - rayon - 8, (rayon + 8) * 2, (rayon + 8) * 2);
+				if(nPoint == 0)
+					g.drawOval(x - 8, y - 8, 16, 16);
+				else
+					g.drawOval(x - rayon - 8, y - rayon - 8, (rayon + 8) * 2, (rayon + 8) * 2);
+				
 			}
 
 			drawIncRedDimNode(x, y, g);
@@ -340,10 +355,13 @@ public abstract class SensorNode extends DeviceWithRadio {
 			g.setColor(UColor.GREEN);
 		} else {
 			g.setColor(UColor.RED);
-		}			
+		}					
+		if(getScriptFileName().equals(""))
+			g.setColor(Color.LIGHT_GRAY);
+		
 		if(isDead()) g.setColor(Color.BLACK);
-		if(!getScriptFileName().equals(""))
-			g.fillOval(x - 3, y - 3, 6, 6);
+		
+		g.fillOval(x - 3, y - 3, 6, 6);		
 		
 		g.setColor(UColor.BLACK_TTRANSPARENT);
 		g.drawOval(x - 3, y - 3, 6, 6);
@@ -552,21 +570,22 @@ public abstract class SensorNode extends DeviceWithRadio {
 	public void initForSimulation() {		
 		super.initForSimulation();
 		
+		message = "";
+		setMarked(false);
+		setVisited(false);
+					
+		setLedColor(0);
+		initBattery();
+		
+		pl = 100;
+		
+		
 		this.deltaDriftTime = 0.0;
-		//DeviceList.initAll();
 		initBuffer();
-		setDead(false);		
-		//getBattery().init(SimulationInputs.energyMax);
+		setDead(false);
 		loadScript();
 		getScript().init();
-		setEvent(0);		
-//		if(SimulationInputs.visibility) {
-//			VisibilityZones vz = new VisibilityZones(this);
-//			vz.start();
-//		}
-//		else {
-//			initGeoZoneList();
-//		}
+		setEvent(0);
 	}
 
 	public int getBufferIndex() {

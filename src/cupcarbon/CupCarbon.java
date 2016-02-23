@@ -67,7 +67,6 @@ import actions_ui.Historic;
 import arduino.Arduino;
 import device.Device;
 import device.DeviceList;
-import device.SensorNode;
 import geo_objects.BuildingList;
 import map.MapLayer;
 import map.RandomDevices;
@@ -82,6 +81,8 @@ import project.Project;
 import simulation.FaultInjector;
 import solver.CharlySchedul;
 import solver.EnvelopeJarvis;
+import solver.EnvelopeLPCN;
+import solver.EnvelopeLPCNMobile;
 import solver.NetworkCenter;
 import solver.NetworkEnvelopeC;
 import solver.NetworkEnvelopeP;
@@ -89,12 +90,13 @@ import solver.NetworkPerso;
 import solver.SensorSetCover;
 import solver.SensorTargetCoverageRun;
 import solver.SolverProxyParams;
+import visibility.VisibilityLauncher;
 
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
- * @version 2.7.3 (U-One)
+ * @version 2.8 (U-One)
  */
 
 public class CupCarbon {
@@ -132,25 +134,18 @@ public class CupCarbon {
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	protected FaultInjector faultInjector = null;
-	//protected EnvelopeLPCN lpcn = null;
-	//protected EnvelopeLPCNMobile lpcnm = null;
+
 	private JTextField textField;
 	private JTextField textField_1;
+	
+	public static JLabel labelMag;
+	
+	private EnvelopeLPCN lpcn = null ;
+	private EnvelopeLPCNMobile lpcnm = null;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {					
-				// try
-				// {
-				// //UIManager.put("Panel.background", new Color(230,210,250));
-				// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-				// //UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-				// }
-				// catch(Exception e)
-				// {
-				// //e.printStackTrace();
-				// }
-
 				try {					
 					FileInputStream licenceFile = new FileInputStream("cupcarbon_licence.txt");
 					int c;
@@ -161,23 +156,12 @@ public class CupCarbon {
 					licenceFile.close();
 					CupCarbon window = new CupCarbon();
 					window.mainFrame.setVisible(true);
-//					DeviceList.add(new Sensor(48.39248851994976, -4.445117712020874, 50, 100, 10));
-//					DeviceList.add(new Sensor(48.39184021522957, -4.441298246383667, 0, 100, 20));
-//					DeviceList.add(new Sensor(48.390344098226706, -4.444688558578491, 0, 100, 20));
-//					Layer.getMapViewer().repaint();
 					setProxy();
-					
-					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-		// Runtime.getRuntime().addShutdownHook(new Thread() {
-		// public void run() {
-		// Project.saveProject();
-		// }
-		// });
 	}	
 	
 	/**
@@ -299,7 +283,7 @@ public class CupCarbon {
 				fc.setFileFilter(projectFilter);
 				int val = fc.showDialog(fc, "New Project");
 				if (val == 0) {
-					Project.newProjectFc(fc.getSelectedFile().getParent() + File.separator + fc.getSelectedFile().getName(), fc.getSelectedFile().getName());
+					Project.newProjectFC(fc.getSelectedFile().getParent() + File.separator + fc.getSelectedFile().getName(), fc.getSelectedFile().getName());
 				}
 				cupCarbonMap.setTitle("CupCarbon Map : "+fc.getSelectedFile().getName());
 			}
@@ -355,9 +339,24 @@ public class CupCarbon {
 			}
 		});
 		mnProject.add(mntmOpenTheLast);
-		mntmSaveProject.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
-				+ "Enregistrer.png"));
+		mntmSaveProject.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "Enregistrer.png"));
 		mnProject.add(mntmSaveProject);
+		
+		JSeparator separator_20 = new JSeparator();
+		mnProject.add(separator_20);
+		
+		JMenuItem mntmReset = new JMenuItem("Reset");
+		mntmReset.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "reset.png"));
+		mntmReset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int n = JOptionPane.showConfirmDialog(mainFrame, "Would you like to reset?", "Reset", JOptionPane.YES_NO_OPTION);
+				if (n == 0) {
+					cupCarbonMap.setTitle("CupCarbon Map");
+					Project.reset();
+				}
+			}
+		});
+		mnProject.add(mntmReset);
 
 		JSeparator separator = new JSeparator();
 		mnProject.add(separator);
@@ -366,11 +365,8 @@ public class CupCarbon {
 		mntmQuit.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "gnome_logout.png"));
 		mntmQuit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int n = JOptionPane.showConfirmDialog(mainFrame,
-						"Would you like to quit ?", "Quit",
-						JOptionPane.YES_NO_OPTION);
+				int n = JOptionPane.showConfirmDialog(mainFrame, "Would you like to quit?", "Quit", JOptionPane.YES_NO_OPTION);
 				if (n == 0) {
-					// Project.saveProject();
 					System.exit(0);
 				}
 			}
@@ -760,41 +756,26 @@ public class CupCarbon {
 		mntmAddSensor.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "blank_badge_mauve.png"));
 		mnNodes.add(mntmAddSensor);
-
-		JMenuItem mntmAddRouter = new JMenuItem("Add Router");
-		mntmAddRouter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				WorldMap.addNodeInMap('2');
-			}
-		});
-		mntmAddRouter.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
-				+ "blank_badge_blue_ciel.png"));
-		mnNodes.add(mntmAddRouter);
+		
+				JMenuItem mntmAddBaseStation = new JMenuItem("Add Base Station");
+				mntmAddBaseStation.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
+						+ "blank_badge_orange.png"));
+				mnNodes.add(mntmAddBaseStation);
+		
+		JMenuItem mntmAddGas = new JMenuItem("Add Gas");
+		mntmAddGas.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
+				+ "circle_orange.png"));
+		mnNodes.add(mntmAddGas);
 
 		JMenuItem mntmAddMobile = new JMenuItem("Add Mobile");
 		mntmAddMobile.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "blank_badge_noir.png"));
 		mnNodes.add(mntmAddMobile);
 
-		JMenuItem mntmAddMobileWr = new JMenuItem("Add Mobile WR");
-		mntmAddMobileWr.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
-				+ "blank_badge_noir_radio.png"));
-		mnNodes.add(mntmAddMobileWr);
-
-		JMenuItem mntmAddBaseStation = new JMenuItem("Add Base Station");
-		mntmAddBaseStation.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
-				+ "blank_badge_orange.png"));
-		mnNodes.add(mntmAddBaseStation);
-
 		JMenuItem mntmAddFlyingObjects = new JMenuItem("Add Flying Objects");
 		mntmAddFlyingObjects.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "insects.png"));
 		mnNodes.add(mntmAddFlyingObjects);
-		
-		JMenuItem mntmAddGas = new JMenuItem("Add Gas");
-		mntmAddGas.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
-				+ "circle_orange.png"));
-		mnNodes.add(mntmAddGas);
 
 		JMenuItem mntmAddMarkers = new JMenuItem("Add Markers");
 		mntmAddMarkers.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
@@ -853,7 +834,7 @@ public class CupCarbon {
 		JMenuItem mntmRouteFromMarkers = new JMenuItem("Route from markers");
 		mntmRouteFromMarkers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				MarkerList.generateGpxFile();
+				//MarkerList.generateGpxFile();
 			}
 		});
 
@@ -1076,8 +1057,8 @@ public class CupCarbon {
 		mntmRunGiftWrap.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "edu_mathematics-1.png"));
 		mntmRunGiftWrap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//lpcn = new EnvelopeLPCN() ;
-				//lpcn.start();			
+				lpcn = new EnvelopeLPCN() ;
+				lpcn.start();			
 			}
 		});
 		mnEnvelope.add(mntmRunGiftWrap);
@@ -1086,8 +1067,8 @@ public class CupCarbon {
 		mntmStopGiftWrap.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "edu_mathematics-1.png"));
 		mntmStopGiftWrap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//if(lpcn!=null) 
-				//	lpcn.stopAlgorithm();			
+				if(lpcn!=null) 
+					lpcn.stopAlgorithm();			
 			}
 		});
 		mnEnvelope.add(mntmStopGiftWrap);
@@ -1096,8 +1077,8 @@ public class CupCarbon {
 		mntmRunLpcnMobile.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "edu_mathematics-1.png"));
 		mntmRunLpcnMobile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//lpcnm = new EnvelopeLPCNMobile() ;
-				//lpcnm.start();			
+				lpcnm = new EnvelopeLPCNMobile() ;
+				lpcnm.start();			
 			}
 		});
 		mnEnvelope.add(mntmRunLpcnMobile);
@@ -1106,8 +1087,8 @@ public class CupCarbon {
 		mntmStopLpcnMobile.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "edu_mathematics-1.png"));
 		mntmStopLpcnMobile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//if(lpcnm!=null) 
-				//	lpcnm.stopAlgorithm();	
+				if(lpcnm!=null) 
+					lpcnm.stopAlgorithm();	
 			}
 		});
 		mnEnvelope.add(mntmStopLpcnMobile);
@@ -1378,17 +1359,6 @@ public class CupCarbon {
 			}
 		});
 		
-		JRadioButtonMenuItem rdbtnmntmLocallightBlue = new JRadioButtonMenuItem("Local (Light Blue)");
-		rdbtnmntmLocallightBlue.setSelected(true);
-		buttonGroup.add(rdbtnmntmLocallightBlue);
-		rdbtnmntmLocallightBlue.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
-		rdbtnmntmLocallightBlue.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				changeLocalTiles("cuptile_light_blue.png");				
-			}
-		});
-		mnMap.add(rdbtnmntmLocallightBlue);
-		
 		JRadioButtonMenuItem rdbtnmntmLight = new JRadioButtonMenuItem("OSM Light");
 		buttonGroup.add(rdbtnmntmLight);
 		rdbtnmntmLight.addActionListener(new ActionListener() {
@@ -1396,6 +1366,17 @@ public class CupCarbon {
 				changeNetTiles("http://a.basemaps.cartocdn.com/light_all/");			
 			}
 		});
+		
+		JRadioButtonMenuItem rdbtnmntmStandard = new JRadioButtonMenuItem("Local (Standard)");
+		rdbtnmntmStandard.setSelected(true);
+		buttonGroup.add(rdbtnmntmStandard);
+		rdbtnmntmStandard.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
+		rdbtnmntmStandard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeLocalTiles("cuptile_std.png");				
+			}
+		});
+		mnMap.add(rdbtnmntmStandard);
 		rdbtnmntmLight.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
 		mnMap.add(rdbtnmntmLight);
 		
@@ -1410,7 +1391,6 @@ public class CupCarbon {
 				changeLocalTiles("cuptile_dark_blue.png");
 			}
 		});
-		mnMap.add(rdbtnmntmLocaldarkBlue);
 		
 		JRadioButtonMenuItem rdbtnmntmLocallines = new JRadioButtonMenuItem("Local (Lines)");
 		buttonGroup.add(rdbtnmntmLocallines);
@@ -1421,6 +1401,7 @@ public class CupCarbon {
 			}
 		});
 		mnMap.add(rdbtnmntmLocallines);
+		mnMap.add(rdbtnmntmLocaldarkBlue);
 		
 		JRadioButtonMenuItem rdbtnmntmLocaldots = new JRadioButtonMenuItem("Local (Dots)");
 		buttonGroup.add(rdbtnmntmLocaldots);
@@ -1444,7 +1425,6 @@ public class CupCarbon {
 		
 		JSeparator separator_18 = new JSeparator();
 		mnMap.add(separator_18);
-		mnMap.add(rdbtnmntmClassic);
 		
 		JRadioButtonMenuItem rdbtnmntmOsm = new JRadioButtonMenuItem("OSM 2");
 		rdbtnmntmOsm.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
@@ -1454,6 +1434,7 @@ public class CupCarbon {
 				changeNetTiles("http://otile1.mqcdn.com/tiles/1.0.0/osm/");
 			}
 		});
+		mnMap.add(rdbtnmntmOsm);
 		
 		JRadioButtonMenuItem mntmLocal = new JRadioButtonMenuItem("OSM Dark");
 		mntmLocal.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
@@ -1465,7 +1446,17 @@ public class CupCarbon {
 			}
 		});
 		mnMap.add(mntmLocal);
-		mnMap.add(rdbtnmntmOsm);
+		
+		JRadioButtonMenuItem mntmTransport = new JRadioButtonMenuItem("OSM Transport");
+		mntmTransport.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
+		buttonGroup.add(mntmTransport);
+		mntmTransport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeNetTiles("http://a.tile2.opencyclemap.org/transport/");
+			}
+		});
+		mnMap.add(mntmTransport);
+		mnMap.add(rdbtnmntmClassic);
 		
 		JRadioButtonMenuItem rdbtnmntmSatellit = new JRadioButtonMenuItem("OSM Satellite (USA)");
 		rdbtnmntmSatellit.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
@@ -1486,16 +1477,6 @@ public class CupCarbon {
 			}
 		});
 		mnMap.add(rdbtnmntmCyclic);
-		
-		JRadioButtonMenuItem mntmTransport = new JRadioButtonMenuItem("OSM Transport");
-		mntmTransport.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
-		buttonGroup.add(mntmTransport);
-		mntmTransport.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				changeNetTiles("http://a.tile2.opencyclemap.org/transport/");
-			}
-		});
-		mnMap.add(mntmTransport);
 		
 		JRadioButtonMenuItem mntmTerrain = new JRadioButtonMenuItem("OSM Terrain");
 		mntmTerrain.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
@@ -1643,16 +1624,6 @@ public class CupCarbon {
 		});
 		toolBar.add(btnGas);
 
-		JButton btnFlyingObjects = new JButton("3 Flying Objects");
-		btnFlyingObjects.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
-				+ "insects.png"));
-		btnFlyingObjects.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				WorldMap.addNodeInMap('3');
-			}
-		});
-		toolBar.add(btnFlyingObjects);
-
 		JButton btnMobile = new JButton("6 Mobile");
 		btnMobile.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
 				+ "blank_badge_noir.png"));
@@ -1726,12 +1697,8 @@ public class CupCarbon {
 		btnVisibility.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Number of Buildings : "+BuildingList.size());
-				for(SensorNode sn : DeviceList.getSensorNodes()) {
-					if(sn.isSelected()) {	
-//						VisibilityZones vz = new VisibilityZones(sn);
-//						vz.run();
-					}
-				}
+				VisibilityLauncher vl = new VisibilityLauncher();
+				vl.start();				
 			}
 		});
 		toolBar.add(btnVisibility);
@@ -1751,6 +1718,10 @@ public class CupCarbon {
 		panel_1.setBorder(new EmptyBorder(2, 2, 2, 2));
 		toolBar.add(panel_1);
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
+		
+		labelMag = new JLabel("    ");
+		labelMag.setFont(new Font("Arial", Font.PLAIN, 12));
+		panel_1.add(labelMag);
 
 		JPanel panel = new JPanel();
 		panel_1.add(panel);
@@ -1770,7 +1741,7 @@ public class CupCarbon {
 		panel_1.add(panel_2);
 		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.X_AXIS));
 
-		JLabel lblNewLabel = new JLabel(" | Agent Speed:  ");
+		JLabel lblNewLabel = new JLabel(" | Ag. Speed:  ");
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 12));
 		panel_2.add(lblNewLabel);
 
@@ -1782,14 +1753,16 @@ public class CupCarbon {
 		toolBar.add(lblSimulation);
 
 		cupCarbonMap = new CupCarbonMap();
+		cupCarbonMap.setBounds(0, 0, 1000, 634);
+		desktopPane.setLayer(cupCarbonMap, 0);
 		cupCarbonMap.getContentPane().setBackground(Color.LIGHT_GRAY);
 		cupCarbonMap.getContentPane().setFont(new Font("Arial", Font.PLAIN, 12));
-		cupCarbonMap.setLocation(280, 91);
 		cupCarbonMap.setFrameIcon(new ImageIcon("images/cupcarbon_logo_small.png"));
 		cupCarbonMap.setVisible(true);
 
 		mainFrame.getContentPane().add(desktopPane, BorderLayout.CENTER);
 		desktopPane.setBackground(new Color(173, 216, 230));
+		desktopPane.setLayout(null);
 		desktopPane.add(cupCarbonMap);
 
 		try {
