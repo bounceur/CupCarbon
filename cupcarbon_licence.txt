@@ -1,7 +1,7 @@
 Copyright (C) 2013-2016 CupCarbon - UBO - Lab-STICC
 ----------------------------------------------
 CupCarbon V 2.8 (U-ONE): A Smart City & IoT Wireless Sensor Network Simulator
-SenScript V 2.4
+SenScript V 2.5
 www.cupcarbon.com
 ----------------------------------------------
 This program is free software: you can redistribute it and/or modify

@@ -32,12 +32,13 @@ public class WorldMap extends JXMapKit {
 	private static final long serialVersionUID = 1L;
 	private static MapLayer layer;
 	private final int max = 19;
-	public static String tileType = ".png";
+	public static String tileType = ".png";	
 	//public static String tileUrl = "http://otile1.mqcdn.com/tiles/1.0.0/osm/";
 	//public static String tileUrl = "http://a.basemaps.cartocdn.com/dark_all/";
 	public static String tileUrl = "http://a.basemaps.cartocdn.com/light_all/";	
 	//public static String tileUrl = "http://a.tile.stamen.com/toner/";
 	public static boolean local = true;
+	public static boolean gmap = false; // to use google maps (not yet integrated)
 	public static String tileName = "cuptile_std.png" ;
 	
 	//http://bcdcspatial.blogspot.fr/2012/01/onlineoffline-mapping-map-tiles-and.html
@@ -70,11 +71,20 @@ public class WorldMap extends JXMapKit {
 						tileUrl = file.getAbsolutePath();
 						tileUrl = tileUrl.replaceAll(" ", "%20");
 						tileUrl = tileUrl.replaceAll("\\\\", "/");
-						return "file:///"+tileUrl;
+						//return "file:///"+tileUrl;
+						tileUrl = "http://mt0.google.com/vt/lyrs=m&hl=en"; 
+						return tileUrl + "&x="+x+"&y="+y+"&z="+zoom;
 //					}
 				}
 				else {
-					return tileUrl+zoom+"/"+x+"/"+y+tileType ;
+//					if(gmap) {
+//						tileUrl = "http://mt0.google.com/vt/lyrs=y&hl=en"; 
+//						return tileUrl + "&x="+x+"&y="+y+"&z="+zoom+"&s=Ga";
+//					}
+//					else {
+						return tileUrl+zoom+"/"+x+"/"+y+tileType ;					
+//					}
+					
 				}
 				//File file = new File("/Users/bounceur/Google Drive/CupCarbon/images/cuptile.png");//"./images/cuptile.png");
 				//return "file://"+file.getAbsolutePath();

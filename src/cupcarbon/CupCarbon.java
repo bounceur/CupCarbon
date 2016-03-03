@@ -1355,7 +1355,7 @@ public class CupCarbon {
 		buttonGroup.add(rdbtnmntmClassic);
 		rdbtnmntmClassic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				changeNetTiles("http://a.tile.openstreetmap.org/");
+				changeOsmTiles("http://a.tile.openstreetmap.org/");
 			}
 		});
 		
@@ -1363,7 +1363,7 @@ public class CupCarbon {
 		buttonGroup.add(rdbtnmntmLight);
 		rdbtnmntmLight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeNetTiles("http://a.basemaps.cartocdn.com/light_all/");			
+				changeOsmTiles("http://a.basemaps.cartocdn.com/light_all/");			
 			}
 		});
 		
@@ -1431,7 +1431,7 @@ public class CupCarbon {
 		buttonGroup.add(rdbtnmntmOsm);
 		rdbtnmntmOsm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeNetTiles("http://otile1.mqcdn.com/tiles/1.0.0/osm/");
+				changeOsmTiles("http://otile1.mqcdn.com/tiles/1.0.0/osm/");
 			}
 		});
 		mnMap.add(rdbtnmntmOsm);
@@ -1442,7 +1442,7 @@ public class CupCarbon {
 		mntmLocal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//changeNetTiles("http://a.tiles.wmflabs.org/bw-mapnik/");
-				changeNetTiles("http://a.basemaps.cartocdn.com/dark_all/");
+				changeOsmTiles("http://a.basemaps.cartocdn.com/dark_all/");
 			}
 		});
 		mnMap.add(mntmLocal);
@@ -1452,7 +1452,7 @@ public class CupCarbon {
 		buttonGroup.add(mntmTransport);
 		mntmTransport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeNetTiles("http://a.tile2.opencyclemap.org/transport/");
+				changeOsmTiles("http://a.tile2.opencyclemap.org/transport/");
 			}
 		});
 		mnMap.add(mntmTransport);
@@ -1463,7 +1463,7 @@ public class CupCarbon {
 		buttonGroup.add(rdbtnmntmSatellit);
 		rdbtnmntmSatellit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeNetTiles("http://otile1.mqcdn.com/tiles/1.0.0/sat/");
+				changeOsmTiles("http://otile1.mqcdn.com/tiles/1.0.0/sat/");
 			}
 		});
 		mnMap.add(rdbtnmntmSatellit);
@@ -1473,7 +1473,7 @@ public class CupCarbon {
 		buttonGroup.add(rdbtnmntmCyclic);
 		rdbtnmntmCyclic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeNetTiles("http://a.tile.opencyclemap.org/cycle/");
+				changeOsmTiles("http://a.tile.opencyclemap.org/cycle/");
 			}
 		});
 		mnMap.add(rdbtnmntmCyclic);
@@ -1483,7 +1483,7 @@ public class CupCarbon {
 		buttonGroup.add(mntmTerrain);
 		mntmTerrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeNetTiles("http://tile.stamen.com/terrain-background/");
+				changeOsmTiles("http://tile.stamen.com/terrain-background/");
 			}
 		});
 		mnMap.add(mntmTerrain);
@@ -1493,7 +1493,7 @@ public class CupCarbon {
 		buttonGroup.add(mntmMapbox);
 		mntmMapbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				changeNetTiles("http://a.tiles.mapbox.com/v3/examples.map-zr0njcqy/");
+				changeOsmTiles("http://a.tiles.mapbox.com/v3/examples.map-zr0njcqy/");
 			}
 		});
 		mnMap.add(mntmMapbox);		
@@ -1825,13 +1825,22 @@ public class CupCarbon {
 		sspeedLabel.setText("" + Device.moveSpeed + "  ");
 	}
 	
-	public void changeNetTiles(String s) {
+	public void changeGoogleTiles(String s) {
+		WorldMap.gmap = true ;
+		WorldMap.local = false ;
+		WorldMap.tileUrl = s;						
+		MapLayer.getMapViewer().repaint();
+	}
+	
+	public void changeOsmTiles(String s) {
+		WorldMap.gmap = false ;
 		WorldMap.local = false ;
 		WorldMap.tileUrl = s;						
 		MapLayer.getMapViewer().repaint();
 	}
 	
 	public void changeLocalTiles(String s) {
+		WorldMap.gmap = false ;
 		WorldMap.local = true ;
 		WorldMap.tileName = s;
 		Refresher ref = new Refresher();
