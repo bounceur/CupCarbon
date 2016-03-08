@@ -71,9 +71,9 @@ public class WorldMap extends JXMapKit {
 						tileUrl = file.getAbsolutePath();
 						tileUrl = tileUrl.replaceAll(" ", "%20");
 						tileUrl = tileUrl.replaceAll("\\\\", "/");
-						//return "file:///"+tileUrl;
-						tileUrl = "http://mt0.google.com/vt/lyrs=m&hl=en"; 
-						return tileUrl + "&x="+x+"&y="+y+"&z="+zoom;
+						return "file:///"+tileUrl;
+						//tileUrl = "http://mt0.google.com/vt/lyrs=m&hl=en"; 
+						//return tileUrl + "&x="+x+"&y="+y+"&z="+zoom;
 //					}
 				}
 				else {
