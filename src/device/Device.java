@@ -943,19 +943,19 @@ public abstract class Device implements Runnable, MouseListener,
 
 		if (selected) {			
 			deviceRadioParametersUpdate();
-			if (key == 'c') {
-				try {
-					// Layer.addNode(this.clone());
-					DeviceList.add(this.clone());
-					move = false;
-					/* For CTRL Z */
-					//AddDevice action = new AddDevice(DeviceList.getNodes().get(DeviceList.size()-1), "Clone");
-					//action.exec();
-					/* ------ */
-				} catch (CloneNotSupportedException e1) {
-					e1.printStackTrace();
-				}
-			}
+//			if (key == 'c') {
+//				try {
+//					// Layer.addNode(this.clone());
+//					DeviceList.add(this.clone());
+//					move = false;
+//					/* For CTRL Z */
+//					//AddDevice action = new AddDevice(DeviceList.getNodes().get(DeviceList.size()-1), "Clone");
+//					//action.exec();
+//					/* ------ */
+//				} catch (CloneNotSupportedException e1) {
+//					e1.printStackTrace();
+//				}
+//			}
 
 			if (key == 'k') {
 				visible = !visible;

@@ -1,8 +1,9 @@
 package visibility;
 
-public class VisibilityLauncher {
+public class VisibilityLauncher extends Thread {
 
-	public void start() {
+	@Override
+	public void run() {
 		
 	}
 	

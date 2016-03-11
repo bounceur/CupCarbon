@@ -4,11 +4,12 @@ import device.SensorNode;
 
 public class VisibilityZones {
 
-	public VisibilityZones(SensorNode s) {
-		
-	}
 	
+	public VisibilityZones(SensorNode sn) {
+	}	
+
 	public void calculate() {
 		
 	}
+
 }

@@ -77,13 +77,13 @@ public class WorldMap extends JXMapKit {
 //					}
 				}
 				else {
-//					if(gmap) {
-//						tileUrl = "http://mt0.google.com/vt/lyrs=y&hl=en"; 
-//						return tileUrl + "&x="+x+"&y="+y+"&z="+zoom+"&s=Ga";
-//					}
-//					else {
+					if(gmap) {
+						//tileUrl = "http://mt0.google.com/vt/lyrs=y&hl=en"; 
+						return tileUrl + "&x="+x+"&y="+y+"&z="+zoom+"&s=Ga";
+					}
+					else {
 						return tileUrl+zoom+"/"+x+"/"+y+tileType ;					
-//					}
+					}
 					
 				}
 				//File file = new File("/Users/bounceur/Google Drive/CupCarbon/images/cuptile.png");//"./images/cuptile.png");

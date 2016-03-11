@@ -1458,16 +1458,6 @@ public class CupCarbon {
 		mnMap.add(mntmTransport);
 		mnMap.add(rdbtnmntmClassic);
 		
-		JRadioButtonMenuItem rdbtnmntmSatellit = new JRadioButtonMenuItem("OSM Satellite (USA)");
-		rdbtnmntmSatellit.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
-		buttonGroup.add(rdbtnmntmSatellit);
-		rdbtnmntmSatellit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				changeOsmTiles("http://otile1.mqcdn.com/tiles/1.0.0/sat/");
-			}
-		});
-		mnMap.add(rdbtnmntmSatellit);
-		
 		JRadioButtonMenuItem rdbtnmntmCyclic = new JRadioButtonMenuItem("OSM Cycle");
 		rdbtnmntmCyclic.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
 		buttonGroup.add(rdbtnmntmCyclic);
@@ -1478,25 +1468,28 @@ public class CupCarbon {
 		});
 		mnMap.add(rdbtnmntmCyclic);
 		
-		JRadioButtonMenuItem mntmTerrain = new JRadioButtonMenuItem("OSM Terrain");
-		mntmTerrain.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
-		buttonGroup.add(mntmTerrain);
-		mntmTerrain.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				changeOsmTiles("http://tile.stamen.com/terrain-background/");
-			}
-		});
-		mnMap.add(mntmTerrain);
+		JSeparator separator_21 = new JSeparator();
+		mnMap.add(separator_21);
 		
-		JRadioButtonMenuItem mntmMapbox = new JRadioButtonMenuItem("OSM MapBox");
-		mntmMapbox.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
-		buttonGroup.add(mntmMapbox);
-		mntmMapbox.addActionListener(new ActionListener() {
+		JRadioButtonMenuItem rdbtnmntmGoogleMap = new JRadioButtonMenuItem("Google Map");
+		rdbtnmntmGoogleMap.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
+		buttonGroup.add(rdbtnmntmGoogleMap);
+		rdbtnmntmGoogleMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				changeOsmTiles("http://a.tiles.mapbox.com/v3/examples.map-zr0njcqy/");
+				changeGoogleTiles("http://mt0.google.com/vt/lyrs=m&hl=en");
 			}
 		});
-		mnMap.add(mntmMapbox);		
+		mnMap.add(rdbtnmntmGoogleMap);
+		
+		JRadioButtonMenuItem rdbtnmntmSatellit = new JRadioButtonMenuItem("Google Map (Sat)");
+		rdbtnmntmSatellit.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "geo.png"));
+		buttonGroup.add(rdbtnmntmSatellit);
+		rdbtnmntmSatellit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeGoogleTiles("http://mt0.google.com/vt/lyrs=y&hl=en");
+			}
+		});
+		mnMap.add(rdbtnmntmSatellit);
 		
 		JSeparator separator_16 = new JSeparator();
 		mnMap.add(separator_16);
