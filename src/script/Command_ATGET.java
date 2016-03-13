@@ -36,6 +36,11 @@ public class Command_ATGET extends Command {
 			v = ""+sensor.getMy();
 		}
 		
+		if(arg1.equals("nid")) {
+			SimLog.add("S" + sensor.getId() + " ATGET NID.");
+			v = ""+sensor.getNId();
+		}
+		
 		sensor.getScript().addVariable(arg2, v);
 		//double ratio = (sensor.getRadioDataRate()*1.0)/(sensor.getUartDataRate());
 		String message = "XX";

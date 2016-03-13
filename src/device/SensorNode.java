@@ -611,7 +611,6 @@ public abstract class SensorNode extends DeviceWithRadio {
 	}
 	
 	public abstract boolean detect(Device device);
-	public abstract boolean isSensorDetecting() ;
 	
 	public String getSensorValues() {
 		String s = "";
@@ -675,6 +674,13 @@ public abstract class SensorNode extends DeviceWithRadio {
 		GeoPosition gp1 = new GeoPosition(sn.getLatitude(), sn.getLongitude());
 		Point2D p = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp1, MapLayer.getMapViewer().getZoom());
 		return geoZoneList.contains((Point) p);
+	}
+	
+	public boolean isSensorDetecting() {
+		for(Device d : DeviceList.getNodes()) {
+			if(detect(d) && this!=d) return true;
+		}
+		return false ;
 	}
 	
 }

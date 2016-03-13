@@ -2,9 +2,9 @@ package device;
 
 import java.awt.Graphics;
 
+import battery.Battery;
 import sensorunit.SensorUnit;
 import utilities.MapCalc;
-import battery.Battery;
 
 public class StdSensorNode extends SensorNode {
 	
@@ -175,12 +175,11 @@ public class StdSensorNode extends SensorNode {
 	}
 	
 	@Override
-	public StdSensorNode clone() throws CloneNotSupportedException {
-		StdSensorNode newSensor = (StdSensorNode) super.clone();
-		SensorUnit newSensorUnit = (SensorUnit) sensorUnit.clone();
+	public Device clone() throws CloneNotSupportedException {
 		Battery newBattery = (Battery) battery.clone();
+		StdSensorNode newSensor = (StdSensorNode) super.clone();
+		SensorUnit newSensorUnit = new SensorUnit(sensorUnit.getLongitude(), sensorUnit.getLatitude(), sensorUnit.getElevation(), sensorUnit.getRadius(), newSensor);
 		newSensor.setSensorUnit(newSensorUnit);
-		newSensorUnit.setNode(newSensor);
 		newSensor.setBattery(newBattery);
 		return newSensor;
 	}
@@ -193,12 +192,7 @@ public class StdSensorNode extends SensorNode {
 		return (sensorUnit.detect(device));
 	}
 	
-	public boolean isSensorDetecting() {
-		for(Device d : DeviceList.getNodes()) {
-			if(detect(d) && this!=d) return true;
-		}
-		return false ;
-	}
+	
 	
 	public double getSensorValue() {
 		for(Device d : DeviceList.getNodes()) {
@@ -236,4 +230,5 @@ public class StdSensorNode extends SensorNode {
 	public void initBattery() {
 		getBattery().init();
 	}
+
 }

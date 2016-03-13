@@ -18,7 +18,6 @@ public class Command_MOVE extends Command {
 		if (sensor.canMove()) {
 			sensor.moveToNext(true, 0);									
 		}
-		//MapLayer.getMapViewer().repaint();	
 		return t/1000. ;
 	}
 

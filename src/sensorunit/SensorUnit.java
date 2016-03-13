@@ -130,8 +130,9 @@ public class SensorUnit implements KeyListener, Cloneable {
 				for(FlyingObject d : ((FlyingGroup)device).getFlyingObjects()) {
 					GeoPosition gp = new GeoPosition(d.getLatitude(), d.getLongitude());
 					Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
-					if(poly.contains(p1))
+					if(poly.contains(p1)) {
 						return true;
+					}
 				}
 				return false;
 			}
@@ -214,5 +215,31 @@ public class SensorUnit implements KeyListener, Cloneable {
 		MapLayer.getMapViewer().addKeyListener(newCU);
 		return newCU;
 	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getElevation() {
+		return elevation;
+	}
+
+	public void setElevation(double elevation) {
+		this.elevation = elevation;
+	}
+	
+	
 	
 }

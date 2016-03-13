@@ -57,6 +57,23 @@ public final class SensorAddCommand {
 		if (inst[0].toLowerCase().equals("stop")) {
 			command = new Command_STOP(sensorNode);
 		}
+		
+		if (inst[0].toLowerCase().equals("xor")) {
+			command = new Command_XOR(sensorNode, inst[1], inst[2], inst[3]);
+		}
+		
+		if (inst[0].toLowerCase().equals("and")) {
+			command = new Command_AND(sensorNode, inst[1], inst[2], inst[3]);
+		}
+		
+		if (inst[0].toLowerCase().equals("or")) {
+			command = new Command_OR(sensorNode, inst[1], inst[2], inst[3]);
+		}
+		
+		if (inst[0].toLowerCase().equals("not")) {
+			command = new Command_NOT(sensorNode, inst[1], inst[2]);
+		}
+		
 		if (inst[0].toLowerCase().equals("plus")) {
 			command = new Command_PLUS(sensorNode, inst[1], inst[2], inst[3]);
 		}
