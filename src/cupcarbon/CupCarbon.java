@@ -96,7 +96,7 @@ import visibility.VisibilityLauncher;
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
- * @version 2.8 (U-One)
+ * @version 2.8.5 (U-One)
  */
 
 public class CupCarbon {
@@ -1476,6 +1476,13 @@ public class CupCarbon {
 		buttonGroup.add(rdbtnmntmGoogleMap);
 		rdbtnmntmGoogleMap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				// h = roads only
+				// m = standard roadmap
+				// p = terrain
+				// r = somehow altered roadmap
+				// s = satellite only
+				// t = terrain only
+				// y = hybrid
 				changeGoogleTiles("http://mt0.google.com/vt/lyrs=m&hl=en");
 			}
 		});
@@ -1486,7 +1493,7 @@ public class CupCarbon {
 		buttonGroup.add(rdbtnmntmSatellit);
 		rdbtnmntmSatellit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				changeGoogleTiles("http://mt0.google.com/vt/lyrs=y&hl=en");
+				changeGoogleTiles("http://mt0.google.com/vt/lyrs=s&hl=en");
 			}
 		});
 		mnMap.add(rdbtnmntmSatellit);

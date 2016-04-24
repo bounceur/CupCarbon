@@ -41,7 +41,6 @@ import org.jdesktop.swingx.painter.Painter;
 import actions_ui.AddDevice;
 import actions_ui.AddMarker;
 import cupcarbon.CupCarbon;
-import cupcarbon.CupCarbonMap;
 import device.BaseStation;
 import device.Device;
 import device.DeviceList;
@@ -262,9 +261,10 @@ public class MapLayer implements Painter<Object>, MouseListener,
 		Point p = new Point(cx, cy);
 		GeoPosition gp = mapViewer.convertPointToGeoPosition(p);	
 		
-		if (arg.getClickCount() == 2) {			
-			CupCarbonMap.getMap().setCenterPosition(new GeoPosition(gp.getLatitude(), gp.getLongitude()));
-		} else if (afficherIndicateur) {			
+//		if (arg.getClickCount() == 2) {			
+//			CupCarbonMap.getMap().setCenterPosition(new GeoPosition(gp.getLatitude(), gp.getLongitude()));
+//		} else 
+		if (afficherIndicateur) {			
 			if (lastKey == '1') {
 				StdSensorNode sn = new StdSensorNode(gp.getLongitude(), gp.getLatitude(), 0, 0, 100, 20, -1); 
 				DeviceList.add(sn);

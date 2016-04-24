@@ -201,7 +201,7 @@ public class WisenSimulationWindow extends JInternalFrame {
 						panel_19.add(cboxMobility);
 						cboxMobility.setFont(new Font("Arial", Font.PLAIN, 12));
 						
-						chckbxCpuDrift = new JCheckBox("Drift (sigma)");
+						chckbxCpuDrift = new JCheckBox("Drift");
 						panel_19.add(chckbxCpuDrift);
 						chckbxCpuDrift.setFont(new Font("Arial", Font.PLAIN, 12));
 						

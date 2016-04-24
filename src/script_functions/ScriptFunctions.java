@@ -2,42 +2,42 @@ package script_functions;
 
 public class ScriptFunctions {
 
-	public static String function(String function, String [] args) {
+	public static String [] function(String function, String [] args) {
 		
 		// Sensor Min -> Return the min with the name of the sensor
 		if(function.equals("smin")) {
-			return Functions.smin(args);
+			return new String [] {Functions.smin(args), "0.00026276", "0.00000162419"};
 		}
 		
 		if(function.equals("min")) {
-			return Functions.min(args);
+			return new String [] {Functions.min(args), "0.0", "0.0"};
 		}
 		
 		if(function.equals("myf")) {
-			return Functions.myf(args);
+			return new String [] {Functions.myf(args), "0.0", "0.0"};
 		}
 		
 		if(function.equals("angle")) {
-			return Functions.angle(args);
+			return new String [] {Functions.angle(args), "0.0", "0.0"};
 		}
 		
 		if(function.equals("check")) {
-			return Functions.check(args);
+			return new String [] {Functions.check(args), "0.0", "0.0"};
 		}
 		
 		if(function.equals("fmu")) {
-			return Functions.fmu(args);
+			return new String [] {Functions.fmu(args), "0.0", "0.0"};
 		}
 		
 		if(function.equals("fsigma")) {
-			return Functions.fsigma(args);
+			return new String [] {Functions.fsigma(args), "0.0", "0.0"};
 		}
 		
 		if(function.equals("factor")) {
-			return Functions.factor(args);
+			return new String [] {Functions.factor(args), "0.0", "0.0"};
 		}
 				
-		return "[SCRIPT] FUNCTION ERROR: Unknown function!";
+		return new String [] {"[SCRIPT] FUNCTION ERROR: Unknown function!","0.0", "0.0"};
 	}
 	
 }

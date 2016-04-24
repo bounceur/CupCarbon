@@ -45,7 +45,7 @@ public class Command_ATND extends Command {
 			frame = XBeeFrameGenerator.at(message);
 		
 		double ratio = 1.0/sensor.getUartDataRate();		
-		return arg3 + (ratio*(frame.length()*8.));
+		return arg3 + (ratio*(frame.length()*8.)) ;
 	}
 	
 	@Override

@@ -24,6 +24,8 @@ import java.awt.geom.Point2D;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
+import device.DeviceList;
+import device.SensorNode;
 import map.MapLayer;
 
 /**
@@ -183,5 +185,20 @@ public class MapCalc {
 		int v2 = (int) pt2.getX();
 		int rp = (int) (radius * (v2 - v1) / 100);
 		return rp;
+	}
+	
+	/**
+	 * Calculate the number of sensor nodes that are inside the area which is around a given sensor node
+	 *  
+	 * @param sensorNode
+	 * @return The number of sensor nodes that are inside the area which is around a given sensor node
+	 */
+	public static int numberOfSensorsInArea(SensorNode sensorNode, int radius) {
+		int n = 0;
+		for(SensorNode otherSensor : DeviceList.getSensorNodes()) {
+				if((sensorNode.distance(otherSensor)<=radius) && (sensorNode != otherSensor))
+					n++;
+		}
+		return n;
 	}
 }

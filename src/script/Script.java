@@ -28,6 +28,8 @@ import device.SensorNode;
 public class Script {
 
 	protected LinkedList<Command> commands = new LinkedList<Command>();
+	//protected LinkedList<Script> tcommands = new LinkedList<Script>();
+	
 	protected SensorNode sensor = null;
 	protected int index = 0;
 	protected int loopIndex = 0;

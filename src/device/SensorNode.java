@@ -165,7 +165,9 @@ public abstract class SensorNode extends DeviceWithRadio {
 		initBuffer();
 	}	
 	
+	public boolean deja = false;
 	public void calculateRadioSpace() {
+		//if(!deja) {
 		if(geoZoneList.isEmpty()) {
 			nPoint = 30;	
 			deg = 2.*Math.PI/nPoint;
@@ -183,7 +185,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 			//variateRadius();
 			double i=0.0;
 			for(int k=0; k<nPoint; k++) {
-				//variateRadius();
+				//variateRadius();				
 				r2 = (rayon+variation)*Math.cos(i);
 				r3 = (rayon+variation)*Math.sin(i);
 				polyX[k]=(int)(x+r2);
@@ -196,10 +198,12 @@ public abstract class SensorNode extends DeviceWithRadio {
 			polyX = null;
 			polyY = null;
 		}
+		//deja = true;
+		//}
 	}
 	
 	public void variateRadius() {
-		variation = rnd.nextGaussian()/0.8;
+		variation = rnd.nextGaussian()/0.2;
 	}
 
 	
@@ -361,10 +365,11 @@ public abstract class SensorNode extends DeviceWithRadio {
 		
 		if(isDead()) g.setColor(Color.BLACK);
 		
-		g.fillOval(x - 3, y - 3, 6, 6);		
+		int r = 3;
+		g.fillOval(x - r, y - r, r*2, r*2);		
 		
 		g.setColor(UColor.BLACK_TTRANSPARENT);
-		g.drawOval(x - 3, y - 3, 6, 6);
+		g.drawOval(x - r, y - r, r*2, r*2);
 	}	
 
 	/**
@@ -580,7 +585,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 		pl = 100;
 		
 		
-		this.deltaDriftTime = 0.0;
+		driftTime = 1.0;
 		initBuffer();
 		setDead(false);
 		loadScript();

@@ -26,18 +26,15 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.filechooser.FileFilter;
 
 import device.DeviceList;
 import map.MapLayer;
@@ -95,26 +92,6 @@ public class DeviceParametersWindow extends JInternalFrame {
 
 		JPanel panel_2 = new JPanel();
 		getContentPane().add(panel_2, BorderLayout.SOUTH);
-
-		JButton btnNewButton = new JButton("Apply");
-		btnNewButton.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
-				+ "loopnone-1.png"));
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {				
-				DeviceList.updateDeviceParaFromMap(
-						tf_latitude.getText(),
-						tf_elevation.getText(), 
-						tf_radius.getText(),
-						tf_suRadius.getText(),
-						scriptComboBox.getSelectedItem()+"",
-						gpsPathNameComboBox.getSelectedItem()+"",
-						tf_eMax.getText(),
-						tf_eS.getText(),
-						(String) cb_uartDataRate.getSelectedItem()	
-					);
-			}
-		});
-		panel_2.add(btnNewButton);
 
 		JPanel panel_8 = new JPanel();
 		getContentPane().add(panel_8, BorderLayout.CENTER);
@@ -236,33 +213,6 @@ public class DeviceParametersWindow extends JInternalFrame {
 		fl_panel_1_1.setHgap(0);
 		panel_11.add(panel_1_1);
 
-		JButton button_ = new JButton("");
-		button_.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FileFilter ff = new FileFilter() {
-					public boolean accept(File f) {
-						if (f.isDirectory())
-							return true;
-						else if (f.getName().endsWith(".scr"))
-							return true;
-						else
-							return false;
-					}
-
-					public String getDescription() {
-						return "Script files";
-					}
-				};
-
-				JFileChooser fc = new JFileChooser();
-				fc.setFileFilter(ff);
-				int val = fc.showDialog(fc, "Open Script File");
-				if (val == 0) {
-					// textField.setText(fc.getSelectedFile().toString());
-				}
-			}
-		});
-
 		JButton button_1_ = new JButton("");
 		button_1_.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -272,41 +222,12 @@ public class DeviceParametersWindow extends JInternalFrame {
 		});
 		button_1_.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
 		panel_1_1.add(button_1_);
-		button_.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "Ouvrir.png"));
-		panel_1_1.add(button_);
 
 		JPanel panel_1 = new JPanel();
 		FlowLayout flowLayout_6 = (FlowLayout) panel_1.getLayout();
 		flowLayout_6.setVgap(0);
 		flowLayout_6.setHgap(0);
 		panel_11.add(panel_1);
-
-		JButton button = new JButton("");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				FileFilter ff = new FileFilter() {
-					public boolean accept(File f) {
-						if (f.isDirectory())
-							return true;
-						else if (f.getName().endsWith(".gps"))
-							return true;
-						else
-							return false;
-					}
-
-					public String getDescription() {
-						return "GPS files";
-					}
-				};
-
-				JFileChooser fc = new JFileChooser();
-				fc.setFileFilter(ff);
-				int val = fc.showDialog(fc, "Open GPS File");
-				if (val == 0) {
-					// textField.setText(fc.getSelectedFile().toString());
-				}
-			}
-		});
 
 		JButton button_1 = new JButton("");
 		button_1.addActionListener(new ActionListener() {
@@ -317,8 +238,6 @@ public class DeviceParametersWindow extends JInternalFrame {
 		});
 		button_1.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
 		panel_1.add(button_1);
-		button.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "Ouvrir.png"));
-		panel_1.add(button);
 
 		JPanel panel_Id = new JPanel();
 		FlowLayout flowLayoutId = (FlowLayout) panel_Id.getLayout();

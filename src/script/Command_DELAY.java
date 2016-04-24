@@ -18,7 +18,7 @@ public class Command_DELAY extends Command {
 		double carg = Double.parseDouble(sensor.getScript().getVariableValue(arg));
 		//SimLog.add("S" + sensor.getId() + " starts delaying for " + (Integer.valueOf(carg)/sensor.getRadioDataRate()*1000.) + " milliseconds");
 		SimLog.add("S" + sensor.getId() + " starts delaying for " + carg + " milliseconds");
-		return carg/1000. ;
+		return (carg/1000.) * sensor.getDriftTime() ;
 	}
 	
 	public boolean isDelay() {

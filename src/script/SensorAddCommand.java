@@ -74,6 +74,30 @@ public final class SensorAddCommand {
 			command = new Command_NOT(sensorNode, inst[1], inst[2]);
 		}
 		
+		if (inst[0].toLowerCase().equals("bxor")) {
+			command = new Command_BXOR(sensorNode, inst[1], inst[2], inst[3]);
+		}
+		
+		if (inst[0].toLowerCase().equals("sxor")) {
+			command = new Command_SXOR(sensorNode, inst[1], inst[2], inst[3]);
+		}
+		
+		if (inst[0].toLowerCase().equals("band")) {
+			command = new Command_BAND(sensorNode, inst[1], inst[2], inst[3]);
+		}
+		
+		if (inst[0].toLowerCase().equals("bor")) {
+			command = new Command_BOR(sensorNode, inst[1], inst[2], inst[3]);
+		}
+		
+		if (inst[0].toLowerCase().equals("bnot")) {
+			command = new Command_BNOT(sensorNode, inst[1], inst[2]);
+		}		
+
+		if (inst[0].toLowerCase().equals("hash")) {
+			command = new Command_HASH(sensorNode, inst[1], inst[2]);
+		}		
+		
 		if (inst[0].toLowerCase().equals("plus")) {
 			command = new Command_PLUS(sensorNode, inst[1], inst[2], inst[3]);
 		}
@@ -116,6 +140,12 @@ public final class SensorAddCommand {
 		}
 		if (inst[0].toLowerCase().equals("mmin")) {
 			command = new Command_MMIN(sensorNode, inst[1], inst[2], inst[3], inst[4]);
+		}
+		if (inst[0].toLowerCase().equals("min")) {
+			command = new Command_MIN(sensorNode, inst[1], inst[2], inst[3]);
+		}
+		if (inst[0].toLowerCase().equals("max")) {
+			command = new Command_MAX(sensorNode, inst[1], inst[2], inst[3]);
 		}
 		if (inst[0].toLowerCase().equals("getpos2")) {
 			command = new Command_GETPOS2(sensorNode, inst[1], inst[2]);
@@ -257,6 +287,14 @@ public final class SensorAddCommand {
 		
 		if (inst[0].toLowerCase().equals("dec")) {
 			command = new Command_MINUS(sensorNode, inst[1], "$"+inst[1], "1");
+		}
+		
+		if (inst[0].toLowerCase().equals("int")) {
+			command = new Command_INT(sensorNode, inst[1]);
+		}
+		
+		if (inst[0].toLowerCase().equals("conc")) {
+			command = new Command_CONC(sensorNode, inst[1], inst[2], inst[3]);
 		}
 		
 		if (inst[0].toLowerCase().equals("getinfo")) {

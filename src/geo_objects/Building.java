@@ -232,7 +232,7 @@ public class Building implements MouseListener, KeyListener {
 				selected = true;
 			else 
 				selected = false;
-		}
+		}		
 		
 	}
 

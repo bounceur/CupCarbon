@@ -65,6 +65,15 @@ public class WisenSimulation extends Thread {
 	// Run simulation 
 	// ------------------------------------------------------------
 	public void simulate() {
+		if(ready()) {
+			start_simulation();
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Not Ready to simulate!", "Warning", JOptionPane.WARNING_MESSAGE);
+		}
+	}
+	
+	public void start_simulation() {
 		SimLog.init();
 		mobility = SimulationInputs.mobility;
 		System.out.println("mobility "+mobility);		
@@ -84,6 +93,7 @@ public class WisenSimulation extends Thread {
 		
 		for (Device device : devices) {
 			device.initForSimulation();
+			if(SimulationInputs.cpuDrift) device.drift();
 			if (mobility) {				
 				if (device.canMove())
 					device.setEvent2(device.getNextTime());
@@ -183,7 +193,7 @@ public class WisenSimulation extends Thread {
 				consolPrintln("--------------------------------------");
 				consolPrint(""+time);
 
-				time += min;
+				//time += min;
 				
 				SimLog.add("Next time (milliseconds) : "+time);
 				SimLog.add("--------------------------------------");
@@ -268,16 +278,17 @@ public class WisenSimulation extends Thread {
 					consolPrintln("");
 					
 					if (generateResults) ps.println();										
-				}
-				
-				
+				}			
+								
 				if(SimulationInputs.cpuDrift) {
-					if (timeEvt <= time) {
-						timeEvt += 1.0;
+					if ((timeEvt <= time)) {
+						timeEvt += 3600; // Drift each 1 hour
 						for (Device device : devices) {					
 							if(!device.isDead()) {
 								if(device.getType()==Device.SENSOR || device.getType()==Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) {
-									device.drift();
+									for(int i=0; i<min; i++) {
+										device.drift();
+									}
 								}
 							}
 						}
@@ -307,11 +318,13 @@ public class WisenSimulation extends Thread {
 					}
 				}
 				
+				time += min;
 				consolPrintln("");
 				consolPrintln("------------------------------------------");				
 				WisenSimulationWindow.setProgress((int) (1000 * time / SimulationInputs.simulationTime));
 				CupCarbon.lblSimulation.setText(" | Simulation: "+ Math.round(time) + "s [" + ((int) (100 * time / SimulationInputs.simulationTime))+"%]");
-								
+				
+				
 				MapLayer.getMapViewer().repaint();
 				if (waitArrow && SimulationInputs.arrowsDelay > 0) {
 					sleep((int)(SimulationInputs.arrowsDelay));

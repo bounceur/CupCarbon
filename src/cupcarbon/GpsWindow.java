@@ -188,16 +188,6 @@ public class GpsWindow extends JInternalFrame {
 		btnLoad.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
 		panel_9.add(btnLoad);
 
-		JButton gpxButton = new JButton("Generate a route");
-		gpxButton.setFont(new Font("Arial", Font.PLAIN, 12));
-		gpxButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				MarkerList.generateGpxFile();
-			}
-		});
-		gpxButton.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
-		panel_9.add(gpxButton);
-
 		JButton btnNewButton = new JButton("Save");
 		btnNewButton.setFont(new Font("Arial", Font.PLAIN, 12));
 		panel_9.add(btnNewButton);

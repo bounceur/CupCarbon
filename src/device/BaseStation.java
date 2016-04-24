@@ -83,7 +83,7 @@ public class BaseStation extends StdSensorNode {
 	public void drawTheCenter(Graphics g, int x, int y) {
 		int [] triangleX = new int [3];
 		int [] triangleY = new int [3];
-		int sz = 5;
+		int sz = 8;
 		triangleX[0] = x-sz ;
 		triangleX[1] = x ;
 		triangleX[2] = x+sz ;

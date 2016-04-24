@@ -337,6 +337,13 @@ public class DeviceList {
 	 *            Graphics
 	 */
 	public void draw(Graphics g) {
+//		for (Device n : getSensorNodes()) {
+//			if(propagationsCalculated)
+//				n.drawRadioPropagations(g);
+//			else
+//				n.drawRadioLinks(g);
+//		}
+		
 		for (Device n : getSensorNodes()) {			
 			n.drawRadioRange(g);
 		}

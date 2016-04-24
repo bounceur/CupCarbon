@@ -51,6 +51,7 @@ import wisen_simulation.SimulationInputs;
  * @version 1.0
  */
 public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
+	
 	protected Battery battery ;
 	protected double porteeErr = .4 ;
 	protected Random random = new Random() ;
@@ -272,13 +273,13 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				int x = coord[0];
 				int y = coord[1];
 				g.setColor(Color.ORANGE);			
-				int r1 = 12;
+				//int r1 = 12;
 				int r2 = 8;
-				if(hide == 0 || hide == 4) {
-					g.drawOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
-					g.setColor(UColor.GREEND_TRANSPARENT);
-					g.fillOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
-				}
+//				if(hide == 0 || hide == 4) {
+//					g.drawOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
+//					g.setColor(UColor.GREEND_TRANSPARENT);
+//					g.fillOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
+//				}
 				g.setColor(UColor.GREEND_TRANSPARENT);
 				g.fillOval(x-(r2+1), y-(r2+1), (r2+1)*2, (r2+1)*2);
 				g.setColor(Color.GRAY);
@@ -290,13 +291,13 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				int x = coord[0];
 				int y = coord[1];
 				g.setColor(Color.ORANGE);			
-				int r1 = 12;
+				//int r1 = 12;
 				int r2 = 8;
-				if(hide == 0 || hide == 4) {
-					g.drawOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
-					g.setColor(UColor.GREEND_TRANSPARENT);
-					g.fillOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
-				}
+//				if(hide == 0 || hide == 4) {
+//					g.drawOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
+//					g.setColor(UColor.GREEND_TRANSPARENT);
+//					g.fillOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
+//				}
 				g.setColor(UColor.colorTab[ledColor-1]);
 				g.fillOval(x-(r2+1), y-(r2+1), (r2+1)*2, (r2+1)*2);
 				g.setColor(Color.GRAY);

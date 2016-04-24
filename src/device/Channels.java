@@ -40,98 +40,65 @@ public class Channels {
 		// type=2 : Broadcast sendind 
 		SimLog.add("S" + rSensor.getId() + " is receiving the message : \"" + message + "\" in its buffer.");
 		double ratio1 = 1.0/sSensor.getRadioDataRate();
-		double ratio2 = 1.0/sSensor.getUartDataRate();
+		double ratio2 = 1.0/rSensor.getUartDataRate();
 		double duration = (ratio1*(packet.length())) + (ratio2*(message.length()*8)) ;
 		
 		double lastTime = 0;
-		if (channelEventList.get(sSensor.getCh()).size()>0 && type != 2) { 
-				lastTime = channelEventList.get(sSensor.getCh()).get(channelEventList.get(sSensor.getCh()).size()-1).getTime();
-		}
-		else {
-			sSensor.setSending(true);
-			rSensor.setReceiving(true);
-		}
+		sSensor.setSending(true);
+		rSensor.setReceiving(true);
 		
 		PacketEvent packetEvent = new PacketEvent(type, sSensor, rSensor, packet, message, lastTime+duration);		
 		channelEventList.get(sSensor.getCh()).add(packetEvent);
-		Collections.sort(channelEventList.get(sSensor.getCh()));
+		Collections.sort(channelEventList.get(sSensor.getCh()));		
 	}
 		
 	public static void receivedMessages() {
 		for (List<PacketEvent> packetEventList : channelEventList) {
-			//boolean stop = false; // For broadcast sending
-			//while(!stop) {
-				//if(packetEventList.size()>0) {
-				//	if(packetEventList.get(0).getTime()==0) {
-				while(packetEventList.size()>0 && packetEventList.get(0).getTime()==0) {
-						int type = packetEventList.get(0).getType();
-						String packet = packetEventList.get(0).getPacket();
-						//String message = packetEventList.get(0).getMessage();
-						SensorNode rSensor = packetEventList.get(0).getRSensor();
-						SensorNode sSensor = packetEventList.get(0).getSSensor();					
+			while(packetEventList.size()>0 && packetEventList.get(0).getTime()==0) {
+				int type = packetEventList.get(0).getType();
+				String packet = packetEventList.get(0).getPacket();
+				SensorNode rSensor = packetEventList.get(0).getRSensor();
+				SensorNode sSensor = packetEventList.get(0).getSSensor();					
+				
+				rSensor.consumeRx(packet.length());
+				
+				boolean berOk = true;
+				
+				berOk = Ber.berOk(packet, rSensor);
+				
+				sSensor.setSending(false);
+				rSensor.setReceiving(false);
+				MapLayer.mapViewer.repaint();
+				
+				// type=0 : Direct sending
+				// type=1 : ACK sending
+				// type=2 : Broadcast sending 
+				if ((type == 0) || (type == 2)) {	
+					if (berOk || (type == 2)) {
+						rSensor.addMessageToBuffer(packetEventList.get(0).getMessage());
 						
-						rSensor.consumeRx(packet.length());
-						
-						boolean berOk = true;
-						
-						berOk = Ber.berOk(packet, rSensor);
-						
-						sSensor.setSending(false);
-						rSensor.setReceiving(false);
-						MapLayer.mapViewer.repaint();
-						
-						// type=0 : Direct sending
-						// type=1 : ACK sending
-						// type=2 : Broadcast sending 
-						if ((type == 0) || (type == 2)) {	
-							if (berOk || (type == 2)) {
-								
-								//System.out.println(WisenSimulation.time+" : "+"S"+sSensor.getId()+"->"+"S"+rSensor.getId()+" : Messages Reçus : "+(sommer++)+" | "+" Messages Perdus : "+sommep);
-								//System.out.println("RECU");
-								
-								//System.out.println(">>> "+sSensor.getId() +"->"+rSensor.getId()+ " : "+packetEventList.get(0).getMessage());
-								rSensor.addMessageToBuffer(packetEventList.get(0).getMessage());
-								
-								if(rSensor.getScript().getCurrent().isWait()) {
-									rSensor.setEvent(0);
-								}
-								
-								if((type == 0) && (SimulationInputs.ack)) {									
-									addPacketEvent(1, XBeeFrameGenerator.ackInBin("0", "00", "00", Standard.getSubChannel(rSensor.getStandard())*8), "0", rSensor, sSensor);																		
-								}
-							}
-							//else {								
-								// Message not received
-								//System.out.println(WisenSimulation.time+" : "+"S"+sSensor.getId()+"->"+"S"+rSensor.getId()+" : Messages Reçus : "+sommer+" | "+" Messages Perdus : "+(sommep++));
-								//addPacketEvent(1, XBeeFrameGenerator.ackInBin("1", "00", "00", Standard.getSubChannel(rSensor.getStandard())*8), "1", rSensor, sSensor);
-							//	sSensor.setAckOk(true);
-								//sSensor.setV(sSensor.getEvent());
-							//}
+						if(rSensor.getScript().getCurrent().isWait()) {
+							rSensor.setEvent(0);
 						}
 						
-						if (type == 1) {
-							//if (message.equals("0")) {
-								rSensor.setAckOk(true);
-								rSensor.setEvent(0);
-							//}
-							//else {
-							//	rSensor.setAckOk(false);
-							//	rSensor.setEvent(0);
-							//}
+						if((type == 0) && (SimulationInputs.ack)) {									
+							addPacketEvent(1, XBeeFrameGenerator.ackInBin("0", "00", "00", Standard.getSubChannel(rSensor.getStandard())*8), "0", rSensor, sSensor);																		
 						}
-						
-						Visualisation.comDeleteArrow(packetEventList.get(0).getSSensor(), packetEventList.get(0).getRSensor());
-						packetEventList.remove(0);						
-						if(packetEventList.size()>0) {
-							packetEventList.get(0).getSSensor().setSending(true);
-							packetEventList.get(0).getRSensor().setReceiving(true);
-						}
-						//Layer.getMapViewer().repaint();
 					}
-					//else stop = true;
-				//}
-				//else stop = true;
-			//}
+				}
+				
+				if (type == 1) {
+						rSensor.setAckOk(true);
+						rSensor.setEvent(0);
+				}
+				
+				Visualisation.comDeleteArrow(packetEventList.get(0).getSSensor(), packetEventList.get(0).getRSensor());
+				packetEventList.remove(0);						
+				if(packetEventList.size()>0) {
+					packetEventList.get(0).getSSensor().setSending(true);
+					packetEventList.get(0).getRSensor().setReceiving(true);
+				}
+			}
 		}
 	}
 	
@@ -159,7 +126,9 @@ public class Channels {
 		//for (List<PacketEvent> packetEventList : channelEventList) {
 		//List<PacketEvent> packetEventList;
 		//PacketEvent pev;
-		//while(it1.hasNext()) {		
+		//while(it1.hasNext()) {	
+		//Collections.synchronizedList(
+		
 		for(List<PacketEvent> packetEventList : channelEventList) {
 			//packetEventList = it1.next();
 			if(packetEventList.size()>0) {
@@ -180,50 +149,55 @@ public class Channels {
 				int arrColor = 0;
 				//Iterator<PacketEvent> it2 = packetEventList.iterator();				
 				//for(PacketEvent pev : packetEventList) {
-				for(PacketEvent pev : packetEventList) {
-					//pev = it2.next();
-					if(pev.getSSensor().isSending() && pev.getRSensor().isReceiving()) {
-						if(pev.getType()==0 || pev.getType()==2 || ((pev.getType()==1) && SimulationInputs.showAckLinks)) {
-							g.setColor(pev.getSSensor().getRadioLinkColor());
-							if (pev.getSSensor().getRadioLinkColor() == UColor.RED) 
-								arrColor = 0;
-							else 
-								arrColor = 1; 
-							if((pev.getType()==1) && SimulationInputs.showAckLinks) {
-								g.setColor(pev.getSSensor().getACKLinkColor());
-								arrColor = 2;
-							}
-							
-							Visualisation.comAddArrow((SensorNode)pev.getSSensor(), (SensorNode)pev.getRSensor(), 2, arrColor, 2);
-							
-							coord = MapCalc.geoToPixelMapA(pev.getSSensor().getLatitude(), pev.getSSensor().getLongitude());
-							lx1 = coord[0];
-							ly1 = coord[1];		
-							coord = MapCalc.geoToPixelMapA(pev.getRSensor().getLatitude(), pev.getRSensor().getLongitude());
-							lx2 = coord[0];
-							ly2 = coord[1];
-							dx = lx2 - lx1;
-							dy = ly2 - ly1;
-							
-							g.drawLine(lx1, ly1, lx2, ly2);
-							
-							
-							
-							//g.setColor(Color.BLACK);
-							//g.drawString(pev.getRSensor().getMessage(), (lx1+lx2)/2, (ly1+ly2)/2);
+				//for(PacketEvent pev : packetEventList) {
+				for(int idx=0; idx<packetEventList.size(); idx++) {
+					try {
+						PacketEvent pev = packetEventList.get(idx);
+						//pev = it2.next();
+						if(pev.getSSensor().isSending() && pev.getRSensor().isReceiving()) {
+							if(pev.getType()==0 || pev.getType()==2 || ((pev.getType()==1) && SimulationInputs.showAckLinks)) {
+								g.setColor(pev.getSSensor().getRadioLinkColor());
+								if (pev.getSSensor().getRadioLinkColor() == UColor.RED) 
+									arrColor = 0;
+								else 
+									arrColor = 1; 
+								if((pev.getType()==1) && SimulationInputs.showAckLinks) {
+									g.setColor(pev.getSSensor().getACKLinkColor());
+									arrColor = 2;
+								}
+								
+								Visualisation.comAddArrow((SensorNode)pev.getSSensor(), (SensorNode)pev.getRSensor(), 2, arrColor, 2);
+								
+								coord = MapCalc.geoToPixelMapA(pev.getSSensor().getLatitude(), pev.getSSensor().getLongitude());
+								lx1 = coord[0];
+								ly1 = coord[1];		
+								coord = MapCalc.geoToPixelMapA(pev.getRSensor().getLatitude(), pev.getRSensor().getLongitude());
+								lx2 = coord[0];
+								ly2 = coord[1];
+								dx = lx2 - lx1;
+								dy = ly2 - ly1;
+								
+								g.drawLine(lx1, ly1, lx2, ly2);
+								
+								
+								
+								//g.setColor(Color.BLACK);
+								//g.drawString(pev.getRSensor().getMessage(), (lx1+lx2)/2, (ly1+ly2)/2);
 
-							alpha = Math.atan(dy / dx);
-							alpha = 180 * alpha / Math.PI;
-							int as = 16;
-							if(MapLayer.getMapViewer().getZoom() < 2) {
-								as = 21;		    	
+								alpha = Math.atan(dy / dx);
+								alpha = 180 * alpha / Math.PI;
+								int as = 16;
+								if(MapLayer.getMapViewer().getZoom() < 2) {
+									as = 21;		    	
+								}
+								if (dx >= 0)	
+									g.fillArc((int) lx2 - as, (int) ly2 - as, as*2, as*2,180 - (int) alpha - as, as*2);
+								else
+									g.fillArc((int) lx2 - as, (int) ly2 - as, as*2, as*2, -(int) alpha - as, as*2);
 							}
-							if (dx >= 0)	
-								g.fillArc((int) lx2 - as, (int) ly2 - as, as*2, as*2,180 - (int) alpha - as, as*2);
-							else
-								g.fillArc((int) lx2 - as, (int) ly2 - as, as*2, as*2, -(int) alpha - as, as*2);
 						}
 					}
+					catch (Exception e) {}
 				}
 			}
 		}

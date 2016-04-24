@@ -1,14 +1,17 @@
 package script;
 
+import java.util.Random;
+
+import device.SensorNode;
 import script_functions.ScriptFunctions;
 import wisen_simulation.SimLog;
-import device.SensorNode;
 
 public class Command_FUNCTION extends Command {
 
 	protected String arg1 = "";
 	protected String arg2 = "";
 	protected String arg3 = "";
+	private Random random = new Random();
 	
 	public Command_FUNCTION(SensorNode sensor, String arg1, String arg2, String arg3) {
 		this.sensor = sensor ;
@@ -24,9 +27,14 @@ public class Command_FUNCTION extends Command {
 		String function = arg2;			
 		String [] args = arg3.split(",");
 		sensor.getScript().variablesToValues(args);
-		String value = ScriptFunctions.function(function, args);
+		String [] ret = ScriptFunctions.function(function, args);
+		String value = ret[0];
 		sensor.getScript().addVariable(arg0, value);
-		return 0 ;
+		if(ret[1].equals("")) return 0.0;
+		
+		double t = (random.nextGaussian() * Double.parseDouble(ret[2])) + Double.parseDouble(ret[1]); 
+		
+		return t ;
 	}
 
 	@Override

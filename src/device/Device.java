@@ -82,7 +82,7 @@ public abstract class Device implements Runnable, MouseListener,
 	public static final boolean SLEEP = false;
 
 	protected double sigmaOfDriftTime = 0.00003;
-	protected double deltaDriftTime = 0.0; 
+	protected double driftTime = 1.0; 
 	
 	public static int moveSpeed = 100;
 
@@ -1764,19 +1764,21 @@ public abstract class Device implements Runnable, MouseListener,
 		this.standard = standard;
 	}
 
-	public void drift() {		
-		double d = random.nextGaussian() * sigmaOfDriftTime;
+	public void drift() {
+		double d = random.nextGaussian() * sigmaOfDriftTime;		
 		if (d > (3.0*sigmaOfDriftTime))
 			d = 3.0*sigmaOfDriftTime;
 		if (d < (-3.0*sigmaOfDriftTime))
-			d = -3.0*sigmaOfDriftTime;		
-		deltaDriftTime += d;
-		if(event != Double.MAX_VALUE)
-			event += deltaDriftTime; 
+			d = -3.0*sigmaOfDriftTime;
+		System.out.println(d);
+		driftTime = 1 - d;
+		
+//		if(event != Double.MAX_VALUE)
+//			event += deltaDriftTime; 
 	}
 	
-	public double getDeltaOfDriftTime() {
-		return deltaDriftTime;
+	public double getDriftTime() {
+		return driftTime;
 	}
 	
 	public abstract Polygon getRadioPolygon();

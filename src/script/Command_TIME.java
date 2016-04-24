@@ -17,7 +17,7 @@ public class Command_TIME extends Command {
 	public double execute() {
 		String v = "" ;
 		SimLog.add("S" + sensor.getId() + " GET TIME.");
-		v = ""+ (WisenSimulation.time + sensor.getDeltaOfDriftTime());
+		v = ""+ (WisenSimulation.time * sensor.getDriftTime());
 		sensor.getScript().addVariable(arg, v);
 		return 0;
 	}

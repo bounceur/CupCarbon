@@ -157,7 +157,9 @@ public class Command_SEND extends Command {
 			//double ratio = (sensor.getRadioDataRate()*1.0)/(sensor.getUartDataRate());
 			//return (long)(Math.round(messageLength*8.*ratio));
 			double ratio = 1.0/(sensor.getUartDataRate());
+			
 			return (ratio * (messageLength*8)) ;
+			//return 0.0000000000001;
 		}
 		
 		if (writing) { // && !ack) {	
