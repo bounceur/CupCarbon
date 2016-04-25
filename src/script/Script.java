@@ -19,11 +19,16 @@
 
 package script;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import device.SensorNode;
+import project.Project;
 
 public class Script {
 
@@ -46,6 +51,8 @@ public class Script {
 	protected Hashtable<String, Integer> labels;
 
 	protected boolean waiting = false;
+	
+	protected PrintStream ps = null; 
 	
 	public Script(SensorNode sensor) {		
 		this.sensor = sensor;
@@ -91,6 +98,27 @@ public class Script {
 		event = Integer.MAX_VALUE - 1;
 		breaked = false;
 		level = 0;
+		createFile() ;
+	}
+	
+	public void createFile() {
+		String name = Project.getProjectResultsPath()+File.separator+sensor.getNodeIdName();
+		File file = new File(name);
+		if(file.exists()) file.delete();
+	}
+	
+	public void printFile(String text) {
+		String name = Project.getProjectResultsPath()+File.separator+sensor.getNodeIdName();
+		File file = new File(name);
+		if(!file.exists()) {
+			try {			
+				FileOutputStream fos = new FileOutputStream(name);
+				ps = new PrintStream(fos);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		ps.println(text);
 	}
 	
 	public int size(){

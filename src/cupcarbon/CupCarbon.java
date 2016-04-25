@@ -96,7 +96,7 @@ import visibility.VisibilityLauncher;
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @author Nabil Mohammed Bouderbala
- * @version 2.8.5 (U-One)
+ * @version 2.8.6 (U-One)
  */
 
 public class CupCarbon {

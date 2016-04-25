@@ -69,8 +69,8 @@ public abstract class SensorNode extends DeviceWithRadio {
 	protected boolean bufferReady = false;	
 
 	protected Color radioRangeColor1 = UColor.PURPLE_TRANSPARENT;
-	protected Color radioRangeColor2 = UColor.PURPLE_DARK_TRANSPARENT;	
-		
+	protected Color radioRangeColor2 = UColor.PURPLE_DARK_TRANSPARENT;		
+	
 	/**
 	 * Constructor 1 Instanciate the sensor unit 
 	 * Instanciate the battery

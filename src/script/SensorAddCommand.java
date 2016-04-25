@@ -120,9 +120,15 @@ public final class SensorAddCommand {
 			if(inst.length==2) command = new Command_ATND(sensorNode, inst[1]);
 			if(inst.length==3) command = new Command_ATND(sensorNode, inst[1], inst[2]);
 		}
+		
 		if (inst[0].toLowerCase().equals("println")) {
 			command =  new Command_PRINTLN(sensorNode, inst);
 		}
+		
+		if (inst[0].toLowerCase().equals("printf")) {
+			command =  new Command_PRINTF(sensorNode, inst);
+		}
+		
 		if (inst[0].toLowerCase().equals("data")) {
 			command = new Command_DATA(sensorNode, inst);
 		}
