@@ -185,7 +185,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 			//variateRadius();
 			double i=0.0;
 			for(int k=0; k<nPoint; k++) {
-				//variateRadius();				
+				variateRadius();				
 				r2 = (rayon+variation)*Math.cos(i);
 				r3 = (rayon+variation)*Math.sin(i);
 				polyX[k]=(int)(x+r2);

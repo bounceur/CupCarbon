@@ -6,11 +6,11 @@ import java.util.Arrays;
 
 import device.SensorNode;
 
-public class Command_PRINTF extends Command {
+public class Command_PRINTFILE extends Command {
 
 protected String [] arg ;
 	
-	public Command_PRINTF(SensorNode sensor, String [] arg) {
+	public Command_PRINTFILE(SensorNode sensor, String [] arg) {
 		this.sensor = sensor ;
 		this.arg = arg ;
 	}

@@ -125,8 +125,8 @@ public final class SensorAddCommand {
 			command =  new Command_PRINTLN(sensorNode, inst);
 		}
 		
-		if (inst[0].toLowerCase().equals("printf")) {
-			command =  new Command_PRINTF(sensorNode, inst);
+		if (inst[0].toLowerCase().equals("printfile")) {
+			command =  new Command_PRINTFILE(sensorNode, inst);
 		}
 		
 		if (inst[0].toLowerCase().equals("data")) {
