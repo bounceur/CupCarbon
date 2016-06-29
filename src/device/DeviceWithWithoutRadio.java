@@ -27,8 +27,6 @@ import java.util.LinkedList;
 
 import map.MapLayer;
 import project.Project;
-import visibility.VisibilityZones;
-import wisen_simulation.SimulationInputs;
 
 /**
  * @author Ahcene Bounceur
@@ -214,10 +212,12 @@ public abstract class DeviceWithWithoutRadio extends Device {
 			elevation = routeZ.get(routeIndex);
 			if (DeviceList.propagationsCalculated)
 				DeviceList.calculatePropagations();
-			if (SimulationInputs.visibility) {
-				VisibilityZones vz = new VisibilityZones((SensorNode) this);
-				vz.calculate();
-			}
+//			if (SimulationInputs.visibility) {
+//				if(this.getType()==Device.SENSOR) {
+//					Vi_VisibilityZones vz = new Vi_VisibilityZones((SensorNode) this);
+//					vz.calculate();
+//				}
+//			}
 		}
 		if (visual) {
 			try {				

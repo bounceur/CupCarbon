@@ -2,8 +2,8 @@ package script;
 
 import java.util.Random;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import wisen_simulation.SimLog;
 
 public class Command_RANDB extends Command {
 
@@ -25,8 +25,10 @@ public class Command_RANDB extends Command {
 		int b =  Integer.valueOf(sensor.getScript().getVariableValue(arg3))+1;
 		
 		Random r = new Random();
-		int rand = a + r.nextInt(b - a);
+		//int rand = a + (int) r.nextDouble()*(b - a);
 
+		int rand = a+r.nextInt(b-a);
+		
 		SimLog.add("S" + sensor.getId() + " RANDB: "+a+" "+b);
 		
 		sensor.getScript().addVariable(arg,""+rand);

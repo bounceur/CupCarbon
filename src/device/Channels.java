@@ -41,7 +41,10 @@ public class Channels {
 		SimLog.add("S" + rSensor.getId() + " is receiving the message : \"" + message + "\" in its buffer.");
 		double ratio1 = 1.0/sSensor.getRadioDataRate();
 		double ratio2 = 1.0/rSensor.getUartDataRate();
-		double duration = (ratio1*(packet.length())) + (ratio2*(message.length()*8)) ;
+		
+		double durationOfSending = ratio1*(packet.length()) ;
+		double durationOfUARTReceiving = ratio2*(message.length()*8) ;
+		double duration = durationOfSending + durationOfUARTReceiving ;
 		
 		double lastTime = 0;
 		sSensor.setSending(true);

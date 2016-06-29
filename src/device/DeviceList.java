@@ -47,7 +47,7 @@ import visualisation.Visualisation;
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
- * @version 2.0
+ * @author Nabil Kadjouh
  */
 public class DeviceList {
 
@@ -55,8 +55,8 @@ public class DeviceList {
 	public static boolean drawLinks = true;
 	public static LinkedList<LinkedList<Integer>> envelopeList = new LinkedList<LinkedList<Integer>>();
 	public static int number = 1;
-	public static boolean propagationsCalculated = false; 
-	
+	public static boolean propagationsCalculated = false;
+
 	/**
 	 * 
 	 */
@@ -65,9 +65,9 @@ public class DeviceList {
 		// Thread th = new Thread(this);
 		// th.start();
 	}
-	
+
 	public static void reset() {
-		for(Device node : nodes) {
+		for (Device node : nodes) {
 			MapLayer.getMapViewer().removeMouseListener(node);
 			MapLayer.getMapViewer().removeMouseMotionListener(node);
 			MapLayer.getMapViewer().removeKeyListener(node);
@@ -75,7 +75,7 @@ public class DeviceList {
 		}
 		nodes = new ArrayList<Device>();
 		drawLinks = true;
-		//displayConnectionDistance = false;
+		// displayConnectionDistance = false;
 		envelopeList = new LinkedList<LinkedList<Integer>>();
 	}
 
@@ -85,80 +85,86 @@ public class DeviceList {
 	public static List<Device> getNodes() {
 		return nodes;
 	}
-	
+
 	/**
 	 * @return a node by its id
 	 */
 	public static Device getNodeById(int id) {
-		for(Device device : nodes) {
-			if(device.getId() == id) return device;
+		for (Device device : nodes) {
+			if (device.getId() == id)
+				return device;
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return a sensor node by its id
 	 */
-	public static SensorNode getSensorNodeById(int id) {		
-		for(SensorNode snode : DeviceList.getSensorNodes()) {
-			if(snode.getId() == id) return snode;
+	public static SensorNode getSensorNodeById(int id) {
+		for (SensorNode snode : DeviceList.getSensorNodes()) {
+			if (snode.getId() == id)
+				return snode;
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return a sensor node by its my
 	 */
-	public static SensorNode getSensorNodeByMy(int my) {		
-		for(SensorNode snode : DeviceList.getSensorNodes()) {
-			if(snode.getMy() == my) return snode;
+	public static SensorNode getSensorNodeByMy(int my) {
+		for (SensorNode snode : DeviceList.getSensorNodes()) {
+			if (snode.getMy() == my)
+				return snode;
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @return the sensor nodes
 	 */
 	public static List<SensorNode> getSensorNodes() {
 		List<SensorNode> snodes = new LinkedList<SensorNode>();
-		for(Device device : nodes) {
-			if(device.getType() == Device.SENSOR || device.getType() == Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION)
+		for (Device device : nodes) {
+			if (device.getType() == Device.SENSOR || device.getType() == Device.MEDIA_SENSOR
+					|| device.getType() == Device.BASE_STATION)
 				snodes.add((SensorNode) device);
 		}
 		return snodes;
 	}
-	
+
 	/**
 	 * @return the selected sensor nodes
 	 */
 	public static List<SensorNode> getSelectedSensorNodes() {
 		List<SensorNode> snodes = new LinkedList<SensorNode>();
-		for(Device device : nodes) {
-			if((device.getType() == Device.SENSOR || device.getType() == Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) && device.isSelected())
+		for (Device device : nodes) {
+			if ((device.getType() == Device.SENSOR || device.getType() == Device.MEDIA_SENSOR
+					|| device.getType() == Device.BASE_STATION) && device.isSelected())
 				snodes.add((SensorNode) device);
 		}
 		return snodes;
 	}
-	
+
 	/**
 	 * @return the sensor and mobile nodes
 	 */
 	public static List<Device> getSensorAndMobileNodes() {
 		List<Device> nodes = new ArrayList<Device>();
-		for(Device node : nodes) {
-			if((node.getType() == Device.SENSOR) || node.getType() == Device.MEDIA_SENSOR || (node.getType() == Device.MOBILE))
+		for (Device node : nodes) {
+			if ((node.getType() == Device.SENSOR) || node.getType() == Device.MEDIA_SENSOR
+					|| (node.getType() == Device.MOBILE))
 				nodes.add((SensorNode) node);
 		}
 		return nodes;
 	}
-	
+
 	/**
 	 * @return the mobile nodes
 	 */
 	public static List<Device> getMobileNodes() {
 		List<Device> snodes = new ArrayList<Device>();
-		for(Device node : nodes) {
-			if(node.getType() == Device.MOBILE)
+		for (Device node : nodes) {
+			if (node.getType() == Device.MOBILE)
 				snodes.add(node);
 		}
 		return snodes;
@@ -173,41 +179,41 @@ public class DeviceList {
 			Device node;
 			for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
 				node = iterator.next();
-				//System.out.println(node.getGPSFileName());
+				// System.out.println(node.getGPSFileName());
 				fos.print(node.getType());
 				fos.print(" " + node.getId());
-				fos.print(" " + node.getMy()+"#"+node.getCh()+"#"+node.getNId());
+				fos.print(" " + node.getMy() + "#" + node.getCh() + "#" + node.getNId());
 				fos.print(" " + node.getLongitude());
 				fos.print(" " + node.getLatitude());
 				fos.print(" " + node.getElevation());
 				fos.print(" " + node.getRadius());
 
-				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION || node.getType() == Device.MEDIA_SENSOR || node.getType() == Device.MOBILE_WR)
+				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION
+						|| node.getType() == Device.MEDIA_SENSOR || node.getType() == Device.MOBILE_WR)
 					fos.print(" " + node.getRadioRadius());
 
-				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION || node.getType() == Device.MEDIA_SENSOR)
+				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION
+						|| node.getType() == Device.MEDIA_SENSOR)
 					fos.print(" " + node.getSensorUnitRadius());
 
 				if (node.getType() == Device.FLYING_OBJECT)
 					fos.print(" " + ((FlyingGroup) node).getflyingObjectNumber());
 
-				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION 
-						|| node.getType() == Device.FLYING_OBJECT
-						|| node.getType() == Device.MOBILE
-						|| node.getType() == Device.MOBILE_WR
-						|| node.getType() == Device.MEDIA_SENSOR) {
-					//System.out.println("----> " + node.getGPSFileName());
-					fos.print(" "
-							+ ((node.getGPSFileName() == "") ? "#" : node
-									.getGPSFileName()));
+				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION
+						|| node.getType() == Device.FLYING_OBJECT || node.getType() == Device.MOBILE
+						|| node.getType() == Device.MOBILE_WR || node.getType() == Device.MEDIA_SENSOR) {
+					// System.out.println("----> " + node.getGPSFileName());
+					fos.print(" " + ((node.getGPSFileName() == "") ? "#" : node.getGPSFileName()));
 				}
 
-				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION || node.getType() == Device.MEDIA_SENSOR) {
-					fos.print(" "+ ((node.getScriptFileName() == "") ? "#" : node.getScriptFileName()));
+				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION
+						|| node.getType() == Device.MEDIA_SENSOR) {
+					fos.print(" " + ((node.getScriptFileName() == "") ? "#" : node.getScriptFileName()));
 				}
-				
+
 				if (node.getType() == Device.MEDIA_SENSOR) {
-					fos.print(" " + node.getSensorUnitDeg()+ " " + node.getSensorUnitDec()+ " " + node.getSensorUnitN());
+					fos.print(" " + node.getSensorUnitDeg() + " " + node.getSensorUnitDec() + " "
+							+ node.getSensorUnitN());
 				}
 
 				fos.println();
@@ -227,8 +233,8 @@ public class DeviceList {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			String line;
-			String[] str=null;
-			int idMax = 0 ;
+			String[] str = null;
+			int idMax = 0;
 			while ((line = br.readLine()) != null) {
 				str = line.split(" ");
 				switch (str.length) {
@@ -248,22 +254,25 @@ public class DeviceList {
 					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[8]);
 					break;
 				case 11:
-					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[9], str[10]);
+					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[9],
+							str[10]);
 					break;
 				case 14:
-					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[9], str[10], str[11], str[12], str[13]);
+					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[9],
+							str[10], str[11], str[12], str[13]);
 					break;
 				}
 				int v = Integer.valueOf(str[1]);
-				if (v>idMax)
-					idMax = v ;
+				if (v > idMax)
+					idMax = v;
 			}
-			if(str!=null)
-				DeviceList.number = idMax+1 ;//Integer.valueOf(str[1])+1;
+			if (str != null)
+				DeviceList.number = idMax + 1;// Integer.valueOf(str[1])+1;
 			br.close();
-			
-			//for(Device device : DeviceList.getNodes()) device.calculateNeighbours();
-			
+
+			// for(Device device : DeviceList.getNodes())
+			// device.calculateNeighbours();
+
 			MapLayer.getMapViewer().repaint();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -289,11 +298,13 @@ public class DeviceList {
 		int id = Integer.valueOf(type[1]);
 		switch (Integer.valueOf(type[0])) {
 		case Device.SENSOR:
-			if(type.length==10)
-				add(new StdSensorNode(type[1], type[2], type[4], type[3], "0.0", type[5], type[6], type[7], type[8], type[9]));
+			if (type.length == 10)
+				add(new StdSensorNode(type[1], type[2], type[4], type[3], "0.0", type[5], type[6], type[7], type[8],
+						type[9]));
 			else
-				add(new StdSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10]));
-			
+				add(new StdSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9],
+						type[10]));
+
 			break;
 		case Device.GAS:
 			add(new Gas(type[3], type[4], type[5], type[6], id));
@@ -302,10 +313,12 @@ public class DeviceList {
 			add(new FlyingGroup(type[3], type[4], type[5], type[6], type[7], type[8]));
 			break;
 		case Device.BASE_STATION:
-			add(new BaseStation(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10]));
+			add(new BaseStation(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9],
+					type[10]));
 			break;
 		case Device.MEDIA_SENSOR:
-			add(new MediaSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10], type[11], type[12], type[13]));
+			add(new MediaSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9],
+					type[10], type[11], type[12], type[13]));
 			break;
 		case Device.MOBILE:
 			add(new Mobile(type[3], type[4], type[5], type[6], type[7], id));
@@ -329,7 +342,6 @@ public class DeviceList {
 	// g.drawString(""+d,(x2-x)/2,(y2-y)/2);
 	// }
 
-	
 	/**
 	 * Draw devices
 	 * 
@@ -337,37 +349,38 @@ public class DeviceList {
 	 *            Graphics
 	 */
 	public void draw(Graphics g) {
-//		for (Device n : getSensorNodes()) {
-//			if(propagationsCalculated)
-//				n.drawRadioPropagations(g);
-//			else
-//				n.drawRadioLinks(g);
-//		}
-		
-		for (Device n : getSensorNodes()) {			
+		// for (Device n : getSensorNodes()) {
+		// if(propagationsCalculated)
+		// n.drawRadioPropagations(g);
+		// else
+		// n.drawRadioLinks(g);
+		// }
+
+		for (Device n : getSensorNodes()) {
 			n.drawRadioRange(g);
 		}
-		
+
 		for (Device n : getSensorNodes()) {
 			n.drawSensorUnit(g);
 		}
-		
-		for (Device n : nodes) {			
+
+		for (Device n : nodes) {
 			n.drawMarked(g);
 			n.draw(g);
 		}
-		
+
 		for (Device n : getSensorNodes()) {
-			if(propagationsCalculated)
+			if (propagationsCalculated)
 				n.drawRadioPropagations(g);
 			else
 				n.drawRadioLinks(g);
 		}
 
 		Channels.drawChannelLinks(g);
-		
+
 		for (Device n : nodes) {
-			if(n.displayInfos()) n.drawInfos(g);
+			if (n.displayInfos())
+				n.drawInfos(g);
 		}
 	}
 
@@ -383,13 +396,13 @@ public class DeviceList {
 		return drawLinks;
 	}
 
-//	public void setDisplayDistance(boolean b) {
-//		displayConnectionDistance = b;
-//	}
-//
-//	public boolean getDisplayDistance() {
-//		return displayConnectionDistance;
-//	}
+	// public void setDisplayDistance(boolean b) {
+	// displayConnectionDistance = b;
+	// }
+	//
+	// public boolean getDisplayDistance() {
+	// return displayConnectionDistance;
+	// }
 
 	public static void delete(int idx) {
 		Device node = nodes.get(idx);
@@ -400,10 +413,10 @@ public class DeviceList {
 		Visualisation.removeDevice(node);
 		node = null;
 	}
-	
+
 	public void simulateMobiles() {
 		for (Device node : nodes) {
-			if(node.getType()==Device.MOBILE || node.getType()==Device.MOBILE_WR) {
+			if (node.getType() == Device.MOBILE || node.getType() == Device.MOBILE_WR) {
 				node.setSelection(true);
 				node.start();
 			}
@@ -432,7 +445,7 @@ public class DeviceList {
 		Device node;
 		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
 			node = iterator.next();
-			if (node.isSelected() && node.getHide()==0) {
+			if (node.isSelected() && node.getHide() == 0) {
 				MapLayer.getMapViewer().removeMouseListener(node);
 				MapLayer.getMapViewer().removeMouseMotionListener(node);
 				MapLayer.getMapViewer().removeKeyListener(node);
@@ -445,6 +458,18 @@ public class DeviceList {
 			}
 		}
 	}
+
+	// ------------------------------------------------------------------------------------------KADJOUH
+	public static void setBatteryModelFileName(String batteryModelFileName) {
+		Device node;
+		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
+			node = iterator.next();
+			if (node.isSelected()) {
+				node.setBatteryModelFileName(batteryModelFileName);
+			}
+		}
+	}
+	// ------------------------------------------------------------------------------------------KADJOUH
 
 	public static void setGpsFileName(String gpsFileName) {
 		Device node;
@@ -466,9 +491,8 @@ public class DeviceList {
 		}
 	}
 
-	public static void updateDeviceParaFromMap(String xS, String yS, String radiusS,
-			String captureRadiusS, String scriptFileName, String gpsFileName,
-			String eMax, String eS, String uart_dr) {
+	public static void updateDeviceParaFromMap(String xS, String yS, String radiusS, String captureRadiusS,
+			String scriptFileName, String gpsFileName, String eMax, String eS, String uart_dr) {
 		Device node;
 		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
 			node = iterator.next();
@@ -480,13 +504,14 @@ public class DeviceList {
 				node.setScriptFileName(scriptFileName);
 				node.setGPSFileName(gpsFileName);
 				node.getBattery().setLevel(Integer.valueOf(eMax));
-				node.setES(Double.valueOf(eS));				
+				node.setES(Double.valueOf(eS));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
-	public static void updateRadioParaFromMap(String radioRadiusS, String eTx, String eRx, String beta, String eSlp, String eL) {
+
+	public static void updateRadioParaFromMap(String radioRadiusS, String eTx, String eRx, String beta, String eSlp,
+			String eL) {
 		Device node;
 		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
 			node = iterator.next();
@@ -495,7 +520,7 @@ public class DeviceList {
 				node.setETx(Double.valueOf(eTx));
 				node.setERx(Double.valueOf(eRx));
 				node.setESlp(Double.valueOf(eSlp));
-				node.setES(Double.valueOf(eL));			
+				node.setES(Double.valueOf(eL));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
@@ -505,15 +530,15 @@ public class DeviceList {
 		envelopeList = new LinkedList<LinkedList<Integer>>();
 		for (Device device : nodes) {
 			device.init();
-			device.initGeoZoneList(); 
-		}		
+			device.initGeoZoneList();
+		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void initAllGeoZones() {
 		for (Device device : nodes) {
 			device.initGeoZoneList();
-		}		
+		}
 		MapLayer.getMapViewer().repaint();
 	}
 
@@ -535,8 +560,7 @@ public class DeviceList {
 		MapLayer.getMapViewer().repaint();
 	}
 
-	public void setSelectionOfAllNodes(boolean selection, int type,
-			boolean addSelect) {
+	public void setSelectionOfAllNodes(boolean selection, int type, boolean addSelect) {
 		for (Device dev : nodes) {
 			if (!addSelect)
 				dev.setSelection(false);
@@ -565,24 +589,24 @@ public class DeviceList {
 		p[1] = new Point(lx2, ly2);
 		return p;
 	}
-	
-	
-	// Note: This method is not correct for a project because it changes 
-	// the id of each sensor. It is used to validate simulation in simbox_simulation
+
+	// Note: This method is not correct for a project because it changes
+	// the id of each sensor. It is used to validate simulation in
+	// simbox_simulation
 	// package
 	public void initId() {
 		int k = 0;
-		Device.initNumber() ;
-		for(Device d : nodes) {
+		Device.initNumber();
+		for (Device d : nodes) {
 			d.setId(k++);
 			Device.incNumber();
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	//---------
-	
+	// ---------
+
 	public void loadRoutesFromFiles() {
-		for(Device d : nodes) {
+		for (Device d : nodes) {
 			d.loadRouteFromFile();
 		}
 	}
@@ -595,323 +619,332 @@ public class DeviceList {
 				node.start();
 		}
 	}
-	
-	public void simulateAll() {	
+
+	public void simulateAll() {
 		for (Device node : nodes) {
 			node.setSelection(true);
 			node.start();
 		}
 	}
-	
+
 	public void simulateSensors() {
 		for (Device node : nodes) {
-			if(node.getType()==Device.SENSOR) {
+			if (node.getType() == Device.SENSOR) {
 				node.setSelection(true);
 				node.start();
 			}
 		}
 	}
-	
+
 	public static void stopSimulation() {
 		for (Device node : nodes) {
 			node.setSelection(false);
 			node.stopSimulation();
 		}
 	}
-	
-	//------
+
+	// ------
 	public static int getLastEnvelopeSize() {
 		return envelopeList.getLast().size();
 	}
-	
+
 	public static void initLastEnvelope() {
 		envelopeList.getLast().clear();
 	}
-	
+
 	public static void addEnvelope() {
 		envelopeList.add(new LinkedList<Integer>());
 	}
-	
+
 	public static void addToLastEnvelope(Integer d) {
 		envelopeList.getLast().add(d);
 	}
-	
+
 	public static LinkedList<Integer> getLastEnvelope() {
 		return envelopeList.getLast();
 	}
-	
+
 	public void drawEnvelope(LinkedList<Integer> envelope, Graphics2D g) {
 		g.setStroke(new BasicStroke(2.0f));
-		if(envelope.size()>0) {
+		if (envelope.size() > 0) {
 			double x = nodes.get(envelope.get(0)).getLatitude();
 			double y = nodes.get(envelope.get(0)).getLongitude();
-			int lx1=0;
-			int ly1=0;
-			int lx2=0;
-			int ly2=0;
-			int[] coord ;
-			for(int i=1; i<envelope.size(); i++) {
+			int lx1 = 0;
+			int ly1 = 0;
+			int lx2 = 0;
+			int ly2 = 0;
+			int[] coord;
+			for (int i = 1; i < envelope.size(); i++) {
 				coord = MapCalc.geoToPixelMapA(x, y);
 				lx1 = coord[0];
 				ly1 = coord[1];
-				//coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(i)).getLongitude(), nodes.get(envelope.get(i)).getLatitude());
-				coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(i)).getLatitude(), nodes.get(envelope.get(i)).getLongitude());
+				// coord =
+				// MapCalc.geoToPixelMapA(nodes.get(envelope.get(i)).getLongitude(),
+				// nodes.get(envelope.get(i)).getLatitude());
+				coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(i)).getLatitude(),
+						nodes.get(envelope.get(i)).getLongitude());
 				lx2 = coord[0];
 				ly2 = coord[1];
 				g.setColor(Color.BLUE);
 				g.drawLine(lx1, ly1, lx2, ly2);
 				x = nodes.get(envelope.get(i)).getLatitude();
-				y = nodes.get(envelope.get(i)).getLongitude();		
+				y = nodes.get(envelope.get(i)).getLongitude();
 			}
-			//coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(0)).getLongitude(), nodes.get(envelope.get(0)).getLatitude());
-//			coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(0)).getLatitude(), nodes.get(envelope.get(0)).getLongitude());
-//			lx1 = coord[0];
-//			ly1 = coord[1];
-//			g.drawLine(lx2, ly2, lx1, ly1);
+			// coord =
+			// MapCalc.geoToPixelMapA(nodes.get(envelope.get(0)).getLongitude(),
+			// nodes.get(envelope.get(0)).getLatitude());
+			// coord =
+			// MapCalc.geoToPixelMapA(nodes.get(envelope.get(0)).getLatitude(),
+			// nodes.get(envelope.get(0)).getLongitude());
+			// lx1 = coord[0];
+			// ly1 = coord[1];
+			// g.drawLine(lx2, ly2, lx1, ly1);
 		}
 	}
-	
+
 	public void drawEnvelopeList(Graphics2D g) {
-		for(LinkedList<Integer> envelope : envelopeList) {
+		for (LinkedList<Integer> envelope : envelopeList) {
 			drawEnvelope(envelope, g);
 		}
 	}
-	
+
 	public static void selectWitoutScript() {
-		for(Device d : nodes) {
-			if((d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION) && (d.getScriptFileName().equals(""))) {
+		for (Device d : nodes) {
+			if ((d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)
+					&& (d.getScriptFileName().equals(""))) {
 				d.setSelection(true);
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void selectWitoutGps() {
-		for(Device d : nodes) {
-			if((d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION) && (d.getGPSFileName().equals(""))) {
+		for (Device d : nodes) {
+			if ((d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)
+					&& (d.getGPSFileName().equals(""))) {
 				d.setSelection(true);
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void selectMarkedSensors() {
-		for(Device d : nodes) {
-			if((d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION) && (d.isMarked())) {
+		for (Device d : nodes) {
+			if ((d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION) && (d.isMarked())) {
 				d.setSelection(true);
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setMy(String my) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setMy(Integer.valueOf(my));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setId(String id) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setId(Integer.valueOf(id));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setCh(String ch) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setCh(Integer.valueOf(ch));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setNId(String NId) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setNId(Integer.valueOf(NId));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setLongitude(String value) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setLongitude(Double.valueOf(value));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setLatitude(String value) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setLatitude(Double.valueOf(value));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setElevation(String value) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setElevation(Double.valueOf(value));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setRadius(String value) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setRadius(Double.valueOf(value));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setRadioRadius(String value) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setRadioRadius(Double.valueOf(value));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setSensorUnitRadius(String value) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setSensorUnitRadius(Double.valueOf(value));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setEMax(String value) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.getBattery().init(Double.valueOf(value));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setTx(String value) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setETx(Double.valueOf(value));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setRx(String value) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setERx(Double.valueOf(value));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setSensingEnergy(String value) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setERx(Double.valueOf(value));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
-//	public static void setBeta(String value) {
-//		for (Device d : nodes) {
-//			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-//				d.setBeta(Double.valueOf(value));
-//			}
-//		}
-//		Layer.getMapViewer().repaint();
-//	}
-	
+
+	// public static void setBeta(String value) {
+	// for (Device d : nodes) {
+	// if (d.isSelected() && (d.getType()==Device.SENSOR ||
+	// d.getType()==Device.BASE_STATION)) {
+	// d.setBeta(Double.valueOf(value));
+	// }
+	// }
+	// Layer.getMapViewer().repaint();
+	// }
+
 	public static void setESlp(String value) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setESlp(Double.valueOf(value));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void setEL(String value) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setEL(Double.valueOf(value));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
 
 	public static void selectById(String id) {
-		String [] ids = id.split(" ");
-		int k=0;
+		String[] ids = id.split(" ");
+		int k = 0;
 		for (Device d : nodes) {
 			d.setSelection(false);
-			if(k<ids.length)
-				if (d.getId()==Integer.valueOf(ids[k])) {
+			if (k < ids.length)
+				if (d.getId() == Integer.valueOf(ids[k])) {
 					d.setSelection(true);
 					k++;
 				}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void selectByMy(String my) {
-		String [] mys = my.split(" ");
+		String[] mys = my.split(" ");
 		for (Device d : nodes) {
 			d.setSelection(false);
 		}
-		for(int k=0; k<mys.length; k++) {
+		for (int k = 0; k < mys.length; k++) {
 			for (Device d : nodes) {
-				if (d.getMy()==Integer.valueOf(mys[k])) {
+				if (d.getMy() == Integer.valueOf(mys[k])) {
 					d.setSelection(true);
-				}			
+				}
 			}
 		}
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 	public static void selectOneFromSelected() {
-		for(Device d : nodes) {
-			if(d.isSelected()) {
+		for (Device d : nodes) {
+			if (d.isSelected()) {
 				deselectAll();
 				d.setSelection(true);
 			}
 		}
 	}
-	
+
 	public static void deselectAll() {
-		for(Device d : nodes) {
+		for (Device d : nodes) {
 			d.setSelection(false);
 		}
 	}
-	
+
 	public static void calculatePropagations() {
 		propagationsCalculated = true;
-		for(Device device : DeviceList.getSensorNodes()) {
+		for (Device device : DeviceList.getSensorNodes()) {
 			device.calculatePropagations();
 		}
 	}
-	
+
 	public static void resetPropagations() {
 		propagationsCalculated = false;
-		for(Device device : nodes) {
+		for (Device device : nodes) {
 			device.resetPropagations();
 		}
 	}
@@ -920,9 +953,9 @@ public class DeviceList {
 		for (Device device : nodes) {
 			if (device.isSelected()) {
 				if (selectedItem.equals("-"))
-					device.setUartDataRate(Integer.MAX_VALUE);
+					device.setUartDataRate(Long.MAX_VALUE);
 				else
-					device.setUartDataRate(Integer.parseInt(selectedItem));
+					device.setUartDataRate(Long.parseLong(selectedItem));
 			}
 		}
 		MapLayer.getMapViewer().repaint();
@@ -934,26 +967,26 @@ public class DeviceList {
 				device.setRadioDataRate(Integer.parseInt(text));
 			}
 		}
-		MapLayer.getMapViewer().repaint();		
-		
+		MapLayer.getMapViewer().repaint();
+
 	}
 
 	public static void setStd(String str) {
 		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+			if (d.isSelected() && (d.getType() == Device.SENSOR || d.getType() == Device.BASE_STATION)) {
 				d.setStd(str);
-				
+
 			}
 		}
-		MapLayer.getMapViewer().repaint();		
+		MapLayer.getMapViewer().repaint();
 	}
 
 	public static void setSigmaOfDriftTime(double drift) {
 		for (Device device : nodes) {
-			if (device.isSelected() && (device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION)) {
-				device.setSigmaOfDriftTime(drift);				
+			if (device.isSelected() && (device.getType() == Device.SENSOR || device.getType() == Device.BASE_STATION)) {
+				device.setSigmaOfDriftTime(drift);
 			}
-		}		
+		}
 	}
-	
+
 }

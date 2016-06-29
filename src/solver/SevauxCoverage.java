@@ -22,9 +22,9 @@ package solver;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-import map.MapLayer;
 import device.Device;
 import device.DeviceList;
+import map.MapLayer;
 
 public class SevauxCoverage implements Runnable {
 

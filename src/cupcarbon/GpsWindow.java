@@ -129,7 +129,7 @@ public class GpsWindow extends JInternalFrame {
 						.getText()));
 			}
 		});
-		button_1.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		button_1.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone2.png"));
 		panel_8.add(button_1);
 
 		JButton button = new JButton("");
@@ -185,7 +185,7 @@ public class GpsWindow extends JInternalFrame {
 				MarkerList.open(Project.getProjectGpsPath()+File.separator+txtFileName.getText());
 			}
 		});
-		btnLoad.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		btnLoad.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone2.png"));
 		panel_9.add(btnLoad);
 
 		JButton btnNewButton = new JButton("Save");

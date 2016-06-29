@@ -23,7 +23,7 @@ public class Command_IF extends Command {
 	
 	@Override
 	public double execute() {		
-		String condition = arg.replaceFirst("if", "");		
+		String condition = arg.replaceFirst("if", "");
 		EvalCondition evalCondtion = new EvalCondition(sensor);
 		
 		ConditionElement conditionElement = evalCondtion.initCondition(condition);
@@ -85,5 +85,25 @@ public class Command_IF extends Command {
 	@Override
 	public String toString() {		
 		return "IF";
+	}
+	
+	@Override
+	public String getArduinoForm() {
+		String s = arg.replace("$","");
+		s = s.replaceFirst("if", "");
+		String ineq = "";
+		String [] z = new String [1];
+		if(z.length==1) { z = s.split("=="); ineq = "=="; }
+		if(z.length==1) { z = s.split("!="); ineq = "!="; }
+		if(z.length==1) { z = s.split("<="); ineq = "<="; }
+		if(z.length==1) { z = s.split(">="); ineq = ">="; }
+		if(z.length==1) { z = s.split(">"); ineq = ">"; }
+		if(z.length==1) { z = s.split("<"); ineq = "<"; }
+		s = "if((-48 + " + z[0] + ".charAt(0)" + "))"+ ineq + z[1] + " {";
+		return "\t"+s;
+	}
+	
+	public static void main(String [] args) {
+		System.out.println((int)'0');
 	}
 }

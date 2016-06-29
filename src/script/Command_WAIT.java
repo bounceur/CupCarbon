@@ -50,7 +50,16 @@ public class Command_WAIT extends Command {
 	@Override
 	public String getArduinoForm() {
 		Bracket.n++;
-		return "\twhile(Serial.available()>0) {";
+		Bracket.n++;
+		
+		String s = "";
+		s += "\t" + "xbee.readPacket("+arg+");\n";
+		s += "\tif (xbee.getResponse().isAvailable()) {\n";
+		s += "\tif (xbee.getResponse().getApiId() == RX_64_RESPONSE || xbee.getResponse().getApiId() == RX_16_RESPONSE) {\n";
+		//s += "\txbee.getResponse().getRx64Response(rx);\n";
+		//s += "\trdata = rx.getData();\n";
+		//s += "\twhile(Serial.available()>0) {";
+		return s ;
 	}
 
 	@Override

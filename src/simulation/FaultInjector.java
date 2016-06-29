@@ -1,7 +1,7 @@
 package simulation;
 
-import map.MapLayer;
 import device.DeviceList;
+import map.MapLayer;
 
 public class FaultInjector extends Thread {
 

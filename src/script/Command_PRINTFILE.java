@@ -1,10 +1,9 @@
 package script;
 
-import wisen_simulation.SimLog;
-
 import java.util.Arrays;
 
 import device.SensorNode;
+import wisen_simulation.SimLog;
 
 public class Command_PRINTFILE extends Command {
 

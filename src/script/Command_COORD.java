@@ -17,13 +17,21 @@ public class Command_COORD extends Command {
 
 	@Override
 	public double execute() {
+		//double d1 = sensor.getLongitude();
+		//double d2 = sensor.getLatitude();
 		String vArg1 = sensor.getScript().getVariableValue(arg1);
 		String vArg2 = sensor.getScript().getVariableValue(arg2);
 		String vArg3 = sensor.getScript().getVariableValue(arg3);
 		sensor.setLongitude(Double.valueOf(vArg1));
-		sensor.setLatitude(Double.valueOf(vArg2));		
+		sensor.setLatitude(Double.valueOf(vArg2));
+//		for(Building building : BuildingList.buildingList) {			
+//			if(building.getPoly().inside((sensor.intc, sensor.getLongitude()))
+//			double t = Integer.valueOf(vArg3);
+//			//MapLayer.getMapViewer().repaint();	
+//			return t/1000. ;
+//		}				
+//		return 0;
 		double t = Integer.valueOf(vArg3);
-		//MapLayer.getMapViewer().repaint();	
 		return t/1000. ;
 	}
 

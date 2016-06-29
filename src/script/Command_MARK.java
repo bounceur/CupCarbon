@@ -17,7 +17,7 @@ public class Command_MARK extends Command {
 	@Override
 	public double execute() {
 		String args = sensor.getScript().getVariableValue(arg);
-		int n = Integer.valueOf(args);
+		int n = 1-Integer.valueOf('1'-args.charAt(0));
 		if(n==0) {
 			sensor.setMarked(false);
 			SimLog.add("S" + sensor.getId() + " UNMARK");
@@ -34,9 +34,13 @@ public class Command_MARK extends Command {
 	@Override
 	public String getArduinoForm() {
 		BeginInstructions.add("pinMode(13, OUTPUT);");
-		String s = arg;
-		if(arg.charAt(0)=='$') s = arg.substring(1);
-		return "\tdigitalWrite(13, "+s+");";
+		String s = "";
+		String v = "'"+arg.charAt(0)+"'";
+		if(arg.charAt(0)=='$') v = arg.substring(1)+".charAt(0)";
+		
+		s = "\tdigitalWrite(13, 1-('1'-"+v+"));";
+		
+		return s;
 	}
 
 	@Override

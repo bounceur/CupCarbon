@@ -27,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -376,42 +375,42 @@ public class MarkerList {
 		MapLayer.getMapViewer().repaint();
 	}
 
-	public static void generateGpxFile() {
-		String host = "http://router.project-osrm.org/viaroute?hl=fr&";
+	public static void generateOSMRouteFile() {
+		//String host = "http://router.project-osrm.org/viaroute?hl=fr&";
+
+		String host = "https://graphhopper.com/api/1/route?";
 
 		for (Marker m : markers) {
 
-			host += "loc=" + m.getLatitude() + "," + m.getLongitude() + "&";
+			host += "point=" + m.getLatitude() + "," + m.getLongitude() + "&";
+			//host += "loc=" + m.getLatitude() + "," + m.getLongitude() + "&";
 		}
 
-		host += "output=json";
+		//host += "output=json";
+		host += "&vehicle=car&locale=de&key=83a9ff19-9dc6-44ff-9f04-70a0500ad0ef&type=gpx";
+		//host = "https://graphhopper.com/api/1/route?point=51.131,12.414&point=48.224%2C3.867&key=83a9ff19-9dc6-44ff-9f04-70a0500ad0ef";
 		System.out.println(host);
 		try {
-//			File f = new File("gpx");
-//			try {
-//				f.mkdir();
-//
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
+			File f = new File("gpx");
+			try {
+				f.mkdir();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			URL url = new URL(host);
 			URLConnection uc = url.openConnection();			
 			
 			uc.setRequestProperty("User-Agent", "CupCarbon");
 			
 			InputStream in = uc.getInputStream();
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			//FileOutputStream file = new FileOutputStream("gpx/tmp.gpx");
-			//int l = 0;
-			String line = "";
-			//while ((l = in.read()) != -1) {
-			while((line=br.readLine()) != null) {
-				System.out.print(line);
-				//file.write(l);
+			FileOutputStream file = new FileOutputStream("gpx/tmp.gpx");
+			int l = 0;
+			while ((l = in.read()) != -1) {
+				file.write(l);
 				//file.flush();
 			}
 			in.close();
-			//file.close();
+			file.close();
 			gpxToMarkers();
 		} catch (MalformedURLException e) {
 			System.err.println(host + " : URL problem.");
@@ -423,17 +422,14 @@ public class MarkerList {
 	public static void gpxToMarkers() {
 		deleteAll();
 		try {
-			BufferedReader br = new BufferedReader(
-					//new FileReader("gpx2/route.gpx"));
-					new FileReader("gpx/tmp.gpx"));
-			//for (int i = 0; i < markers.size(); i++) {
-
-			//}
-			String[] s1 = br.readLine().split("lat=\"");
-			String[] s2;
-			for (int i = 1; i < s1.length; i++) {
-				s2 = s1[i].split("\"");
-				markers.add(new Marker(Double.valueOf(s2[2]), Double.valueOf(s2[0]), 0, 25));
+			BufferedReader br = new BufferedReader(new FileReader("gpx/tmp.gpx"));
+			while(!br.readLine().startsWith("<trkpt")) {}
+				
+			String[] st ;
+			String s ;
+			while((s=br.readLine()).startsWith("<trkpt")) {
+				st = s.split("\"");
+				markers.add(new Marker(Double.valueOf(st[3]), Double.valueOf(st[1]), 0, 10));
 				MapLayer.getMapViewer().repaint();
 			}
 			br.close();
@@ -442,7 +438,7 @@ public class MarkerList {
 			f = new File("gpx");
 			f.delete();
 		} catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	

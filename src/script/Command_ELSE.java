@@ -1,7 +1,7 @@
 package script;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import wisen_simulation.SimLog;
 
 public class Command_ELSE extends Command {
 	
@@ -20,6 +20,11 @@ public class Command_ELSE extends Command {
 		if (currentIf.getRestultOfCondition())
 			sensor.getScript().setIndex(currentIf.getEndIfIndex());
 		return 0 ;
+	}
+	
+	@Override
+	public String getArduinoForm() {
+		return "\t} \n else {";
 	}
 
 	@Override

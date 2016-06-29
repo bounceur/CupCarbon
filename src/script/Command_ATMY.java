@@ -32,8 +32,8 @@ public class Command_ATMY extends Command {
 	}
 	
 	@Override
-	public String getArduinoForm() {
-		String s = XBeeToArduinoFrameGenerator.at("MY"+arg); 
+	public String getArduinoForm() {		
+		String s = XBeeToArduinoFrameGenerator.at("MY"+Integer.toHexString(Integer.valueOf(sensor.getScript().getVariableValue(arg)))); 
 		return s;
 	}
 	
@@ -41,4 +41,5 @@ public class Command_ATMY extends Command {
 	public String toString() {
 		return "ATMY";
 	}
+
 }

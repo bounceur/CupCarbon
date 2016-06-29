@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import device.Device;
 import map.MapLayer;
 import markers.Marker;
 import markers.MarkerList;
-import device.Device;
 
 /**
  * @author Ahcene Bounceur

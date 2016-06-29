@@ -24,10 +24,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.StringTokenizer;
 
-import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 import device.StdSensorNode;
+import map.MapLayer;
 
 
 /**

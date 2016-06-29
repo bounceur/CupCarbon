@@ -30,6 +30,7 @@ import java.awt.event.ActionListener;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -37,8 +38,6 @@ import javax.swing.JTextField;
 
 import device.DeviceList;
 import radio_module.Standard;
-
-import javax.swing.JComboBox;
 
 /**
  * @author Ahcene Bounceur
@@ -94,7 +93,7 @@ public class RadioParametersWindow extends JInternalFrame {
 
 		JButton btnNewButton = new JButton("Apply");
 		btnNewButton.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH
-				+ "loopnone-1.png"));
+				+ "loopnone2.png"));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DeviceList.updateRadioParaFromMap(
@@ -220,7 +219,7 @@ public class RadioParametersWindow extends JInternalFrame {
 				tf_radioDataRate.setText(Standard.getDataRate((String) stdComboBox.getSelectedItem()));
 			}
 		});
-		button_Std.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		button_Std.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone2.png"));
 		panel_Std.add(button_Std);
 		
 		JPanel panel_My = new JPanel();
@@ -248,7 +247,7 @@ public class RadioParametersWindow extends JInternalFrame {
 				DeviceList.setMy(textField_My.getText());
 			}
 		});
-		button_My.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		button_My.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone2.png"));
 		panel_My.add(button_My);
 		
 		
@@ -258,7 +257,7 @@ public class RadioParametersWindow extends JInternalFrame {
 				DeviceList.setCh(textField_Ch.getText());
 			}
 		});
-		button_Ch.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		button_Ch.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone2.png"));
 		panel_Ch.add(button_Ch);
 		
 		JButton button_NId = new JButton("");
@@ -267,7 +266,7 @@ public class RadioParametersWindow extends JInternalFrame {
 				DeviceList.setNId(textField_NId.getText());
 			}
 		});
-		button_NId.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		button_NId.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone2.png"));
 		panel_NId.add(button_NId);
 
 		JPanel panel_15 = new JPanel();
@@ -282,7 +281,7 @@ public class RadioParametersWindow extends JInternalFrame {
 				DeviceList.setRadioRadius(tf_radioRadius.getText());
 			}
 		});
-		button_5.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		button_5.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone2.png"));
 		panel_15.add(button_5);
 
 		JPanel panel_3 = new JPanel();
@@ -297,7 +296,7 @@ public class RadioParametersWindow extends JInternalFrame {
 				DeviceList.setTx(tf_eTx.getText());
 			}
 		});
-		button_8.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		button_8.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone2.png"));
 		panel_3.add(button_8);
 		
 		JPanel panel_4 = new JPanel();
@@ -312,7 +311,7 @@ public class RadioParametersWindow extends JInternalFrame {
 				DeviceList.setRx(tf_eRx.getText());
 			}
 		});
-		button_9.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		button_9.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone2.png"));
 		panel_4.add(button_9);
 		
 		JPanel panel_Slp = new JPanel();
@@ -336,7 +335,7 @@ public class RadioParametersWindow extends JInternalFrame {
 				DeviceList.setESlp(tf_eSlp.getText());
 			}
 		});
-		button_Slp.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		button_Slp.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone2.png"));
 		panel_Slp.add(button_Slp);
 		
 		JButton button_L = new JButton("");
@@ -345,7 +344,7 @@ public class RadioParametersWindow extends JInternalFrame {
 				DeviceList.setEL(tf_eL.getText());
 			}
 		});
-		button_L.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		button_L.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone2.png"));
 		panel_L.add(button_L);
 		
 		
@@ -361,7 +360,7 @@ public class RadioParametersWindow extends JInternalFrame {
 				DeviceList.setRadioDataRate((String) tf_radioDataRate.getText());
 			}
 		});
-		button_11.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone-1.png"));
+		button_11.setIcon(new ImageIcon(CupCarbonParameters.IMGPATH + "loopnone2.png"));
 		panel_6.add(button_11);
 	}
 

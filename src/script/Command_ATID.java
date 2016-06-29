@@ -36,7 +36,7 @@ public class Command_ATID extends Command {
 	
 	@Override
 	public String getArduinoForm() {
-		String s = XBeeToArduinoFrameGenerator.at("NI"+arg); 
+		String s = XBeeToArduinoFrameGenerator.at("ID"+arg); 
 		return s;
 	}
 	

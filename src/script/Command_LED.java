@@ -1,5 +1,6 @@
 package script;
 
+import arduino.BeginInstructions;
 import device.SensorNode;
 import utilities.UColor;
 import visualisation.Visualisation;
@@ -31,6 +32,18 @@ public class Command_LED extends Command {
 		return 0 ;
 	}
 
+	@Override
+	public String getArduinoForm() {
+		BeginInstructions.add("pinMode("+arg1+", OUTPUT);");
+		String s = "";
+		String v = "'"+arg2.charAt(0)+"'";
+		if(arg2.charAt(0)=='$') v = arg2.substring(1)+".charAt(0)";
+		
+		s = "\tdigitalWrite(13, 1-('1'-"+v+"));";
+		
+		return s;
+	}
+	
 	@Override
 	public String toString() {
 		return "LED";

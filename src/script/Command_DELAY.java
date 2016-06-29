@@ -27,7 +27,7 @@ public class Command_DELAY extends Command {
 	
 	@Override
 	public String getArduinoForm() { 
-		return "\tdelay("+(Integer.valueOf(arg)/(sensor.getRadioDataRate()/1000.))+");";
+		return "\tdelay("+Integer.valueOf(arg)+");";
 	}
 	
 	@Override

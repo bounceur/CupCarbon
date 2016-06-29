@@ -5,12 +5,13 @@ import java.util.List;
 import device.SensorNode;
 import radio_module.Standard;
 import radio_module.XBeeFrameGenerator;
+import radio_module.XBeeToArduinoFrameGenerator;
 
 public class Command_ATND extends Command {
 	// ND: 
 	protected String arg1 = "";
 	protected String arg2 = "";
-	protected double arg3 = 0.5;//6 seconds (6=0x3C) is the value of the parameter NT: Node Discovery Timeout;
+	protected double arg3 = 0.5;
 	
 	public Command_ATND(SensorNode sensor, String arg1) {
 		this.sensor = sensor ;
@@ -46,6 +47,12 @@ public class Command_ATND extends Command {
 		
 		double ratio = 1.0/sensor.getUartDataRate();		
 		return arg3 + (ratio*(frame.length()*8.)) ;
+	}
+	
+	@Override
+	public String getArduinoForm() {
+		String s = XBeeToArduinoFrameGenerator.nd(); 
+		return s;
 	}
 	
 	@Override

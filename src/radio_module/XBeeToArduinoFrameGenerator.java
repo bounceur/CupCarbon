@@ -39,6 +39,20 @@ public class XBeeToArduinoFrameGenerator {
 		return code;
 	}
 	
+	public static String nd() {
+		String code = "";
+		code += "\t" + "Serial.write(0x7E);" + "\n";
+		code += "\t" + "Serial.write(0x00);" + "\n";		
+		code += "\t" + "Serial.write(0x04);" + "\n";
+		code += "\t" + "Serial.write(0x09);" + "\n";
+		code += "\t" + "Serial.write(0x00);" + "\n";
+		code += "\t" + "Serial.write(0x4E);" + "\n";
+		code += "\t" + "Serial.write(0x44);" + "\n";
+		code += "\t" + "Serial.write(0x64);" + "\n";
+
+		return code;
+	}
+	
 	public static void atc(String ats) {
 		System.out.println("\t" + "Serial.write(0x7E);");
 		System.out.println("\t" + "Serial.write(0x00);");
@@ -151,6 +165,34 @@ public class XBeeToArduinoFrameGenerator {
 		code += "\t" + "Serial.write(0x"+ss+");" + "\n";
 		code += "\tdelay(10);" + "\n";
 		return code;
+	}
+	
+	public static String atac() {
+		String code = "";
+		code += "\t" + "Serial.write(0x7E);" + "\n";
+		code += "\t" + "Serial.write(0x00);" + "\n";
+		code += "\t" + "Serial.write(0x04);" + "\n";
+		code += "\t" + "Serial.write(0x09);" + "\n";
+		code += "\t" + "Serial.write(0x00);" + "\n";
+		code += "\t" + "Serial.write(0x41);" + "\n";
+		code += "\t" + "Serial.write(0x43);" + "\n";
+		code += "\t" + "Serial.write(0x72);" + "\n";
+		code += "\tdelay(10);" + "\n";
+		return code;		
+	}
+	
+	public static String atwr() {
+		String code = "";
+		code += "\t" + "Serial.write(0x7E);" + "\n";
+		code += "\t" + "Serial.write(0x00);" + "\n";
+		code += "\t" + "Serial.write(0x04);" + "\n";
+		code += "\t" + "Serial.write(0x09);" + "\n";
+		code += "\t" + "Serial.write(0x00);" + "\n";
+		code += "\t" + "Serial.write(0x57);" + "\n";
+		code += "\t" + "Serial.write(0x52);" + "\n";
+		code += "\t" + "Serial.write(0x4D);" + "\n";
+		code += "\tdelay(10);" + "\n";
+		return code;		
 	}
 	
 }
