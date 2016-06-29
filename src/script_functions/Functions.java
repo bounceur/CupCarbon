@@ -2,6 +2,10 @@ package script_functions;
 
 import java.util.Arrays;
 
+import security.Blowfish;
+import security.Operator;
+import security.SuperFastHash;
+
 public class Functions {
 
 	public static String min(String [] args) {
@@ -11,6 +15,13 @@ public class Functions {
 				min = Double.valueOf(args[i]);
 		}
 		return  ""+min;
+	}
+	
+	public static String mysum(String [] args) {
+		int x = Integer.parseInt(args[0]);
+		int y = Integer.parseInt(args[1]);
+		int s = x + y + 2;
+		return  ""+s;
 	}
 	
 	public static String smin(String [] args) {
@@ -150,6 +161,36 @@ public class Functions {
 		double f = mu - sigma * Math.sin(Math.PI*(mu/eng));
 		return ""+f;
 	}
+	
+	public static String encrypt(String [] args)throws Exception {
+		  String valToReturn = "";
+		  Blowfish b = new Blowfish(args[0],args[1]);
+		  valToReturn = b.encrypt();
+		  return valToReturn;
+		}
+		
+		public static String decrypt(String [] args) throws Exception {
+			String valToReturn = "";
+			
+		  Blowfish b = new Blowfish(args[0],args[1]);
+		  valToReturn = b.decrypt();
+		  return valToReturn;
+		}
+		
+		public static String hash(String [] args) throws Exception {
+			String valToReturn = "";
+			
+		  SuperFastHash b = new SuperFastHash(args[0],Long.valueOf(args[1]) ,Integer.valueOf(args[2]),Integer.valueOf(args[3]));
+		  valToReturn = Long.toString(b.calculate());
+		  return valToReturn;
+		}
+		public static String mod(String [] args) throws Exception {
+			String valToReturn = "";
+			
+		  Operator b = new Operator(Long.valueOf(args[0]),Long.valueOf(args[1]));
+		  valToReturn = b.mod();
+		  return valToReturn;
+		}
 	
 	public static String myf(String [] args) {
 		String valToReturn = "";

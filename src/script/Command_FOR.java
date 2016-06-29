@@ -1,7 +1,7 @@
 package script;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import wisen_simulation.SimLog;
 
 public class Command_FOR extends Command {
 	
@@ -102,6 +102,16 @@ public class Command_FOR extends Command {
 		}
 	}
 		
+	@Override
+	public String getArduinoForm() {
+		String sarg2 = arg2.startsWith("$")?arg2.substring(1)+".toInt()":arg2;
+		String sright = right.startsWith("$")?right.substring(1)+".toInt()":right;
+		String ssStep = sStep.startsWith("$")?sStep.substring(1)+".toInt()":sStep;
+		String s = "for(int "+arg1+"="+sarg2+";"+arg1+"<"+sright+";"+arg1+"+="+ssStep+") {";
+		
+		return s;
+	}
+	
 	@Override
 	public String toString() {
 		return "FOR";

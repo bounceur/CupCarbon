@@ -1,7 +1,7 @@
 package script;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import wisen_simulation.SimLog;
 
 public class Command_SET extends Command {
 

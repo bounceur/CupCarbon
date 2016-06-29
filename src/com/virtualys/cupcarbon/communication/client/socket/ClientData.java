@@ -1,6 +1,6 @@
 package com.virtualys.cupcarbon.communication.client.socket;
 
-import java.net.*;
+import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 

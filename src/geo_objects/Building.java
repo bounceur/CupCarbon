@@ -319,4 +319,18 @@ public class Building implements MouseListener, KeyListener {
 	public boolean isHide() {
 		return hide;
 	}
+
+//	@Override
+//	public void reflect(Vector3d in, Vector3d reflected, Vector3d normal, Vector3d tangent, double[] wavelengths,
+//			Field[] result) throws ExceptionWavelengthOutOfScope, ExceptionArrayLengths {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	@Override
+//	public void transmit(Vector3d in, Vector3d refracted, Vector3d normal, Vector3d tangent, double distance,
+//			double[] wavelengths, Field[] result) throws ExceptionWavelengthOutOfScope, ExceptionArrayLengths {
+//		// TODO Auto-generated method stub
+//		
+//	}
 }

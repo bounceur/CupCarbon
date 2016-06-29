@@ -25,13 +25,13 @@ public class WisenEventList {
 	
 	public void goToTheNextEvent(long min) {
 		for (WisenEvent event : eventList) {
-			event.setEnd(event.getEnd()-min);
+			event.setDuration(event.getDuration()-min);
 		}
 	}
 	
 	public long getMin() {
 		if(eventList.size()>0)
-			return eventList.get(0).getEnd();
+			return eventList.get(0).getDuration();
 		else
 			return Long.MAX_VALUE;
 	}

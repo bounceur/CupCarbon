@@ -19,16 +19,15 @@
 
 package solver;
 
-import graph.Graph;
-import graph.Vertex;
-
 import java.util.List;
 import java.util.ListIterator;
 
-import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 import device.SensorNode;
+import graph.Graph;
+import graph.Vertex;
+import map.MapLayer;
 
 public class SensorTargetCoverageRun implements Runnable {
 

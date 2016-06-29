@@ -31,7 +31,8 @@ import geo_objects.BuildingList;
 import map.MapLayer;
 
 /**
- * @author BOYER Yoann
+ * @author Yann Allain
+ * @author Julien Benkhellate
  * @author BOUNCEUR Ahcène
  * @version 1.0
  */

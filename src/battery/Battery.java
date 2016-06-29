@@ -19,18 +19,82 @@
 
 package battery;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+
+import javax.swing.JOptionPane;
+
+import weather.FileManager;
+import weather.WeatherScenario;
+import wisen_simulation.WisenSimulation;
 
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
- * @version 1.0
+ * @author Nabil Kadjouh
+ * @version 2.8.3 (U-One)
  */
+
 public class Battery implements Cloneable {
 
 	public double eMax = 9580*2;
 
 	//private SensorUnit sensorUnit;
 	private double level = eMax;
+	
+//------------------------------------------------------------------------------------------KADJOUH
+	private BatteryModel bm = null;
+	
+	public BatteryModel getBatteryModel() {
+		return bm;
+	}
+
+	public void setBatteryModel(BatteryModel bm) {
+		this.bm = bm;
+	}
+	public static void loadBatteryModelFromFile(String batteryModelFile,BatteryModel bm)
+	//String modelName, int capacity, double tension, String model)
+    {
+    	String ErrorMsg ="";
+		FileInputStream fis;
+		BufferedReader b = null;
+		String s="*/*/*/*";// initialization
+		String[] mdl;
+		try {
+			if (!batteryModelFile.equals("")) 
+				{
+					if ( FileManager.fileExists (batteryModelFile))						
+					{
+						fis = new FileInputStream(batteryModelFile);				
+						b = new BufferedReader(new InputStreamReader(fis));			
+						if ((s = b.readLine()) != null) {bm.setModelName(s);}
+						if ((s = b.readLine()) != null) 
+					    	{
+							mdl = s.trim().split(" ");
+							bm.setCapacity(Integer.parseInt(mdl[0]));	
+							}
+						if ((s = b.readLine()) != null) 
+				    		{
+						   mdl = s.trim().split(" ");
+						   bm.setTension(Double.parseDouble(mdl[0]));	
+				    		}
+						if ((s = b.readLine()) != null) {bm.setDischargeCurrentModel(s);}
+							
+						b.close();
+						fis.close();							
+					}	else ErrorMsg += "\n#battery model file doesn't exist";
+				} else  ErrorMsg += "\n#battery model file  is Empty (not selected)! ";
+				
+				} catch (Exception e) {
+			
+					e.printStackTrace(); 										
+					} 
+					
+			if (ErrorMsg !="" ) JOptionPane.showMessageDialog(null, ErrorMsg,"CupCarbon", JOptionPane.INFORMATION_MESSAGE);	
+}
+	
+//------------------------------------------------------------------------------------------KADJOUH
 
 	/**
 	 * Battery initialization
@@ -85,6 +149,7 @@ public class Battery implements Cloneable {
 	 * Initialization of the battery (energy max)
 	 */
 	public void init() {
+				
 		level = eMax;
 	}
 
@@ -94,12 +159,43 @@ public class Battery implements Cloneable {
 	 * @param v
 	 *            Number of the units to consume
 	 */
+//------------------------------------------------------------------------------------------KADJOUH	
 	public void consume(double v) {
+		
+		if (WisenSimulation.weather)
+		{
+			double currentTemperature = WeatherScenario.getCurrentTemperature();
+			int capacity = getBatteryModel().getCapacity();
+			double tension = getBatteryModel().getTension();
+			String dischargeCurrentModel =  getBatteryModel().getDischargeCurrentModel();
+			double tt1o = 0.0039; // time to transfert one octet in zigBee transmission
+			
+			double dischargeCurrent = 5;
+			try {
+				dischargeCurrent = BatteryModel.getCurrentFromModel(currentTemperature, tension, dischargeCurrentModel );
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			capacity = (int)(eMax);
+			double lc = BatteryModel.levelConsumption(dischargeCurrent, capacity, tt1o);
+			lc = lc*100/lc;
+					
+			level = level-( v*lc);
+			if (level < 0)
+				level = 0;
+		}
+		else 
+		{	
+		
+		
 		level -= v;
 		if (level < 0)
 			level = 0;
+		}
+		
 	}
-	
+//------------------------------------------------------------------------------------------KADJOUH	
 	public double getBatteryConsumption() {
 		return eMax - level;
 	}
@@ -126,4 +222,6 @@ public class Battery implements Cloneable {
 		//newBattery.setSensorUnit(sensorUnit.clone());
 		return newBattery;
 	}
+
+
 }

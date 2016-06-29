@@ -19,6 +19,11 @@ public class Command_ENDIF extends Command {
 	}
 	
 	@Override
+	public String getArduinoForm() {
+		return "}";
+	}
+	
+	@Override
 	public String toString() {		
 		return "ENDIF";
 	}

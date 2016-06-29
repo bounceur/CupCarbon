@@ -1,7 +1,7 @@
 package script;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import wisen_simulation.SimLog;
 //H
 public class Command_ENDFOR extends Command {
 	
@@ -63,6 +63,11 @@ public class Command_ENDFOR extends Command {
 		return trueCondition;
 	}
 
+	@Override
+	public String getArduinoForm() {
+		return "}";
+	}
+	
 	@Override
 	public String toString() {
 		return "ENDFOR";

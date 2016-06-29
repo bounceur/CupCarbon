@@ -24,7 +24,10 @@ public class RadioDetection {
 	public static boolean powerReceptionDetection(DeviceWithRadio device1, DeviceWithRadio device2) {
 		if (device1.withRadio() && device2.withRadio() && device1.getNId() == device2.getNId() && device1.getCh() == device2.getCh()) {
 			if ( getPowerReception(device1, device2) > device2.getRequiredQuality())
-				return device1.contains(device2);
+				if (SimulationInputs.symmetricalLinks)
+					return (device1.contains(device2) || device2.contains(device1));
+				else
+					return device1.contains(device2);
 		}
 		return false;
 	}	

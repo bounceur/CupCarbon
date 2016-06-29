@@ -1,7 +1,8 @@
 package script;
 
-import wisen_simulation.SimLog;
+import arduino.BeginInstructions;
 import device.SensorNode;
+import wisen_simulation.SimLog;
 
 public class Command_DREADSENSOR extends Command {
 
@@ -21,8 +22,11 @@ public class Command_DREADSENSOR extends Command {
 	}
 	
 	@Override
-	public String getArduinoForm() { 
-		return "digitalRead(8);";
+	public String getArduinoForm() {
+		BeginInstructions.add("pinMode(2, INPUT);");
+		String s = "\tString " + arg + ";\n"; 
+		s += "\t" + arg + " = digitalRead(2); \n";		
+		return s;
 	}
 	
 	@Override

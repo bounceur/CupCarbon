@@ -2,8 +2,8 @@ package script;
 
 import java.util.Random;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import wisen_simulation.SimLog;
 
 public class Command_RGAUSS extends Command {
 

@@ -1,6 +1,7 @@
 package cupcarbon;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -27,6 +28,11 @@ import map.MapLayer;
 import wisen_simulation.SimulationInputs;
 import wisen_simulation.WisenSimulation;
 
+/**
+ * @author Ahcene Bounceur
+ * @author Nabil Kadjouh
+ */
+
 public class WisenSimulationWindow extends JInternalFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -39,6 +45,9 @@ public class WisenSimulationWindow extends JInternalFrame {
 	private static JLabel stateLabel;
 	private JCheckBox cboxMobility;
 	private JTextField vdTextField;
+	// ------------------------------------------------------------------------------------------KADJOUH
+	private JCheckBox cboxWeather;
+	// ------------------------------------------------------------------------------------------KADJOUH
 
 	private JCheckBox chckbxGenerateResults;
 	private JCheckBox chckbxGenerateLog;
@@ -51,8 +60,8 @@ public class WisenSimulationWindow extends JInternalFrame {
 	private JCheckBox chbxSymRadio;
 	private JCheckBox chckbxCpuDrift;
 	private JTextField tf_arrowsSpeed;
-	private JCheckBox visibilityCB ;
-	
+	private JCheckBox visibilityCB;
+
 	/**
 	 * Launch the application.
 	 */
@@ -98,9 +107,9 @@ public class WisenSimulationWindow extends JInternalFrame {
 		simulationTimeTextField = new JTextField();
 		panel_8.add(simulationTimeTextField);
 		simulationTimeTextField.setFont(new Font("Arial", Font.PLAIN, 12));
-		simulationTimeTextField.setText(""+SimulationInputs.simulationTime);
+		simulationTimeTextField.setText("" + SimulationInputs.simulationTime);
 		simulationTimeTextField.setColumns(10);
-		
+
 		JLabel lblSeconds = new JLabel("  second(s)  ");
 		lblSeconds.setFont(new Font("Arial", Font.PLAIN, 12));
 		panel_8.add(lblSeconds);
@@ -114,6 +123,16 @@ public class WisenSimulationWindow extends JInternalFrame {
 		panel_1.add(panel_3);
 		panel_3.setLayout(new BoxLayout(panel_3, BoxLayout.Y_AXIS));
 
+		// ------------------------------------------------------------------------------------------KADJOUH
+		JPanel panel_w = new JPanel();
+		panel_w.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel_w.setLayout(new GridLayout(1, 2, 0, 0));
+		panel_1.add(panel_w);
+		cboxWeather = new JCheckBox("Weather /Events");
+		panel_w.add(cboxWeather);
+		cboxWeather.setFont(new Font("Arial", Font.PLAIN, 12));
+		// ------------------------------------------------------------------------------------------KADJOUH
+
 		JPanel panel_4 = new JPanel();
 		panel_4.setBorder(new EmptyBorder(5, 5, 5, 5));
 		panel_3.add(panel_4);
@@ -123,17 +142,17 @@ public class WisenSimulationWindow extends JInternalFrame {
 		panel_18.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_3.add(panel_18);
 		panel_18.setLayout(new GridLayout(1, 3, 0, 0));
-		
+
 		chckbxGenerateResults = new JCheckBox("Results");
 		chckbxGenerateResults.setFont(new Font("Arial", Font.PLAIN, 12));
 		chckbxGenerateResults.setSelected(true);
 		panel_18.add(chckbxGenerateResults);
-		
+
 		chckbxGenerateLog = new JCheckBox("Log");
 		chckbxGenerateLog.setFont(new Font("Arial", Font.PLAIN, 12));
 		chckbxGenerateLog.setSelected(true);
 		panel_18.add(chckbxGenerateLog);
-		
+
 		chckbxShowInConsole = new JCheckBox("Console");
 		chckbxShowInConsole.setFont(new Font("Arial", Font.PLAIN, 12));
 		panel_18.add(chckbxShowInConsole);
@@ -141,13 +160,13 @@ public class WisenSimulationWindow extends JInternalFrame {
 		JPanel panel_17 = new JPanel();
 		panel_3.add(panel_17);
 		panel_17.setLayout(new GridLayout(1, 2, 0, 0));
-		
+
 		chbxSymRadio = new JCheckBox("Symmetrical Radio Links");
 		chbxSymRadio.setToolTipText("Symmetrical Radio Links");
 		chbxSymRadio.setSelected(true);
 		chbxSymRadio.setFont(new Font("Arial", Font.PLAIN, 12));
 		panel_17.add(chbxSymRadio);
-		
+
 		visibilityCB = new JCheckBox("Visibility");
 		visibilityCB.setFont(new Font("Arial", Font.PLAIN, 12));
 		panel_17.add(visibilityCB);
@@ -181,72 +200,72 @@ public class WisenSimulationWindow extends JInternalFrame {
 		JLabel lblMs = new JLabel("  ms / Arrows  ");
 		lblMs.setFont(new Font("Arial", Font.PLAIN, 12));
 		panel_16.add(lblMs);
-		
+
 		tf_arrowsSpeed = new JTextField();
 		tf_arrowsSpeed.setFont(new Font("Arial", Font.PLAIN, 12));
 		tf_arrowsSpeed.setText("50");
 		panel_16.add(tf_arrowsSpeed);
 		tf_arrowsSpeed.setColumns(10);
-		
+
 		JLabel label = new JLabel("  ms   ");
 		label.setFont(new Font("Arial", Font.PLAIN, 12));
 		panel_16.add(label);
-		
+
 		JPanel panel_19 = new JPanel();
 		panel_19.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_13.add(panel_19);
-				panel_19.setLayout(new GridLayout(0, 2, 0, 0));
-				
-						cboxMobility = new JCheckBox("Mobility / Sensor Events");
-						panel_19.add(cboxMobility);
-						cboxMobility.setFont(new Font("Arial", Font.PLAIN, 12));
-						
-						chckbxCpuDrift = new JCheckBox("Drift");
-						panel_19.add(chckbxCpuDrift);
-						chckbxCpuDrift.setFont(new Font("Arial", Font.PLAIN, 12));
-						
-						JPanel panel_2 = new JPanel();
-						panel_2.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-						panel_13.add(panel_2);
-						panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.X_AXIS));
-						
-						JLabel lblProtocol = new JLabel(" Protocol ");
-						lblProtocol.setFont(new Font("Arial", Font.PLAIN, 12));
-						panel_2.add(lblProtocol);
-						
-						protocolCBox = new JComboBox<String>();
-						protocolCBox.setToolTipText("Protocol");
-						protocolCBox.setModel(new DefaultComboBoxModel<String>(new String[] {"CSMA"}));
-						protocolCBox.setSelectedIndex(0);
-						protocolCBox.setFont(new Font("Arial", Font.PLAIN, 12));
-						panel_2.add(protocolCBox);
-						
-						JPanel panel_9 = new JPanel();
-						panel_9.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-						panel_13.add(panel_9);
-						panel_9.setLayout(new BoxLayout(panel_9, BoxLayout.X_AXIS));
-						
-						checkBoxAck = new JCheckBox("ACK");
-						checkBoxAck.setFont(new Font("Arial", Font.PLAIN, 12));
-						panel_9.add(checkBoxAck);
-						
-						ackTypeCB = new JComboBox<String>();
-						ackTypeCB.setToolTipText("ACK");
-						ackTypeCB.setModel(new DefaultComboBoxModel<String>(new String[] {"Probability", "Stable-distribution"}));
-						ackTypeCB.setSelectedIndex(0);
-						ackTypeCB.setFont(new Font("Arial", Font.PLAIN, 12));
-						panel_9.add(ackTypeCB);
-						
-						ackProbaCB = new JTextField();
-						ackProbaCB.setToolTipText("ACK Probability");
-						ackProbaCB.setText(""+SimulationInputs.ackProba);
-						ackProbaCB.setFont(new Font("Arial", Font.PLAIN, 12));
-						ackProbaCB.setColumns(10);
-						panel_9.add(ackProbaCB);
-						
-						chckbxAck = new JCheckBox("Show ACK");
-						chckbxAck.setFont(new Font("Arial", Font.PLAIN, 12));
-						panel_9.add(chckbxAck);
+		panel_19.setLayout(new GridLayout(0, 2, 0, 0));
+
+		cboxMobility = new JCheckBox("Mobility / Sensor Events");
+		panel_19.add(cboxMobility);
+		cboxMobility.setFont(new Font("Arial", Font.PLAIN, 12));
+
+		chckbxCpuDrift = new JCheckBox("Drift");
+		panel_19.add(chckbxCpuDrift);
+		chckbxCpuDrift.setFont(new Font("Arial", Font.PLAIN, 12));
+
+		JPanel panel_2 = new JPanel();
+		panel_2.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel_13.add(panel_2);
+		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.X_AXIS));
+
+		JLabel lblProtocol = new JLabel(" Protocol ");
+		lblProtocol.setFont(new Font("Arial", Font.PLAIN, 12));
+		panel_2.add(lblProtocol);
+
+		protocolCBox = new JComboBox<String>();
+		protocolCBox.setToolTipText("Protocol");
+		protocolCBox.setModel(new DefaultComboBoxModel<String>(new String[] { "CSMA" }));
+		protocolCBox.setSelectedIndex(0);
+		protocolCBox.setFont(new Font("Arial", Font.PLAIN, 12));
+		panel_2.add(protocolCBox);
+
+		JPanel panel_9 = new JPanel();
+		panel_9.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel_13.add(panel_9);
+		panel_9.setLayout(new BoxLayout(panel_9, BoxLayout.X_AXIS));
+
+		checkBoxAck = new JCheckBox("ACK");
+		checkBoxAck.setFont(new Font("Arial", Font.PLAIN, 12));
+		panel_9.add(checkBoxAck);
+
+		ackTypeCB = new JComboBox<String>();
+		ackTypeCB.setToolTipText("ACK");
+		ackTypeCB.setModel(new DefaultComboBoxModel<String>(new String[] { "Probability", "Stable-distribution" }));
+		ackTypeCB.setSelectedIndex(0);
+		ackTypeCB.setFont(new Font("Arial", Font.PLAIN, 12));
+		panel_9.add(ackTypeCB);
+
+		ackProbaCB = new JTextField();
+		ackProbaCB.setToolTipText("ACK Probability");
+		ackProbaCB.setText("" + SimulationInputs.ackProba);
+		ackProbaCB.setFont(new Font("Arial", Font.PLAIN, 12));
+		ackProbaCB.setColumns(10);
+		panel_9.add(ackProbaCB);
+
+		chckbxAck = new JCheckBox("Show ACK");
+		chckbxAck.setFont(new Font("Arial", Font.PLAIN, 12));
+		panel_9.add(chckbxAck);
 
 		JSeparator separator = new JSeparator();
 		panel_1.add(separator);
@@ -254,11 +273,11 @@ public class WisenSimulationWindow extends JInternalFrame {
 		JPanel panel_5 = new JPanel();
 		panel_1.add(panel_5);
 		panel_5.setLayout(new GridLayout(0, 1, 0, 0));
-				
+
 		JPanel panel_20 = new JPanel();
 		panel_5.add(panel_20);
 		panel_20.setLayout(new GridLayout(2, 2, 0, 0));
-		
+
 		JButton btnNewButton_1 = new JButton("Check");
 		panel_20.add(btnNewButton_1);
 		btnNewButton_1.setIcon(new ImageIcon("images/check.png"));
@@ -268,7 +287,7 @@ public class WisenSimulationWindow extends JInternalFrame {
 			}
 		});
 		btnNewButton_1.setFont(new Font("Arial", Font.PLAIN, 12));
-								
+
 		JButton btnApply = new JButton("Apply");
 		btnApply.setIcon(new ImageIcon("images/stylo.png"));
 		btnApply.addActionListener(new ActionListener() {
@@ -295,12 +314,10 @@ public class WisenSimulationWindow extends JInternalFrame {
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				stopSimulation();
-				/*if (rdbtnCpuSimulation.isSelected()) {
-					stopSimulation(1);
-				}
-				if (rdbtnGpuSimulation.isSelected()) {
-					stopSimulation(2);
-				}*/
+				/*
+				 * if (rdbtnCpuSimulation.isSelected()) { stopSimulation(1); }
+				 * if (rdbtnGpuSimulation.isSelected()) { stopSimulation(2); }
+				 */
 			}
 		});
 		btnNewButton_2.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -337,12 +354,12 @@ public class WisenSimulationWindow extends JInternalFrame {
 		stateLabel.setText(s);
 	}
 
-	public void simulateCallBack() {		
+	public void simulateCallBack() {
 		apply();
 		wisenSimulation = new WisenSimulation();
 		wisenSimulation.start();
 	}
-	
+
 	public static void quickRun() {
 		wisenSimulation = new WisenSimulation();
 		wisenSimulation.start();
@@ -353,6 +370,16 @@ public class WisenSimulationWindow extends JInternalFrame {
 	}
 
 	public void apply() {
+		// ------------------------------------------------------------------------------------------KADJOUH
+		SimulationInputs.weather = cboxWeather.isSelected();
+		if (!cboxWeather.isSelected()) {
+			CupCarbon.lblTemperature.setText("  ");
+		} else {
+			cupcarbon.CupCarbon.lblTemperature.setForeground(Color.red);
+			cupcarbon.CupCarbon.lblTemperature.setText(" °C");
+		}
+		// ------------------------------------------------------------------------------------------KADJOUH
+
 		SimulationInputs.simulationTime = Double.parseDouble(simulationTimeTextField.getText());
 		SimulationInputs.mobility = cboxMobility.isSelected();
 		SimulationInputs.visualDelay = Integer.parseInt(vdTextField.getText());
@@ -363,7 +390,7 @@ public class WisenSimulationWindow extends JInternalFrame {
 		SimulationInputs.protocol = protocolCBox.getSelectedIndex();
 		SimulationInputs.ackType = ackTypeCB.getSelectedIndex();
 		double proba = Double.parseDouble(ackProbaCB.getText());
-		SimulationInputs.ackProba = (proba>1)?1:proba;
+		SimulationInputs.ackProba = (proba > 1) ? 1 : proba;
 		SimulationInputs.showAckLinks = chckbxAck.isSelected();
 		SimulationInputs.ack = checkBoxAck.isSelected();
 		SimulationInputs.symmetricalLinks = chbxSymRadio.isSelected();
@@ -371,5 +398,5 @@ public class WisenSimulationWindow extends JInternalFrame {
 		SimulationInputs.visibility = visibilityCB.isSelected();
 		MapLayer.getMapViewer().repaint();
 	}
-	
+
 }

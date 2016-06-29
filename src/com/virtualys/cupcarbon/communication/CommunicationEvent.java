@@ -1,8 +1,8 @@
 package com.virtualys.cupcarbon.communication;
 
-import java.util.EventObject;
-import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.EventObject;
 
 
 /**

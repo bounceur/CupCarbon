@@ -113,7 +113,7 @@ public abstract class Command {
 	}
 	
 	public String getArduinoForm() {
-		return "ERROR ----";
+		return "// ----";
 	}	
 	
 	public String finishMessage() {

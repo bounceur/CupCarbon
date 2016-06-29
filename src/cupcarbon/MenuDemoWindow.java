@@ -115,7 +115,7 @@ public class MenuDemoWindow extends JInternalFrame {
 		JButton button_1 = new JButton("");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MarkerList.generateGpxFile();
+				MarkerList.generateOSMRouteFile();
 			}
 		});
 		button_1.setIcon(new ImageIcon(CupCarbonParameters.IMGPATHDEMO + "move.jpg"));
