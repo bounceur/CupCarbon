@@ -41,7 +41,6 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import actions_ui.MoveDevice;
 import battery.Battery;
-import battery.BatteryModel;
 import cupcarbon.DeviceParametersWindow;
 import cupcarbon.RadioParametersWindow;
 import geo_objects.GeoZoneList;
@@ -54,17 +53,15 @@ import utilities.MapCalc;
 import utilities.UColor;
 import utilities._Constantes;
 import visualisation.Visualisation;
-import weather.WeatherScenario;
-import wisen_simulation.WisenSimulation;
 
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
- * @author Nabil Kadjouh
+ * @version 1.0
  */
-public abstract class Device
-		implements Runnable, MouseListener, MouseMotionListener, KeyListener, _Constantes, Cloneable {
-
+public abstract class Device implements Runnable, MouseListener,
+		MouseMotionListener, KeyListener, _Constantes, Cloneable {
+	
 	public static final int TARGET = 0;
 	public static final int SENSOR = 1;
 	public static final int GAS = 2;
@@ -77,32 +74,32 @@ public abstract class Device
 	public static final int VERTEX = 9;
 	public static final int BUILDING = 10;
 	public static final int GEOZONE = 11;
-
+	
 	public static final boolean DEAD = false;
 	public static final boolean ALIVE = true;
 	public static final boolean SLEEP = false;
 
 	protected double sigmaOfDriftTime = 0.00003;
-	protected double driftTime = 1.0;
-
+	protected double driftTime = 1.0; 
+	
 	public static int moveSpeed = 100;
 
 	protected boolean altDown = false;
 	protected boolean shiftDown = false;
 	protected boolean ctrlDown = false;
-	protected int lastKeyCode = 0;
+	protected int lastKeyCode = 0;	
 
 	protected int id = 0;
 	protected int idm = 0;
-
+	
 	protected int my = 0;
 	protected int pl = 100;
 	protected int ch = 0x0;
 	protected int nId = 0x3334;
 	protected String userId = "";
-	protected double timeToResend = 1.0;
-	protected int numberOfSends = 3;
-
+	protected double timeToResend = 1.0 ;
+	protected int numberOfSends = 3 ;
+	
 	protected long uartDataRate = 9600;
 	protected int radioDataRate = 250000;
 	protected int standard = Standard.ZIGBEE_802_15_4;
@@ -117,7 +114,7 @@ public abstract class Device
 	protected boolean selected = false;
 	protected char key = 0;
 	protected boolean move = false;
-	protected boolean inside = false;
+	protected boolean inside = false;	
 	protected boolean underSimulation = false;
 	protected int hide = 0;
 	protected boolean increaseNode = false;
@@ -125,67 +122,60 @@ public abstract class Device
 	protected boolean withRadio = false;
 	protected boolean withSensor = false;
 	protected boolean mobile = false;
-	protected boolean displayRadius = false;
+	protected boolean displayRadius = false;	
 	protected boolean visited = false;
 	protected boolean visible = true;
 	protected boolean drawBatteryLevel = false;
 	protected boolean drawTxRx = false;
 
-	protected String[][] infos = { { "SENSOR: ", "" }, { "ID: ", "" }, { "MY: ", "" }, { "Network ID: ", "" },
-			{ "Channel: ", "" }, { "Script: ", "" }, { "GPS: ", "" }, { "Battery: ", "" }, { "Model: ", "" }  };
+	protected String [][] infos = {{"SENSOR: ",""},{"ID: ",""},{"MY: ",""},{"Network ID: ",""},{"Channel: ",""},{"Script: ",""},{"GPS: ",""},{"Battery: ",""}};
 	protected boolean displayInfos = false;
-
-	// ------------------------------------------------------------------------------------------KADJOUH
-	protected String batteryModelFileName = "";
-	// ------------------------------------------------------------------------------------------KADJOUH
-
+	
 	protected String scriptFileName = "";
 	protected String gpsFileName = "";
 	protected Script script = null;
-	protected String targetName = "";
+	protected String targetName = ""; 
 	protected int ledColor = 0;
 
-	protected double eTx = 0.0000592; // sending energy
+	protected double eTx = 0.0000592; //sending energy
 	protected double eRx = 0.0000286; // receiving energy
-	protected double eSlp = 0.0000001;// Sleeping energy
-	protected double eL = 0.000001;// Listening energy
-	protected double eS = 1; // sensing energy
-
+	protected double eSlp = 0.0000001;//Sleeping energy
+	protected double eL = 0.000001;//Listening energy
+	protected double eS = 1; // sensing energy	
+	
 	protected Color radioLinkColor = UColor.RED;
 	protected Color ackLinkColor = Color.BLACK;
-
+	
 	protected boolean receiving = false;
 	protected boolean sending = false;
 	protected boolean writing = false;
-	// protected boolean distanceMode = false ;
-	protected long distanceModeDelay = 2000;
+	//protected boolean distanceMode = false ;
+	protected long distanceModeDelay = 2000 ;
 
 	protected GeoZoneList geoZoneList = null;
-
-	protected boolean state = ALIVE;
-
-	// ----------------------------------
+	
+	protected boolean state = ALIVE; 
+	
+	//----------------------------------
 	// For Algorithms
-	// ----------------------------------
+	//----------------------------------
 	protected boolean marked = false;
 	protected double value = 0;
 	protected LinkedList<Double> valueList;
-	// ----------------------------------
-
-	protected double event = Double.MAX_VALUE; // Event relied to actions =
-												// sending/receiving
-	protected double event2 = Double.MAX_VALUE; // Event relied to mobility
-	// protected int nextEvent = Integer.MAX_VALUE; // Calculate the next Event
-	// protected int mrEvent = Integer.MAX_VALUE; // Event relied to the message
-	// reception
-
-	protected Thread thread;
-
+	//----------------------------------
+	
+	protected double event = Double.MAX_VALUE;		// Event relied to actions = sending/receiving
+	protected double event2 = Double.MAX_VALUE;		// Event relied to mobility
+	//protected int nextEvent = Integer.MAX_VALUE;		// Calculate the next Event
+	//protected int mrEvent = Integer.MAX_VALUE;		// Event relied to the message reception	
+	
+	protected Thread thread;	
+	
 	protected String message = "";
-
+	
 	Random random = new Random();
-
-	// ------
+	
+	// ------	
 
 	/**
 	 * Empty constructor
@@ -200,15 +190,15 @@ public abstract class Device
 	 *            Longitude
 	 * @param y
 	 *            Latitude
-	 * @param z
+	 * @param z         
 	 *            Elevation
 	 * @param radius
 	 *            Radius
 	 */
 	public Device(double x, double y, double z, double radius, int id) {
-		if (id == -1)
+		if(id==-1) 
 			this.id = DeviceList.number++;
-		else
+		else 
 			this.id = id;
 		userId = "_" + id;
 		this.longitude = x;
@@ -266,7 +256,7 @@ public abstract class Device
 	 * @param gpsFileName
 	 */
 	public void setGPSFileName(String gpsFileName) {
-		if (gpsFileName.endsWith(".gps"))
+		if(gpsFileName.endsWith(".gps"))
 			this.gpsFileName = gpsFileName;
 		else
 			this.gpsFileName = "";
@@ -288,13 +278,13 @@ public abstract class Device
 	}
 
 	public void drawSensorUnit(Graphics g) {
-
+		
 	}
-
+	
 	public void drawRadioRange(Graphics g) {
-
+		
 	}
-
+	
 	/**
 	 * Consume
 	 * 
@@ -303,73 +293,29 @@ public abstract class Device
 	public void consume(int v) {
 		getBattery().consume(v);
 	}
-
+	
 	/**
 	 * consumeTx
 	 * 
 	 * @param v
 	 */
-	// ------------------------------------------------------------------------------------------KADJOUH
 	public void consumeTx(int v) {
-
-		if (WisenSimulation.weather) {
-			double currentTemperature = WeatherScenario.getCurrentTemperature();
-			int capacity = this.getBattery().getBatteryModel().getCapacity();
-			double tension = this.getBattery().getBatteryModel().getTension();
-			String dischargeCurrentModel = this.getBattery().getBatteryModel().getDischargeCurrentModel();
-			double tt1o = 0.0039; // time to transfert one octet in zigBee
-									// transmission
-
-			double dischargeCurrent = 5;
-			try {
-				dischargeCurrent = BatteryModel.getCurrentFromModel(currentTemperature, tension, dischargeCurrentModel);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			capacity = (int) (this.getBattery().getInitialLevel());
-			double lc = BatteryModel.levelConsumption(dischargeCurrent, capacity, tt1o);
-			getBattery().consume(v * lc * pl / 100.);
-		} else
-			getBattery().consume(v * eTx * pl / 100.);
-
+		//System.out.println(consumptionTx*v*eTx);
+		//this.getBattery().consume(consumptionTx*v*eTx*pl/100.);
+		getBattery().consume(v*eTx*pl/100.);
 	}
-
-	// ------------------------------------------------------------------------------------------KADJOUH
-
+	
 	/**
 	 * consumeRx
 	 * 
 	 * @param v
 	 */
-	// ------------------------------------------------------------------------------------------KADJOUH
 	public void consumeRx(int v) {
-
-		if (WisenSimulation.weather) {
-			double currentTemperature = WeatherScenario.getCurrentTemperature();
-			int capacity = this.getBattery().getBatteryModel().getCapacity();
-			double tension = this.getBattery().getBatteryModel().getTension();
-			String dischargeCurrentModel = this.getBattery().getBatteryModel().getDischargeCurrentModel();
-			double tt1o = 0.0039; // time to transfert one octet in zigBee
-									// transmission
-
-			double dischargeCurrent = 5;
-			try {
-				dischargeCurrent = BatteryModel.getCurrentFromModel(currentTemperature, tension, dischargeCurrentModel);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			capacity = (int) (this.getBattery().getInitialLevel());
-			double lc = BatteryModel.levelConsumption(dischargeCurrent, capacity, tt1o);
-			getBattery().consume(v * lc);
-		} else
-			getBattery().consume(v * eRx);
-
+		//this.getBattery().consume(consumptionRx*v*eRx);
+		getBattery().consume(v*eRx);
 	}
-
-	// ------------------------------------------------------------------------------------------KADJOUH
-
+	
+	
 	/**
 	 * ConsumeTx v units
 	 * 
@@ -377,7 +323,7 @@ public abstract class Device
 	 */
 	public void consumeTx(double v) {
 	}
-
+	
 	/**
 	 * ConsumeRx v units
 	 * 
@@ -402,53 +348,53 @@ public abstract class Device
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	
 	public void setMy(int my) {
 		this.my = my;
 	}
-
+	
 	public void setPl(int pl) {
 		this.pl = pl;
 	}
-
+	
 	public void setStd(String str) {
-		if (str.equals("NONE")) {
-			standard = Standard.NONE;
+		if(str.equals("NONE")) {
+			standard = Standard.NONE;			
 		}
-		if (str.equals("802.15.4")) {
+		if(str.equals("802.15.4")) {
 			standard = Standard.ZIGBEE_802_15_4;
 		}
-		if (str.equals("WIFI 802.11")) {
+		if(str.equals("WIFI 802.11")) {
 			standard = Standard.WIFI_802_11;
 		}
-		if (str.equals("LoRa")) {
+		if(str.equals("LoRa")) {
 			standard = Standard.LORA;
 		}
 		radioDataRate = Standard.getDataRate(standard);
 	}
-
+	
 	public int getMy() {
-		return my;
+		return my; 
 	}
-
+	
 	public int getPl() {
-		return pl;
+		return pl; 
 	}
-
+	
 	public void setCh(int ch) {
 		this.ch = ch;
 	}
-
+	
 	public int getCh() {
-		return ch;
+		return ch; 
 	}
-
+	
 	public void setNId(int nId) {
 		this.nId = nId;
 	}
-
+	
 	public int getNId() {
-		return nId;
+		return nId; 
 	}
 
 	/**
@@ -467,25 +413,6 @@ public abstract class Device
 		this.userId = userId;
 	}
 
-	// ------------------------------------------------------------------------------------------KADJOUH
-	/**
-	 * Set a path and name for the battery Model file
-	 * 
-	 * @param batteryModelFileName
-	 */
-	public void setBatteryModelFileName(String batteryModelFileName) {
-		this.batteryModelFileName = batteryModelFileName;
-	}
-
-	/**
-	 * @return the path of battery Model File
-	 */
-	public String getBatteryModelFileName() {
-		return batteryModelFileName;
-	}
-
-	// ------------------------------------------------------------------------------------------KADJOUH
-
 	/**
 	 * Set a path and name for the script file
 	 * 
@@ -493,7 +420,7 @@ public abstract class Device
 	 */
 	public void setScriptFileName(String scriptFileName) {
 		this.scriptFileName = scriptFileName;
-		// deviceSimulator.setScriptFile(scriptFileName);
+		//deviceSimulator.setScriptFile(scriptFileName);
 	}
 
 	/**
@@ -510,23 +437,20 @@ public abstract class Device
 	 */
 	public void setInfos(String[][] infos) {
 		this.infos = infos;
-	}
+	}	
 
 	/**
 	 * @return the informations about the device
 	 */
 	public String[][] getInfos() {
-		infos[0][1] = "S" + id;
-		infos[1][1] = "" + id;
-		infos[2][1] = "" + my;
-		infos[3][1] = "" + nId + " (" + Integer.toHexString(nId).toUpperCase() + ")";
-		infos[4][1] = "" + ch + " (" + Integer.toHexString(ch).toUpperCase() + ")";
+		infos[0][1] = "S"+id;
+		infos[1][1] = ""+id;
+		infos[2][1] = ""+my;
+		infos[3][1] = ""+nId+" ("+Integer.toHexString(nId).toUpperCase()+")";
+		infos[4][1] = ""+ch+" ("+Integer.toHexString(ch).toUpperCase()+")";
 		infos[5][1] = scriptFileName;
 		infos[6][1] = gpsFileName;
-		infos[7][1] = getBatteryLevelInPercent() + " % [" + (int) getBatteryConsumption() + "]";
-		// ------------------------------------------------------------------------------------------KADJOUH
-		infos[8][1] = batteryModelFileName;
-		// ------------------------------------------------------------------------------------------KADJOUH
+		infos[7][1] = getBatteryLevelInPercent()+" % ["+(int)getBatteryConsumption()+"]";
 		return infos;
 	}
 
@@ -537,69 +461,67 @@ public abstract class Device
 	 *            Yes/No (to select the device by algorithms)
 	 */
 	public void setMarked(boolean b) {
-		if (b)
+		if(b) 
 			ledColor = 1;
 		else
 			ledColor = 0;
 		this.marked = b;
 	}
-
+		
 	/**
 	 * Returns if the node is selected by the algorithm (yellow color)
-	 * 
 	 * @return marked
 	 */
 	public boolean isMarked() {
 		return marked;
 	}
-
+	
 	public void setVisited(boolean visited) {
-		this.visited = visited;
+		this.visited = visited ;
 	}
-
+	
 	/**
-	 * Returns if the node is visited by the algorithm This parameter is used to
-	 * simplify algorithms programming
-	 * 
+	 * Returns if the node is visited by the algorithm
+	 * This parameter is used to simplify 
+	 * algorithms programming
 	 * @return visited
 	 */
 	public boolean isVisited() {
 		return visited;
 	}
-
+		
 	/**
 	 * Set if the device is dead or not
 	 * 
 	 * @param dead
 	 */
 	public void setDead(boolean dead) {
-		if (dead) {
+		if(dead) {
 			this.marked = false;
 			this.getBattery().setLevel(0);
-		}
+		} 
 	}
-
+	
 	public boolean isDead() {
-		if (getBatteryLevel() <= 0)
-			return true;
+		if(getBatteryLevel()<=0) return true;
 		return false;
 	}
-
+	
 	/**
 	 * @return the sensor unit radius
 	 */
 	public double getSensorUnitRadius() {
 		return 0.0;
 	}
-
+	
 	public double getSensorUnitDeg() {
 		return 0.0;
 	}
-
+	
 	public double getSensorUnitDec() {
 		return 0.0;
 	}
-
+	
 	public int getSensorUnitN() {
 		return 0;
 	}
@@ -610,22 +532,22 @@ public abstract class Device
 	public double getRadioRadius() {
 		return 0.0;
 	}
-	//
-	// public boolean isDetected() {
-	// for(Device device : DeviceList.getNodes()) {
-	// if(device.detection(this)) {
-	// device.setDetection(true);
-	// device.setDetecting(true);
-	// return true;
-	// }
-	// else {
-	// device.setDetection(false);
-	// device.setDetecting(false);
-	// }
-	// }
-	// return false;
-	// }
-
+//
+//	public boolean isDetected() {
+//		for(Device device : DeviceList.getNodes()) {
+//			if(device.detection(this)) {
+//				device.setDetection(true);
+//				device.setDetecting(true);
+//				return true;
+//			}
+//			else {
+//				device.setDetection(false);
+//				device.setDetecting(false);
+//			}
+//		}
+//		return false;
+//	}
+	
 	/**
 	 * @return if the device is with or without radio
 	 */
@@ -671,8 +593,8 @@ public abstract class Device
 	 * @return the longitude
 	 */
 	public double getLongitude() {
-		// longitude = (int) (longitude * 10000000);
-		// longitude = longitude / 10000000;
+		//longitude = (int) (longitude * 10000000);
+		//longitude = longitude / 10000000;
 		return longitude;
 	}
 
@@ -682,7 +604,7 @@ public abstract class Device
 	 * @param x
 	 *            Longitude
 	 */
-	public void setLongitude(double x) {
+	public void setLongitude(double x) {		
 		this.longitude = x;
 	}
 
@@ -690,8 +612,8 @@ public abstract class Device
 	 * @return the latitude
 	 */
 	public double getLatitude() {
-		// latitude = (int) (latitude * 10000000);
-		// latitude = latitude / 10000000;
+		//latitude = (int) (latitude * 10000000);
+		//latitude = latitude / 10000000;
 		return latitude;
 	}
 
@@ -718,10 +640,10 @@ public abstract class Device
 	 * @param x
 	 *            elevation
 	 */
-	public void setElevation(double elevation) {
+	public void setElevation(double elevation) {		
 		this.elevation = elevation;
 	}
-
+	
 	/**
 	 * Set if it is possible to move or not the device
 	 * 
@@ -736,7 +658,8 @@ public abstract class Device
 	 * @return the value of the radio in meter from a value given in pixels
 	 */
 	public double convertRadius() {
-		return 40075017.0 * Math.cos(latitude) / Math.pow(2, (MapLayer.getMapViewer().getZoom() + 8));
+		return 40075017.0 * Math.cos(latitude)
+				/ Math.pow(2, (MapLayer.getMapViewer().getZoom() + 8));
 	}
 
 	/**
@@ -758,12 +681,11 @@ public abstract class Device
 		double d2 = p1.getY() - p2.getY();
 		inside = false;
 		double v = Math.sqrt(d1 * d1 + d2 * d2);
-		if (v < getInsideRadius()) { // MapCalc.radiusInPixels(getMaxRadius()))
-										// {
+		if (v < getInsideRadius()) { //MapCalc.radiusInPixels(getMaxRadius())) {
 			inside = true;
 		}
 	}
-
+	
 	public int getInsideRadius() {
 		return 10;
 	}
@@ -797,11 +719,10 @@ public abstract class Device
 		double y2 = device.getLatitude();
 		return MapCalc.distance(longitude, latitude, x2, y2);
 	}
-
+	
 	public double distance(int id) {
 		DeviceWithRadio device = (DeviceWithRadio) DeviceList.getNodeById(id);
-		if (!radioDetect(device))
-			return -1;
+		if (!radioDetect(device)) return -1;
 		double x2 = device.getLongitude();
 		double y2 = device.getLatitude();
 		return MapCalc.distance(longitude, latitude, x2, y2);
@@ -834,95 +755,49 @@ public abstract class Device
 		return selected;
 	}
 
-	public void deviceRadioParametersEmpty() {
-		if (selected) {
-			DeviceParametersWindow.textField_Id.setText("");
-			DeviceParametersWindow.tf_longitude.setText("");
-			DeviceParametersWindow.tf_latitude.setText("");
-			DeviceParametersWindow.tf_elevation.setText("");
-			DeviceParametersWindow.tf_radius.setText("");
-			DeviceParametersWindow.tf_suRadius.setText("");
-			DeviceParametersWindow.tf_eMax.setText("");
-			DeviceParametersWindow.tf_eS.setText("");
-			DeviceParametersWindow.scriptComboBox.setSelectedItem("");
-			DeviceParametersWindow.gpsPathNameComboBox.setSelectedItem("");
-
-			RadioParametersWindow.textField_My.setText("");
-			RadioParametersWindow.textField_Ch.setText("");
-			RadioParametersWindow.textField_NId.setText("");
-			RadioParametersWindow.tf_radioRadius.setText("");
-			RadioParametersWindow.tf_eTx.setText("");
-			RadioParametersWindow.tf_eRx.setText("");
-			RadioParametersWindow.tf_eSlp.setText("");
-			RadioParametersWindow.tf_eL.setText("");
-			RadioParametersWindow.tf_radioDataRate.setText("");
-			RadioParametersWindow.stdComboBox.setSelectedIndex(getStandard());
-
-			DeviceParametersWindow.scriptComboBox.setSelectedItem("");
-			DeviceParametersWindow.gpsPathNameComboBox.setSelectedItem("");
-		}
-	}
-
 	/**
 	 * Update the window of the device/radio parameters
 	 */
 	public void deviceRadioParametersUpdate() {
 		if (selected) {
-			DeviceParametersWindow.textField_Id.setText("" + id);
-			DeviceParametersWindow.tf_longitude.setText("" + longitude);
-			DeviceParametersWindow.tf_latitude.setText("" + latitude);
-			DeviceParametersWindow.tf_elevation.setText("" + elevation);
-			DeviceParametersWindow.tf_radius.setText("" + getRadius());
-			DeviceParametersWindow.tf_suRadius.setText("" + getSensorUnitRadius());
-			DeviceParametersWindow.tf_eMax.setText("" + this.getBatteryLevel());
-			DeviceParametersWindow.tf_eS.setText("" + getES());
-
-			// ------------------------------------------------------------------------------------------KADJOUH
-			DeviceParametersWindow.batteryModelComboBox.setSelectedItem("");
-			// ------------------------------------------------------------------------------------------KADJOUH
-
-			DeviceParametersWindow.scriptComboBox.setSelectedItem("");
-			DeviceParametersWindow.gpsPathNameComboBox.setSelectedItem("");
-			// DeviceParametersWindow.stdComboBox.
-
-			RadioParametersWindow.textField_My.setText("" + my);
-			RadioParametersWindow.textField_Ch.setText("" + ch);
-			RadioParametersWindow.textField_NId.setText("" + nId);
-			RadioParametersWindow.tf_radioRadius.setText("" + getRadioRadius());
-			RadioParametersWindow.tf_eTx.setText("" + getETx());
-			RadioParametersWindow.tf_eRx.setText("" + getERx());
-			RadioParametersWindow.tf_eSlp.setText("" + getESlp());
-			RadioParametersWindow.tf_eL.setText("" + getEL());
+			DeviceParametersWindow.textField_Id.setText("" + id) ;		
+			DeviceParametersWindow.tf_longitude.setText("" + longitude) ;
+			DeviceParametersWindow.tf_latitude.setText("" + latitude) ;
+			DeviceParametersWindow.tf_elevation.setText("" + elevation) ;
+			DeviceParametersWindow.tf_radius.setText("" + getRadius()) ;			
+			DeviceParametersWindow.tf_suRadius.setText("" + getSensorUnitRadius()) ; 
+			DeviceParametersWindow.tf_eMax.setText("" + this.getBatteryLevel()) ;		
+			DeviceParametersWindow.tf_eS.setText("" + getES()) ;
+			DeviceParametersWindow.scriptComboBox.setSelectedItem("") ;
+			DeviceParametersWindow.gpsPathNameComboBox.setSelectedItem("") ;
+			//DeviceParametersWindow.stdComboBox.
+			
+			RadioParametersWindow.textField_My.setText("" + my) ;
+			RadioParametersWindow.textField_Ch.setText("" + ch) ;
+			RadioParametersWindow.textField_NId.setText("" + nId) ;
+			RadioParametersWindow.tf_radioRadius.setText("" + getRadioRadius()) ;
+			RadioParametersWindow.tf_eTx.setText("" + getETx()) ;
+			RadioParametersWindow.tf_eRx.setText("" + getERx()) ;
+			RadioParametersWindow.tf_eSlp.setText("" + getESlp()) ;
+			RadioParametersWindow.tf_eL.setText("" + getEL()) ;
 			RadioParametersWindow.tf_radioDataRate.setText("" + getRadioDataRate());
 			RadioParametersWindow.stdComboBox.setSelectedIndex(getStandard());
-
+			
 			String[] gpsFile;
 			String gpsFileName;
 			String[] scriptFile;
 			String scriptFileName;
-
-			// ------------------------------------------------------------------------------------------KADJOUH
-			String[] batteryModelFile;
-			String batteryModelFileName;
-
-			if (!getBatteryModelFileName().equals("")) {
-
-				batteryModelFile = getBatteryModelFileName().split(Pattern.quote(File.separator));
-				batteryModelFileName = batteryModelFile[batteryModelFile.length - 1];
-				DeviceParametersWindow.batteryModelComboBox.setSelectedItem(batteryModelFileName);
-			}
-			// ------------------------------------------------------------------------------------------KADJOUH
-
-			if (!getScriptFileName().equals("")) {
+			
+			if(!getScriptFileName().equals("")) {
 				scriptFile = getScriptFileName().split(Pattern.quote(File.separator));
 				scriptFileName = scriptFile[scriptFile.length - 1];
 				DeviceParametersWindow.scriptComboBox.setSelectedItem(scriptFileName);
 			}
-
-			if (!getGPSFileName().equals("")) {
+			
+			if(!getGPSFileName().equals("")) {
 				gpsFile = getGPSFileName().split(Pattern.quote(File.separator));
 				gpsFileName = gpsFile[gpsFile.length - 1];
-				DeviceParametersWindow.gpsPathNameComboBox.setSelectedItem(gpsFileName);
+				DeviceParametersWindow.gpsPathNameComboBox.setSelectedItem(gpsFileName);				
 			}
 		}
 	}
@@ -954,28 +829,25 @@ public abstract class Device
 	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		deviceRadioParametersUpdate();
 		if (!inside && !ctrlDown) {
 			selected = false;
 			MapLayer.getMapViewer().repaint();
 		}
 
-		if (inside) {
-			selected = !selected;
+		if (inside) {			
+			selected = !selected;			
 			MapLayer.getMapViewer().repaint();
 		}
-
-		if (move) {
+		
+		if(move) {
 			move = false;
 			Visualisation.moveDevice(this);
 			MapLayer.getMapViewer().repaint();
-		}
+		}		
 		increaseNode = false;
 		reduceNode = false;
-		// calculateNeighbours();
-
-		if (selected) {
-			deviceRadioParametersUpdate();
-		}
+		//calculateNeighbours();
 	}
 
 	/*
@@ -1029,18 +901,18 @@ public abstract class Device
 			altDown = true;
 		if (key.isControlDown())
 			ctrlDown = true;
-		// if (key.isMetaDown())
-		// cmdDown = true;
+		//if (key.isMetaDown())
+		//	cmdDown = true;
 		if (key.getKeyCode() == 65 && ctrlDown) {
 			selected = true;
-			if (move) {
+			if(move) {
 				Visualisation.moveDevice(this);
 				move = false;
 			}
 		}
-		// if (key.getKeyCode() == 75 && ctrlDown) {
-		// visible = true;
-		// }
+//		if (key.getKeyCode() == 75 && ctrlDown) {
+//			visible = true;
+//		}
 	}
 
 	/*
@@ -1053,7 +925,7 @@ public abstract class Device
 		altDown = false;
 		shiftDown = false;
 		ctrlDown = false;
-		// cmdDown = false;
+		//cmdDown = false;
 	}
 
 	/**
@@ -1063,22 +935,20 @@ public abstract class Device
 		id = ++DeviceList.number;
 	}
 
+	
 	@Override
-	public void keyTyped(KeyEvent e) {
+	public void keyTyped(KeyEvent e) {		
 		key = e.getKeyChar();
 
-		if (selected) {
-			// deviceRadioParametersUpdate();
+		if (selected) {			
 			if (key == 'c') {
 				try {
 					// Layer.addNode(this.clone());
 					DeviceList.add(this.clone());
 					move = false;
 					/* For CTRL Z */
-					// AddDevice action = new
-					// AddDevice(DeviceList.getNodes().get(DeviceList.size()-1),
-					// "Clone");
-					// action.exec();
+					//AddDevice action = new AddDevice(DeviceList.getNodes().get(DeviceList.size()-1), "Clone");
+					//action.exec();
 					/* ------ */
 				} catch (CloneNotSupportedException e1) {
 					e1.printStackTrace();
@@ -1110,7 +980,7 @@ public abstract class Device
 				if (radius > 0)
 					radius -= 5;
 			}
-		}
+		}		
 
 		if (key == 'S') {// && (!ctrlDown && !cmdDown)) {
 			simulate();
@@ -1120,30 +990,30 @@ public abstract class Device
 			stopSimulation();
 		}
 
-		if (key == 'm') {
-			// boolean typeDevice = false;
-			if (selected) {
-				// for (Device device : DeviceList.getNodes()) {
-				// if(getId()==device.getId()) {
-				// typeDevice = true;
-				// break;
-				// }
-				// }
+		if (key == 'm') {			
+			//boolean typeDevice = false;
+			if(selected) {
+//				for (Device device : DeviceList.getNodes()) {
+//					if(getId()==device.getId()) {
+//						typeDevice = true;
+//						break;
+//					}
+//				}
 				move = true;
 				increaseNode = false;
 				reduceNode = false;
-				// if(typeDevice){
-				// actionMoveDevice(getNodeIdName());
-				// }
-				// else {
-				// actionMoveMarker(getNodeIdName());
-				// }
-			}
+//				if(typeDevice){
+//					actionMoveDevice(getNodeIdName());	
+//				}
+//				else {
+//					actionMoveMarker(getNodeIdName());
+//				}				
+			}			
 		}
 
-		// if (key == 'l') {
-		// move = false;
-		// }
+		//if (key == 'l') {
+		//	move = false;
+		//}	
 
 		if (key == 'z') {
 			selected = false;
@@ -1159,10 +1029,10 @@ public abstract class Device
 
 		if (key == 'r') {
 			displayInfos = !displayInfos;
-		}
-
+		}		
+		
 		if (key == 'g') {
-			if (selected)
+			if(selected)
 				drawTxRx = !drawTxRx;
 		}
 
@@ -1170,14 +1040,15 @@ public abstract class Device
 			if (selected)
 				drawBatteryLevel = !drawBatteryLevel;
 		}
-
+		
 		if (key == 'n') {
-			if (selected) {
-				if (getBatteryLevel() > 0) {
-					getBattery().setLevel(0);
-				} else
+			if (selected) {				
+				if (getBatteryLevel()>0) {
+					getBattery().setLevel(0);					
+				}
+				else
 					getBattery().init();
-				if (DeviceList.propagationsCalculated)
+				if(DeviceList.propagationsCalculated)
 					DeviceList.calculatePropagations();
 			}
 		}
@@ -1186,16 +1057,18 @@ public abstract class Device
 			selected = false;
 			if (MapLayer.selectType == getType())
 				selected = true;
-		}
+		}		
 
-		if (key == '1' || key == '2' || key == '3' || key == '4' || key == '5' || key == '6' || key == '7'
-				|| key == '8') {
+		if (key == '1' || key == '2' || key == '3' || key == '4' || key == '5'
+				|| key == '6' || key == '7' || key == '8') {
 			move = false;
 			selected = false;
 		}
-
+		
 		MapLayer.getMapViewer().repaint();
 	}
+
+
 
 	/**
 	 * Stop the simulation
@@ -1206,13 +1079,13 @@ public abstract class Device
 			thread.stop();
 			longitude = longitude_ori;
 			latitude = latitude_ori;
-		}
+		}		
 		thread = null;
 		underSimulation = false;
-		// if(getType()==Device.SENSOR) getBattery().init();
+		//if(getType()==Device.SENSOR) getBattery().init();
 		MapLayer.getMapViewer().repaint();
 	}
-
+	
 	public void stopSimByAlgo() {
 		thread = null;
 		underSimulation = false;
@@ -1258,8 +1131,8 @@ public abstract class Device
 	public void mouseDragged(MouseEvent arg0) {
 	}
 
-	public abstract void initGeoZoneList();
-
+	public abstract void initGeoZoneList() ;
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -1270,19 +1143,19 @@ public abstract class Device
 	public void mouseMoved(MouseEvent e) {
 		int cx = e.getX();
 		int cy = e.getY();
-
+		
 		if (MapLayer.magnetic) {
 			cx = cx - (cx % MapLayer.magnetic_step);
 			cy = cy - (cy % MapLayer.magnetic_step);
 		}
-		// Point p = new Point(e.getX(), e.getY());
+		//Point p = new Point(e.getX(), e.getY());
 		Point p = new Point(cx, cy);
 		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
 		double ex = gp.getLongitude();
 		double ey = gp.getLatitude();
 
-		if (!move) {
-			// calculateDxDy(e.getX(), e.getY());
+		if (!move) {			
+			//calculateDxDy(e.getX(), e.getY());
 			calculateDxDy(cx, cy);
 		}
 
@@ -1291,17 +1164,17 @@ public abstract class Device
 		inside(e.getX(), e.getY());
 
 		if (inside != tmp_inside) {
-			// sensorParametersUpdate();
+			//sensorParametersUpdate();
 			MapLayer.getMapViewer().repaint();
 		}
 
 		if ((move && selected) && hide == 0) {
-
-			if (geoZoneList != null && geoZoneList.size() > 0)
-				initGeoZoneList();
+			
+			if(geoZoneList!=null && geoZoneList.size()>0)
+				initGeoZoneList() ;
 			longitude = ex - dlongitude;
 			latitude = ey - dlatitude;
-			// calculateNeighbours();
+			//calculateNeighbours();
 			Visualisation.updatePosition(Device.SENSOR, id, this);
 			MapLayer.getMapViewer().repaint();
 		}
@@ -1314,7 +1187,7 @@ public abstract class Device
 			if (radius > 0)
 				radius -= 30;
 			MapLayer.getMapViewer().repaint();
-		}
+		}		
 	}
 
 	/**
@@ -1385,34 +1258,34 @@ public abstract class Device
 	public void drawId(int x, int y, Graphics g) {
 		if (DeviceParameters.displayDetails) {
 			g.setColor(Color.BLACK);
-			g.drawString(getNodeIdName() + " [" + my + "]", (int) (x + 10), (int) (y + 5));
-			if (!message.equals("")) {
+			g.drawString(getNodeIdName()+" ["+my+"]", (int) (x + 10), (int) (y + 5));
+			if(!message.equals("")) {
 				g.setColor(Color.BLUE);
-				g.drawString(">> " + message, (int) (x + 10), (int) (y + 15));
+				g.drawString(">> "+message, (int) (x + 10), (int) (y + 15));
 			}
 		}
 	}
-
+	
 	public void drawId2(int x, int y, Graphics g) {
 		if (DeviceParameters.displayDetails) {
 			g.setColor(Color.BLACK);
 			g.drawString(getNodeIdName(), (int) (x + 10), (int) (y + 10));
 		}
-	}
-
-	// /**
-	// * @param device
-	// * @return if a device is in the radio area of the current device
-	// */
-	// public boolean radioDetect(Device device) {
-	// if (withRadio && device.withRadio()) {
-	// // double dMax = Math.max(MapCalc.rayonEnPixel(getRadioRadius()),
-	// // MapCalc.rayonEnPixel(node.getRadioRadius()));
-	// double dMax = Math.max(getRadioRadius(), device.getRadioRadius());
-	// return (dMax > (distance(device)));
-	// }
-	// return false;
-	// }
+	}	
+	
+//	/**
+//	 * @param device
+//	 * @return if a device is in the radio area of the current device
+//	 */
+//	public boolean radioDetect(Device device) {
+//		if (withRadio && device.withRadio()) {
+//			// double dMax = Math.max(MapCalc.rayonEnPixel(getRadioRadius()),
+//			// MapCalc.rayonEnPixel(node.getRadioRadius()));
+//			double dMax = Math.max(getRadioRadius(), device.getRadioRadius());
+//			return (dMax > (distance(device)));
+//		}
+//		return false;
+//	}
 
 	/**
 	 * Draw the radius
@@ -1428,11 +1301,11 @@ public abstract class Device
 	 */
 	public void drawRadius(int x, int y, int r, Graphics g) {
 	}
-
+	
 	public boolean displayInfos() {
 		return displayInfos;
 	}
-
+	
 	/**
 	 * Draw the informations of the device
 	 * 
@@ -1463,9 +1336,6 @@ public abstract class Device
 			g.drawString(getInfos()[5][0] + getInfos()[5][1], lx1 + 30, ly1 + 40);
 			g.drawString(getInfos()[6][0] + getInfos()[6][1], lx1 + 30, ly1 + 50);
 			g.drawString(getInfos()[7][0] + getInfos()[7][1], lx1 + 30, ly1 + 60);
-			// ------------------------------------------------------------------------------------------KADJOUH
-			g.drawString(getInfos()[8][0] + getInfos()[8][1], lx1 + 30, ly1 + 70);
-			// ------------------------------------------------------------------------------------------KADJOUH
 		}
 	}
 
@@ -1474,11 +1344,6 @@ public abstract class Device
 		Device newNode = (Device) super.clone();
 		newNode.setId();
 		newNode.move = true;
-		
-		//------------------------------------------------------------------------------------------KADJOUH			
-		newNode.setBatteryModelFileName(batteryModelFileName);
-		//------------------------------------------------------------------------------------------KADJOUH	
-		
 		newNode.setScriptFileName(scriptFileName);
 		newNode.setGPSFileName(gpsFileName);
 		MapLayer.getMapViewer().addMouseListener(newNode);
@@ -1503,26 +1368,26 @@ public abstract class Device
 	 * @return the battery level
 	 */
 	public double getBatteryLevel() {
-		if (getBattery() != null)
+		if(getBattery() != null)
 			return getBattery().getLevel();
 		return 0;
 	}
-
+	
 	/**
 	 * Set the battery level
 	 */
 	public void setBatteryLevel(double level) {
-		if (getBattery() != null)
+		if(getBattery() != null)
 			getBattery().setLevel(level);
 	}
-
+	
 	/**
 	 * @return the battery level in percent
 	 */
 	public int getBatteryLevelInPercent() {
 		return getBattery().getLevelInPercent();
 	}
-
+	
 	public double getBatteryConsumption() {
 		return getBattery().getBatteryConsumption();
 	}
@@ -1568,7 +1433,7 @@ public abstract class Device
 	public static void incNumber() {
 		DeviceList.number++;
 	}
-
+	
 	public void fixori() {
 		longitude_ori = longitude;
 		latitude_ori = latitude;
@@ -1579,30 +1444,26 @@ public abstract class Device
 		longitude = longitude_ori;
 		latitude = latitude_ori;
 		elevation = elevation_ori;
-		// if (SimulationInputs.visibility && isMobile()) {
-		// Vi_VisibilityZones vz = new Vi_VisibilityZones((SensorNode) this);
-		// vz.calculate();
-		// }
+//		if (SimulationInputs.visibility && isMobile()) {
+//			VisibilityZones vz = new VisibilityZones((SensorNode) this);
+//			vz.calculate();
+//		}
 	}
-
+	
 	public int getHide() {
 		return this.hide;
 	}
 
 	public abstract double getNextTime();
-
 	public abstract void loadRouteFromFile();
-
 	public abstract void moveToNext(boolean visual, int visualDelay);
-
-	public abstract boolean hasNext();
-
+	public abstract boolean hasNext() ;
 	public abstract boolean canMove();
 
 	public void setLedColor(int ledColor) {
 		this.ledColor = ledColor;
 	}
-
+	
 	public int getLedColor() {
 		return ledColor;
 	}
@@ -1622,7 +1483,7 @@ public abstract class Device
 	public void setERx(double eRx) {
 		this.eRx = eRx;
 	}
-
+	
 	public double getESlp() {
 		return eSlp;
 	}
@@ -1639,6 +1500,7 @@ public abstract class Device
 		this.eL = eL;
 	}
 
+
 	public double getES() {
 		return eS;
 	}
@@ -1646,13 +1508,13 @@ public abstract class Device
 	public void setES(double eS) {
 		this.eS = eS;
 	}
-
+	
 	public void setTrgetName(String targetName) {
 		this.targetName = targetName;
 	}
-
+	
 	public String getTargetName() {
-		return targetName;
+		return targetName ;
 	}
 
 	public double getValue() {
@@ -1661,84 +1523,79 @@ public abstract class Device
 
 	public void setValue(double value) {
 		this.value = value;
-	}
-
+	}	
+	
 	@Override
 	public String toString() {
-		return "" + id;
+		return ""+id;
 	}
-
-	// ------
+	
+	//------
 	public void creatValueList() {
 		valueList = new LinkedList<Double>();
 	}
-
+	
 	public Double getIthValue(int i) {
 		return valueList.get(i);
 	}
-
+	
 	public void addValue(Double value) {
 		valueList.add(value);
 	}
-
+	
 	// Remove the first occurence
 	public void removeValue(Double value) {
 		valueList.remove(value);
 	}
-
+	
 	public void removeIthValue(int i) {
 		valueList.remove(i);
 	}
-
+	
 	public Script getScript() {
 		return script;
 	}
-
+	
 	public void setEvent(double event) {
-		this.event = event;
+		this.event = event ;
 	}
-
+	
 	public void setEvent(String event) {
-		this.event = Double.parseDouble(event);
+		this.event = Double.parseDouble(event) ;
 	}
-
+	
 	public double getEvent() {
 		return event;
 	}
-
+	
 	public void setEvent2(double event) {
-		this.event2 = event;
+		this.event2 = event ;
 	}
-
+	
 	public double getEvent2() {
 		return event2;
 	}
 
 	public abstract void loadScript();
-
-	public abstract void initBuffer();
-
+	
+	public abstract void initBuffer() ;
+	
 	public abstract void initForSimulation();
-
+	
 	public void deviceMoveAction(String s) {
 		try {
 			DeviceList.add(cloneWithSameId());
-			MoveDevice action = new MoveDevice(DeviceList.getNodes().get(DeviceList.size() - 1), "Move");
+			MoveDevice action = new MoveDevice(DeviceList.getNodes().get(DeviceList.size()-1), "Move");
 			action.exec();
-			DeviceList.delete(DeviceList.size() - 1); // WithClone
+			DeviceList.delete(DeviceList.size()-1);	//	WithClone
 		} catch (CloneNotSupportedException e1) {
 			e1.printStackTrace();
 		}
 	}
-
+		
 	public Device cloneWithSameId() throws CloneNotSupportedException {
 		Device newNode = (Device) super.clone();
 		newNode.move = true;
-
-		// ------------------------------------------------------------------------------------------KADJOUH
-		newNode.setBatteryModelFileName(batteryModelFileName);
-		// ------------------------------------------------------------------------------------------KADJOUH
-
 		newNode.setScriptFileName(scriptFileName);
 		newNode.setGPSFileName(gpsFileName);
 		MapLayer.getMapViewer().addMouseListener(newNode);
@@ -1746,13 +1603,10 @@ public abstract class Device
 		MapLayer.getMapViewer().addKeyListener(newNode);
 		return newNode;
 	}
-
+	
 	public Device cloneDeviceWithId() throws CloneNotSupportedException {
 		Device newNode = (Device) super.clone();
 		newNode.move = true;
-		// ------------------------------------------------------------------------------------------KADJOUH
-		newNode.setBatteryModelFileName(batteryModelFileName);
-		// ------------------------------------------------------------------------------------------KADJOUH
 		newNode.setScriptFileName(scriptFileName);
 		newNode.setGPSFileName(gpsFileName);
 		MapLayer.getMapViewer().addMouseListener(newNode);
@@ -1760,82 +1614,74 @@ public abstract class Device
 		MapLayer.getMapViewer().addKeyListener(newNode);
 		return newNode;
 	}
-
-	// public void actionMoveDevice(String s) {
-	// try {
-	// DeviceList.add(this.cloneDeviceWithId());
-	// MoveDevice action = new
-	// MoveDevice(DeviceList.getNodes().get(DeviceList.size()-1), "Move");
-	// action.exec();
-	// DeviceList.delete(DeviceList.size()-1); // WithClone
-	// } catch (CloneNotSupportedException e1) {
-	// e1.printStackTrace();
-	// }
-	// }
-
-	// public void actionMoveMarker(String s) {
-	// try {
-	// MarkerList.add((Marker)this.cloneMarker());
-	// MoveMarker action = new
-	// MoveMarker(MarkerList.getMarkers().get(MarkerList.size()-1),
-	// "MoveMarker");
-	// action.exec();
-	// MarkerList.delete(MarkerList.size()-1);
-	// } catch (CloneNotSupportedException e1) {
-	// e1.printStackTrace();
-	// }
-	// }
-	public Device cloneMarker() throws CloneNotSupportedException {
-		Device newNode = (Marker) super.clone();
-		newNode.move = true;
-
-		// ------------------------------------------------------------------------------------------KADJOUH
-		newNode.setBatteryModelFileName(batteryModelFileName);
-		// ------------------------------------------------------------------------------------------KADJOUH
-
-		newNode.setScriptFileName(scriptFileName);
-		newNode.setGPSFileName(gpsFileName);
-		MapLayer.getMapViewer().addMouseListener(newNode);
-		MapLayer.getMapViewer().addMouseMotionListener(newNode);
-		MapLayer.getMapViewer().addKeyListener(newNode);
-		return newNode;
-	}
-
+	
+//	public void actionMoveDevice(String s) {
+//		try {
+//			DeviceList.add(this.cloneDeviceWithId());
+//			MoveDevice action = new MoveDevice(DeviceList.getNodes().get(DeviceList.size()-1), "Move");
+//			action.exec();
+//			DeviceList.delete(DeviceList.size()-1);	//	WithClone
+//		} catch (CloneNotSupportedException e1) {
+//			e1.printStackTrace();
+//		}
+//	}
+	
+//	public void actionMoveMarker(String s) {
+//		try {
+//			MarkerList.add((Marker)this.cloneMarker());
+//			MoveMarker action = new MoveMarker(MarkerList.getMarkers().get(MarkerList.size()-1), "MoveMarker");
+//			action.exec();
+//			MarkerList.delete(MarkerList.size()-1);	
+//		} catch (CloneNotSupportedException e1) {
+//			e1.printStackTrace();
+//		}
+//	}
+		public Device cloneMarker() throws CloneNotSupportedException {
+			Device newNode = (Marker) super.clone();
+			newNode.move = true;
+			newNode.setScriptFileName(scriptFileName);
+			newNode.setGPSFileName(gpsFileName);
+			MapLayer.getMapViewer().addMouseListener(newNode);
+			MapLayer.getMapViewer().addMouseMotionListener(newNode);
+			MapLayer.getMapViewer().addKeyListener(newNode);
+			return newNode;
+		}
+	
 	public int getIdm() {
 		return idm;
 	}
-
+	
 	public void setIdm() {
 		idm = MarkerList.size();
 	}
-
+	
 	public void init() {
-		// packetEventList = new LinkedList<PacketEvent>();
+		//packetEventList = new LinkedList<PacketEvent>();
 		message = "";
 		setMarked(false);
 		setVisited(false);
-		setDead(false);
+		setDead(false);			
 		setLedColor(0);
 		initBattery();
 		initBuffer();
 		pl = 100;
-		// getBattery().init();
-		if (getType() == Device.SENSOR) {
+		//getBattery().init();
+		if(getType()==Device.SENSOR) {
 			setSending(false);
 			setReceiving(false);
-		}
+		}		
 	}
-
-	public abstract void initBattery();
-
+	
+	public abstract void initBattery() ;
+		
 	public boolean isSending() {
 		return sending;
 	}
-
+	
 	public boolean isWriting() {
 		return writing;
 	}
-
+	
 	public boolean isReceiving() {
 		return receiving;
 	}
@@ -1843,37 +1689,36 @@ public abstract class Device
 	public void setSending(boolean b) {
 		sending = b;
 	}
-
+	
 	public void setWriting(boolean b) {
 		writing = b;
 	}
-
+	
 	public void setReceiving(boolean b) {
 		receiving = b;
-	}
-
+	}	
+		
 	public Color getRadioLinkColor() {
 		return radioLinkColor;
 	}
-
+	
 	public Color getACKLinkColor() {
 		return ackLinkColor;
 	}
 
 	public void setRadioLinkColor(Color radioLinkColor) {
 		this.radioLinkColor = radioLinkColor;
-	}
+	}	
 
 	public void gotoTheNextInstruction() {
-		// System.out.println(getId()+" -> "+script.getCurrent()+"
-		// "+script.getIndex());
-		if (!script.getCurrent().isExecuting()) {
+		//System.out.println(getId()+" -> "+script.getCurrent()+" "+script.getIndex());
+		if(!script.getCurrent().isExecuting()) {
 			script.next();
-		}
+		}		
 	}
 
 	public void gotoTheNextEvent(double min) {
-		if (event != Double.MAX_VALUE)
+		if(event != Double.MAX_VALUE)
 			event = event - min;
 	}
 
@@ -1888,11 +1733,11 @@ public abstract class Device
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
+	
 	public String getMessage() {
 		return message;
-	}
-
+	}	
+	
 	public long getUartDataRate() {
 		return uartDataRate;
 	}
@@ -1907,8 +1752,8 @@ public abstract class Device
 
 	public void setRadioDataRate(int radioDataRate) {
 		this.radioDataRate = radioDataRate;
-	}
-
+	}	
+	
 	public int getStandard() {
 		return standard;
 	}
@@ -1918,35 +1763,30 @@ public abstract class Device
 	}
 
 	public void drift() {
-		double d = random.nextGaussian() * sigmaOfDriftTime;
-		if (d > (3.0 * sigmaOfDriftTime))
-			d = 3.0 * sigmaOfDriftTime;
-		if (d < (-3.0 * sigmaOfDriftTime))
-			d = -3.0 * sigmaOfDriftTime;
+		double d = random.nextGaussian() * sigmaOfDriftTime;		
+		if (d > (3.0*sigmaOfDriftTime))
+			d = 3.0*sigmaOfDriftTime;
+		if (d < (-3.0*sigmaOfDriftTime))
+			d = -3.0*sigmaOfDriftTime;
 		System.out.println(d);
 		driftTime = 1 - d;
-
-		// if(event != Double.MAX_VALUE)
-		// event += deltaDriftTime;
+		
+//		if(event != Double.MAX_VALUE)
+//			event += deltaDriftTime; 
 	}
-
+	
 	public double getDriftTime() {
 		return driftTime;
 	}
-
+	
 	public abstract Polygon getRadioPolygon();
-
+	
 	public abstract void execute();
-
-	public abstract void drawRadioLinks(Graphics g);
-
+	public abstract void drawRadioLinks(Graphics g) ;
 	public abstract void calculatePropagations();
-
 	public abstract void resetPropagations();
-
-	public abstract void drawRadioPropagations(Graphics g);
-
-	public abstract boolean radioDetect(DeviceWithRadio device);
+	public abstract void drawRadioPropagations(Graphics g) ;
+	public abstract boolean radioDetect(DeviceWithRadio device) ;
 
 	public void setSigmaOfDriftTime(double sigmaOfDriftTime) {
 		this.sigmaOfDriftTime = sigmaOfDriftTime;
@@ -1966,22 +1806,24 @@ public abstract class Device
 
 	public void setNumberOfSends(int numberOfSends) {
 		this.numberOfSends = numberOfSends;
-	}
+	}	
 
-	// public static void main(String [] args) {
-	// Random random = new Random();
-	// double d = random.nextGaussian();
-	// double sigma = 3;
-	// double s = 0;
-	// for(int i=0; i<10000; i++) {
-	// d = random.nextGaussian() * sigma;
-	// s += d;
-	// }
-	// System.out.println(s/10000);
-	// }
+	
+	
+//	public static void main(String [] args) {
+//		Random random = new Random();
+//		double d = random.nextGaussian();
+//		double sigma = 3; 
+//		double s = 0;
+//		for(int i=0; i<10000; i++) {
+//			d = random.nextGaussian() * sigma;
+//			s += d;
+//		}
+//		System.out.println(s/10000); 
+//	}
 
 	public boolean isMobile() {
 		return !gpsFileName.equals("");
 	}
-
+	
 }

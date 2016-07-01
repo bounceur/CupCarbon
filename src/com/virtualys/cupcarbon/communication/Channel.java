@@ -1,6 +1,6 @@
 package com.virtualys.cupcarbon.communication;
 
-import java.io.IOException;
+import java.io.*;
 
 import javax.swing.event.EventListenerList;
 

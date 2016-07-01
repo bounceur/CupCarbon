@@ -11,7 +11,7 @@ public class Command_ATND extends Command {
 	// ND: 
 	protected String arg1 = "";
 	protected String arg2 = "";
-	protected double arg3 = 0.5;
+	protected double arg3 = 0.5;//6 seconds (6=0x3C) is the value of the parameter NT: Node Discovery Timeout;
 	
 	public Command_ATND(SensorNode sensor, String arg1) {
 		this.sensor = sensor ;

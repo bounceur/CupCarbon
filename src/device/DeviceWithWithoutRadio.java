@@ -213,10 +213,8 @@ public abstract class DeviceWithWithoutRadio extends Device {
 			if (DeviceList.propagationsCalculated)
 				DeviceList.calculatePropagations();
 //			if (SimulationInputs.visibility) {
-//				if(this.getType()==Device.SENSOR) {
-//					Vi_VisibilityZones vz = new Vi_VisibilityZones((SensorNode) this);
-//					vz.calculate();
-//				}
+//				VisibilityZones vz = new VisibilityZones((SensorNode) this);
+//				vz.calculate();
 //			}
 		}
 		if (visual) {

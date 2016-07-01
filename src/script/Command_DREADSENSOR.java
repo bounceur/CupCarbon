@@ -1,8 +1,8 @@
 package script;
 
+import wisen_simulation.SimLog;
 import arduino.BeginInstructions;
 import device.SensorNode;
-import wisen_simulation.SimLog;
 
 public class Command_DREADSENSOR extends Command {
 

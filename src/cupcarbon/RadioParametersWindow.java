@@ -30,7 +30,6 @@ import java.awt.event.ActionListener;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,6 +37,8 @@ import javax.swing.JTextField;
 
 import device.DeviceList;
 import radio_module.Standard;
+
+import javax.swing.JComboBox;
 
 /**
  * @author Ahcene Bounceur

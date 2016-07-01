@@ -45,10 +45,6 @@ public final class Project {
 	public static String projectPath = "";
 	public static String projectName = "";
 
-	// ------------------------------------------------------------------------------------------KADJOUH
-	public static String projectWeather_eventsFileName = "";
-	// ------------------------------------------------------------------------------------------KADJOUH
-
 	public static void setProjectName(String path, String name) {
 		projectPath = path;
 		projectName = name;
@@ -73,7 +69,7 @@ public final class Project {
 	public static String getProjectBuildingPathName() {
 		return projectPath + File.separator + "config/buildings.cfg";
 	}
-
+	
 	public static String getProjectGpsPath() {
 		return projectPath + File.separator + "gps";
 	}
@@ -81,10 +77,11 @@ public final class Project {
 	public static String getProjectScriptPath() {
 		return projectPath + File.separator + "scripts";
 	}
-
+	
 	public static String getProjectNetworkPath() {
 		return projectPath + File.separator + "network";
 	}
+
 
 	public static String getProjectLogPath() {
 		return projectPath + File.separator + "logs";
@@ -94,35 +91,18 @@ public final class Project {
 		return projectPath + File.separator + "results";
 	}
 
-	// ------------------------------------------------------------------------------------------KADJOUH
-	public static void setProjectWeather_eventsFileName(String s) {
-		projectWeather_eventsFileName = s;
-	}
-
-	public static String getProjectWeather_eventsFileName() {
-		return projectWeather_eventsFileName;
-	}
-
-	public static String getProjectWeather_eventsPath() {
-		return projectPath + File.separator + "weather_events";
-	}
-
-	public static String getProjectBatteryModelPath() {
-		return projectPath + File.separator + "battery_model";
-	}
-	// ------------------------------------------------------------------------------------------KADJOUH
-
 	public static void saveProject() {
 		if (projectPath.equals("") || projectName.equals(""))
-			JOptionPane.showMessageDialog(null, "Project must be created or must be open.", "Warning",
+			JOptionPane.showMessageDialog(null,
+					"Project must be created or must be open.", "Warning",
 					JOptionPane.WARNING_MESSAGE);
 		else {
 			saveParameters();
 			DeviceList.save(getProjectNodePathName());
 			MarkerList.save(getProjectMarkerPathName());
-			// StreetGraph.save(getProjectStreetVertexPathName());
+			//StreetGraph.save(getProjectStreetVertexPathName());
 			BuildingList.save(getProjectBuildingPathName());
-
+			
 			JOptionPane.showMessageDialog(null, "Project saved !");
 		}
 	}
@@ -130,30 +110,30 @@ public final class Project {
 	public static void reset() {
 		projectPath = "";
 		projectName = "";
-		DeviceList.number = 1;
+		DeviceList.number=1;
 		DeviceList.initAll();
 		DeviceList.reset();
 		MarkerList.reset();
 		BuildingList.init();
 	}
-
+	
 	public static void openProject(String path, String name) {
 		reset();
 		setProjectName(path, name);
-
+		
 		saveRecentPath();
-
+		
 		loadParameters();
 		DeviceList.open(getProjectNodePathName());
 		MarkerList.open(getProjectMarkerPathName());
 		BuildingList.open(getProjectBuildingPathName());
-		// StreetGraph.open(getProjectStreetVertexPathName());
-		CupCarbon.updateInfos();
+		//StreetGraph.open(getProjectStreetVertexPathName());
+		CupCarbon.updateInfos();		
 	}
 
 	public static void newProject(String path, String name) {
 		File file = new File(path);
-		if (!file.exists()) {
+		if(!file.exists()) {
 			reset();
 			setProjectName(path, name + ".cup");
 			file.mkdir();
@@ -173,25 +153,18 @@ public final class Project {
 			file.mkdir();
 			file = new File(path + File.separator + "results");
 			file.mkdir();
-
-			// ------------------------------------------------------------------------------------------KADJOUH
-			file = new File(path + File.separator + "weather_events");
-			file.mkdir();
-			file = new File(path + File.separator + "battery_model");
-			file.mkdir();
-			// ------------------------------------------------------------------------------------------KADJOUH
-
 			saveParameters();
 			saveRecentPath();
-		} else {
+		}
+		else {
 			JOptionPane.showMessageDialog(null, "The Project exists!", "New Project", JOptionPane.WARNING_MESSAGE);
 		}
 	}
-
+	
 	public static void saveRecentPath() {
 		try {
 			FileOutputStream fos = new FileOutputStream("recent.rec");
-			PrintStream ps = new PrintStream(fos);
+			PrintStream ps = new PrintStream(fos);			
 			ps.println(projectPath);
 			ps.println(projectName);
 			ps.close();
@@ -199,10 +172,10 @@ public final class Project {
 			e.printStackTrace();
 		}
 	}
-
-	public static void newProjectFC(String path, String name) {
+	
+	public static void newProjectFC(String path, String name) {		
 		File file = new File(path);
-		if (!file.exists()) {
+		if(!file.exists()) {
 			setProjectName(path, name + ".cup");
 			file.mkdir();
 			file = new File(path + File.separator + "gps");
@@ -221,17 +194,10 @@ public final class Project {
 			file.mkdir();
 			file = new File(path + File.separator + "results");
 			file.mkdir();
-
-			// ------------------------------------------------------------------------------------------KADJOUH
-			file = new File(path + File.separator + "weather_events");
-			file.mkdir();
-			file = new File(path + File.separator + "battery_model");
-			file.mkdir();
-			// ------------------------------------------------------------------------------------------KADJOUH
-
 			saveParameters();
 			saveRecentPath();
-		} else {
+		}
+		else {
 			JOptionPane.showMessageDialog(null, "The Project exists!", "New Project", JOptionPane.WARNING_MESSAGE);
 		}
 	}
@@ -257,13 +223,17 @@ public final class Project {
 
 	public static void saveParameters() {
 		try {
-			PrintStream fos = new PrintStream(new FileOutputStream(getProjectPathName()));
-			fos.println("CupCarbon v. " + Version.VERSION);
+			PrintStream fos = new PrintStream(new FileOutputStream(
+					getProjectPathName()));
+			fos.println("CupCarbon v. "+Version.VERSION);
 			fos.println("----------------");
-			fos.println("Name " + projectName.substring(0, projectName.length() - 4));
+			fos.println("Name "
+					+ projectName.substring(0, projectName.length() - 4));
 			fos.println("zoom " + MapLayer.getMapViewer().getZoom());
-			fos.println("centerposition_la " + MapLayer.getMapViewer().getCenterPosition().getLatitude());
-			fos.println("centerposition_lo " + MapLayer.getMapViewer().getCenterPosition().getLongitude());
+			fos.println("centerposition_la "
+					+ MapLayer.getMapViewer().getCenterPosition().getLatitude());
+			fos.println("centerposition_lo "
+					+ MapLayer.getMapViewer().getCenterPosition().getLongitude());
 			fos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -325,36 +295,6 @@ public final class Project {
 		else
 			return name + ".res";
 	}
-
-	// ------------------------------------------------------------------------------------------KADJOUH
-	public static String getWeather_eventsFileFromName(String name) {
-		if (name.endsWith(".wsc"))
-			return getProjectWeather_eventsPath() + File.separator + name;
-		else
-			return getProjectWeather_eventsPath() + File.separator + name + ".wsc";
-	}
-
-	public static String getWeather_eventsFileExtension(String name) {
-		if (name.endsWith(".wsc"))
-			return name;
-		else
-			return name + ".wsc";
-	}
-
-	public static Object getBatteryModelFileExtension(String name) {
-		if (name.endsWith(".bmf"))
-			return name;
-		else
-			return name + ".bmf";
-	}
-
-	public static String getBatteryModelFileFromName(String name) {
-		if (name.endsWith(".bmf"))
-			return getProjectBatteryModelPath() + File.separator + name;
-		else
-			return getProjectBatteryModelPath() + File.separator + name + ".bmf";
-	}
-	// ------------------------------------------------------------------------------------------KADJOUH
 
 	public static String openRecentProject() {
 		try {

@@ -26,9 +26,6 @@ public class Arduino {
 		
 		for(SensorNode sensor : DeviceList.getSensorNodes()) {
 			
-			sensor.loadScript();
-			sensor.getScript().init();
-			
 			System.out.println("---------------------------------");
 			System.out.println("Sensor: S"+sensor.getId());
 			System.out.println("---------------------------------");
@@ -59,8 +56,7 @@ public class Arduino {
 			r = "uint8_t sdata[30] ;\n" + r ;
 			r = "XBeeAddress64 addr;\n" + r ;
 			r = "Tx64Request tx;\n" + r ;
-			r = "Rx16Response rx16 = Rx16Response() ;\n" + r ;
-			r = "Rx64Response rx64 = Rx64Response() ;\n" + r ;
+			r = "Rx64Response rx = Rx64Response() ;\n" + r ;
 			r = "XBee xbee = XBee();\n" + r ;
 			r = "#include <LiquidCrystal.h>\n\n" + r ;
 			r = "#include <XBee.h>\n" + r ;

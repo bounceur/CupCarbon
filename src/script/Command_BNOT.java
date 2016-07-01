@@ -1,7 +1,7 @@
 package script;
 
-import device.SensorNode;
 import wisen_simulation.SimLog;
+import device.SensorNode;
 
 public class Command_BNOT extends Command {
 

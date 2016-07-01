@@ -5,13 +5,13 @@ public class WisenEvent {
 	public static final int CLASSIC = 0 ; 
 	
 	protected int type = CLASSIC ;
-	protected long duration ;
+	protected long end ;
 	protected WisenAction action;
 	
-	public WisenEvent(int type, long duration, WisenAction action) {
+	public WisenEvent(int type, long end, WisenAction action) {
 		super();
 		this.type = type;
-		this.duration = duration;
+		this.end = end;
 		this.action = action;
 	}
 
@@ -23,12 +23,12 @@ public class WisenEvent {
 		this.type = type;
 	}
 
-	public long getDuration() {
-		return duration;
+	public long getEnd() {
+		return end;
 	}
 
-	public void setDuration(long duration) {
-		this.duration = duration;
+	public void setEnd(long end) {
+		this.end = end;
 	}
 
 	public WisenAction getAction() {

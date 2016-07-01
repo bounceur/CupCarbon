@@ -27,35 +27,31 @@ import radio_module.Ber;
  * @author Massinissa Lounis
  * @version 1.0
  * 
- *          The necessary parameters for the simulation
+ * The necessary parameters for the simulation
  */
 public class SimulationInputs {
-
+	
 	public static final int NONE = 0;
-	public static final int CSMA = 1;
-
+	public static final int CSMA = 1;	
+	
 	public static boolean cpuDrift = false;
-
-	// ------------------------------------------------------------------------------------------KADJOUH
-	public static boolean weather = true;
-	// ------------------------------------------------------------------------------------------KADJOUH
-
+	
 	public static boolean mobility = false;
 	public static double simulationTime = 86400.0;
-
+	
 	public static int visualDelay = 10;
 	public static int arrowsDelay = 50;
 	public static boolean showInConsole = false;
 	public static boolean displayLog = true;
 	public static boolean displayResults = true;
 	public static boolean showAckLinks = false;
-
-	public static boolean ack = false;
+	
+	public static boolean ack = false ;
 	public static double ackType = Ber.PROBABILITY;
-	public static double ackProba = 1.0;
-	public static int protocol = SimulationInputs.CSMA;
-
+	public static double ackProba = 1.0 ;
+	public static int protocol = SimulationInputs.CSMA ;
+	
 	public static boolean symmetricalLinks = true;
 	public static int radioDetectionType = RadioDetection.SIMPLE_DETECTION;
-	public static boolean visibility = false;
+	public static boolean visibility = false; 
 }

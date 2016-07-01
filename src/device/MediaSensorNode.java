@@ -22,10 +22,10 @@ package device;
 
 import java.awt.Graphics;
 
-import battery.Battery;
-import geo_objects.BuildingList;
 import sensorunit.MediaSensorUnit;
 import utilities.MapCalc;
+import battery.Battery;
+import geo_objects.BuildingList;
 
 /**
  * @author Ahcene Bounceur

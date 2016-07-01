@@ -1,14 +1,15 @@
 package solver;
 
+import graph.Graph;
+import graph.GraphStd;
+import graph.Vertex;
+import graph.VertexStd;
+
 import java.util.List;
 import java.util.ListIterator;
 
 import device.Device;
 import device.SensorNode;
-import graph.Graph;
-import graph.GraphStd;
-import graph.Vertex;
-import graph.VertexStd;
 
 public class SensorGraph {
 

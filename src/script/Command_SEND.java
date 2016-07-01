@@ -275,7 +275,7 @@ public class Command_SEND extends Command {
 		else
 			if (arg2.equals("0")) {
 				info = getXBeeInfoById(arg2);
-				s += "\taddr = XBeeAddress16(0x0, "+info[1]+");\n";
+				s += "\taddr = XBeeAddress64(0x0, "+info[1]+");\n";
 			} 
 			else {
 				info = getXBeeInfoById(arg2);
@@ -288,7 +288,7 @@ public class Command_SEND extends Command {
 	}
 	
 	public String [] getXBeeInfoById(String id) {
-		String [] info = {"", "", "", ""}; 
+		String [] info = {"","","", ""}; 
 		for(int i=0; i<5; i++) {
 			if(Arduino.xbeeList[i][0].equals(id)) {
 				info[0] = Arduino.xbeeList[i][1];

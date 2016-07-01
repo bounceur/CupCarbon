@@ -26,11 +26,11 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import project.Project;
 import device.Device;
 import device.DeviceList;
-import device.SensorNode;
 import device.StdSensorNode;
-import project.Project;
+import device.SensorNode;
 
 public class OmnetPp {
 

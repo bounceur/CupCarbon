@@ -21,9 +21,9 @@ package solver;
 
 import java.util.LinkedList;
 
+import map.MapLayer;
 import device.Device;
 import device.DeviceList;
-import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur

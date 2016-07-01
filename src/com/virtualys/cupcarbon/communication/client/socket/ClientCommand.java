@@ -1,9 +1,7 @@
 package com.virtualys.cupcarbon.communication.client.socket;
 
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 import java.util.Scanner;
 
 /**
