@@ -234,9 +234,9 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 	public void drawRadioLinks(int k1, Graphics g) {
 		numberOfNeighbors = 0;
-		int k2 = 0;
+		//int k2 = 0;
 		for(SensorNode sensor : DeviceList.sensors) {
-			if(k2>k1) {
+			//if(k2>k1) {
 				if(this!=sensor) {
 					if(radioDetect(sensor) && !isDead() && !sensor.isDead()) {
 						drawRadioLink(sensor, g, 1);
@@ -246,8 +246,8 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 						}
 					}
 				}
-			}
-			k2++;
+			//}
+			//k2++;
 		}
 	}
 	

@@ -707,10 +707,10 @@ public abstract class Device extends MapObject implements Runnable, _Constantes,
 		initBattery();
 		initBuffer();		
 
-		if(getType()==Device.SENSOR) {
-			setSending(false);
-			setReceiving(false);
-		}		
+		//if(getType()==Device.SENSOR) {
+		setSending(false);
+		setReceiving(false);
+		//}		
 	}
 	
 	public abstract void initBattery() ;

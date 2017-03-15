@@ -116,51 +116,54 @@ import wisen_simulation.WisenSimulation;
 public class CupCarbonController implements Initializable {
 
 	private WorldMap map;
-	private SwingNode sn;	
+	private SwingNode sn;
 	protected FaultInjector faultInjector = null;
 
 	@FXML
+	public Button saveButton;
+
+	@FXML
 	public MenuItem openRecentProjectItem1;
-	
+
 	@FXML
 	public MenuItem openRecentProjectItem2;
-	
+
 	@FXML
 	public MenuItem openRecentProjectItem3;
-	
+
 	@FXML
 	public MenuItem openRecentProjectItem4;
-	
+
 	@FXML
 	public MenuItem openRecentProjectItem5;
-	
+
 	@FXML
 	public MenuItem openRecentProjectItem6;
-	
+
 	@FXML
 	public MenuItem openRecentProjectItem7;
-	
+
 	@FXML
 	public MenuItem openRecentProjectItem8;
-	
+
 	@FXML
 	public MenuItem openRecentProjectItem9;
-	
+
 	@FXML
 	public MenuItem openRecentProjectItem10;
-	
+
 	@FXML
 	public TextField resultsWPeriod;
-	
-	@FXML 
+
+	@FXML
 	public ComboBox<String> radio_spreading_factor;
-	
+
 	@FXML
 	public Button spreading_factor_apply_button;
-	
+
 	@FXML
 	public Label simulationTimeLabel;
-	
+
 	@FXML
 	public MenuItem resetItem;
 
@@ -202,7 +205,7 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public ComboBox<String> gpsFileComboBox;
-	
+
 	@FXML
 	public ComboBox<String> nateventFileComboBox;
 
@@ -365,7 +368,7 @@ public class CupCarbonController implements Initializable {
 	public void mapFocus() {
 		Platform.runLater(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				numberOfDevices.setText("N = " + DeviceList.getSize());
 				sn.requestFocus();
 			}
@@ -381,13 +384,14 @@ public class CupCarbonController implements Initializable {
 		mapFocus();
 	}
 
-	public void initComboBoxes() {		
+	public void initComboBoxes() {
 		radio_spreading_factor.getItems().removeAll(radio_spreading_factor.getItems());
 		radio_spreading_factor.getItems().addAll("", "7", "8", "9", "10", "11", "12");
 		radio_spreading_factor.getSelectionModel().select(0);
-		
+
 		radioStdComboBox.getItems().removeAll(radioStdComboBox.getItems());
-		radioStdComboBox.getItems().addAll(new RadioStandardModel("802.15.4", "ZIGBEE"), new RadioStandardModel("WiFi", "WIFI"), new RadioStandardModel("LoRa", "LORA"));
+		radioStdComboBox.getItems().addAll(new RadioStandardModel("802.15.4", "ZIGBEE"),
+				new RadioStandardModel("WiFi", "WIFI"), new RadioStandardModel("LoRa", "LORA"));
 		radioStdComboBox.getSelectionModel().select(0);
 
 		probaComboBox.getItems().removeAll(probaComboBox.getItems());
@@ -399,7 +403,8 @@ public class CupCarbonController implements Initializable {
 		uartComboBox.getSelectionModel().select(0);
 
 		radioNameComboBox.getItems().removeAll(radioNameComboBox.getItems());
-		radioNameComboBox.getItems().addAll("radio1", "radio2", "radio3", "radio4", "radio5", "radio6", "radio7", "radio8", "radio9", "radio10");
+		radioNameComboBox.getItems().addAll("radio1", "radio2", "radio3", "radio4", "radio5", "radio6", "radio7",
+				"radio8", "radio9", "radio10");
 		radioNameComboBox.getSelectionModel().select(0);
 	}
 
@@ -426,7 +431,7 @@ public class CupCarbonController implements Initializable {
 		eventListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 		initRecentProjectMenu();
-		
+
 		initMap();
 
 	}
@@ -434,7 +439,7 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void zoomP() {
-		map.setZoom(map.getZoomSlider().getValue() - 1);		
+		map.setZoom(map.getZoomSlider().getValue() - 1);
 		SensorNode sensor = null;
 		for (SensorNode s : DeviceList.sensors) {
 			if (s.isSelected()) {
@@ -511,14 +516,14 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public Menu menuEdition;
-	
+
 	@FXML
 	public Menu menuSelection;
-	
+
 	@FXML
 	public void openSenScriptWindow() throws IOException {
-		//menuEdition.setDisable(true);
-		//menuSelection.setDisable(true);
+		// menuEdition.setDisable(true);
+		// menuSelection.setDisable(true);
 		if (!Project.projectName.equals(""))
 			new SenScriptWindow();
 		else {
@@ -529,7 +534,7 @@ public class CupCarbonController implements Initializable {
 			alert.showAndWait();
 		}
 	}
-	
+
 	@FXML
 	public void openNaturalEventGenerator() throws IOException {
 		if (!Project.projectName.equals(""))
@@ -586,6 +591,7 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void connection() {
+		saveButton.setDisable(false);
 		DeviceList.resetPropagations();
 		MapLayer.repaint();
 		mapFocus();
@@ -593,6 +599,7 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void propagation() {
+		saveButton.setDisable(false);
 		DeviceList.calculatePropagations();
 		MapLayer.repaint();
 		mapFocus();
@@ -603,8 +610,8 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-					VisibilityLauncher visibility = new VisibilityLauncher();
-					visibility.run();
+				VisibilityLauncher visibility = new VisibilityLauncher();
+				visibility.run();
 			}
 		});
 	}
@@ -616,13 +623,14 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				saveButton.setDisable(false);
 				qRunSimulationButton.setDefaultButton(true);
 				qStopSimulationButton.setDefaultButton(false);
 				runSimulationButton.setDisable(false);
 				qRunSimulationButton.setDisable(false);
 				stateLabel.setText("Ready");
 				CupCarbon.cupCarbonController.monitor.setFill(Color.YELLOWGREEN);
-				if(wisenSimulation!=null)
+				if (wisenSimulation != null)
 					wisenSimulation.stopSimulation();
 				mapFocus();
 			}
@@ -635,6 +643,7 @@ public class CupCarbonController implements Initializable {
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
+					saveButton.setDisable(false);
 					qRunSimulationButton.setDefaultButton(false);
 					qStopSimulationButton.setDefaultButton(true);
 					runSimulationButton.setDisable(true);
@@ -662,7 +671,7 @@ public class CupCarbonController implements Initializable {
 			alert.setHeaderText(null);
 			alert.setContentText("Project must be created first.");
 			alert.showAndWait();
-		}		
+		}
 		mapFocus();
 	}
 
@@ -671,6 +680,7 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				saveButton.setDisable(false);
 				SimulationInputs.simulationTime = Double.parseDouble(simulationTimeTextField.getText());
 				SimulationInputs.mobilityAndEvents = mobilityCheckBox.isSelected();
 				SimulationInputs.visualDelay = Integer.parseInt(simulationSpeedTextField.getText());
@@ -686,9 +696,11 @@ public class CupCarbonController implements Initializable {
 				SimulationInputs.symmetricalLinks = symmetricalLinkCheckBox.isSelected();
 				SimulationInputs.clockDrift = clockDriftCheckBox.isSelected();
 				SimulationInputs.visibility = visibilityCheckBox.isSelected();
+				MapLayer.repaint();
+				mapFocus();
 			}
-		});		
-	}	
+		});
+	}
 
 	@FXML
 	public void magnetic() throws Exception {
@@ -726,12 +738,14 @@ public class CupCarbonController implements Initializable {
 		}
 
 		if (delete) {
+			saveButton.setDisable(false);
 			file.delete();
 			getListOfRoutes();
 			initScriptGpsEventComboBoxes();
+			mapFocus();
 		}
 	}
-	
+
 	@FXML
 	public void saveRoute() {
 		if (!Project.projectName.equals("")) {
@@ -760,12 +774,14 @@ public class CupCarbonController implements Initializable {
 					}
 				}
 				if (saveOk) {
+					saveButton.setDisable(false);
 					txtFileName.setText(Project.getGpsFileExtension(txtFileName.getText()));
 					MarkerList.saveGpsCoords(txtFileName.getText(), txtTitle.getText(), txtFrom.getText(),
 							txtTo.getText(), loopCheckBox.isSelected(), Integer.parseInt(loopAfter.getText()),
 							Integer.parseInt(loopNumber.getText()));
 					getListOfRoutes();
 					initScriptGpsEventComboBoxes();
+					mapFocus();
 				}
 			} else {
 				Alert alert = new Alert(AlertType.WARNING);
@@ -802,36 +818,37 @@ public class CupCarbonController implements Initializable {
 		String radioName = radioNameComboBox.getSelectionModel().getSelectedItem();
 		String radioStd = radioStdComboBox.getSelectionModel().getSelectedItem().getStd();
 		CupActionBlock block = new CupActionBlock();
-		for(SensorNode sensor : DeviceList.sensors) {
-			if(sensor.isSelected()) {
+		for (SensorNode sensor : DeviceList.sensors) {
+			if (sensor.isSelected()) {
 				RadioModule radioModule = RadioModule.newRadioModule(sensor, radioName, radioStd);
 				CupAction action = new CupActionAddRadioModule(sensor, radioModule);
 				block.addAction(action);
 				currentDevice = sensor;
 			}
 		}
-		if(block.size()>0) {
+		if (block.size() > 0) {
 			CupActionStack.add(block);
 			CupActionStack.execute();
 		}
 		getNodeInformations();
 		mapFocus();
 	}
-	
+
 	@FXML
 	public void removeRadioStd() {
 		CupActionBlock block = new CupActionBlock();
-		for(SensorNode sensor : DeviceList.sensors) {
-			if(sensor.isSelected()) {
-				if(sensor.getRadioModuleList().size()>1) {
-					RadioModule radioModule = sensor.getRadioModuleByName(radioListView.getSelectionModel().getSelectedItem().split(" ")[0]);
+		for (SensorNode sensor : DeviceList.sensors) {
+			if (sensor.isSelected()) {
+				if (sensor.getRadioModuleList().size() > 1) {
+					RadioModule radioModule = sensor
+							.getRadioModuleByName(radioListView.getSelectionModel().getSelectedItem().split(" ")[0]);
 					CupAction action = new CupActionDeleteRadioModule(radioModule);
 					block.addAction(action);
 					currentDevice = sensor;
 				}
 			}
 		}
-		if(block.size()>0) {
+		if (block.size() > 0) {
 			CupActionStack.add(block);
 			CupActionStack.execute();
 		}
@@ -933,7 +950,8 @@ public class CupCarbonController implements Initializable {
 			@Override
 			public void run() {
 				try {
-					FileInputStream in = new FileInputStream(Project.projectPath + File.separator + "config" + File.separator + "simulationParams.cfg");
+					FileInputStream in = new FileInputStream(
+							Project.projectPath + File.separator + "config" + File.separator + "simulationParams.cfg");
 					BufferedReader br = new BufferedReader(new InputStreamReader(in));
 					simulationTimeTextField.setText(br.readLine().split(":")[1]);
 					mobilityCheckBox.setSelected(Boolean.parseBoolean(br.readLine().split(":")[1]));
@@ -966,8 +984,8 @@ public class CupCarbonController implements Initializable {
 		for (SensorNode sensor : DeviceList.sensors) {
 			if (sensor.isSelected()) {
 				String currentScriptFileName = sensor.getScriptFileName();
-				CupAction action = new CupActionModifSensorScriptFile((SensorNode) sensor,
-						currentScriptFileName, newScriptFileName);
+				CupAction action = new CupActionModifSensorScriptFile((SensorNode) sensor, currentScriptFileName,
+						newScriptFileName);
 				block.addAction(action);
 			}
 		}
@@ -991,7 +1009,8 @@ public class CupCarbonController implements Initializable {
 		for (Device device : DeviceList.devices) {
 			if (device.isSelected()) {
 				String currentNatEventFileName = device.getNatEventFileName();
-				CupAction action = new CupActionModifDeviceNatEventFile(device, currentNatEventFileName, newNatEventFileName);
+				CupAction action = new CupActionModifDeviceNatEventFile(device, currentNatEventFileName,
+						newNatEventFileName);
 				block.addAction(action);
 			}
 		}
@@ -999,7 +1018,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void gpsFileApply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1250,7 +1269,7 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
-	
+
 	@FXML
 	public void spreading_factor_Apply() {
 		CupActionBlock block = new CupActionBlock();
@@ -1742,7 +1761,7 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				if(currentDevice != null)
+				if (currentDevice != null)
 					sensorName.setText(" of " + currentDevice.getName());
 				initScriptGpsEventComboBoxes();
 				scriptFileComboBox.setValue("");
@@ -1752,7 +1771,7 @@ public class CupCarbonController implements Initializable {
 				String gpsFileName;
 				String[] scriptFile;
 				String scriptFileName;
-				if(currentDevice != null) {
+				if (currentDevice != null) {
 					if (!currentDevice.getScriptFileName().equals("")) {
 						scriptFile = currentDevice.getScriptFileName().split(Pattern.quote(File.separator));
 						scriptFileName = scriptFile[scriptFile.length - 1];
@@ -1778,7 +1797,7 @@ public class CupCarbonController implements Initializable {
 					device_eSensing.setText("" + currentDevice.getESensing());
 					uartComboBox.setValue("" + currentDevice.getUartDataRate());
 					device_drift.setText("" + currentDevice.getSigmaOfDriftTime());
-				}				
+				}
 			}
 		});
 	}
@@ -1791,8 +1810,8 @@ public class CupCarbonController implements Initializable {
 		gpsFileComboBox.getItems().removeAll(gpsFileComboBox.getItems());
 		gpsFileComboBox.getItems().add("");
 		for (int i = 0; i < s.length; i++) {
-			if(s[i] != null)
-				if(!s[i].startsWith("."))
+			if (s[i] != null)
+				if (!s[i].startsWith("."))
 					gpsFileComboBox.getItems().add(s[i]);
 		}
 
@@ -1803,11 +1822,11 @@ public class CupCarbonController implements Initializable {
 		scriptFileComboBox.getItems().removeAll(scriptFileComboBox.getItems());
 		scriptFileComboBox.getItems().add("");
 		for (int i = 0; i < s.length; i++) {
-			if(s[i] != null)
-				if(!s[i].startsWith("."))
+			if (s[i] != null)
+				if (!s[i].startsWith("."))
 					scriptFileComboBox.getItems().add(s[i]);
 		}
-		
+
 		File neteventFiles = new File(Project.getProjectNatEventPath());
 		s = neteventFiles.list();
 		if (s == null)
@@ -1815,8 +1834,8 @@ public class CupCarbonController implements Initializable {
 		nateventFileComboBox.getItems().removeAll(nateventFileComboBox.getItems());
 		nateventFileComboBox.getItems().add("");
 		for (int i = 0; i < s.length; i++) {
-			if(s[i] != null)
-				if(!s[i].startsWith("."))
+			if (s[i] != null)
+				if (!s[i].startsWith("."))
 					nateventFileComboBox.getItems().add(s[i]);
 		}
 	}
@@ -1838,7 +1857,7 @@ public class CupCarbonController implements Initializable {
 		}
 		radioListView.getSelectionModel().select(idx);
 	}
-	
+
 	@FXML
 	public void getRadioInformations() {
 		Platform.runLater(new Runnable() {
@@ -1857,12 +1876,11 @@ public class CupCarbonController implements Initializable {
 					radio_esleep.setText("" + rm.getESleep());
 					radio_elisten.setText("" + rm.getEListen());
 					radio_drate.setText("" + rm.getRadioDataRate());
-					if(rm.getSpreadingFactor()==-1) {
+					if (rm.getSpreadingFactor() == -1) {
 						radio_spreading_factor.setDisable(true);
-						spreading_factor_apply_button.setDisable(true);						
+						spreading_factor_apply_button.setDisable(true);
 						radio_spreading_factor.getSelectionModel().select(0);
-					}
-					else {
+					} else {
 						radio_spreading_factor.setDisable(false);
 						spreading_factor_apply_button.setDisable(false);
 						radio_spreading_factor.getSelectionModel().select("" + rm.getSpreadingFactor());
@@ -1876,7 +1894,7 @@ public class CupCarbonController implements Initializable {
 	public void setCurrentRadio() {
 		CupActionBlock block = new CupActionBlock();
 		for (SensorNode sensor : DeviceList.sensors) {
-			if(sensor.isSelected()) {
+			if (sensor.isSelected()) {
 				String currentRadioModule = sensor.getCurrentRadioModule().getName();
 				String newRadioModule = radioListView.getSelectionModel().getSelectedItem().split(" ")[0];
 				CupAction action = new CupActionModifSensorCurrentRadio(sensor, currentRadioModule, newRadioModule);
@@ -2141,6 +2159,7 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				saveButton.setDisable(false);
 				MarkerList.generateOSMRouteFile();
 				selectAllMarkers();
 				mapFocus();
@@ -2214,7 +2233,7 @@ public class CupCarbonController implements Initializable {
 			public void run() {
 				deviceListView.getSelectionModel().clearSelection();
 				eventListView.getSelectionModel().clearSelection();
-				
+
 				for (int i = 0; i < DeviceList.devices.size(); i++) {
 					if (DeviceList.devices.get(i).getType() == Device.GAS) {
 						if (DeviceList.devices.get(i).isSelected()) {
@@ -2285,47 +2304,58 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void loadRoute() {
-		if (!gpsListView.getSelectionModel().isEmpty()) {
-
-			String gps = Project.getProjectGpsPath();
-			String gpsFile = gpsListView.getItems().get(gpsListView.getSelectionModel().getSelectedIndex());
-
-			MarkerList.open(Project.getProjectGpsPath() + File.separator + gpsFile);
-
-			try {
-				BufferedReader br = new BufferedReader(new FileReader(gps + File.separator + gpsFile));
-				String line;
-				txtFileName.setText(gpsFile);
-				line = br.readLine();
-				txtTitle.setText(line);
-				line = br.readLine();
-				txtFrom.setText(line);
-				line = br.readLine();
-				txtTo.setText(line);
-				line = br.readLine();
-				loopCheckBox.setSelected(Boolean.valueOf(line));
-				if (loopCheckBox.isSelected()) {
-					loopAfter.setDisable(false);
-					loopNumber.setDisable(false);
-				} else {
-					loopAfter.setDisable(true);
-					loopNumber.setDisable(true);
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {				
+				if (!gpsListView.getSelectionModel().isEmpty()) {
+					saveButton.setDisable(false);
+					String gps = Project.getProjectGpsPath();
+					String gpsFile = gpsListView.getItems().get(gpsListView.getSelectionModel().getSelectedIndex());
+		
+					MarkerList.open(Project.getProjectGpsPath() + File.separator + gpsFile);
+		
+					try {
+						BufferedReader br = new BufferedReader(new FileReader(gps + File.separator + gpsFile));
+						String line;
+						txtFileName.setText(gpsFile);
+						line = br.readLine();
+						txtTitle.setText(line);
+						line = br.readLine();
+						txtFrom.setText(line);
+						line = br.readLine();
+						txtTo.setText(line);
+						line = br.readLine();
+						loopCheckBox.setSelected(Boolean.valueOf(line));
+						if (loopCheckBox.isSelected()) {
+							loopAfter.setDisable(false);
+							loopNumber.setDisable(false);
+						} else {
+							loopAfter.setDisable(true);
+							loopNumber.setDisable(true);
+						}
+						line = br.readLine();
+						loopNumber.setText(line);
+		
+						br.close();
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
-				line = br.readLine();
-				loopNumber.setText(line);
-
-				br.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
-		}
+		});
 	}
 
 	@FXML
 	public void loadBuildings() {
-		BuildingList.loadFromOsm();
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				saveButton.setDisable(false);
+				BuildingList.loadFromOsm();
+			}
+		});
 	}
 
 	@FXML
@@ -2401,22 +2431,22 @@ public class CupCarbonController implements Initializable {
 	}
 
 	@FXML
-	public void  showFileNames() {
+	public void showFileNames() {
 		NetworkParameters.drawScriptFileName = !NetworkParameters.drawScriptFileName;
 		MapLayer.repaint();
 		mapFocus();
 	}
-	
+
 	@FXML
 	public void showDetails() {
 		NetworkParameters.displayDetails = !NetworkParameters.displayDetails;
 		MapLayer.repaint();
 		mapFocus();
 	}
-	
+
 	@FXML
 	public void showBatteryBufferLevels() {
-		for(SensorNode sensor : DeviceList.sensors) {
+		for (SensorNode sensor : DeviceList.sensors) {
 			if (sensor.isSelected()) {
 				sensor.invertDrawBatteryLevel();
 			}
@@ -2517,7 +2547,7 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public Button qRunSimulationButton;
-	
+
 	@FXML
 	public Button qStopSimulationButton;
 
@@ -2556,37 +2586,37 @@ public class CupCarbonController implements Initializable {
 		opneIthRecentProject(1);
 		initRecentProjectMenu();
 	}
-	
+
 	@FXML
 	public void openRecentProject2() {
 		opneIthRecentProject(2);
 		initRecentProjectMenu();
 	}
-	
+
 	@FXML
 	public void openRecentProject3() {
 		opneIthRecentProject(3);
 		initRecentProjectMenu();
 	}
-	
+
 	@FXML
 	public void openRecentProject4() {
 		opneIthRecentProject(4);
 		initRecentProjectMenu();
 	}
-	
+
 	@FXML
 	public void openRecentProject5() {
 		opneIthRecentProject(5);
 		initRecentProjectMenu();
 	}
-	
+
 	@FXML
 	public void openRecentProject6() {
 		opneIthRecentProject(6);
 		initRecentProjectMenu();
 	}
-	
+
 	@FXML
 	public void openRecentProject7() {
 		opneIthRecentProject(7);
@@ -2598,52 +2628,112 @@ public class CupCarbonController implements Initializable {
 		opneIthRecentProject(8);
 		initRecentProjectMenu();
 	}
-	
+
 	@FXML
 	public void openRecentProject9() {
 		opneIthRecentProject(9);
 		initRecentProjectMenu();
 	}
-	
+
 	@FXML
 	public void openRecentProject10() {
 		opneIthRecentProject(10);
 		initRecentProjectMenu();
 	}
-	 
+
 	public void initRecentProjectMenu() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("utils/recent.rec")));
-					
-					for(int i=0; i<10; i++) {
+					BufferedReader br = new BufferedReader(
+							new InputStreamReader(new FileInputStream("utils/recent.rec")));
+
+					for (int i = 0; i < 10; i++) {
 						String s = br.readLine();
-						if(s!=null) {
-							String name = s.split(":")[1];	
-							if(i==0) {openRecentProjectItem1.setVisible(true); openRecentProjectItem1.setText(name);}
-							if(i==1) {openRecentProjectItem2.setVisible(true); openRecentProjectItem2.setText(name);}
-							if(i==2) {openRecentProjectItem3.setVisible(true); openRecentProjectItem3.setText(name);}
-							if(i==3) {openRecentProjectItem4.setVisible(true); openRecentProjectItem4.setText(name);}
-							if(i==4) {openRecentProjectItem5.setVisible(true); openRecentProjectItem5.setText(name);}
-							if(i==5) {openRecentProjectItem6.setVisible(true); openRecentProjectItem6.setText(name);}
-							if(i==6) {openRecentProjectItem7.setVisible(true); openRecentProjectItem7.setText(name);}
-							if(i==7) {openRecentProjectItem8.setVisible(true); openRecentProjectItem8.setText(name);}
-							if(i==8) {openRecentProjectItem9.setVisible(true); openRecentProjectItem9.setText(name);}
-							if(i==9) {openRecentProjectItem10.setVisible(true); openRecentProjectItem10.setText(name);}
-						}
-						else {
-							if(i==0) {openRecentProjectItem1.setVisible(false); openRecentProjectItem1.setText("");}
-							if(i==1) {openRecentProjectItem2.setVisible(false); openRecentProjectItem2.setText("");}
-							if(i==2) {openRecentProjectItem3.setVisible(false); openRecentProjectItem3.setText("");}
-							if(i==3) {openRecentProjectItem4.setVisible(false); openRecentProjectItem4.setText("");}
-							if(i==4) {openRecentProjectItem5.setVisible(false); openRecentProjectItem5.setText("");}
-							if(i==5) {openRecentProjectItem6.setVisible(false); openRecentProjectItem6.setText("");}
-							if(i==6) {openRecentProjectItem7.setVisible(false); openRecentProjectItem7.setText("");}
-							if(i==7) {openRecentProjectItem8.setVisible(false); openRecentProjectItem8.setText("");}
-							if(i==8) {openRecentProjectItem9.setVisible(false); openRecentProjectItem9.setText("");}
-							if(i==9) {openRecentProjectItem10.setVisible(false); openRecentProjectItem10.setText("");}
+						if (s != null) {
+							String name = s.split(":")[1];
+							if (i == 0) {
+								openRecentProjectItem1.setVisible(true);
+								openRecentProjectItem1.setText(name);
+							}
+							if (i == 1) {
+								openRecentProjectItem2.setVisible(true);
+								openRecentProjectItem2.setText(name);
+							}
+							if (i == 2) {
+								openRecentProjectItem3.setVisible(true);
+								openRecentProjectItem3.setText(name);
+							}
+							if (i == 3) {
+								openRecentProjectItem4.setVisible(true);
+								openRecentProjectItem4.setText(name);
+							}
+							if (i == 4) {
+								openRecentProjectItem5.setVisible(true);
+								openRecentProjectItem5.setText(name);
+							}
+							if (i == 5) {
+								openRecentProjectItem6.setVisible(true);
+								openRecentProjectItem6.setText(name);
+							}
+							if (i == 6) {
+								openRecentProjectItem7.setVisible(true);
+								openRecentProjectItem7.setText(name);
+							}
+							if (i == 7) {
+								openRecentProjectItem8.setVisible(true);
+								openRecentProjectItem8.setText(name);
+							}
+							if (i == 8) {
+								openRecentProjectItem9.setVisible(true);
+								openRecentProjectItem9.setText(name);
+							}
+							if (i == 9) {
+								openRecentProjectItem10.setVisible(true);
+								openRecentProjectItem10.setText(name);
+							}
+						} else {
+							if (i == 0) {
+								openRecentProjectItem1.setVisible(false);
+								openRecentProjectItem1.setText("");
+							}
+							if (i == 1) {
+								openRecentProjectItem2.setVisible(false);
+								openRecentProjectItem2.setText("");
+							}
+							if (i == 2) {
+								openRecentProjectItem3.setVisible(false);
+								openRecentProjectItem3.setText("");
+							}
+							if (i == 3) {
+								openRecentProjectItem4.setVisible(false);
+								openRecentProjectItem4.setText("");
+							}
+							if (i == 4) {
+								openRecentProjectItem5.setVisible(false);
+								openRecentProjectItem5.setText("");
+							}
+							if (i == 5) {
+								openRecentProjectItem6.setVisible(false);
+								openRecentProjectItem6.setText("");
+							}
+							if (i == 6) {
+								openRecentProjectItem7.setVisible(false);
+								openRecentProjectItem7.setText("");
+							}
+							if (i == 7) {
+								openRecentProjectItem8.setVisible(false);
+								openRecentProjectItem8.setText("");
+							}
+							if (i == 8) {
+								openRecentProjectItem9.setVisible(false);
+								openRecentProjectItem9.setText("");
+							}
+							if (i == 9) {
+								openRecentProjectItem10.setVisible(false);
+								openRecentProjectItem10.setText("");
+							}
 						}
 					}
 					br.close();
@@ -2655,14 +2745,14 @@ public class CupCarbonController implements Initializable {
 				openProjectLoadParameters();
 			}
 		});
-	}	
-	
+	}
+
 	@FXML
 	public void openLastProject() {
 		opneIthRecentProject(1);
 		initRecentProjectMenu();
 	}
-	
+
 	@FXML
 	public void saveProject() {
 		Platform.runLater(new Runnable() {
@@ -2676,25 +2766,23 @@ public class CupCarbonController implements Initializable {
 					alert.showAndWait();
 				} else {
 					Project.saveProject();
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Save Project");
-					alert.setHeaderText("Project saved with success!");
-					alert.setContentText(null);
-					alert.showAndWait();
+					saveButton.setDisable(true);
 				}
 			}
 		});
 	}
-	
+
 	public void opneIthRecentProject(int index) {
-		//idx = 1 .. 10
+		// idx = 1 .. 10
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("utils/recent.rec")));
+					BufferedReader br = new BufferedReader(
+							new InputStreamReader(new FileInputStream("utils/recent.rec")));
 					String s = "";
-					for(int i=0; i<index; i++) s = br.readLine();							
+					for (int i = 0; i < index; i++)
+						s = br.readLine();
 					String path = s.split(":")[0];
 					String name = s.split(":")[1];
 					br.close();
@@ -2711,5 +2799,5 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
-	
+
 }

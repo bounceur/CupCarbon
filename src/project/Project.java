@@ -48,7 +48,7 @@ import markers.MarkerList;
 import wisen_simulation.SimulationInputs;
 
 public final class Project {
-
+	
 	public static String projectPath = "";
 	public static String projectName = "";
 
@@ -114,7 +114,7 @@ public final class Project {
 		}
 		if(MarkerList.size()>0) MarkerList.save(getProjectMarkerPath());
 		if(BuildingList.size()>0) BuildingList.save(getProjectBuildingPathName());
-		saveSimulationParams();
+		saveSimulationParams();		
 	}
 	
 	public static void saveSimulationParams() {
@@ -150,6 +150,7 @@ public final class Project {
 		BuildingList.init();
 		MultiChannels.init();
 		MapLayer.repaint();
+		CupCarbon.cupCarbonController.saveButton.setDisable(false);
 	}
 	
 	public static void openProject(String path, String name) {
@@ -165,6 +166,7 @@ public final class Project {
 		if(DeviceList.propagationsCalculated) DeviceList.calculatePropagations();
 		CupCarbon.cupCarbonController.loadSimulationParams();
 		CupCarbon.cupCarbonController.applyParameters();
+		CupCarbon.cupCarbonController.saveButton.setDisable(false);
 	}
 	
 	public static void openProject1(String path, String name) {
@@ -177,6 +179,7 @@ public final class Project {
 		MarkerList.open(getProjectMarkerPath());		
 		DeviceList.open1(getProjectNodePath());
 		if(DeviceList.propagationsCalculated) DeviceList.calculatePropagations();
+		CupCarbon.cupCarbonController.saveButton.setDisable(false);
 	}
 
 	public static void newProject(String path, String name, boolean reset) {
@@ -218,6 +221,7 @@ public final class Project {
 				String path2 = Project.projectPath;
 				copyResProjectFiles(path1, path2);
 			}
+			CupCarbon.cupCarbonController.saveButton.setDisable(false);
 		}
 		else {
 			Alert alert = new Alert(AlertType.WARNING);
@@ -252,70 +256,22 @@ public final class Project {
 		copyFromTo(path1, path2, "scripts");
 		copyFromTo(path1, path2, "gps");
 		copyFromTo(path1, path2, "natevents");
-//		try {
-//			File fileS = new File(path1+File.separator+"scripts");
-//			String [] s = fileS.list();
-//			if(s!=null) {
-//				for(int i=0; i<s.length; i++) {
-//					FileInputStream copy = new FileInputStream(path1+File.separator+"scripts"+File.separator+s[i]);
-//					FileOutputStream past = new FileOutputStream(path2+File.separator+"scripts"+File.separator+s[i]);
-//					int x ;
-//					while((x=copy.read())!=-1) {
-//						past.write(x);
-//					}
-//					copy.close();
-//					past.close();
-//				}
-//			}
-			
-//			fileS = new File(path1+File.separator+"natevents");
-//			s = fileS.list();
-//			if(s!=null) {
-//				for(int i=0; i<s.length; i++) {
-//					FileInputStream copy = new FileInputStream(path1+File.separator+"natevents"+File.separator+s[i]);
-//					FileOutputStream past = new FileOutputStream(path2+File.separator+"natevents"+File.separator+s[i]);
-//					int x ;
-//					while((x=copy.read())!=-1) {
-//						past.write(x);
-//					}
-//					copy.close();
-//					past.close();
-//				}
-//			}
-			
-//			fileS = new File(path1+File.separator+"gps");
-//			s = fileS.list();
-//			if(s!=null) {
-//				for(int i=0; i<s.length; i++) {
-//					FileInputStream copy = new FileInputStream(path1+File.separator+"gps"+File.separator+s[i]);
-//					FileOutputStream past = new FileOutputStream(path2+File.separator+"gps"+File.separator+s[i]);
-//					int x ;
-//					while((x=copy.read())!=-1) {
-//						past.write(x);
-//					}
-//					copy.close();
-//					past.close();
-//				}
-//			}
-			
-			try {
-				FileInputStream copy = new FileInputStream(path1+File.separator+"config"+File.separator+"simulationParams.cfg");
-				FileOutputStream past = new FileOutputStream(path2+File.separator+"config"+File.separator+"simulationParams.cfg");
-				int x ;
-				while((x=copy.read())!=-1) {
-					past.write(x);
-				}
-				copy.close();
-				past.close();
+		try {
+			FileInputStream copy = new FileInputStream(path1+File.separator+"config"+File.separator+"simulationParams.cfg");
+			FileOutputStream past = new FileOutputStream(path2+File.separator+"config"+File.separator+"simulationParams.cfg");
+			int x ;
+			while((x=copy.read())!=-1) {
+				past.write(x);
 			}
-			catch(FileNotFoundException e) {
-				System.err.println("[CupCarbon] No Simulation Parameter file");
-			} 
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-//		}
-//		catch(IOException e) {e.printStackTrace();}
+			copy.close();
+			past.close();
+		}
+		catch(FileNotFoundException e) {
+			System.err.println("[CupCarbon] No Simulation Parameter file");
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void addExamples(String path) {

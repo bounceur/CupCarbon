@@ -76,7 +76,7 @@ public class VisibilityZones extends Thread {
 		int nPoint = 20;
 		GeoZone zoneOfInterest = new GeoZone(nPoint);
 		double step = 2. * Math.PI / nPoint;
-
+		
 		double deg = 0.0;
 		for (int i = 0; i < nPoint; i++) {
 			zoneOfInterest.set(sensorNode.getLatitude() + 0.001 * Math.cos(deg),sensorNode.getLongitude() + 0.0015 * Math.sin(deg), 0, i);			
@@ -105,7 +105,7 @@ public class VisibilityZones extends Thread {
 				double[] t = new double[2];
 				t[0] = building.getYCoords(i);
 				t[1] = building.getXCoords(i);
-				if(sensorNode.distance(t[1], t[0])<100) {
+				if(sensorNode.distance(t[1], t[0])<(sensorNode.getCurrentRadioRangeRadius())) {
 					boolean intersection = false;
 					for (Building building2 : buildings) {					
 						if (building2.intersect(sensorNode.getLatitude(), sensorNode.getLongitude(), t[0], t[1])) {

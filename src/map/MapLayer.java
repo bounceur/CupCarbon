@@ -233,6 +233,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		g.drawString("Number of SENT messages:"+Channels.numberOfSentMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+26);
 		g.drawString("Number of ACK messages:"+Channels.numberOfAckMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+36);
 		g.drawString("Number of LOST messages:"+Channels.numberOfLostMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+46);
+		//g.drawString(Project.saved?"SAVED":"NOT SAVED" , (int)mapViewer.getCenter().getX()+(mapViewer.getWidth()/2)-60, (int)mapViewer.getCenter().getY()+(mapViewer.getHeight()/2)-8);
 		g.dispose();
 	}
 	

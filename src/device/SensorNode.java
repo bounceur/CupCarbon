@@ -569,6 +569,12 @@ public abstract class SensorNode extends DeviceWithRadio {
 		this.setSending(false);
 		this.setReceiving(false);
 	}
+	
+	@Override
+	public void init() {
+		super.init();
+		this.getCurrentRadioModule().setPl(100);
+	}
 
 	public int getBufferIndex() {
 		return this.bufferIndex ;

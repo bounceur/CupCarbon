@@ -841,7 +841,7 @@
                         <Font size="10.0" />
                      </font>
                   </Button>
-                  <Button ellipsisString="" mnemonicParsing="false" onAction="#saveProject">
+                  <Button fx:id="saveButton" ellipsisString="" mnemonicParsing="false" onAction="#saveProject">
                      <graphic>
                         <ImageView pickOnBounds="true" smooth="false">
                            <image>

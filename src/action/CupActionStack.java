@@ -2,6 +2,7 @@ package action;
 
 import java.util.ArrayList;
 
+import cupcarbon.CupCarbon;
 import cupcarbon_script.CupCommand;
 
 public class CupActionStack {
@@ -21,7 +22,7 @@ public class CupActionStack {
 		}
 	}
 	
-	public static void add(CupActionBlock actionList) {
+	public static void add(CupActionBlock actionList) {		
 		idx++;		
 		if(idx > MAX_ELEMENT-1) {
 			idx = MAX_ELEMENT-1;
@@ -34,13 +35,15 @@ public class CupActionStack {
 	}
 	
 	public static void execute() {
+		CupCarbon.cupCarbonController.saveButton.setDisable(false);
 		if(idx<n-1) {
 			idx++;			
 			actions.get(idx).execute();
 		}
 	}
 	
-	public static void antiExecute() {		
+	public static void antiExecute() {
+		CupCarbon.cupCarbonController.saveButton.setDisable(false);
 		if(idx>-1) {
 			actions.get(idx).antiExecute();
 			idx--;
