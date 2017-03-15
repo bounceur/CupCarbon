@@ -37,7 +37,7 @@ protected boolean loop = true ;
 	@Override	
 	public void run() {
 
-		List<SensorNode> nodes = DeviceList.getSensorNodes();
+		List<SensorNode> nodes = DeviceList.sensors;
 
 		SensorNode n1, n2;
 		
@@ -47,7 +47,7 @@ protected boolean loop = true ;
 		//for(s=0.0001; s<0.1; s+=0.0001) {
 			for (int i = 0; i < nodes.size(); i++) {
 				nodes.get(i).setMarked(false);
-				MapLayer.getMapViewer().repaint();
+				MapLayer.repaint();
 			}
 			//delay();
 			for(int i = 0; i < nodes.size(); i++) {
@@ -86,7 +86,7 @@ protected boolean loop = true ;
 				}
 				//System.out.println(imax);
 				nodes.get(imax).setMarked(true);
-				MapLayer.getMapViewer().repaint();
+				MapLayer.repaint();
 				delay();
 			}			
 		//}

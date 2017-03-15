@@ -70,7 +70,7 @@ public class NetworkEnvelopeP extends Thread {
 		double by1;
 		double by2;
 		
-		List<SensorNode> nodes = DeviceList.getSensorNodes();
+		List<SensorNode> nodes = DeviceList.sensors;
 
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).setValue(0);
@@ -129,7 +129,7 @@ public class NetworkEnvelopeP extends Thread {
 				//DeviceList.addEnvelope1(i); 
 			}
 
-			MapLayer.getMapViewer().repaint();
+			MapLayer.repaint();
 //			try {
 //				sleep(100);
 //			} catch (InterruptedException e) {}

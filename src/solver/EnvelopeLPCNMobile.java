@@ -42,7 +42,7 @@ protected boolean loop = true ;
 	@Override	
 	public void run() {
 
-		List<SensorNode> nodes = DeviceList.getSensorNodes();
+		List<SensorNode> nodes = DeviceList.sensors;
 		List<Device> mobiles = DeviceList.getMobileNodes();
 
 		SensorNode n1, n2;
@@ -90,7 +90,7 @@ protected boolean loop = true ;
 			previous = imin;
 			current = imin;
 			nodes.get(imin).setMarked(true);
-			MapLayer.getMapViewer().repaint();
+			MapLayer.repaint();
 			DeviceList.addToLastEnvelope(imin);
 	
 			delay();
@@ -146,7 +146,7 @@ protected boolean loop = true ;
 					imin = current;	
 				
 				nodes.get(imin).setMarked(true);
-				MapLayer.getMapViewer().repaint();				
+				MapLayer.repaint();				
 				DeviceList.addToLastEnvelope(imin);
 	
 				previous = current;

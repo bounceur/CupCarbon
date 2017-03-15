@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import java.util.Random;
 

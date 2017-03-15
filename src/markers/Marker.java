@@ -23,20 +23,19 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.awt.event.KeyEvent;
 
+//import java.awt.event.MouseListener;
 import device.Device;
 import device.DeviceList;
-import device.DeviceWithRadio;
+import device.MapObject;
 import device.StdSensorNode;
 import map.MapLayer;
 import utilities.MapCalc;
 import utilities.UColor;
 
-public class Marker extends Device {
+public class Marker extends MapObject {
 
-	private static String idFL = "M" ; // ID First Letter	
+	private static String idFL = "U" ; // ID First Letter	
 	
 	public Marker(double x, double y, double z, double radius) {
 		super(x, y, z, radius, 0);
@@ -54,13 +53,12 @@ public class Marker extends Device {
 			initDraw(g) ;
 			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int x = coord[0];
-			int y = coord[1];
-			//int x = MapCalc.geoToIntPixelMapX(this.x,this.y) ;
-			//int y = MapCalc.geoToIntPixelMapY(this.x,this.y) ;		
+			int y = coord[1];		
 			int rayon = MapCalc.radiusInPixels(this.radius) ;
 					
 			if (inside || selected) {
-				g.setColor(UColor.BLACK_TRANSPARENT);
+				g.setColor(Color.GRAY);
+				if(MapLayer.dark) g.setColor(Color.LIGHT_GRAY);
 				g.drawLine(x-rayon-3, y-rayon-3, x-rayon+2, y-rayon-3);
 				g.drawLine(x-rayon-3, y-rayon-3, x-rayon-3, y-rayon+2);
 				g.drawLine(x-rayon-3, y+rayon+3, x-rayon+2, y+rayon+3);
@@ -72,15 +70,14 @@ public class Marker extends Device {
 			}
 			
 			if (selected) {
-				g.setColor(Color.gray);
+				g.setColor(Color.GRAY);
+				if(MapLayer.dark) g.setColor(Color.LIGHT_GRAY);
 				g.drawOval(x - rayon-2, y - rayon-2, (rayon+2) * 2, (rayon+2) * 2);
 			}	
 			
-			drawMoveArrows(x,y,g) ;
-			
 			if(hide==0) {
-				g.setColor(UColor.RED);
-				g.fillOval(x-2, y-2, 4, 4);
+				g.setColor(UColor.BLUE);
+				g.fillOval(x-3, y-3, 6, 6);
 			}
 		}
 	}	
@@ -98,7 +95,7 @@ public class Marker extends Device {
 		double y = y1+((y2-y1)/2.0);
 		double z = z1+((z2-z1)/2.0);
 		Marker marker = new Marker(x, y, z, 4) ; 
-		if(b) marker.setSelection(true);
+		marker.setSelected(b);
 		return marker;
 	}
 	
@@ -118,30 +115,35 @@ public class Marker extends Device {
 	}
 	
 	@Override
-	public String getNodeIdName() {
+	public String getName() {
 		return getIdFL()+id;
 	}
 	
-	@Override
-	public void keyTyped(KeyEvent e) {
-		super.keyTyped(e);
-		if(e.getKeyChar()=='u') {
-			insertMarker();
-		}
-		
-		if(e.getKeyChar()=='t') {
-			transformMarkerToSensor();
+	public void insertInAll() {
+		int i = MarkerList.getIndex(this)+1 ;
+		if(i<MarkerList.size()) {
+			MapLayer.addMarker(i, getCentre(this, MarkerList.get(i), true));
 		}
 	}
 	
-	public void insertMarker() {
+	public void insertAfterSelectedMarker() {
 		if(selected) {
+			int i = MarkerList.getIndex(this)+1 ;
+			if(i<MarkerList.size()) {
+				MapLayer.addMarker(i, getCentre(this, MarkerList.get(i), true));
+			}
+		}
+	}
+	
+	public void insertMarkerAndDeselect() {
+		if(selected) {
+			selected = false;
 			int ix = MarkerList.getIndex(this)+1 ;
 			if(ix<MarkerList.size()) {
 				MapLayer.addMarker(ix, getCentre(this, MarkerList.get(ix), true));
 			}
 		}
-	}	
+	}
 	
 	public void transformMarkerToSensor() {
 		if(selected) {
@@ -153,96 +155,12 @@ public class Marker extends Device {
 		return 6;
 	}
 
-	@Override
-	public void setRadioRadius(double radiuRadius) {}
+	public Marker cloneMarker() throws CloneNotSupportedException {
+		Marker newNode = (Marker) super.clone();
+		return newNode;
+	}
 
 	@Override
-	public void setSensorUnitRadius(double captureRadius) {}
+	public void initGeoZoneList() {}
 	
-	@Override
-	public String getGPSFileName() {
-		return "" ;
-	}
-
-	@Override
-	public void setScriptFileName(String comFileName) {
-		
-	}
-	
-	@Override
-	public double getNextTime() { return 0 ;}
-	
-	@Override
-	public void loadRouteFromFile() {}
-	
-	@Override
-	public void moveToNext(boolean visual, int visualDelay) {}
-	
-	@Override
-	public boolean canMove() {return false;}
-
-	@Override
-	public boolean hasNext() {
-		return false;
-	}
-	
-	public void loadScript() {}
-
-	@Override
-	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void drawRadioLinks(Graphics g) {
-		// TODO Auto-generated method stub		
-	}
-	
-	@Override
-	public void drawRadioPropagations(Graphics g) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void initForSimulation() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void initBattery() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Polygon getRadioPolygon() {
-		return null;
-	}
-
-	@Override
-	public void calculatePropagations() {
-		// TODO Auto-generated method stub
-	}
-	
-	@Override
-	public void resetPropagations() {
-
-	}
-
-	@Override
-	public boolean radioDetect(DeviceWithRadio device) {
-		return false;
-	}
-
-	@Override
-	public void initGeoZoneList() {
-		
-	}
-	
-	@Override
-	public void initBuffer() {
-		
-	}
 }

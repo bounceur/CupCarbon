@@ -27,6 +27,8 @@ import java.util.LinkedList;
 
 import map.MapLayer;
 import project.Project;
+import visibility.VisibilityZones;
+import wisen_simulation.SimulationInputs;
 
 /**
  * @author Ahcene Bounceur
@@ -41,13 +43,15 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	protected LinkedList<Double> routeZ;
 	protected boolean loop = false;
 	protected int nLoop = 0;
-	protected int routeIndex = 0;
-	protected boolean readyForSimulation = false;
+	protected int routeIndex = 0;	
+	
+	protected double angle = 0.0;
 	
 	/**
 	 * Empty constructor
 	 */
 	public DeviceWithWithoutRadio() {
+		
 	}
 
 	/**
@@ -78,7 +82,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 		String[] ts;
 		try {
 			if (!gpsFileName.equals("")) {
-				readyForSimulation = true;
+				readyForMobility = true;
 				fis = new FileInputStream(Project.getProjectGpsPath() + File.separator + gpsFileName);				
 				b = new BufferedReader(new InputStreamReader(fis));
 				underSimulation = true;
@@ -98,7 +102,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 				fis.close();
 
 			} else
-				readyForSimulation = false;
+				readyForMobility = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -115,6 +119,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	public void initForSimulation() {
 		loadRouteFromFile();
 		fixori();
+		angle = 0;
 		routeIndex=-1;
 	}
 	
@@ -124,10 +129,9 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	public void runSimulation() {
 		loadRouteFromFile();
 		fixori();
-		if (readyForSimulation) {
+		if (readyForMobility) {
 			underSimulation = true;
 			routeIndex = 0;
-			//selected = false;
 			long tmpTime = 0;
 			long cTime = 0;
 			long toWait = 0;			
@@ -145,7 +149,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 				if (DeviceList.propagationsCalculated)
 					DeviceList.calculatePropagations();
 				
-				MapLayer.getMapViewer().repaint();
+				MapLayer.repaint();
 				try {
 					Thread.sleep(toWait * Device.moveSpeed);
 				} catch (InterruptedException e) {
@@ -159,11 +163,10 @@ public abstract class DeviceWithWithoutRadio extends Device {
 				e.printStackTrace();
 			}
 			routeIndex = 0;
-			//selected = false;
 			toOri();
 			thread = null;
 			underSimulation = false;
-			MapLayer.getMapViewer().repaint();
+			MapLayer.repaint();
 		}
 	}
 	
@@ -185,7 +188,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 			if (routeIndex <= 0)
 				diff = routeTime.get(0);
 			else 
-				diff = routeTime.get(routeIndex) - routeTime.get(routeIndex - 1);
+				diff = routeTime.get(routeIndex);// - routeTime.get(routeIndex - 1);
 			return diff;
 		}
 		return 0;
@@ -198,6 +201,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	public void moveToNext(boolean visual, int visualDelay) {
 		if (routeTime != null && nLoop > 0) {
 			routeIndex++;
+			angle += 0.1;
 			if ((routeIndex == (routeTime.size()))) {
 				nLoop--;
 				if (!loop || nLoop == 0) {
@@ -209,17 +213,19 @@ public abstract class DeviceWithWithoutRadio extends Device {
 			}
 			longitude = routeX.get(routeIndex);
 			latitude = routeY.get(routeIndex);
-			elevation = routeZ.get(routeIndex);
+			elevation = routeZ.get(routeIndex);		
+			if (SimulationInputs.visibility) {
+				if(this.getType()==Device.SENSOR) {
+					VisibilityZones vz = new VisibilityZones((SensorNode) this);
+					vz.run();
+				}
+			}
 			if (DeviceList.propagationsCalculated)
 				DeviceList.calculatePropagations();
-//			if (SimulationInputs.visibility) {
-//				VisibilityZones vz = new VisibilityZones((SensorNode) this);
-//				vz.calculate();
-//			}
 		}
 		if (visual) {
 			try {				
-				MapLayer.getMapViewer().repaint();
+				MapLayer.repaint();
 				Thread.sleep(visualDelay);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -254,15 +260,6 @@ public abstract class DeviceWithWithoutRadio extends Device {
 		return false;
 	}
 
-	// ------------------------------------------------------------------------
-	// Test if the gps file name is not empty
-	// ------------------------------------------------------------------------
-	public boolean canMove() {
-		if (getGPSFileName().equals(""))
-			return false;
-		return true;
-	}
-
 	public LinkedList<Long> getRouteTime() {
 		return routeTime;
 	}
@@ -292,14 +289,6 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	 * @return if a neighbor device is in the radio area of the current device
 	 */
 	public boolean radioDetect(DeviceWithRadio device) {
-		return false;
-	}
-	
-	/**
-	 * @param device
-	 * @return if a neighbor device is in the propagation area of the current device
-	 */
-	public boolean propagationDetect(Device device) {
 		return false;
 	}
 	

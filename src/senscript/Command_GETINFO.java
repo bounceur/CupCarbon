@@ -1,8 +1,7 @@
-package script;
+package senscript;
 
 import device.Device;
 import device.DeviceList;
-import device.MediaSensorNode;
 import device.SensorNode;
 import wisen_simulation.SimLog;
 
@@ -20,9 +19,9 @@ public class Command_GETINFO extends Command {
 
 		SimLog.add("S" + sensor.getId() + " GET INFO.");
 		
-		for (Device device : DeviceList.getNodes()) {
+		for (Device device : DeviceList.devices) {
 			if(device.getType() == Device.MOBILE) {	
-				if (((MediaSensorNode)sensor).detect(device)) {
+				if (sensor.detect(device)) {
 					sensor.getScript().addVariable(arg, device.getId()+"#"+device.getLatitude()+"#"+device.getLongitude());
 				}
 				else

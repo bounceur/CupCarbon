@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import wisen_simulation.SimLog;
 import device.SensorNode;
@@ -16,13 +16,13 @@ public class Command_ENDWHILE extends Command {
 	public double execute() {
 		SimLog.add("S" + sensor.getId() + " END WHILE.");
 		
-		Script script = sensor.getScript();
+		SenScript script = sensor.getScript();
 		
 		String condition = getCurrentWhile().getArg().replaceFirst("while", "");
 		
-		EvalCondition evalCondtion = new EvalCondition(sensor);
+		SenScriptEvalCondition evalCondtion = new SenScriptEvalCondition(sensor);
 		
-		ConditionElement conditionElement = evalCondtion.initCondition(condition);
+		SenScriptConditionElement conditionElement = evalCondtion.initCondition(condition);
 		resultOfCondition = conditionElement.evaluate();
 		
 		Command_WHILE cmdWhile =  this.getCurrentWhile();

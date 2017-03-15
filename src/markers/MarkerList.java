@@ -19,7 +19,9 @@
 
 package markers;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,41 +30,47 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Proxy;
+import java.net.SocketAddress;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedList;
 
-import javax.swing.JOptionPane;
-
+import action.CupAction;
+import action.CupActionAddSensor;
+import action.CupActionBlock;
+import action.CupActionDeleteMarker;
+import action.CupActionInsertMarker;
+import action.CupActionRouteFromMarkers;
+import action.CupActionStack;
 import cupcarbon.Version;
-import device.DeviceParameters;
+import device.DeviceList;
+import device.StdSensorNode;
+import map.NetworkParameters;
 import map.MapLayer;
 import project.Project;
+import solver.SolverProxyParams;
 import utilities.MapCalc;
 import utilities.UColor;
 
 public class MarkerList {
 
-	private static List<Marker> markers;
-	private static boolean drawLinks = true;
+	public static LinkedList<Marker> markers;
+	public static int totalDistance;
+	public static int totalDuration;
 
 	public MarkerList() {
-		markers = new ArrayList<Marker>();
-		drawLinks = true;
+		markers = new LinkedList<Marker>();
 	}
 	
 	public static void reset() {
-		for(Marker marker : markers) {
-			MapLayer.getMapViewer().removeMouseListener(marker);
-			MapLayer.getMapViewer().removeMouseMotionListener(marker);
-			MapLayer.getMapViewer().removeKeyListener(marker);
-			marker = null;
+		if(markers != null) {
+			markers = new LinkedList<Marker>();
 		}
-		markers = new ArrayList<Marker>();
-		drawLinks = true;
 	}
 
 	public static void save(String fileName) {
@@ -90,28 +98,29 @@ public class MarkerList {
 	}
 
 	public static void open(String fileName) {
-		reset();
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(fileName));
-			String line;
-			String[] str;
-			line = br.readLine();
-			line = br.readLine();
-			line = br.readLine();
-			line = br.readLine();
-			line = br.readLine();
-			//line = br.readLine();
-			while ((line = br.readLine()) != null) {
-				str = line.split(" ");
-				addNodeByType(str[1], str[2], str[3], str[4]);
-			}
-			br.close();
-			MapLayer.getMapViewer().repaint();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+				reset();
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(fileName));
+					String line;
+					String[] str;
+					line = br.readLine();
+					line = br.readLine();
+					line = br.readLine();
+					line = br.readLine();
+					line = br.readLine();
+					while ((line = br.readLine()) != null) {
+						str = line.split(" ");
+						addNodeByType(str[1], str[2], str[3], str[4]);
+					}
+					br.close();
+					MapLayer.repaint();
+				} 
+				catch (FileNotFoundException e) {
+					System.out.println("No Markers!");
+				} 
+				catch (IOException e) {
+					e.printStackTrace();
+				}
 	}
 
 	public static void addNodeByType(String... type) {
@@ -122,7 +131,7 @@ public class MarkerList {
 		markers.add(marker);
 	}
 
-	public void add(int index, Marker marker) {
+	public static void add(int index, Marker marker) {
 		markers.add(index, marker);
 	}
 
@@ -132,7 +141,10 @@ public class MarkerList {
 	 * @param g
 	 *            Graphical object
 	 */
-	public void draw(Graphics g) {
+	public void draw(Graphics g2) {
+		totalDistance = 0;
+		totalDuration = 0;
+		Graphics2D g = (Graphics2D) g2;
 		try {
 			double x1 = 0;
 			double y1 = 0;
@@ -146,60 +158,73 @@ public class MarkerList {
 			int lx2 = 0;
 			int ly2 = 0;
 			int[] coord ;
-			for (Marker marker : markers)
-				marker.draw(g);
-			if (drawLinks && markers.size() > 0) {
+
+			if (markers.size() > 0) {
 				boolean firstTime = true;
 				for (Marker marker : markers) {
+					if(marker.isInside() && marker.isSelected())
+						MapLayer.numberOfInsideAndSelected++;
+					if(marker.isSelected() || marker.isInside())
+						MapLayer.mapViewer.setPanEnabled(false);
+					
+					// Draw the marker
+					marker.draw(g);
+					
 					if (firstTime) {
 						firstTime = false;
 						x1 = marker.getLongitude();
 						y1 = marker.getLatitude();
 						coord = MapCalc.geoToPixelMapA(y1, x1);
 						lx1 = coord[0];
-						ly1 = coord[1];								
-						//lx1 = MapCalc.geoToIntPixelMapX(x1, y1);
-						//ly1 = MapCalc.geoToIntPixelMapY(x1, y1);
-						g.setColor(UColor.RED);
-						g.drawOval((int) lx1 - 5, (int) ly1 - 5, (int) 10,
-								(int) 10);
+						ly1 = coord[1];			
+						g.setColor(UColor.BLUE3);
+						g.fillOval((int) lx1 - 5, (int) ly1 - 5, (int) 10, (int) 10);
+						g.setColor(UColor.BLUE1);
+						g.drawOval((int) lx1 - 5, (int) ly1 - 5, (int) 10, (int) 10);
 					} else {
 						x2 = marker.getLongitude();
 						y2 = marker.getLatitude();
 						coord = MapCalc.geoToPixelMapA(y2, x2);
 						lx2 = coord[0];
 						ly2 = coord[1];
-						//lx2 = MapCalc.geoToIntPixelMapX(x2, y2);
-						//ly2 = MapCalc.geoToIntPixelMapY(x2, y2);
 
-						g.setColor(UColor.RED);
-
+						g.setStroke(new BasicStroke(3f));
+						
+						g.setColor(UColor.BLUE2);
+						if(NetworkParameters.drawMarkerArrows)
+							g.setColor(UColor.BLUE4);
+						if(MapLayer.dark && NetworkParameters.drawMarkerArrows) {
+							g.setColor(UColor.BLUE3);
+						}
 						// Draw the link between markers
 						g.drawLine((int) lx1, (int) ly1, (int) lx2, (int) ly2);
+												
 						// Draw arrows
-						if(DeviceParameters.drawMarkerArrows) {							
+						if(NetworkParameters.drawMarkerArrows) {
+							g.setStroke(new BasicStroke(0.8f));
+							g.setColor(UColor.BLUE1);
+							g.drawLine((int) lx1, (int) ly1, (int) lx2, (int) ly2);
 							dx = lx2 - lx1;
 							dy = ly2 - ly1;
 							alpha = Math.atan(dy / dx);
 							alpha = 180 * alpha / Math.PI;
-							/*if ((dx >= 0 && dy >= 0) || (dx >= 0 && dy <= 0))
-								g.fillArc((int) lx2 - 15, (int) ly2 - 15, 30, 30,
-										180 - (int) alpha - 10, 20);
-							else
-								g.fillArc((int) lx2 - 15, (int) ly2 - 15, 30, 30,
-										-(int) alpha - 10, 20);*/
 							if ((dx >= 0 && dy >= 0) || (dx >= 0 && dy <= 0))
 								g.fillArc((int) lx2 - 12, (int) ly2 - 12, 12*2, 12*2,180 - (int) alpha - 12, 12*2);
 							else
 								g.fillArc((int) lx2 - 12, (int) ly2 - 12, 12*2, 12*2, -(int) alpha - 12, 12*2);		
 						}
+						if (NetworkParameters.displayMarkerDistance) {
+							MapLayer.drawDistance(x1, y1, 0, x2, y2, 0, g);
+						}
+						totalDistance+=(int)  (int) MapLayer.distance(x1, y1, x2, y2);
+						totalDuration++;						
 						x1 = marker.getLongitude();
 						y1 = marker.getLatitude();
 						coord = MapCalc.geoToPixelMapA(y1, x1);
 						lx1 = coord[0];
 						ly1 = coord[1];	
-						//lx1 = MapCalc.geoToIntPixelMapX(x1, y1);
-						//ly1 = MapCalc.geoToIntPixelMapY(x1, y1);
+						
+						
 					}
 				}
 			}
@@ -218,72 +243,19 @@ public class MarkerList {
 		}
 		return -1;
 	}
-
-	public void setLinks(boolean b) {
-		drawLinks = b;
-	}
-
-	public boolean getLinks() {
-		return drawLinks;
-	}
 	
 	public static int size() {
 		return markers.size();
 	}
 
 	public static void delete(int idx) {
-		Marker marker = markers.get(idx);
-		MapLayer.getMapViewer().removeMouseListener(marker);
-		MapLayer.getMapViewer().removeMouseMotionListener(marker);
-		MapLayer.getMapViewer().removeKeyListener(marker);
 		markers.remove(idx);
-		marker = null;
 	}
 
-	public void simulate() {
-		// for (int i = 0; i < markers.size(); i++) {
-		// markers.get(i).start();
-		// }
-	}
-
-	/*
-	 public static void saveGpsCoords(String fileName, String title,
-			String from, String to) {
-		try {
-			PrintStream ps;
-			ps = new PrintStream(new FileOutputStream(
-					Project.getGpsFileFromName(fileName)));
-			ps.println(title);
-			ps.println(from);
-			ps.println(to);
-			Marker marker;
-
-			int initialDate = -3600000;
-			Date date = new Date(initialDate);
-			String s = "";
-			SimpleDateFormat formateur = new SimpleDateFormat("HH:mm:ss");
-
-			for (Iterator<Marker> iterator = markers.iterator(); iterator
-					.hasNext();) {
-				marker = iterator.next();
-				s = formateur.format(date);
-				date.setTime(initialDate += 1000);
-				ps.println(s + " " + marker.getX() + " " + marker.getY() + " "
-						+ marker.getRadius());
-			}
-			ps.close();
-			JOptionPane.showMessageDialog(null, "File saved!", "Save",
-					JOptionPane.INFORMATION_MESSAGE);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-	 */
 	public static void saveGpsCoords(String fileName, String title, String from, String to, boolean loop, int delay, int nLoop) {
 		try {
 			PrintStream ps;
-			ps = new PrintStream(new FileOutputStream(
-					Project.getGpsFileFromName(fileName)));
+			ps = new PrintStream(new FileOutputStream(Project.getGpsFileFromName(fileName)));
 			ps.println(title);
 			ps.println(from);
 			ps.println(to);
@@ -291,105 +263,86 @@ public class MarkerList {
 			ps.println(nLoop);
 			Marker marker;
 
-			//int initialDate = 0;
-			//Date date = new Date(initialDate);
-			//String s = "";
 			int s = 0;
-			//SimpleDateFormat formateur = new SimpleDateFormat("HH:mm:ss");
 
 			for (Iterator<Marker> iterator = markers.iterator(); iterator.hasNext();) {
 				marker = iterator.next();
-				//s = formateur.format(date);
-				//date.setTime(initialDate += 1000);
 				if(iterator.hasNext() || !loop)
-					s++;
+					s = 1;
 				else {
-					s+=delay;
+					s = delay;
 				}
-				ps.println(s + " " + marker.getLongitude() + " " + marker.getLatitude() + " " + marker.getElevation() + " "
-						+ marker.getRadius());				
+				ps.println(s + " " + marker.getLongitude() + " " + marker.getLatitude() + " " + marker.getElevation() + " " + marker.getRadius());				
 			}
 			ps.close();
-			JOptionPane.showMessageDialog(null, "File saved!", "Save",
-					JOptionPane.INFORMATION_MESSAGE);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void selectInNodeSelection(int cadreX1, int cadreY1, int cadreX2,
+	public void selectInsideRectangle(int cadreX1, int cadreY1, int cadreX2,
 			int cadreY2) {
 		Marker marker;
 		for (Iterator<Marker> iterator = markers.iterator(); iterator.hasNext();) {
 			marker = iterator.next();
-			marker.setMove(false);
-			marker.setSelection(false);
+			marker.setSelected(false);
 			if (MapLayer.insideSelection(marker.getLongitude(), marker.getLatitude(),
 					cadreX1, cadreX2, cadreY1, cadreY2)) {
-				marker.setSelection(true);
+				marker.setSelected(true);
 			}
 		}
 	}
 
 	public void deleteIfSelected() {
+		CupActionBlock block = new CupActionBlock();
 		Marker marker;
+		int index = 0;
 		for (Iterator<Marker> iterator = markers.iterator(); iterator.hasNext();) {
 			marker = iterator.next();
 			if (marker.isSelected()) {
-				MapLayer.getMapViewer().removeMouseListener(marker);
-				MapLayer.getMapViewer().removeMouseMotionListener(marker);
-				MapLayer.getMapViewer().removeKeyListener(marker);
-				iterator.remove();
-				marker = null;
+				CupActionDeleteMarker action = new CupActionDeleteMarker(marker, index);
+				block.addAction(action);
 			}
+			index++;
+		}
+		if(block.size()>0) {
+			CupActionStack.add(block);
+			CupActionStack.execute();
 		}
 	}
 
 	public static void deleteAll() {
-		Marker marker;
-		for (Iterator<Marker> iterator = markers.iterator(); iterator.hasNext();) {
-			marker = iterator.next();
-			MapLayer.getMapViewer().removeMouseListener(marker);
-			MapLayer.getMapViewer().removeMouseMotionListener(marker);
-			MapLayer.getMapViewer().removeKeyListener(marker);
-			iterator.remove();
-			marker = null;
-		}
+		markers.removeAll(markers);
 	}
 
-	public void setSelectionOfAllMarkers(boolean selection, int type,
-			boolean addSelect) {
-		for (Marker mar : markers) {
+	public void setSelectionOfAllMarkers(boolean selection, boolean addSelect) {
+		for (Marker marker : markers) {
 			if (!addSelect)
-				mar.setSelection(false);
-			if (mar.getType() == type || type == -1)
-				mar.setSelection(selection);
+				marker.setSelected(false);
+			marker.setSelected(selection);
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 
 	public void invertSelection() {
 		for (Marker mar : markers) {
 			mar.invSelection();
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 
 	public static void generateOSMRouteFile() {
-		//String host = "http://router.project-osrm.org/viaroute?hl=fr&";
-
 		String host = "https://graphhopper.com/api/1/route?";
-
-		for (Marker m : markers) {
-
-			host += "point=" + m.getLatitude() + "," + m.getLongitude() + "&";
-			//host += "loc=" + m.getLatitude() + "," + m.getLongitude() + "&";
-		}
-
-		//host += "output=json";
+		int n1 = 0;
+		int n2 = markers.size();
+		
+		if(n2>2) 
+			n1 = n2-2;
+		for (int i=n1; i<n2; i++) {
+			host += "point=" + markers.get(i).getLatitude() + "," + markers.get(i).getLongitude() + "&";
+		}		
 		host += "&vehicle=car&locale=de&key=83a9ff19-9dc6-44ff-9f04-70a0500ad0ef&type=gpx";
-		//host = "https://graphhopper.com/api/1/route?point=51.131,12.414&point=48.224%2C3.867&key=83a9ff19-9dc6-44ff-9f04-70a0500ad0ef";
-		System.out.println(host);
+
 		try {
 			File f = new File("gpx");
 			try {
@@ -398,29 +351,40 @@ public class MarkerList {
 				e.printStackTrace();
 			}
 			URL url = new URL(host);
-			URLConnection uc = url.openConnection();			
+			URLConnection uc = null;
+			if(SolverProxyParams.host.equals("") && SolverProxyParams.port.equals("")) {
+				uc = url.openConnection();
+			}
+			else {
+				SocketAddress sa = new InetSocketAddress(SolverProxyParams.host, Integer.parseInt(SolverProxyParams.port));
+				Proxy proxy = new Proxy(Proxy.Type.HTTP, sa);			
+				uc = url.openConnection(proxy);
+			}
 			
 			uc.setRequestProperty("User-Agent", "CupCarbon");
-			
+
 			InputStream in = uc.getInputStream();
 			FileOutputStream file = new FileOutputStream("gpx/tmp.gpx");
 			int l = 0;
 			while ((l = in.read()) != -1) {
 				file.write(l);
-				//file.flush();
 			}
 			in.close();
 			file.close();
 			gpxToMarkers();
 		} catch (MalformedURLException e) {
-			System.err.println(host + " : URL problem.");
+			System.err.println("[CUPCARBON: MarkerList/generateOSMRouteFile] "+host + " : URL problem.");
 		} catch (IOException e) {
-			System.err.println("------ Connexion problem ! ------");
+			System.err.println("[CUPCARBON: MarkerList/generateOSMRouteFile] "+"------ Connexion problem ! ------");
 		}
 	}
 
 	public static void gpxToMarkers() {
-		deleteAll();
+		CupActionBlock block = new CupActionBlock();
+		
+		LinkedList<Marker> nMarkers = new LinkedList<Marker>(markers);
+		nMarkers.removeLast();
+		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("gpx/tmp.gpx"));
 			while(!br.readLine().startsWith("<trkpt")) {}
@@ -429,32 +393,95 @@ public class MarkerList {
 			String s ;
 			while((s=br.readLine()).startsWith("<trkpt")) {
 				st = s.split("\"");
-				markers.add(new Marker(Double.valueOf(st[3]), Double.valueOf(st[1]), 0, 10));
-				MapLayer.getMapViewer().repaint();
+				nMarkers.add(new Marker(Double.valueOf(st[3]), Double.valueOf(st[1]), 0, 5));
 			}
 			br.close();
 			File f = new File("gpx/tmp.gpx");
 			f.delete();
 			f = new File("gpx");
 			f.delete();
+			
+			CupAction action = new CupActionRouteFromMarkers(markers, nMarkers);
+			block.addAction(action);
+			CupActionStack.add(block);
+			CupActionStack.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	/**
-	 * @return the markers
-	 */
-	public static List<Marker> getMarkers() {
-		return markers;
+	public static void insertMarkers() {
+		ArrayList<Integer> iList = new ArrayList<Integer>();
+		for (int i = 0; i < markers.size()-1; i++) {
+			if(markers.get(i).isSelected()) {
+				iList.add(i);
+			}
+		}
+		if(iList.size()>0) {
+			CupAction action = new CupActionInsertMarker(iList);		
+			CupActionBlock block = new CupActionBlock();
+			block.addAction(action);
+			CupActionStack.add(block);
+			CupActionStack.execute();
+		}
 	}
 	
-	public static void insertMarkers() {
-		int n = markers.size()-1;
-		for (int ix = 0; ix < n; ix++) {
-			//if(markers.get(ix*2).isSelected())
-			MapLayer.addMarker(ix*2+1,Marker.getCentre(markers.get(ix*2),MarkerList.get(ix*2+1),true));
+	public static void selectNextMarkers() {
+		for(int i=0; i<markers.size(); i++) {
+			if(markers.get(i).isSelected() && !markers.get(i+1).isSelected()) {
+				markers.get(i+1).setSelected(true);
+				break;
+			}
 		}
+	}
+	
+	public static void insertMarkers2() {
+		int n = markers.size()-1;
+		for (int i = 0; i < n; i++) {
+			if(markers.get(i*2+1).isSelected())
+				MapLayer.addMarker(i*2+1,Marker.getCentre(markers.get(i*2),MarkerList.get(i*2+1),true));
+		}
+	}
+		
+	public static void transformMarkersToSensors() {
+		if(markers.size()>0) {
+			CupActionBlock block = new CupActionBlock();		
+			for (int i = 0; i < markers.size(); i++) {
+				Marker marker = markers.get(i);
+				if(marker.isSelected()) {
+					CupAction action = new CupActionAddSensor(new StdSensorNode(marker.getLongitude(), marker.getLatitude(), marker.getElevation(), 0, 100, 20, -1));
+					block.addAction(action);
+				}
+			}
+			if(block.size()>0) {
+				CupActionStack.add(block);
+				CupActionStack.execute();
+			}
+		}
+	}
+	
+	public static void deselectAll() {
+		for(Marker marker : markers) {
+			marker.setSelected(false);
+		}
+	}
+	
+	public static void selectAll() {
+		for(Marker marker : markers) {
+			marker.setSelected(true);
+		}
+	}
+	
+	public static void delete(Marker marker) {
+		Marker tMarker;
+		for (Iterator<Marker> iterator = MarkerList.markers.iterator(); iterator.hasNext();) {
+			tMarker = iterator.next();
+			if (tMarker == marker) {
+				iterator.remove();				
+			}
+		}
+		if(DeviceList.propagationsCalculated)			
+			DeviceList.calculatePropagations();
 	}
 	
 }

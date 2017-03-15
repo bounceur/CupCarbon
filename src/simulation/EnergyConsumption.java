@@ -9,14 +9,14 @@ public class EnergyConsumption extends Thread {
 	
 	@Override
 	public void run() {
-		int n = DeviceList.size();
+		int n = DeviceList.sensorListSize();
 		double p ;
 		while(loop) {
 			for (int i = 0; i < n; i++) {
 				p=Math.random();				
 				if(p<0.0005) {
-					DeviceList.getNodes().get(i).setDead(true);
-					MapLayer.getMapViewer().repaint();
+					DeviceList.sensors.get(i).setDead(true);
+					MapLayer.repaint();
 				}
 			}
 			try {

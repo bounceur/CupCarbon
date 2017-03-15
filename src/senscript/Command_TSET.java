@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import wisen_simulation.SimLog;
 import device.SensorNode;
@@ -20,13 +20,13 @@ public class Command_TSET extends Command {
 
 	@Override
 	public double execute() {
-		String tabName = arg1;
-		String x_str = sensor.getScript().getVariableValue(arg2);
-		String y_str = sensor.getScript().getVariableValue(arg3);
-		String var = sensor.getScript().getVariableValue(arg4);			
+		String tabName = arg2;
+		String x_str = sensor.getScript().getVariableValue(arg3);
+		String y_str = sensor.getScript().getVariableValue(arg4);
+		String var = sensor.getScript().getVariableValue(arg1);			
 		int x  = Double.valueOf(x_str).intValue();
 		int y  = Double.valueOf(y_str).intValue();
-		Object [][] tab = sensor.getScript().getTable(tabName);
+		String [][] tab = sensor.getScript().getTable(tabName);
 		tab[x][y] = var;
 		SimLog.add("S" + sensor.getId() + " SET TABLE VALUE "+tabName+"["+x+"]["+y+"] = "+var);
 		return 0 ;

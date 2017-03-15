@@ -34,12 +34,12 @@ import map.MapLayer;
 public class EnvelopeLPCN extends Thread {
  
 	protected int delayTime = 50;
-	protected boolean loop = true;
+	//protected boolean loop = true;
 	
 	@Override	
 	public void run() {
 
-		List<SensorNode> nodes = DeviceList.getSensorNodes();
+		List<SensorNode> nodes = DeviceList.sensors;
 		
 		SensorNode n1, n2;
 
@@ -64,7 +64,7 @@ public class EnvelopeLPCN extends Thread {
 		
 		DeviceList.initAll();
 		DeviceList.addEnvelope();
-		while(loop) {
+		//while(loop) {
 			DeviceList.initLastEnvelope();
 			min = 1000;
 			imin = 0;
@@ -83,7 +83,7 @@ public class EnvelopeLPCN extends Thread {
 			first = imin;
 			current = imin;
 			nodes.get(imin).setMarked(true);
-			MapLayer.getMapViewer().repaint();
+			MapLayer.repaint();
 			DeviceList.addToLastEnvelope(imin);
 	
 			delay();
@@ -131,7 +131,7 @@ public class EnvelopeLPCN extends Thread {
 					stop = true;	
 				
 				nodes.get(imin).setMarked(true);
-				MapLayer.getMapViewer().repaint();
+				MapLayer.repaint();
 				DeviceList.addToLastEnvelope(imin);
 	
 				n1 = nodes.get(imin);
@@ -142,10 +142,10 @@ public class EnvelopeLPCN extends Thread {
 				yc = nodes.get(imin).getLatitude();
 				delay();
 			}
-			try {
-				sleep(1000);
-			} catch (InterruptedException e) {}
-		}
+//			try {
+//				sleep(1000);
+//			} catch (InterruptedException e) {}
+		//}
 		System.out.println("FINISH !");
 	}
 
@@ -217,7 +217,7 @@ public class EnvelopeLPCN extends Thread {
 	}
 	
 	public void stopAlgorithm() {
-		loop = false;
+		//loop = false;
 	}
 
 	public double matan(double x) {

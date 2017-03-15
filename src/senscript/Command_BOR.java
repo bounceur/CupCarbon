@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import wisen_simulation.SimLog;
 import device.SensorNode;
@@ -22,7 +22,7 @@ public class Command_BOR extends Command {
 		String s2 = sensor.getScript().getVariableValue(arg3);
 		String s = "";
 		for(int i =0; i<s1.length(); i++) {
-			s += (s1.charAt(i) ^ s2.charAt(i));
+			s += (s1.charAt(i) | s2.charAt(i)) - '0';
 		}
 
 		SimLog.add("S" + sensor.getId() + " " + arg1 + " = (" + Integer.valueOf(s1) + ") | (" + Integer.valueOf(s2) + ") -> " + s);

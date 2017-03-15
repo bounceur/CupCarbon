@@ -1,8 +1,7 @@
-package script;
+package senscript;
 
 import arduino.BeginInstructions;
 import device.SensorNode;
-import visualisation.Visualisation;
 import wisen_simulation.SimLog;
 
 public class Command_MARK extends Command {
@@ -26,7 +25,7 @@ public class Command_MARK extends Command {
 			sensor.setMarked(true);
 			SimLog.add("S" + sensor.getId() + " MARK");
 		}
-		Visualisation.updateStdSensorNode(sensor);
+		//Visualisation.updateStdSensorNode(sensor);
 		//Layer.getMapViewer().repaint();	
 		return 0 ;
 	}

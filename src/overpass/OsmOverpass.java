@@ -26,14 +26,17 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import geo_objects.Building;
-import geo_objects.BuildingList;
+import action.CupAction;
+import action.CupActionAddBuilding;
+import action.CupActionBlock;
+import action.CupActionStack;
+import buildings.Building;
 import map.MapLayer;
 
 /**
  * @author Yann Allain
  * @author Julien Benkhellate
- * @author BOUNCEUR Ahcène
+ * @author Bounceur Ahcène
  * @version 1.0
  */
 public class OsmOverpass extends Thread {
@@ -56,7 +59,8 @@ public class OsmOverpass extends Thread {
 		isLoading = true;
 		try {
 		    URL url = new URL("http://overpass-api.de/api/map?bbox="+bottomLeftLat+","+bottomLeftLng+","+topRightLat+","+topRightLng);
-		    System.out.println("[Buildings] File downloading...");
+		    System.out.println("[Buildings] File downloading...");		    
+		    
 		    Osm data = (Osm) JAXBContext.newInstance(Osm.class).createUnmarshaller().unmarshal( url );
 		    System.out.println("[Buildings] File downloaded.");
 		    System.out.println("[Buildings] Processing...");
@@ -66,7 +70,10 @@ public class OsmOverpass extends Thread {
 			List<OsmNd> nds;
 			Building building;
 			
-	        for(OsmWay way:ways){ // For each shapes
+			
+			CupActionBlock block = new CupActionBlock();			
+			
+	        for(OsmWay way:ways){ // For each shape
 	        	if (way.isBuilding()){
 	        		nds = way.getNd();
 		        	building = new Building(nds.size());
@@ -80,13 +87,19 @@ public class OsmOverpass extends Thread {
 		    	        }
 		        	}
 		        	
-		        	MapLayer.getMapViewer().addMouseListener(building);
-		    		MapLayer.getMapViewer().addKeyListener(building);
-		        	BuildingList.add(building);
+		        	MapLayer.mapViewer.addMouseListener(building);
+		    		MapLayer.mapViewer.addKeyListener(building);
+		        	//BuildingList.add(building);
+		        	CupAction action = new CupActionAddBuilding(building);
+					block.addAction(action);
 	        	}
 	        }
+	        if(block.size()>0) {
+		        CupActionStack.add(block);			
+				CupActionStack.execute();
+	        }
 	        isLoading = false;
-	        MapLayer.mapViewer.repaint();
+	        MapLayer.repaint();
 	        System.out.println("[Buildings] Building loaded: SECCESS!");	        
 		} catch (JAXBException e) {
 			e.printStackTrace();

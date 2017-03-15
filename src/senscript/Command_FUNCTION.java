@@ -1,9 +1,9 @@
-package script;
+package senscript;
 
 import java.util.Random;
 
 import device.SensorNode;
-import script_functions.ScriptFunctions;
+import senscript_functions.ScriptFunctions;
 import wisen_simulation.SimLog;
 
 public class Command_FUNCTION extends Command {

@@ -63,27 +63,27 @@ public class NetworkEnvelopeHTmp extends Thread {
 			DeviceList.initLastEnvelope();
 			min = 10000000;
 			imin = 0;
-			for (int i = 0; i < DeviceList.getNodes().size(); i++) {
-				DeviceList.getNodes().get(i).setValue(0);
-				DeviceList.getNodes().get(i).setMarked(false);
-				//DeviceList.getNodes().get(i).setVisited(false);
-				if(!DeviceList.getNodes().get(i).isDead())
-					if(min>DeviceList.getNodes().get(i).getLatitude()) {
-						min = DeviceList.getNodes().get(i).getLatitude();
+			for (int i = 0; i < DeviceList.sensors.size(); i++) {
+				DeviceList.sensors.get(i).setValue(0);
+				DeviceList.sensors.get(i).setMarked(false);
+				//DeviceList.sensors.get(i).setVisited(false);
+				if(!DeviceList.sensors.get(i).isDead())
+					if(min>DeviceList.sensors.get(i).getLatitude()) {
+						min = DeviceList.sensors.get(i).getLatitude();
 						imin = i;
 					}
 			}
 			prem = imin;
 			prec = imin;
 			cur=imin;
-			DeviceList.getNodes().get(imin).setMarked(true);
-			//DeviceList.getNodes().get(imin).setVisited(true);
-			MapLayer.getMapViewer().repaint();
+			DeviceList.sensors.get(imin).setMarked(true);
+			//DeviceList.sensors.get(imin).setVisited(true);
+			MapLayer.repaint();
 			DeviceList.addToLastEnvelope(imin);
 			
 			delay();
 			
-			n1 = DeviceList.getSensorNodes().get(cur);
+			n1 = DeviceList.sensors.get(cur);
 			xc = n1.getLatitude();
 			yc = n1.getLongitude();
 			x0 = xc-0.2;
@@ -100,14 +100,14 @@ public class NetworkEnvelopeHTmp extends Thread {
 			boolean b1;
 			//boolean b2;
 			boolean b3;
-			//for (int i = 0; i < DeviceList.getNodes().size(); i++) {
+			//for (int i = 0; i < DeviceList.sensors.size(); i++) {
 			while(!fini) {
 				//if(!fini) {
 					min = 10000000;
 					//trouve = false;
-					for (int j = 0; j < DeviceList.getNodes().size(); j++) {
-						n2 = DeviceList.getSensorNodes().get(j);
-						if(!DeviceList.getNodes().get(j).isDead())							
+					for (int j = 0; j < DeviceList.sensors.size(); j++) {
+						n2 = DeviceList.sensors.get(j);
+						if(!DeviceList.sensors.get(j).isDead())							
 							if ((cur!=j) && n1.radioDetect(n2)) {
 								//if(!n2.isVisited()) {
 								if(j != prec) {
@@ -131,35 +131,35 @@ public class NetworkEnvelopeHTmp extends Thread {
 					//if(trouve) {
 						if(imin==prem) fini=true;
 						prec = cur;
-						DeviceList.getNodes().get(imin).setMarked(true);
-						//DeviceList.getNodes().get(imin).setVisited(true);
-						MapLayer.getMapViewer().repaint();
+						DeviceList.sensors.get(imin).setMarked(true);
+						//DeviceList.sensors.get(imin).setVisited(true);
+						MapLayer.repaint();
 						DeviceList.addToLastEnvelope(imin);
 						
 						n3 = n4;
 						n4 = n1;			
-						n1 = DeviceList.getSensorNodes().get(imin);
+						n1 = DeviceList.sensors.get(imin);
 						cur = imin;
 						
 						x0=x1;
 						y0=y1;
 						x1=xc;
 						y1=yc;						
-						xc=DeviceList.getNodes().get(imin).getLatitude();
-						yc=DeviceList.getNodes().get(imin).getLongitude();
+						xc=DeviceList.sensors.get(imin).getLatitude();
+						yc=DeviceList.sensors.get(imin).getLongitude();
 					//}
 //					else {
-//						for(int k=0; k<DeviceList.getNodes().size(); k++) {
-//							nv = DeviceList.getNodes().get(k);
+//						for(int k=0; k<DeviceList.sensors.size(); k++) {
+//							nv = DeviceList.sensors.get(k);
 //							if(n1.radioDetect(nv) && nv.isAlgoSelected()) {
 //								nv.setVisited(false);
 //							}
 //						}
 //					}
 					//sm = 0;
-					//for(int k=0; k<DeviceList.getNodes().size(); k++) {
-					//	if((k != prem) && DeviceList.getNodes().get(k).radioDetect(DeviceList.getNodes().get(prem))) {
-					//		if(DeviceList.getNodes().get(k).isAlgoSelected()) sm++;
+					//for(int k=0; k<DeviceList.sensors.size(); k++) {
+					//	if((k != prem) && DeviceList.sensors.get(k).radioDetect(DeviceList.sensors.get(prem))) {
+					//		if(DeviceList.sensors.get(k).isAlgoSelected()) sm++;
 					//	}
 					//}
 					//if(sm>=2) fini=true;

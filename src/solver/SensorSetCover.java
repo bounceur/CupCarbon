@@ -21,7 +21,6 @@ package solver;
 
 import java.util.List;
 
-import device.Device;
 import device.DeviceList;
 import device.SensorNode;
 import graph.Graph;
@@ -33,9 +32,9 @@ public class SensorSetCover {
 	public static void sensorSetCover() {
 		GraphStd graphe = null;
 		
-		List<SensorNode> nodes = DeviceList.getSensorNodes();
+		List<SensorNode> nodes = DeviceList.sensors;
 		
-		graphe = SensorGraph.toSensorGraph(nodes, DeviceList.size());
+		graphe = SensorGraph.toSensorGraph(nodes, DeviceList.sensorListSize());
 		
 		//
 		// graphe.afficher();
@@ -71,13 +70,13 @@ public class SensorSetCover {
 		// System.out.println(++k+" : "+i);
 		// }
 		// return nbCouvrants;
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 
 	public static void sensorTargetSetCover() {
 		Graph graphe = null;
-		List<Device> nodes = DeviceList.getNodes();
-		graphe = SensorGraph.toSensorTargetGraph(nodes, DeviceList.size());
+		List<SensorNode> nodes = DeviceList.sensors;
+		graphe = SensorGraph.toSensorTargetGraph(nodes, DeviceList.deviceListSize());
 		int ng = graphe.size();
 		for (int i = 0; i < ng; i++) {
 			if (graphe.get(i).getNbNeignbors() == 0) {
@@ -99,7 +98,7 @@ public class SensorSetCover {
 			nodes.get(graphe.get(imax).getNumber()).setMarked(true);
 			graphe.removeWithNeighbors(imax);
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 
 }

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *----------------------------------------------------------------------------------------------------------------*/
 
-package script;
+package senscript;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,10 +30,9 @@ import java.util.LinkedList;
 import device.SensorNode;
 import project.Project;
 
-public class Script {
+public class SenScript {
 
 	protected LinkedList<Command> commands = new LinkedList<Command>();
-	//protected LinkedList<Script> tcommands = new LinkedList<Script>();
 	
 	protected SensorNode sensor = null;
 	protected int index = 0;
@@ -41,26 +40,25 @@ public class Script {
 	protected double event = Double.MAX_VALUE;
 	protected boolean breaked = false;
 	protected int level;
-	protected Script parent;
+	protected SenScript parent;
 	protected Command_IF currentIf = null;
 	protected Command_WHILE currentWhile = null;
 	protected Command_FOR currentFor = null;	
 	
-	protected VariableList variables ; 
-	protected TabList tables;
+	protected SenScriptVariableList variables ; 
+	protected SenScriptTabList tables;
 	protected Hashtable<String, Integer> labels;
 
 	protected boolean waiting = false;
 	
 	protected PrintStream ps = null; 
 	
-	public Script(SensorNode sensor) {		
+	public SenScript(SensorNode sensor) {		
 		this.sensor = sensor;
 		index = 0;
-		variables = new VariableList();
-		tables = new TabList();
+		variables = new SenScriptVariableList();
+		tables = new SenScriptTabList();
 		labels = new Hashtable<String, Integer>();
-		//System.out.println("--------->"+labels.size());
 	}
 	
 	public void add(Command command) {
@@ -68,7 +66,6 @@ public class Script {
 	}
 
 	public void next() {
-		//System.out.println("NEXT -> " + sensor.getId());
 		if (!breaked) {
 			index++;
 			if (index >= commands.size()){
@@ -89,9 +86,9 @@ public class Script {
 
 	public void init() {
 		//labels = new Hashtable<String, Integer>();
-		variables = new VariableList();
+		variables = new SenScriptVariableList();
 		sensor.initBuffer();		
-		tables = new TabList();
+		tables = new SenScriptTabList();
 		index = 0;
 		waiting = false;
 		loopIndex = 0;
@@ -102,13 +99,13 @@ public class Script {
 	}
 	
 	public void createFile() {
-		String name = Project.getProjectResultsPath()+File.separator+sensor.getNodeIdName();
+		String name = Project.getProjectResultPath()+File.separator+sensor.getName();
 		File file = new File(name);
 		if(file.exists()) file.delete();
 	}
 	
 	public void printFile(String text) {
-		String name = Project.getProjectResultsPath()+File.separator+sensor.getNodeIdName();
+		String name = Project.getProjectResultPath()+File.separator+sensor.getName();
 		File file = new File(name);
 		if(!file.exists()) {
 			try {			
@@ -147,17 +144,7 @@ public class Script {
 	public double getEvent() {
 		return event;
 	}
-		
-//	public int getNextIteration() {
-//		int index = this.index;
-//		while (index < commands.size()) {
-//			if (commands.get(index).isElse() || commands.get(index).isEndIf())
-//				return index;
-//			index++;
-//		}
-//		return this.index;
-//	}
-	
+
 	public void addVariable(String s1, String s2) {
 		variables.put(s1, s2);
 	}
@@ -206,7 +193,7 @@ public class Script {
 		return level;
 	}
 	
-	public Script getParent(){
+	public SenScript getParent(){
 		return parent;
 	}
 	
@@ -253,9 +240,17 @@ public class Script {
 	public void putTable(String name, int heigth, int width) {
 		tables.putTable(name, heigth, width);
 	}
+	
+	public void putVector(String name, int heigth) {
+		tables.putVector(name, heigth);
+	}
 
-	public Object[][] getTable(String tabName) {
+	public String[][] getTable(String tabName) {
 		return  tables.getTable(tabName);
+	}
+	
+	public String[] getVector(String tabName) {
+		return  tables.getVector(tabName);
 	}
 	
 	public LinkedList<Command> getCommands() {

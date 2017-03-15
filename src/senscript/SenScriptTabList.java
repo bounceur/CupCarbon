@@ -17,25 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *----------------------------------------------------------------------------------------------------------------*/
 
-package script;
+package senscript;
 
 import java.util.LinkedList;
 
-public class TabList {
+public class SenScriptTabList {
 	
 	private LinkedList<String> keys;
-	private LinkedList<Object[][]> values;
+	private LinkedList<String[][]> values;
+	private LinkedList<String[]> vvalues;
 
-	public TabList(){
+	public SenScriptTabList(){
 		keys = new LinkedList<String>();
-		values = new LinkedList<Object[][]>();
+		values = new LinkedList<String[][]>();
+		vvalues = new LinkedList<String[]>();
 	}
-	
-	
 	
 	public void putTable(String key, int heigth,int width){
 		boolean exist = false;
-		Object[][] tab = new Object[heigth][width];
+		String[][] tab = new String[heigth][width];
 		for(int i = 0; i < keys.size() ; i++){
 			if(key.equals(keys.get(i))){
 				values.remove(i);
@@ -49,12 +49,35 @@ public class TabList {
 		}	
 	}
 	
+	public void putVector(String key, int heigth){
+		boolean exist = false;
+		String[] tab = new String[heigth];
+		for(int i = 0; i < keys.size() ; i++){
+			if(key.equals(keys.get(i))){
+				vvalues.remove(i);
+				vvalues.add(i, tab);
+				exist = true;
+			}
+		}
+		if(!exist){
+			keys.addLast(key);
+			vvalues.addLast(tab);
+		}	
+	}
 	
-	
-	public Object[][] getTable(String key){		
+	public String[][] getTable(String key){		
 		for(int i = 0; i < keys.size() ; i++){
 			if(key.compareTo(keys.get(i))==0){
 				return values.get(i);
+			}
+		}
+		return null;
+	}
+	
+	public String[] getVector(String key){		
+		for(int i = 0; i < keys.size() ; i++){
+			if(key.compareTo(keys.get(i))==0){
+				return vvalues.get(i);
 			}
 		}
 		return null;

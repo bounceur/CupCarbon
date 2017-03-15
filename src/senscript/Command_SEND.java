@@ -1,14 +1,56 @@
-package script;
+/*----------------------------------------------------------------------------------------------------------------
+ * CupCarbon: A Smart City & IoT Wireless Sensor Network Simulator
+ * www.cupcarbon.com
+ * ----------------------------------------------------------------------------------------------------------------
+ * Copyright (C) 2013-2017 CupCarbon
+ * ----------------------------------------------------------------------------------------------------------------
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *----------------------------------------------------------------------------------------------------------------
+ * CupCarbon U-One is part of the research project PERSEPTEUR supported by the 
+ * French Agence Nationale de la Recherche ANR 
+ * under the reference ANR-14-CE24-0017-01. 
+ * ----------------------------------------------------------------------------------------------------------------
+ * Definition:
+ * This class allows to send messages by a sensor
+ * 
+ * Command examples:
+ * send A 4
+ * -> The current sensor will send a message "A" to the sensor having an id = 4
+ * send A
+ * -> The current sensor will send a message "A" in a broadcast
+ * send A *
+ * -> The same than send A
+ * send A * 3
+ * -> The current sensor will send a message "A" in a broadcast mode except for the sensor having an id = 3
+ * ----------------------------------------------------------------------------------------------------------------
+ **/
 
-import arduino.Arduino;
+package senscript;
+
 import device.Channels;
 import device.DeviceList;
+import device.MultiChannels;
 import device.SensorNode;
-import radio_module.Standard;
-import radio_module.XBeeFrameGenerator;
+import radio_module.RadioPacketGenerator;
+import radio_module.XBeeToArduinoFrameGenerator;
 import utilities.UColor;
 import wisen_simulation.SimLog;
 import wisen_simulation.SimulationInputs;
+
+/**
+ * @author Ahcene Bounceur
+ *
+ */
 
 public class Command_SEND extends Command {
 	
@@ -18,309 +60,251 @@ public class Command_SEND extends Command {
 	protected String arg4 = "";	
 	protected String arg5 = "";	
 	
-	//private boolean ack = false;
+	protected String rRadioName = "";
 	
+	protected boolean checkForAckMessage = false;
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+	// Constructor 
+	// ---------------------------------------------------------------------------------------------------------------------
 	public Command_SEND(SensorNode sensor, String arg1, String arg2) {
 		this.sensor = sensor ;
 		this.arg1 = arg1 ;
-		this.arg2 = arg2 ;
-		writing = false ;
+		this.arg2 = arg2.split(":")[0] ;
+		if(arg2.split(":").length>1)
+			rRadioName = arg2.split(":")[1] ;
+		writtenInUART = false ;
 	}
 	
+	// ---------------------------------------------------------------------------------------------------------------------
+	// Constructor 
+	// ---------------------------------------------------------------------------------------------------------------------
 	public Command_SEND(SensorNode sensor, String arg1, String arg2, String arg3) {
 		this.sensor = sensor ;
 		this.arg1 = arg1 ;
 		this.arg2 = arg2 ;
 		this.arg3 = arg3 ;
-		writing = false ;
+		writtenInUART = false ;
 	}
 	
+	// ---------------------------------------------------------------------------------------------------------------------
+	// Constructor 
+	// ---------------------------------------------------------------------------------------------------------------------
 	public Command_SEND(SensorNode sensor, String arg1, String arg2, String arg3, String arg4) {
 		this.sensor = sensor ;
 		this.arg1 = arg1 ;
 		this.arg2 = arg2 ;
 		this.arg3 = arg3 ;
 		this.arg4 = arg4 ;
-		writing = false ;
-	}
-
-	public void sendOperation(String message) {
-		String packet = "";
-		if(sensor.getStandard() == Standard.NONE)
-			packet = message ;
-		if(sensor.getStandard() == Standard.ZIGBEE_802_15_4)
-			packet = XBeeFrameGenerator.data16InBin(message, "00", "00", Standard.getSubChannel(sensor.getStandard())*8);
-		if(sensor.getStandard() == Standard.WIFI_802_11) {
-			packet = XBeeFrameGenerator.data16InBin(message, "00", "00", Standard.getSubChannel(sensor.getStandard())*8);
-		}
-		
-		sensor.consumeTx(packet.length());
-		
-		if (arg2.equals("*")) {
-			SimLog.add("S" + sensor.getId() + " has finished sending in a broadcast the message : \"" + message + "\" to the nodes: ");
-			double v = 0;
-			if (!arg3.equals("")) {
-				v = Double.valueOf(sensor.getScript().getVariableValue(arg3));
-			}
-			for (SensorNode rnode : sensor.getSensorNodeNeighbors()) {
-				if (sensor.propagationDetect(rnode) && sensor.canCommunicateWith(rnode) && rnode.getId()!=v) {
-					Channels.addPacketEvent(v==0?2:0, packet, message, sensor, rnode);
-				}
-			}
-		}
-		else {
-			String dest = arg2;
-			dest = sensor.getScript().getVariableValue(dest);
-			double destNodeId;	
-			if(!dest.equals("0")) {
-				destNodeId = Double.valueOf(dest);
-				SensorNode rnode = DeviceList.getSensorNodeById((int) destNodeId);
-				if (rnode != null) {
-					SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
-					if (sensor.propagationDetect(rnode) && sensor.canCommunicateWith(rnode)) {
-						Channels.addPacketEvent(0, packet, message, sensor, rnode);
-					}
-				}
-				else 
-					SimLog.add("S" + sensor.getId() + " can not send the message : \"" + message + "\" to the non-existent node: "+destNodeId);
-			}
-			else {
-				dest = arg3;
-				dest = sensor.getScript().getVariableValue(dest);
-				destNodeId = Double.valueOf(dest);
-				
-				if(!dest.equals("0")) {
-					SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the nodes with MY="+destNodeId+": ");
-					for(SensorNode rnode : DeviceList.getSensorNodes()) {
-						if ((sensor.propagationDetect(rnode)) && (rnode.getMy()==destNodeId) && sensor.canCommunicateWith(rnode)) {
-							SimLog.add("  -> S" + rnode.getId() + " ");							
-							//rnode.setReceiving(true);
-							Channels.addPacketEvent(0, packet, message, sensor, rnode);
-						}						
-					}
-				}
-				else {
-					dest = arg4;
-					dest = sensor.getScript().getVariableValue(dest);
-					if(!dest.equals("0")) {
-						destNodeId = Integer.valueOf(dest);
-						SensorNode rnode = DeviceList.getSensorNodeById((int)destNodeId);
-						if (rnode != null) {
-							SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
-							if (sensor.canCommunicateWith(rnode)) {
-								//rnode.setReceiving(true);
-								Channels.addPacketEvent(0, packet, message, sensor, rnode);
-								//sensor.setDistanceMode(true);
-								//rnode.setDistanceMode(true);
-							}
-						}
-						else 
-							SimLog.add("S" + sensor.getId() + " can not send the message : \"" + message + "\" to the non-existent node: "+destNodeId);
-					}
-				}
-			}
-		}
-	}
+		writtenInUART  = false ;
+	}	
 	
-	public void nodeOperation(int step) {
-		
-	}
-	
-	private int tentative = 0;
-	
+	// ---------------------------------------------------------------------------------------------------------------------
+	// execute send
+	// First we write in a UART (if writtenInUART=false)
+	// Then the message will be sent by radio (if writtenInUART=true) 
+	// Than we will wait for an ACK if this mode is activated (ie. SimulationInputs.ack=true)
+	// No ACK for the broadcast sending : arg2.equals("*") && arg3.equals("")
+	// ---------------------------------------------------------------------------------------------------------------------
 	@Override
 	public double execute() {	
-		//System.out.println("------------------------------");
-		//System.out.println("--> execute");
+		//System.out.println("===================================");
+		//System.out.println("           CALL  " + sensor.getId()+" "+sensor.ackOk());
+		//System.out.println("===================================");
 		if (arg1.equals("!color")) {
 			sensor.setRadioLinkColor(UColor.colorTab2[Integer.parseInt(arg2)]);
-			//Visualisation.changeColorOfArrows(Integer.parseInt(arg2));
 			return 0;
 		}
 		String message = arg1;
 		message = sensor.getScript().getVariableValue(message);
 		int messageLength = message.length();
 		
-		//System.out.println(sensor.getId()+" -> "+" SEND "+sensor.getId());
-		
-		if(!writing) {
-			//System.out.println("--> writing");
-			sensor.setAckOk(false);
-			tentative = 0;
-			//ack = false;
-			SimLog.add("S" + sensor.getId() + " is writing the message : \"" + message + "\" in its buffer.");
-			writing = true ;
-			executing = true;
-			//System.out.println("W1 "+executing);
-			
-			// Considering the message sent to the buffer (it requires UartDataRate bauds)
-			//double ratio = (sensor.getRadioDataRate()*1.0)/(sensor.getUartDataRate());
-			//return (long)(Math.round(messageLength*8.*ratio));
-			double ratio = 1.0/(sensor.getUartDataRate());
-			
-			return (ratio * (messageLength*8)) ;
-			//return 0.0000000000001;
-		}
-		
-		if (writing) { // && !ack) {	
-			//System.out.println("--> written");
-			if(sensor.getAckOk()) {
-				System.out.println("ACK RECEIVED");
-				sensor.setAckOk(false);
-				tentative = 0;
-				writing = false;
+		// In ACK mode (SimulationInputs.ack = true)
+		// After sending a message (ackBlock = true), we verify if the ASK message is received (sensor.ackOk)
+		// Otherwise, we recend the message
+		if(SimulationInputs.ack && checkForAckMessage) {
+			//System.out.println("ACK BLOCK");
+			if(sensor.isAckReceived()) {
+				//System.out.println(WisenSimulation.time + " ACK RECEIVED");
+				sensor.setAckReceived(false);
+				sensor.setAckWaiting(false);
+				sensor.setAttempts(0);
+				writtenInUART = false;
 				executing = false;
+				checkForAckMessage = false;
 				return 0 ;
-			}
-						
-			if(tentative < sensor.getNumberOfSends()) {
-				//System.out.println("SEND "+ tentative);
-				SimLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");
-				sendOperation(message);
 			}
 			else {
-				System.out.println("MESSAGE LOST");
+				//System.out.println("RESEND");
+				sensor.incAttempts();
+				writtenInUART = true;
 			}
-			
-			if ((arg2.equals("*") && arg3.equals("")) || !SimulationInputs.ack) {
-				//ack = false;
-				writing = false ;
-				executing=false;
-				return 0 ;
-			}
-			//else {
-			if (tentative < sensor.getNumberOfSends()) {
-				//if(tentative > 0 && tentative < sensor.getNumberOfSends()-1) sensor.getScript().previous();
-				if(tentative > 0) {
-					//System.out.println("::: "+sensor.getId()+" -> "+tentative);
-					sensor.getScript().previous();
-				}
-				tentative++;
-				System.out.println("SEND "+ tentative);
-				writing = true;
-				executing = true;						
-				return sensor.getTimeToResend();//Double.MAX_VALUE;// (250000*3);
-			}
-			//System.out.println("||| "+sensor.getId()+" -> "+tentative+ " RATE ");
-			tentative = 0;
-			writing = false;
+		}
+		
+		// First operation, we start by writing the message in the UART of the card
+		if(!writtenInUART) {
+			//System.out.println("UART");
+			sensor.setMessageLost(false);
+			sensor.setAckReceived(false);
+			sensor.setAttempts(0);
+			SimLog.add("S" + sensor.getId() + " is writing the message : \"" + message + "\" in its buffer.");
+			writtenInUART = true ;
+			executing = true;
+			double ratio = 1.0/(sensor.getUartDataRate());			
+			return (ratio * (messageLength*8)) ;
+		}
+		
+		//System.out.println(writtenInUART+ " "+sensor.ackOk() +" " + sensor.getAttempts() + " " + sensor.getNumberOfSends() );
+		
+		// ---------------------------------------------------------------------------------------------------------------------
+		// Once the message is written in the UART, here we send it without ack if :
+		// Non ACK mode (!SimulationInputs.ack)
+		// or in a broadcast mode (send x *)
+		// ---------------------------------------------------------------------------------------------------------------------		
+		if (writtenInUART && (!SimulationInputs.ack || (arg2.equals("*") && arg3.equals("")))) {
+			SimLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");
+			//System.out.println(WisenSimulation.time + " SEND " + message);
+			//System.out.println("SEND");	
+			sensor.setAckReceived(false);
+			sensor.setAckWaiting(false);
+			writtenInUART = false;
 			executing = false;
-			return 0 ;
-				
-				
-//				if (tentative < 3) {
-//					tentative++;
-//					//if (tentative == 1) remaining = 0.3;
-//					System.out.println("Tentaive :"+tentative);					
-//					return 0.3;//Double.MAX_VALUE;// (250000*3);
-//				}
-//				else {
-//					//ack = true;
-//					ack = false;
-//					writing = false ;
-//					executing=false;
-//					System.out.println("FIN TEN");
-//					return 0;//Double.MAX_VALUE;// (250000*3);
-//				}				
+			sensor.setAttempts(0);
+			sendOperation(message);
+			return 0;
+		}
+
+		// ---------------------------------------------------------------------------------------------------------------------
+		// Once the message is written in the UART, here we send it with ack mode
+		// ---------------------------------------------------------------------------------------------------------------------
+		if (writtenInUART && SimulationInputs.ack && !sensor.isAckWaiting()) {
+		//if (writtenInUART && SimulationInputs.ack) {
+			if(sensor.getAttempts() < sensor.getNumberOfSends()) {
+				 SimLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");
+				 //System.out.println(WisenSimulation.time+ " "+ sensor.getAttempts() + " SEND " + message);
+				 sensor.setAckWaiting(true);
+				 //System.out.println();				 
+				 sendOperation(message);
+				 checkForAckMessage = true;
+				 return sensor.getTimeToResend();
 			}
-		//}
-		//System.out.println("--> ?");
-//		if(ack) {
-//			//System.out.println(sensor.getId()+" ACK Received : "+sensor.getAckOk());
-//			ack = false;
-//			if(sensor.getAckOk()) {
-//				writing = false;
-//				executing = false;				
-//			} 
-//			else {
-//				writing = true;
-//				executing = true;
-//				sensor.getScript().previous();
-//			}
-//			return 0 ;
-//		}
-				
+			else {
+				Channels.numberOfLostMessages++;
+				//System.out.println("MESSAGE LOST");
+				sensor.setAckWaiting(false);
+				checkForAckMessage = false;
+				sensor.setAckReceived(false);
+				writtenInUART = false;
+				executing = false;
+				sensor.setAttempts(0);
+				sensor.setMessageLost(true);
+				return 0;
+			}
+		}
+		
 		return 0;
-	}	
-	
-	@Override
-	public boolean isSend() {
-		return true;
 	}
 	
+	// ---------------------------------------------------------------------------------------------------------------------
+	// Generate Arduino Code for the SEND function
+	// ---------------------------------------------------------------------------------------------------------------------
 	@Override
 	public String getArduinoForm() {
-		
-		String s = "";
-		
-		if(arg1.charAt(0)=='$') {			
-			s += "\tfor(int i=0; i<30; i++) {\n";				
-			s += "\t\tsdata[i] = " + arg1.substring(1) + ".charAt(i);\n";
-			s += "\t}\n";
-		}
-		else {
-			for(int i=0; i<arg1.length();i++) {
-				s += "\tsdata["+ i +"] = '" + arg1.charAt(i) + "';\n";
-			}
-			s +="\tfor(int i="+arg1.length()+"; i < 30; i++) {\n";
-			s +="\t\tsdata[i] = ' ';\n\t}\n";
-		}
-		
-		
-		
-		String [] info ;
-		if (arg2.equals("") || arg2.equals("*")) {
-			s += "\taddr = XBeeAddress64(0x0, 0xFFFF);\n";
-		}
-		else
-			if (arg2.equals("0")) {
-				info = getXBeeInfoById(arg2);
-				s += "\taddr = XBeeAddress64(0x0, "+info[1]+");\n";
-			} 
-			else {
-				info = getXBeeInfoById(arg2);
-				s += "\taddr = XBeeAddress64("+info[2]+", "+info[3]+");\n";
-			}
-//		s += "addr = XBeeAddress64(0x13A200, 0x40BEBA04);\n";
-		s +=  "\ttx = Tx64Request(addr, sdata, sizeof(sdata));\n";
-		s +=  "\txbee.send(tx);";
+		String s1 = sensor.getScript().getVariableValue(arg1);
+		String s2 = sensor.getScript().getVariableValue(arg2);
+		String s3 = sensor.getScript().getVariableValue(arg3);
+		System.out.println(s1);
+		System.out.println(s2);
+		System.out.println(s3);
+		String s = XBeeToArduinoFrameGenerator.data16(s1, s2, s3);
 		return s;
 	}
 	
-	public String [] getXBeeInfoById(String id) {
-		String [] info = {"","","", ""}; 
-		for(int i=0; i<5; i++) {
-			if(Arduino.xbeeList[i][0].equals(id)) {
-				info[0] = Arduino.xbeeList[i][1];
-				info[1] = Arduino.xbeeList[i][2];
-				info[2] = Arduino.xbeeList[i][3];
-				info[3] = Arduino.xbeeList[i][4];
-			}
-		}
-		return info;
-	}
-	
+	// ---------------------------------------------------------------------------------------------------------------------
+	// toString()
+	// ---------------------------------------------------------------------------------------------------------------------
 	@Override
 	public String toString() {
-		if(writing)
-			return "SEND [RADIO]";	
+		if(writtenInUART)
+			return "SEND [BY RADIO]";	
 		else 
-			return "SEND [UART]"; 
+			return "SEND [TO UART]"; 
 		
 	}
 	
-	@Override
-	public String getMessage() {
-		String message = arg1;
-		message = sensor.getScript().getVariableValue(message);
-		return message;
-	}
-	
-	@Override
-	public String finishMessage() {
-		if(writing)
-			return ("S" + sensor.getId() + " has finished writing in its buffer.");
-		return "-finish sending-";
-	}
-	
+	// ---------------------------------------------------------------------------------------------------------------------
+		// Operation of sending a message (prepare the packets according to the standard and the type of the command)
+		// Calculate the energy consumption of the sending ooperation
+		// ---------------------------------------------------------------------------------------------------------------------
+		public void sendOperation(String message) {
+			//String packet = RadioPacketGenerator.generate(sensor.getStandard());
+			
+			sensor.consumeTx(RadioPacketGenerator.packetLengthInBits(0, sensor.getStandard()));
+			
+			if (arg2.equals("*")) {
+				SimLog.add("S" + sensor.getId() + " has finished sending in a broadcast the message : \"" + message + "\" to the nodes: ");
+				double v = 0;
+				if (!arg3.equals("")) {
+					v = Double.valueOf(sensor.getScript().getVariableValue(arg3));
+				}
+				for (SensorNode rnode : sensor.getSensorNodeNeighbors()) {
+					if (sensor.propagationDetect(rnode) && sensor.canCommunicateWith(rnode) && rnode.getId()!=v) {
+						MultiChannels.addPacketEvent(2, message, sensor, rnode);
+					}
+				}
+			}
+			else {
+				String dest = arg2;
+				dest = sensor.getScript().getVariableValue(dest);
+				double destNodeId;	
+				if(!dest.equals("0")) {
+					destNodeId = Double.valueOf(dest);
+					SensorNode rnode = DeviceList.getSensorNodeById((int) destNodeId);
+					if (rnode != null) {
+						SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
+						if (sensor.propagationDetect(rnode) && sensor.canCommunicateWith(rnode)) {
+							if(rRadioName.equals("") || rRadioName.equals(rnode.getCurrentRadioModule().getName())) 
+								MultiChannels.addPacketEvent(0, message, sensor, rnode);
+						}
+						else
+							SimLog.add("S" + sensor.getId() + " and S" + destNodeId + "have not the same protocol!");
+					}
+					else 
+						SimLog.add("S" + sensor.getId() + " can not send the message : \"" + message + "\" to the non-existent node: "+destNodeId);
+				}
+				else {
+					dest = arg3;
+					dest = sensor.getScript().getVariableValue(dest);
+					destNodeId = Double.valueOf(dest);
+					
+					if(!dest.equals("0")) {
+						SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the nodes with MY="+destNodeId+": ");
+						for(SensorNode rnode : DeviceList.sensors) {
+							if ((sensor.propagationDetect(rnode)) && (rnode.getCurrentRadioModule().getMy()==destNodeId) && sensor.canCommunicateWith(rnode)) {
+								SimLog.add("  -> S" + rnode.getId() + " ");							
+								//rnode.setReceiving(true);
+								MultiChannels.addPacketEvent(0, message, sensor, rnode);
+							}						
+						}
+					}
+					else {
+						dest = arg4;
+						dest = sensor.getScript().getVariableValue(dest);
+						if(!dest.equals("0")) {
+							destNodeId = Integer.valueOf(dest);
+							SensorNode rnode = DeviceList.getSensorNodeById((int)destNodeId);
+							if (rnode != null) {
+								SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
+								if (sensor.canCommunicateWith(rnode)) {
+									MultiChannels.addPacketEvent(0, message, sensor, rnode);
+								}
+							}
+							else 
+								SimLog.add("S" + sensor.getId() + " can not send the message : \"" + message + "\" to the non-existent node: "+destNodeId);
+						}
+					}
+				}
+			}
+		}
+			
 }

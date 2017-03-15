@@ -66,27 +66,27 @@ public class NetworkEnvelopeC2 extends Thread {
 		double min = 10000000;
 		int imin = 0;
 		
-		for (int i = 0; i < DeviceList.getNodes().size(); i++) {
-			DeviceList.getNodes().get(i).setValue(0);
-			DeviceList.getNodes().get(i).setMarked(false);
-			if(min>DeviceList.getNodes().get(i).getLatitude()) {
-				min = DeviceList.getNodes().get(i).getLatitude();
+		for (int i = 0; i < DeviceList.sensors.size(); i++) {
+			DeviceList.sensors.get(i).setValue(0);
+			DeviceList.sensors.get(i).setMarked(false);
+			if(min>DeviceList.sensors.get(i).getLatitude()) {
+				min = DeviceList.sensors.get(i).getLatitude();
 				imin = i;
 			}
 		}
-		DeviceList.getNodes().get(imin).setMarked(true);
-		MapLayer.getMapViewer().repaint();		
+		DeviceList.sensors.get(imin).setMarked(true);
+		MapLayer.repaint();		
 		
 		try {
 			sleep(500);
 		} catch (InterruptedException e) {}		
-		//DeviceList.getNodes().get(imin).setAlgoSelect(false);
+		//DeviceList.sensors.get(imin).setAlgoSelect(false);
 		
 		existList.add(imin);
 		cur = imin ;
 		
-		x1 = DeviceList.getNodes().get(imin).getLatitude();
-		y1 = DeviceList.getNodes().get(imin).getLongitude();
+		x1 = DeviceList.sensors.get(imin).getLatitude();
+		y1 = DeviceList.sensors.get(imin).getLongitude();
 		
 		p1 = imin;
 		px1 = x1 ;
@@ -96,10 +96,10 @@ public class NetworkEnvelopeC2 extends Thread {
 		
 		min = 10000000;
 		imin = 0;
-		//n1 = DeviceList.getNodes().get(cur);
+		//n1 = DeviceList.sensors.get(cur);
 		//System.out.println(cur);
-		for (int j = 0; j < DeviceList.getNodes().size(); j++) {
-			n2 = DeviceList.getNodes().get(j);				
+		for (int j = 0; j < DeviceList.sensors.size(); j++) {
+			n2 = DeviceList.sensors.get(j);				
 			if ((cur!=j) && !exist(j)) {					
 				x2 = n2.getLatitude();					
 				y2 = n2.getLongitude();								
@@ -115,8 +115,8 @@ public class NetworkEnvelopeC2 extends Thread {
 		//System.out.println("--------");
 		existList.add(imin);
 		cur = imin;
-		DeviceList.getNodes().get(imin).setMarked(true);
-		MapLayer.getMapViewer().repaint();
+		DeviceList.sensors.get(imin).setMarked(true);
+		MapLayer.repaint();
 		p2 = imin;
 		px2 = x2 ;
 		py2 = y2 ;
@@ -124,15 +124,15 @@ public class NetworkEnvelopeC2 extends Thread {
 		try {
 			sleep(500);
 		} catch (InterruptedException e) {}
-		//DeviceList.getNodes().get(imin).setAlgoSelect(false);
+		//DeviceList.sensors.get(imin).setAlgoSelect(false);
 		
-		for (int i = 0; i < DeviceList.getNodes().size(); i++) {
+		for (int i = 0; i < DeviceList.sensors.size(); i++) {
 			min = 10000000;
 			imin = 0;
-			//n1 = DeviceList.getNodes().get(cur);
+			//n1 = DeviceList.sensors.get(cur);
 			//System.out.println(cur);
-			for (int j = 0; j < DeviceList.getNodes().size(); j++) {
-				n2 = DeviceList.getNodes().get(j);				
+			for (int j = 0; j < DeviceList.sensors.size(); j++) {
+				n2 = DeviceList.sensors.get(j);				
 				if ((cur!=j) && !exist(j)) {					
 					x2 = n2.getLatitude();					
 					y2 = n2.getLongitude();								
@@ -158,12 +158,12 @@ public class NetworkEnvelopeC2 extends Thread {
 				System.out.println(" oui");
 				existList.add(imin);
 				cur = imin;
-				DeviceList.getNodes().get(imin).setMarked(true);
-				MapLayer.getMapViewer().repaint();
+				DeviceList.sensors.get(imin).setMarked(true);
+				MapLayer.repaint();
 				try {
 					sleep(500);
 				} catch (InterruptedException e) {}
-				//DeviceList.getNodes().get(imin).setAlgoSelect(false);
+				//DeviceList.sensors.get(imin).setAlgoSelect(false);
 				p1 = p2;
 				p2 = p3;
 				px4 = px1;

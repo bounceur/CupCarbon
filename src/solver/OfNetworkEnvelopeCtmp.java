@@ -25,12 +25,6 @@ import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur
- * @author Reinhardt Euler
- * @author Marc Sevaux
- * @author Bernard Pottier 
- * @author Ali Benzerbadj
- * @author Farid Lalem
- * @author Massinissa Saoudi
  * @version 1.0
  */
 public class OfNetworkEnvelopeCtmp extends Thread {
@@ -55,23 +49,23 @@ public class OfNetworkEnvelopeCtmp extends Thread {
 		
 		int imin = 0;
 		
-		for (int i = 0; i < DeviceList.getNodes().size(); i++) {
-			DeviceList.getNodes().get(i).setValue(0);
-			DeviceList.getNodes().get(i).setMarked(false);
-			if(min>DeviceList.getNodes().get(i).getLatitude()) {
-				min = DeviceList.getNodes().get(i).getLatitude();
+		for (int i = 0; i < DeviceList.sensors.size(); i++) {
+			DeviceList.sensors.get(i).setValue(0);
+			DeviceList.sensors.get(i).setMarked(false);
+			if(min>DeviceList.sensors.get(i).getLatitude()) {
+				min = DeviceList.sensors.get(i).getLatitude();
 				imin = i;
 			}
 		}
-		DeviceList.getNodes().get(imin).setMarked(true);
-		MapLayer.getMapViewer().repaint();		
+		DeviceList.sensors.get(imin).setMarked(true);
+		MapLayer.repaint();		
 		
 		try {
 			sleep(500);
 		} catch (InterruptedException e) {}		
-		//DeviceList.getNodes().get(imin).setAlgoSelect(false);
+		//DeviceList.sensors.get(imin).setAlgoSelect(false);
 		int cur = imin;		
-		SensorNode n1 = DeviceList.getSensorNodes().get(cur);
+		SensorNode n1 = DeviceList.sensors.get(cur);
 		SensorNode n2 ;
 		double x1 = n1.getLatitude();
 		double y1 = n1.getLongitude();
@@ -83,11 +77,11 @@ public class OfNetworkEnvelopeCtmp extends Thread {
 		p1 = cur ;
 		//px1 = x1 ;
 		//py1 = y1 ;
-		//for(int i=0; i<DeviceList.getNodes().size(); i++) {
+		//for(int i=0; i<DeviceList.sensors.size(); i++) {
 			min = 10000000;
 			imin = -1;
-			for(int j=0; j<DeviceList.getNodes().size(); j++) {
-				n2 = DeviceList.getSensorNodes().get(j);
+			for(int j=0; j<DeviceList.sensors.size(); j++) {
+				n2 = DeviceList.sensors.get(j);
 				if((j!=cur) && (!n2.isMarked()) && n1.radioDetect(n2)) {
 					x2 = n2.getLatitude();
 					y2 = n2.getLongitude();
@@ -101,20 +95,20 @@ public class OfNetworkEnvelopeCtmp extends Thread {
 			}
 			cur = imin;
 			System.out.println("  > "+cur);
-			DeviceList.getNodes().get(cur).setMarked(true);
-			MapLayer.getMapViewer().repaint();
-			x2 = DeviceList.getNodes().get(cur).getLatitude();
-			y2 = DeviceList.getNodes().get(cur).getLongitude();
+			DeviceList.sensors.get(cur).setMarked(true);
+			MapLayer.repaint();
+			x2 = DeviceList.sensors.get(cur).getLatitude();
+			y2 = DeviceList.sensors.get(cur).getLongitude();
 			p2 = cur ;
 			//px2 = x2;
 			//py2 = y2;
-			n1 = DeviceList.getSensorNodes().get(cur);
+			n1 = DeviceList.sensors.get(cur);
 			
 			System.out.println(cur);
 			min = 10000000;
 			imin = -1;
-			for(int j=0; j<DeviceList.getNodes().size(); j++) {
-				n2 = DeviceList.getSensorNodes().get(j);
+			for(int j=0; j<DeviceList.sensors.size(); j++) {
+				n2 = DeviceList.sensors.get(j);
 				if((j!=cur) && (!n2.isMarked()) && n1.radioDetect(n2)) {
 					x2 = n2.getLatitude();
 					y2 = n2.getLongitude();
@@ -128,10 +122,10 @@ public class OfNetworkEnvelopeCtmp extends Thread {
 			}
 			cur = imin;
 			System.out.println("  > "+cur);
-			DeviceList.getNodes().get(cur).setMarked(true);
-			MapLayer.getMapViewer().repaint();
-			x2 = DeviceList.getNodes().get(cur).getLatitude();
-			y2 = DeviceList.getNodes().get(cur).getLongitude();
+			DeviceList.sensors.get(cur).setMarked(true);
+			MapLayer.repaint();
+			x2 = DeviceList.sensors.get(cur).getLatitude();
+			y2 = DeviceList.sensors.get(cur).getLongitude();
 			p3 = cur ;
 			//px3 = x2 ;
 			//py3 = y2 ;

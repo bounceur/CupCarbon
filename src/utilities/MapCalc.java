@@ -54,12 +54,12 @@ public class MapCalc {
 	 * @return The pixel coordinates (Point2D) corresponding to the GPS
 	 *         coordinates (x, y)
 	 */
-	public static Point2D geoToPixelMap(double x, double y) {
+	public static Point2D geoToPixelMap(double x, double y) { 
 		return MapLayer
-				.getMapViewer()
+				.mapViewer
 				.getTileFactory()
 				.geoToPixel(new GeoPosition(x, y),
-						MapLayer.getMapViewer().getZoom());
+						MapLayer.mapViewer.getZoom());
 	}
 
 	// public static GeoPosition geoXYToPixel(int x, int y) {
@@ -68,7 +68,7 @@ public class MapCalc {
 	// }
 	
 	public static GeoPosition pixelMapToGeo(int x, int y) {
-		return MapLayer.getMapViewer().getTileFactory().pixelToGeo (new Point(x, y), MapLayer.getMapViewer().getZoom()); 
+		return MapLayer.mapViewer.getTileFactory().pixelToGeo (new Point(x, y), MapLayer.mapViewer.getZoom()); 
 	}
 
 	/**
@@ -83,12 +83,12 @@ public class MapCalc {
 	 */
 	public static Point2D pixelPanelToPixelMap(int x, int y) {
 		return MapLayer
-				.getMapViewer()
+				.mapViewer
 				.getTileFactory()
 				.geoToPixel(
-						MapLayer.getMapViewer().convertPointToGeoPosition(
+						MapLayer.mapViewer.convertPointToGeoPosition(
 								new Point(x, y)),
-						MapLayer.getMapViewer().getZoom());
+						MapLayer.mapViewer.getZoom());
 	}
 
 	// public static int geoToIntPixelMapX(double x, double y) {
@@ -178,10 +178,10 @@ public class MapCalc {
 	 */
 	public static int radiusInPixels(double radius) {
 		GeoPosition p1 = new GeoPosition(36.000000, 40.000000);
-		Point2D pt1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(p1, MapLayer.getMapViewer().getZoom());
+		Point2D pt1 = MapLayer.mapViewer.getTileFactory().geoToPixel(p1, MapLayer.mapViewer.getZoom());
 		int v1 = (int) pt1.getX();
 		GeoPosition p2 = new GeoPosition(36.000000, 40.0011125);
-		Point2D pt2 = MapLayer.getMapViewer().getTileFactory().geoToPixel(p2, MapLayer.getMapViewer().getZoom());
+		Point2D pt2 = MapLayer.mapViewer.getTileFactory().geoToPixel(p2, MapLayer.mapViewer.getZoom());
 		int v2 = (int) pt2.getX();
 		int rp = (int) (radius * (v2 - v1) / 100);
 		return rp;
@@ -195,7 +195,7 @@ public class MapCalc {
 	 */
 	public static int numberOfSensorsInArea(SensorNode sensorNode, int radius) {
 		int n = 0;
-		for(SensorNode otherSensor : DeviceList.getSensorNodes()) {
+		for(SensorNode otherSensor : DeviceList.sensors) {
 				if((sensorNode.distance(otherSensor)<=radius) && (sensorNode != otherSensor))
 					n++;
 		}

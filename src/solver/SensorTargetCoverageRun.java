@@ -19,16 +19,15 @@
 
 package solver;
 
-import graph.Graph;
-import graph.Vertex;
-
 import java.util.List;
 import java.util.ListIterator;
 
-import map.MapLayer;
 import device.Device;
 import device.DeviceList;
 import device.SensorNode;
+import graph.Graph;
+import graph.Vertex;
+import map.MapLayer;
 
 public class SensorTargetCoverageRun implements Runnable {
 
@@ -43,7 +42,7 @@ public class SensorTargetCoverageRun implements Runnable {
 		while (iterator.hasNext()) {
 			n1 = iterator.next();
 			if (n1.getType() == Device.SENSOR && n1.getState() == Device.ALIVE) {
-				graph.add(new Vertex(i++, n1.getNodeIdName()));
+				graph.add(new Vertex(i++, n1.getName()));
 				n1.setMarked(false);
 			}
 		}
@@ -71,8 +70,8 @@ public class SensorTargetCoverageRun implements Runnable {
 
 	public static void sensorTargetSetCover() {
 		Graph graph = null;
-		List<Device> nodes = DeviceList.getNodes();
-		graph = toSensorTargetGraph(nodes, DeviceList.size());
+		List<Device> nodes = DeviceList.devices;
+		graph = toSensorTargetGraph(nodes, DeviceList.sensorListSize());
 		int ng = graph.size();
 		for (int i = 0; i < ng; i++) {
 			if (graph.get(i).getNbNeignbors() == 0) {
@@ -94,7 +93,7 @@ public class SensorTargetCoverageRun implements Runnable {
 			nodes.get(graph.get(imax).getNumber()).setMarked(true);
 			graph.removeWithNeighbors(imax);
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 
 	public void start() {

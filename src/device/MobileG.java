@@ -19,56 +19,12 @@
 
 package device;
 
-import java.awt.Graphics;
-
-
-public abstract class MobileG extends DeviceWithoutRadio {
-
-	protected int gpsId = 0 ;
-	protected static int gpsNbr = 0 ; 
-	
-	public MobileG() {
-	}
-	
+public abstract class MobileG extends DeviceWithoutRadio { 
+		
 	public MobileG(double x, double y, double z, double rayon, String gpsFileName, int id) {
 		super(x, y, z, rayon, id);
 		mobile = true ;		
 		this.gpsFileName = gpsFileName ;
 	}
-	
-	public void setGPSFileName(String fileName) {
-		gpsFileName = fileName ;
-	}
-	
-	@Override
-	public String getGPSFileName() {
-		return gpsFileName ;
-	}
-	
-	public abstract void draw(Graphics g) ;
 
-//	@Override
-//	public double getSensorUnitRadius() {
-//		return 0 ;
-//	}
-	
-	@Override
-	public double getRadioRadius() {
-		return 0 ;
-	}
-	
-	@Override
-	public void setRadioRadius(double radiuRadius) {
-		
-	}
-
-	@Override
-	public void setSensorUnitRadius(double captureRadius) {
-		
-	}
-
-	@Override
-	public void initBuffer() {
-		
-	}
 }

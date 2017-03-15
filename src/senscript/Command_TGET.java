@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import wisen_simulation.SimLog;
 import device.SensorNode;
@@ -20,15 +20,15 @@ public class Command_TGET extends Command {
 
 	@Override
 	public double execute() {
-		String tabName = arg1;
-		String x_str = sensor.getScript().getVariableValue(arg2);
-		String y_str = sensor.getScript().getVariableValue(arg3);
-		String var = arg4;
+		String tabName = arg2;
+		String x_str = sensor.getScript().getVariableValue(arg3);
+		String y_str = sensor.getScript().getVariableValue(arg4);
+		String var = arg1;
 		
 		int x  = Double.valueOf(x_str).intValue();
 		int y  = Double.valueOf(y_str).intValue();
-		Object[][] tab = sensor.getScript().getTable(tabName);
-		String val = (String) tab[x][y];
+		String[][] tab = sensor.getScript().getTable(tabName);
+		String val = tab[x][y];
 		sensor.getScript().putVariable(var, val);	
 		SimLog.add("S" + sensor.getId() + " GET TABLE VALUE "+tabName+"["+x+"]["+y+"] -> "+val);
 		return 0 ;

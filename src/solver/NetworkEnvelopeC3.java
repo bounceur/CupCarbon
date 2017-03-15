@@ -63,27 +63,27 @@ public class NetworkEnvelopeC3 extends Thread {
 		
 		int imin = 0;
 		
-		for (int i = 0; i < DeviceList.getNodes().size(); i++) {
-			DeviceList.getNodes().get(i).setValue(0);
-			DeviceList.getNodes().get(i).setVisited(false);
-			DeviceList.getNodes().get(i).setMarked(false);
-			if(min>DeviceList.getNodes().get(i).getLatitude()) {
-				min = DeviceList.getNodes().get(i).getLatitude();
+		for (int i = 0; i < DeviceList.sensors.size(); i++) {
+			DeviceList.sensors.get(i).setValue(0);
+			DeviceList.sensors.get(i).setVisited(false);
+			DeviceList.sensors.get(i).setMarked(false);
+			if(min>DeviceList.sensors.get(i).getLatitude()) {
+				min = DeviceList.sensors.get(i).getLatitude();
 				imin = i;
 			}
 		}
-		DeviceList.getNodes().get(imin).setMarked(true);
-		DeviceList.getNodes().get(imin).setVisited(true);
+		DeviceList.sensors.get(imin).setMarked(true);
+		DeviceList.sensors.get(imin).setVisited(true);
 		DeviceList.addToLastEnvelope(imin);
-		MapLayer.getMapViewer().repaint();		
+		MapLayer.repaint();		
 		
 		try {
 			sleep(100);
 		} catch (InterruptedException e) {}		
-		//DeviceList.getNodes().get(imin).setAlgoSelect(false);
+		//DeviceList.sensors.get(imin).setAlgoSelect(false);
 		
 		int cur = imin;		
-		Device n1 = DeviceList.getNodes().get(cur);
+		Device n1 = DeviceList.sensors.get(cur);
 		Device n2 ;
 		double x1 = n1.getLatitude();
 		double y1 = n1.getLongitude();
@@ -98,8 +98,8 @@ public class NetworkEnvelopeC3 extends Thread {
 
 			min = 10000000;
 			imin = -1;
-			for(int j=0; j<DeviceList.getNodes().size(); j++) {
-				n2 = DeviceList.getNodes().get(j);
+			for(int j=0; j<DeviceList.sensors.size(); j++) {
+				n2 = DeviceList.sensors.get(j);
 				if((j!=cur) && (!n2.isVisited())) {
 					x2 = n2.getLatitude();
 					y2 = n2.getLongitude();
@@ -113,28 +113,28 @@ public class NetworkEnvelopeC3 extends Thread {
 			}
 			cur = imin;
 			System.out.println("  > "+cur);
-			DeviceList.getNodes().get(cur).setMarked(true);
-			DeviceList.getNodes().get(cur).setVisited(true);
+			DeviceList.sensors.get(cur).setMarked(true);
+			DeviceList.sensors.get(cur).setVisited(true);
 			DeviceList.addToLastEnvelope(imin);
-			MapLayer.getMapViewer().repaint();
-			x2 = DeviceList.getNodes().get(cur).getLatitude();
-			y2 = DeviceList.getNodes().get(cur).getLongitude();
+			MapLayer.repaint();
+			x2 = DeviceList.sensors.get(cur).getLatitude();
+			y2 = DeviceList.sensors.get(cur).getLongitude();
 			p2 = cur ;
 			px2 = x2;
 			py2 = y2;
-			n1 = DeviceList.getNodes().get(cur);
+			n1 = DeviceList.sensors.get(cur);
 			
 			try {
 				sleep(100);
 			} catch (InterruptedException e) {}		
-			//DeviceList.getNodes().get(imin).setAlgoSelect(false);
+			//DeviceList.sensors.get(imin).setAlgoSelect(false);
 			
-		for(int i=0; i<DeviceList.getNodes().size()-2; i++) {
+		for(int i=0; i<DeviceList.sensors.size()-2; i++) {
 			System.out.println(cur);
 			min = 10000000;
 			imin = -1;
-			for(int j=0; j<DeviceList.getNodes().size(); j++) {
-				n2 = DeviceList.getNodes().get(j);
+			for(int j=0; j<DeviceList.sensors.size(); j++) {
+				n2 = DeviceList.sensors.get(j);
 				if((j!=cur) && (!n2.isVisited())) {
 					x2 = n2.getLatitude();
 					y2 = n2.getLongitude();
@@ -148,12 +148,12 @@ public class NetworkEnvelopeC3 extends Thread {
 			}
 			cur = imin;
 			System.out.println("  > "+cur);
-			DeviceList.getNodes().get(cur).setMarked(true);
-			DeviceList.getNodes().get(cur).setVisited(true);
+			DeviceList.sensors.get(cur).setMarked(true);
+			DeviceList.sensors.get(cur).setVisited(true);
 			DeviceList.addToLastEnvelope(imin);
-			MapLayer.getMapViewer().repaint();
-			x2 = DeviceList.getNodes().get(cur).getLatitude();
-			y2 = DeviceList.getNodes().get(cur).getLongitude();
+			MapLayer.repaint();
+			x2 = DeviceList.sensors.get(cur).getLatitude();
+			y2 = DeviceList.sensors.get(cur).getLongitude();
 			p3 = cur ;
 			px3 = x2 ;
 			py3 = y2 ;
@@ -167,8 +167,8 @@ public class NetworkEnvelopeC3 extends Thread {
 			System.out.println(r?"DROITE":"GAUCHE");
 			
 			if(!r) {
-				DeviceList.getNodes().get(p2).setMarked(false);				
-				MapLayer.getMapViewer().repaint();
+				DeviceList.sensors.get(p2).setMarked(false);				
+				MapLayer.repaint();
 				int tmp = p2;
 				double tmpx = px2;
 				double tmpy = py2;
@@ -202,12 +202,12 @@ public class NetworkEnvelopeC3 extends Thread {
 		}
 		
 		int v ;
-		for(int i=0; i<DeviceList.getNodes().size(); i++) {
+		for(int i=0; i<DeviceList.sensors.size(); i++) {
 			v = DeviceList.getLastEnvelope().get(i);					
-			if(DeviceList.getNodes().get(v).isSelected())
+			if(DeviceList.sensors.get(v).isSelected())
 				DeviceList.addToLastEnvelope(v);
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 		System.out.println("---------------------------");
 		System.out.println(" F I N I S H");
 		System.out.println("---------------------------");

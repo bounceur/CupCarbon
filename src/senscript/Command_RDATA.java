@@ -1,7 +1,7 @@
-package script;
+package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import wisen_simulation.SimLog;
 
 public class Command_RDATA extends Command {
 
@@ -11,6 +11,7 @@ public class Command_RDATA extends Command {
 	public Command_RDATA(SensorNode sensor, String [] args) {
 		this.sensor = sensor ;		
 		this.args = args ;
+		//System.out.println(Arrays.toString(args));
 	}
 
 	@Override
@@ -18,13 +19,12 @@ public class Command_RDATA extends Command {
 		data = sensor.getScript().getVariableValue(args[1]);
 		SimLog.add("S" + sensor.getId() + " Read DATA: "+data);
 		String [] tab = data.split("#");
-		
 		for(int i=2; i<args.length; i++) {
 			try {
 				sensor.getScript().addVariable(args[i], tab[i-2]);
 			} 
 			catch(Exception e) {
-				System.err.println("S"+sensor.getId()+" [ERROR RDATA]: No data to read!");
+				System.err.println("S"+sensor.getId()+" [ERROR RDATA: IDX OUT OF RANGE]!");
 			}
 		}
 		return 0 ;

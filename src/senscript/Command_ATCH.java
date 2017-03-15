@@ -1,8 +1,8 @@
-package script;
+package senscript;
 
 import device.DeviceList;
 import device.SensorNode;
-import radio_module.Standard;
+import radio_module.RadioStandard;
 import radio_module.XBeeFrameGenerator;
 import radio_module.XBeeToArduinoFrameGenerator;
 import wisen_simulation.SimLog;
@@ -20,14 +20,14 @@ public class Command_ATCH extends Command {
 	public double execute() {
 		SimLog.add("S" + sensor.getId() + " ATCH "+arg);
 		String args = sensor.getScript().getVariableValue(arg);
-		sensor.setCh(Integer.valueOf(args));
+		sensor.getCurrentRadioModule().setCh(Integer.valueOf(args));
 		if (DeviceList.propagationsCalculated)
 			DeviceList.calculatePropagations();
 		
 		String message = "CH"+ Integer.toHexString(Integer.parseInt(args)).toUpperCase();
 		
 		String frame = message;
-		if(sensor.getStandard() == Standard.ZIGBEE_802_15_4)
+		if(sensor.getStandard() == RadioStandard.ZIGBEE_802_15_4)
 			frame = XBeeFrameGenerator.at(message);
 		
 		double ratio = 1.0/sensor.getUartDataRate();

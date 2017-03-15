@@ -21,26 +21,15 @@ package sensorunit;
 
 import java.awt.Graphics;
 import java.awt.Polygon;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.geom.Point2D;
-
-import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import device.Device;
-import flying_object.FlyingGroup;
-import flying_object.FlyingObject;
-import map.MapLayer;
-import utilities.MapCalc;
-import utilities.UColor;
-import visualisation.Visualisation;
 
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @version 1.0
  */
-public class SensorUnit implements KeyListener, Cloneable {
+public abstract class SensorUnit implements Cloneable {
 
 	protected double radius = 10;
 	protected double longitude;
@@ -48,6 +37,7 @@ public class SensorUnit implements KeyListener, Cloneable {
 	protected double elevation;
 	protected Device node;
 	protected boolean displayRadius = false;
+	protected double eSensing = 1; // sensing energy
 	
 	
 	protected int n = 30;
@@ -56,64 +46,15 @@ public class SensorUnit implements KeyListener, Cloneable {
 	protected int [] polyX = new int[n];
 	protected int [] polyY = new int[n];
 
-	/**
-	 * Constructor 1 : radius is equal to 10 meter
-	 * @param x Position of the sensor unit on the map
-	 * @param y Position of the sensor unit on the map
-	 * @param node which is associated to this sensor unit
-	 */
 	public SensorUnit(double longitude, double latitude, double elevation, Device node) {
 		this.longitude = longitude;
 		this.latitude = latitude;
 		this.elevation = elevation;
 		this.node = node;
-		calculateSensingArea();
-		MapLayer.getMapViewer().addKeyListener(this);
 	}
 
-	/**
-	 * Constructor 3 : radius is equal to 10 meter
-	 * @param x Position of the sensor unit on the map
-	 * @param y Position of the sensor unit on the map
-	 * @param cuRadius the value of the radius 
-	 * @param node which is associated to this sensor unit
-	 */
-	public SensorUnit(double longitude, double latitude, double elevation, double radius, Device node) {
-		this(longitude, latitude, elevation, node);
-		this.radius = radius;
-		calculateSensingArea();
-	}	
-
-	public void calculateSensingArea() {
-		int rayon = MapCalc.radiusInPixels(radius) ; 
-		
-		double r2=0;
-		double r3=0;
-		
-		double i=0.0;
-		for(int k=0; k<n; k++) {
-			r2 = rayon*Math.cos(i);
-			r3 = rayon*Math.sin(i);
-			polyX[k]=(int)(longitude+r2);
-			polyY[k]=(int)(latitude+r3);
-			i+=deg;
-		}
-	}
+	public abstract void calculateSensingArea();
 	
-	/**
-	 * @return radius of the sensor unit
-	 */
-	public double getRadius() {
-		return radius;
-	}
-
-	/**
-	 * Set the radius
-	 */
-	public void setRadius(double radius) {
-		this.radius = radius;
-	}
-
 	/**
 	 * Change the position of the sensor unit
 	 */
@@ -121,83 +62,13 @@ public class SensorUnit implements KeyListener, Cloneable {
 		this.longitude = longitude;
 		this.latitude = latitude;
 	}
-
 	
-	public boolean detect(Device device) {
-		if(device.getRadius()>0) {
-			Polygon poly = new Polygon(polyX, polyY, n);
-			if(device.getType()==Device.FLYING_OBJECT) {
-				for(FlyingObject d : ((FlyingGroup)device).getFlyingObjects()) {
-					GeoPosition gp = new GeoPosition(d.getLatitude(), d.getLongitude());
-					Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
-					if(poly.contains(p1)) {
-						return true;
-					}
-				}
-				return false;
-			}
-			else {
-				GeoPosition gp = new GeoPosition(device.getLatitude(), device.getLongitude());
-				Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());		
-				return (poly.contains(p1));
-			}
-		}
-		else
-			return false;
-	}
+	public abstract boolean detect(Device device);
 	
 	/**
 	 * Draw the sensor unit
 	 */
-	public void draw(Graphics g, int mode, boolean detection) {
-		 calculateSensingArea();
-		if (!detection)
-			g.setColor(UColor.WHITE_LLTRANSPARENT);
-		if (detection)
-			g.setColor(UColor.YELLOW_SENSOR);
-	
-		if (mode == 0)
-			g.fillPolygon(polyX, polyY, n);
-		g.setColor(UColor.BLACK_TTTRANSPARENT);
-		g.drawPolygon(polyX, polyY, n);
-	}
-
-	@Override
-	public void keyPressed(KeyEvent key) {
-		if (node.isSelected()) {
-			if (key.getKeyChar() == ')') {
-				radius += 5;
-				Visualisation.updateSensorUnitRadius(node, radius);
-				MapLayer.getMapViewer().repaint();
-			}
-			if (key.getKeyChar() == '(') {
-				radius -= 5;
-				Visualisation.updateSensorUnitRadius(node, radius);
-				MapLayer.getMapViewer().repaint();
-			}			
-		}
-		if (key.getKeyChar() == 'e') {
-			displayRadius = true;
-		}
-
-		if (key.getKeyChar() == 'r') {
-			displayRadius = false;
-		}
-	}
-
-	/**
-	 * Coming soon
-	 */
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-	}
-
-	/**
-	 * Coming soon
-	 */
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-	}
+	public abstract void draw(Graphics g, int mode, boolean detection, boolean buildingDetection);
 
 	/**
 	 * Coming soon
@@ -212,7 +83,7 @@ public class SensorUnit implements KeyListener, Cloneable {
 	@Override
 	public SensorUnit clone() throws CloneNotSupportedException {
 		SensorUnit newCU = (SensorUnit) super.clone();
-		MapLayer.getMapViewer().addKeyListener(newCU);
+		//MapLayer.mapViewer.addKeyListener(newCU);
 		return newCU;
 	}
 
@@ -240,6 +111,26 @@ public class SensorUnit implements KeyListener, Cloneable {
 		this.elevation = elevation;
 	}
 	
+	public double getESensing() {
+		return eSensing;
+	}
+
+	public void setESensing(double eSensing) {
+		this.eSensing = eSensing;
+	}
 	
+	public Polygon getPoly() {
+		return new Polygon(polyX, polyY, n);
+	}
+	
+	public double getRadius() {
+		return radius;
+	}
+	
+	public void setRadius(double radius) {
+		this.radius = radius;
+	}
+	
+	public abstract void incRadius(int u);
 	
 }

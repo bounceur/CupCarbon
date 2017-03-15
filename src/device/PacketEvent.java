@@ -5,16 +5,14 @@ public class PacketEvent implements Comparable<PacketEvent> {
 	protected int type = 0;
 	protected SensorNode sSensor = null;
 	protected SensorNode rSensor = null;
-	protected String packet = "";
 	protected String message = "";
 	protected double time = 0;
 	
-	public PacketEvent(int type, SensorNode sSensor, SensorNode rSensor, String packet, String message, double time) {
+	public PacketEvent(int type, SensorNode sSensor, SensorNode rSensor, String message, double time) {
 		super();
 		this.type = type ;
 		this.sSensor = sSensor ;
 		this.rSensor = rSensor ;
-		this.packet = packet;
 		this.message = message;
 		this.time = time;
 	}
@@ -49,14 +47,6 @@ public class PacketEvent implements Comparable<PacketEvent> {
 	
 	public SensorNode getSSensor() {
 		return sSensor;
-	}
-	
-	public void setPacket(String packet) {
-		this.packet = packet;
-	}
-	
-	public String getPacket() {
-		return packet;
 	}
 
 	@Override

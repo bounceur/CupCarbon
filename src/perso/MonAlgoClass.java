@@ -9,7 +9,7 @@ import device.SensorNode;
 public class MonAlgoClass extends Thread {
 
 	public void run() {
-		List<SensorNode> capteurs = DeviceList.getSensorNodes();
+		List<SensorNode> capteurs = DeviceList.sensors;
 		
 		for(SensorNode capteur : capteurs) {
 			System.out.print(capteur.getId()+ " -> ");

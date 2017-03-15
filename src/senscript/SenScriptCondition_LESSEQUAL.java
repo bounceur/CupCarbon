@@ -1,10 +1,10 @@
-package script;
+package senscript;
 
 import device.SensorNode;
 
-public class Condition_LESSEQUAL extends Condition {
+public class SenScriptCondition_LESSEQUAL extends SenScriptCondition {
 	
-	public Condition_LESSEQUAL(SensorNode sensor, String arg1, String arg2){
+	public SenScriptCondition_LESSEQUAL(SensorNode sensor, String arg1, String arg2){
 		this.sensor = sensor ;
 		this.arg1 = arg1 ;
 		this.arg2 = arg2 ;

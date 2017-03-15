@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import wisen_simulation.SimLog;
 import device.SensorNode;
@@ -21,7 +21,7 @@ public class Command_CONC extends Command {
 		String v1 = sensor.getScript().getVariableValue(arg2);
 		String v2 = sensor.getScript().getVariableValue(arg3);
 		String z = v1+v2;
-		SimLog.add("S" + sensor.getId() + " " + arg1 + " = (" + Double.valueOf(v1) + ") + (" + Double.valueOf(v2) + ") -> " + z);
+		SimLog.add("S" + sensor.getId() + " " + arg1 + " = (" + v1 + ") + (" + v2 + ") -> " + z);
 		sensor.getScript().addVariable(arg1, "" + z);
 		return 0 ;
 	}

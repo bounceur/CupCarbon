@@ -21,11 +21,17 @@
 package device;
 
 import java.awt.Graphics;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 
-import sensorunit.MediaSensorUnit;
-import utilities.MapCalc;
 import battery.Battery;
-import geo_objects.BuildingList;
+import buildings.BuildingList;
+import project.Project;
+import sensorunit.MediaSensorUnit;
+import sensorunit.SensorUnit;
+import utilities.MapCalc;
 
 /**
  * @author Ahcene Bounceur
@@ -33,8 +39,6 @@ import geo_objects.BuildingList;
  */
 
 public class MediaSensorNode extends SensorNode {
-
-	protected MediaSensorUnit sensorUnit;
 	
 	/**
 	 * Constructor 1 Instanciate the sensor unit 
@@ -125,13 +129,13 @@ public class MediaSensorNode extends SensorNode {
 	 * @param scriptFileName
 	 *            The path of the script file
 	 */
-	public MediaSensorNode(String id, String rdInfos, String x, String y, String z, String radius, String radioRadius,
+	public MediaSensorNode(String id, String x, String y, String z, String radius, String radioRadius,
 			String suRadius, String gpsFileName, String scriptFileName, String degS, String decS, String nS) {
 		this(x, y, z, radius, radioRadius, suRadius, Integer.valueOf(id), Double.valueOf(degS), Double.valueOf(decS), Integer.valueOf(nS));
-		String [] srd = rdInfos.split("#");
-		my = Integer.valueOf(srd[0]);
-		ch = Integer.valueOf(srd[1]);
-		nId = Integer.valueOf(srd[2]);
+//		String [] srd = rdInfos.split("#");
+//		this.getCurrentRadioModule().setMy(Integer.valueOf(srd[0]));
+//		this.getCurrentRadioModule().setCh(Integer.valueOf(srd[1]));
+//		this.getCurrentRadioModule().setNId(Integer.valueOf(srd[2]));
 		gpsFileName = (gpsFileName.equals("#") ? "" : gpsFileName);
 		scriptFileName = (scriptFileName.equals("#") ? "" : scriptFileName);
 		setGPSFileName(gpsFileName);
@@ -181,97 +185,61 @@ public class MediaSensorNode extends SensorNode {
 		}
 	}
 	
-	/**
-	 * Set the capture unit
-	 * 
-	 * @param sensorUnit
-	 */
-	public void setSensorUnit(MediaSensorUnit sensorUnit) {
-		this.sensorUnit = sensorUnit;
-	}
-	
 	@Override
-	public MediaSensorNode clone() throws CloneNotSupportedException {
-		MediaSensorNode newSensor = (MediaSensorNode) super.clone();
-		MediaSensorUnit newCaptureUnit = (MediaSensorUnit) sensorUnit.clone();
+	public SensorNode clone() throws CloneNotSupportedException {
+		SensorNode newSensor = (SensorNode) super.clone();
+		SensorUnit newCaptureUnit = (SensorUnit) sensorUnit.clone();
 		Battery newBattery = (Battery) battery.clone();
-		newSensor.setSensorUnit(newCaptureUnit);
+		((MediaSensorNode)newSensor).setSensorUnit(newCaptureUnit);
 		newCaptureUnit.setNode(newSensor);
 		newSensor.setBattery(newBattery);
 		return newSensor;
 	}
 	
-	/**
-	 * @param device
-	 * @return if a device is in the sensor unit area of the current device
-	 */
-	public boolean detect(Device device) {		
-		return (sensorUnit.detect(device));
-	}
-	
-	public boolean detectBuildings() {		
-		return BuildingList.intersect(sensorUnit.getPoly());
-	}
-	
-	public boolean isSensorDetecting() {
-		for(Device d : DeviceList.getNodes()) {
-			if(detect(d) && this!=d) return true;
-		}
-		return false ;
-	}
-	
-	public double getSensorValue() {
-		for(Device d : DeviceList.getNodes()) {
-			if(detect(d) && this!=d) return d.getValue();
-		}
-		return 0.0 ;
-	}
-	
-	public String getSensorValues() {
-		String s = "";
-		boolean first = true; 
-		for(Device d : DeviceList.getNodes()) {
-			if(detect(d) && this!=d) {
-				if (!first) {
-					s+="#";
-				}
-				s += d.getId()+"#"+d.getValue();
-				first = false;
-			}
-		}
-		return s ;
-	}
+//	public double getSensorValue() {
+//		for(Device d : DeviceList.sensors) {
+//			if(detect(d) && this!=d) return d.getValue();
+//		}
+//		return 0.0 ;
+//	}
+//	
+//	public String getSensorValues() {
+//		String s = "";
+//		boolean first = true; 
+//		for(Device d : DeviceList.sensors) {
+//			if(detect(d) && this!=d) {
+//				if (!first) {
+//					s+="#";
+//				}
+//				s += d.getId()+"#"+d.getValue();
+//				first = false;
+//			}
+//		}
+//		return s ;
+//	}
 
-	@Override
 	public double getSensorUnitDeg() {
-		return sensorUnit.getDeg();
+		return ((MediaSensorUnit) sensorUnit).getDeg();
 	}
 	
-	@Override
 	public double getSensorUnitDec() {
-		return sensorUnit.getDec();
+		return ((MediaSensorUnit) sensorUnit).getDec();
 	}
 	
-	@Override
 	public int getSensorUnitN() {
-		return sensorUnit.getN();
-	}
-
-	@Override
-	public double getSensorUnitRadius() {
-		return sensorUnit.getRadius();
+		return ((MediaSensorUnit) sensorUnit).getN();
 	}
 
 	public void setSensorUnitDeg(double deg) {
-		sensorUnit.setDeg(deg);
+		((MediaSensorUnit) sensorUnit).setDeg(deg);
 	}
 	
 	public void setSensorUnitDec(double dec) {
-		sensorUnit.setDec(dec);
+		((MediaSensorUnit) sensorUnit).setDec(dec);
 	}
 
 	public void setSensorUnitRadius(double radius) {
-		sensorUnit.setRadius(radius);
+		((MediaSensorUnit) sensorUnit).setRadius(radius);
 	}
 
 	@Override
@@ -288,4 +256,57 @@ public class MediaSensorNode extends SensorNode {
 	public void initBattery() {
 		getBattery().init();
 	}
+	
+	@Override
+	public String getParamsStr() {
+		return getSensorUnitDeg()+ " " + getSensorUnitDec()+ " " + getSensorUnitN();
+	}
+	
+	public boolean detectBuildings() {		
+		return BuildingList.intersect(sensorUnit.getPoly());
+	}
+	
+	@Override
+	public double getSensorUnitRadius() {
+		return sensorUnit.getRadius();
+	}
+	
+	@Override	
+	public SensorNode createNewWithTheSameType() {
+		return new MediaSensorNode(longitude, latitude, elevation, radius, 0.0, DeviceList.number++);
+	}
+	
+	@Override
+	public void save(String ref) {
+		String fileName = Project.getProjectNodePath();
+		try {
+			PrintStream fos = null;	
+			fos = new PrintStream(new FileOutputStream(fileName + File.separator + "mediasensor_" + ref));
+			fos.println("List of parameters");
+			fos.println("------------------------------------------");
+			fos.println("device_type:" + getType());
+			fos.println("device_id:" + getId());
+			fos.println("device_longitude:" + getLongitude());
+			fos.println("device_latitude:" + getLatitude());
+			fos.println("device_elevation:" + getElevation());
+			fos.println("device_radius:" + getRadius());
+			fos.println("device_hide:" + getHide());
+			fos.println("device_draw_battery:" + getDrawBatteryLevel());
+			fos.println("device_sensor_unit_radius:" + getSensorUnitRadius());			
+			if (!getGPSFileName().equals(""))
+				fos.println("device_gps_file_name:" + getGPSFileName());
+			if (!getScriptFileName().equals(""))
+				fos.println("device_script_file_name:" + getScriptFileName());
+			if (getType() == Device.MEDIA_SENSOR)
+				fos.println("media_parameters:" + ((MediaSensorNode) this).getParamsStr());
+			fos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		saveRadioModule(Project.getProjectRadioPath() + File.separator + "mediasensor_"+ref);
+	}
+
+	public double getNextValueTime() {return Double.MAX_VALUE;}
+	public void generateNextValue() {}
+
 }

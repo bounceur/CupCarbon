@@ -38,7 +38,7 @@ public class EnvelopeLPCN_secu extends Thread {
 	@Override	
 	public void run() {
 
-		List<SensorNode> nodes = DeviceList.getSensorNodes();
+		List<SensorNode> nodes = DeviceList.sensors;
 		
 		// Max of neighbors
 //		int max = 0;
@@ -94,7 +94,7 @@ public class EnvelopeLPCN_secu extends Thread {
 			//previous = imin;
 			current = imin;
 			nodes.get(imin).setMarked(true);
-			MapLayer.getMapViewer().repaint();
+			MapLayer.repaint();
 			DeviceList.addToLastEnvelope(imin);
 	
 			delay();
@@ -151,7 +151,7 @@ public class EnvelopeLPCN_secu extends Thread {
 				//	imin = current;	
 				
 				nodes.get(imin).setMarked(true);
-				MapLayer.getMapViewer().repaint();
+				MapLayer.repaint();
 				DeviceList.addToLastEnvelope(imin);
 	
 				//previous = current;

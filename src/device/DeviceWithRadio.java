@@ -1,4 +1,3 @@
-
 /*----------------------------------------------------------------------------------------------------------------
  * CupCarbon: OSM based Wireless Sensor Network design and simulation tool
  * www.cupcarbon.com
@@ -27,8 +26,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Stroke;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,10 +36,11 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import battery.Battery;
 import geo_objects.GeoZoneList;
 import map.MapLayer;
-import propagation.RadioDetection;
+import map.NetworkParameters;
+import radio_module.RadioDetection;
+import radio_module.RadioModule;
 import utilities.MapCalc;
 import utilities.UColor;
-import visualisation.Visualisation;
 import wisen_simulation.SimulationInputs;
 
 /**
@@ -51,19 +49,12 @@ import wisen_simulation.SimulationInputs;
  * @version 1.0
  */
 public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
-	
-	protected Battery battery ;
+		
 	protected double porteeErr = .4 ;
 	protected Random random = new Random() ;
 	
-	protected double radioRangeRadius = 0 ;
-	protected double radioRangeRadiusOri = 0 ;
-	protected boolean augmenterRadio = false ;
-	protected boolean reduireRadio = false ;
-	
-	// ------ Simple Propagation
-	public double requiredQuality = -80.0; // dB
-	public double transmitPower = 0 ; // dBm	
+	protected LinkedList<RadioModule> radioModuleList = new LinkedList<RadioModule>();	
+	protected RadioModule currentRadioModule = null;
 	
 	protected LinkedList<SensorNode> neighbors = new LinkedList<SensorNode> () ;
 	
@@ -71,7 +62,12 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	protected double deg = 2.*Math.PI/nPoint;
 	
 	protected int [] polyX = new int [nPoint];
-	protected int [] polyY = new int [nPoint];	
+	protected int [] polyY = new int [nPoint];
+	
+	protected int numberOfNeighbors = 0;
+	
+	protected boolean ackReceived = false;
+	protected boolean ackWaiting = false;
 	
 	/**
 	 * 
@@ -89,8 +85,6 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 */
 	public DeviceWithRadio(double x, double y, double z, double radius, double radioRangeRadius, int id) {
 		super(x, y, z, radius, id);
-		this.radioRangeRadius = radioRangeRadius ;
-		radioRangeRadiusOri = radioRangeRadius ;
 		initGeoZoneList(); 
 	}
 	
@@ -103,30 +97,21 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	}
 	
 	public Polygon getRadioPolygon() {
-		//if(nPoint>0)
-			return new Polygon(polyX, polyY, nPoint);	
-		//return null;
+		return new Polygon(polyX, polyY, nPoint);	
 	}
 	
 	public boolean contains(Point2D p) {
 		if(nPoint>0)
 			return (getRadioPolygon().contains(p));
 		return (geoZoneList.contains((Point) p));
-		//return false;
 	}
 	
 	public boolean contains(DeviceWithRadio device) {
 		GeoPosition gp = new GeoPosition(device.getLatitude(), device.getLongitude());
-		Point2D p = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
+		Point2D p = MapLayer.mapViewer.getTileFactory().geoToPixel(gp, MapLayer.mapViewer.getZoom());
 		if(nPoint>0)
 			return ((new Polygon(polyX, polyY, nPoint)).contains(p));
 		return (geoZoneList.contains(p));
-		//return false;
-	}
-
-	@Override
-	public double getRadioRadius() {
-		return radioRangeRadius;
 	}
 	
 	@Override
@@ -135,119 +120,16 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	}
 	
 	public double getRadioRadiusOri() {
-		return radioRangeRadiusOri ;
+		return currentRadioModule.getRadioRangeRadiusOri() ;
 	}
 	
-	@Override
 	public void setRadioRadius(double radioRadius) {
-		this.radioRangeRadius = radioRadius ;
+		currentRadioModule.setRadioRangeRadius(radioRadius) ;
 	}
-	
-	@Override 
-	public void setSensorUnitRadius(double captureRadio) {}
-	
-	/* (non-Javadoc)
-	 * @see device.Device#getMaxRadius()
-	 */
-	@Override
-	public double getMaxRadius() {
-		return Math.max(radius, getRadioRadius()) ;
-	}
-	
-	/* (non-Javadoc)
-	 * @see device.Device#getGPSFileName()
-	 */
-	@Override
-	public String getGPSFileName() {
-		return gpsFileName ;
-	}
-	
-	/**
-	 * @param x
-	 * @param y
-	 * @param g
-	 */
-	public void drawIncDimRadio(int x, int y, Graphics g) {
-		if(reduireRadio || augmenterRadio) {
-			g.setColor(UColor.BLUE);
-			g.drawLine(x-10, y-2, x+10, y-2);
-			g.drawLine(x-10, y+2, x+10, y+2);
-		}
-		if(augmenterRadio) {
-			g.drawLine(x-2, y-10, x-2, y+10);
-			g.drawLine(x+2, y-10, x+2, y+10);
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see device.Device#mouseClicked(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		super.mouseClicked(e);
-		augmenterRadio = false ;
-		reduireRadio = false ;
-	}
-	
-	/* (non-Javadoc)
-	 * @see device.Device#mouseMoved(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		super.mouseMoved(e);
-		if (augmenterRadio) {			
-			radioRangeRadius += 1;
-			radioRangeRadiusOri += 1 ;
-			MapLayer.getMapViewer().repaint();
-		}
-		if (reduireRadio) {
-			if(radioRangeRadius>0) { 
-				radioRangeRadius -= 1 ;
-				radioRangeRadiusOri -= 1 ;
-			}
-			MapLayer.getMapViewer().repaint();
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see device.Device#keyTyped(java.awt.event.KeyEvent)
-	 */
-	@Override
-	public void keyTyped(KeyEvent key) {
-		super.keyTyped(key);
-		
-		if(selected) {
-			if(key.getKeyChar()=='+') {
-				move = false ;
-				reduireRadio = false ;
-				augmenterRadio = !augmenterRadio ;
-				radioRangeRadius+=1 ;
-				radioRangeRadiusOri+=1 ;
-				//ThreeDUnityIHM.updatePosition(this);
-				Visualisation.updateRadioRadius(Device.SENSOR, id, radioRangeRadius);
-				MapLayer.getMapViewer().repaint();
-			}
-			if(key.getKeyChar()=='-') {
-				move = false ;
-				augmenterRadio = false ;
-				reduireRadio = !reduireRadio ;
-				if(radioRangeRadius>0) { 
-					radioRangeRadius-=1 ;
-					radioRangeRadiusOri-=1 ;
-				}
-				Visualisation.updateRadioRadius(Device.SENSOR, id, radioRangeRadius);
-				MapLayer.getMapViewer().repaint();
-				
-			}			
-		}
-					
-	}
-	
+
 	@Override
 	public void initSelection() {		
 		super.initSelection() ;
-		augmenterRadio = false ;
-		reduireRadio = false ;
 	}
 	
 	/**
@@ -257,29 +139,20 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 * @param g
 	 */
 	public void drawRadioRadius(int x, int y, int r, Graphics g) {
-		if (r > 0 && displayRadius) {
-			g.setColor(UColor.WHITE_TRANSPARENT);
-			int lr1 = (int) (r * Math.cos(Math.PI / 4.));
-			g.drawLine(x, y, (int) (x + lr1), (int) (y - lr1));
-			g.drawString("" +requiredQuality+" dB", x + (lr1 / 2), (int) (y - (lr1 / 4.)));
-		}		
+		this.getCurrentRadioModule().drawRadioRadius(x, y, r, g);
 	}
 		
 	@Override
-	public void drawMarked(Graphics g) {
+	public void drawMarked(Graphics g2) {
 		if (!isDead()) {
+			Graphics2D g = (Graphics2D) g2;
+			g.setStroke(new BasicStroke(0.4f));
 			if (ledColor==1) {	
 				int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 				int x = coord[0];
 				int y = coord[1];
-				g.setColor(Color.ORANGE);			
-				//int r1 = 12;
+				g.setColor(Color.ORANGE);
 				int r2 = 8;
-//				if(hide == 0 || hide == 4) {
-//					g.drawOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
-//					g.setColor(UColor.GREEND_TRANSPARENT);
-//					g.fillOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
-//				}
 				g.setColor(UColor.GREEND_TRANSPARENT);
 				g.fillOval(x-(r2+1), y-(r2+1), (r2+1)*2, (r2+1)*2);
 				g.setColor(Color.GRAY);
@@ -291,107 +164,113 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				int x = coord[0];
 				int y = coord[1];
 				g.setColor(Color.ORANGE);			
-				//int r1 = 12;
 				int r2 = 8;
-//				if(hide == 0 || hide == 4) {
-//					g.drawOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
-//					g.setColor(UColor.GREEND_TRANSPARENT);
-//					g.fillOval(x-(r1+1), y-(r1+1), (r1+1)*2, (r1+1)*2);
-//				}
 				g.setColor(UColor.colorTab[ledColor-1]);
 				g.fillOval(x-(r2+1), y-(r2+1), (r2+1)*2, (r2+1)*2);
 				g.setColor(Color.GRAY);
 				g.drawOval(x-(r2+1), y-(r2+1), (r2+1)*2, (r2+1)*2);
 			}
 		}
-	}	
-	
-//	public void calculateNeighbours() {
-//		neighbors = new LinkedList<Device> () ;
-//		for(SensorNode device : DeviceList.getSensorNodes()) {
-//			if(radioDetect(device) && this!=device) {
-//				if (!isDead() && !device.isDead()) 
-//					neighbors.add(device);
-//				if (device.radioDetect(this))
-//					if (!this.isDead())
-//						device.addNeighbor(this);
-//					else
-//						device.removeNeighbor(this);				
-//			}
-//		}
-//		Layer.getMapViewer().repaint();
-//	}
-	
-//	public void addNeighbor(Device device) {
-//		if(!neighbors.contains(device) && !device.isDead()) {
-//			neighbors.add(device);
-//		}
-//		//Layer.getMapViewer().repaint();
-//	}
-//	
-//	public void removeNeighbor(Device device) {
-//		if(neighbors.contains(device)) {
-//			neighbors.remove(device);
-//		}
-//		//Layer.getMapViewer().repaint();
-//	}
+	}
 	
 	public List<SensorNode> getNeighbors() {
 		if(DeviceList.propagationsCalculated)
 			return neighbors;
 		else {
 			List<SensorNode> neighnodes = new LinkedList<SensorNode>();
-			for(SensorNode sensorNode : DeviceList.getSensorNodes()) {
+			for(SensorNode sensorNode : DeviceList.sensors) {
 				if(radioDetect(sensorNode) && this!=sensorNode && !isDead() && !sensorNode.isDead()) {
 					neighnodes.add(sensorNode);
 				}
 			}	
-			
-//			for (int i = 0; i < DeviceList.size(); i++) {
-//				if(this != DeviceList.getNodes().get(i)) 
-//					if((DeviceList.getNodes().get(i).radioDetect(this)) || (radioDetect(DeviceList.getNodes().get(i)))) {
-//						neighnodes.add(DeviceList.getNodes().get(i));
-//					}
-//			}
 			return neighnodes;
 		}
 	}
 	
+	public List<SensorNode> getActiveNodes() {
+		List<SensorNode> neighActiveNodes = new LinkedList<SensorNode>(); 
+		for(SensorNode sensorNode : getNeighbors()) {
+			if(sensorNode.isSending())
+				neighActiveNodes.add(sensorNode);
+		}
+		return neighActiveNodes;
+	}
+	
+	public int getPerActiveNodes() {
+		int n = getNeighbors().size();
+		int p = 0;
+		for(SensorNode sensorNode : getNeighbors()) {
+			if(sensorNode.isSending())
+				p++;
+		}
+		return (p/n);
+	}
+	
 	public void displayNeighbors() {
 		System.out.print(id+" : ");
-		for (int i = 0; i < DeviceList.size(); i++) {
-			if(this != DeviceList.getNodes().get(i)) 
-				if((DeviceList.getNodes().get(i).radioDetect(this)) || (radioDetect((DeviceWithRadio)DeviceList.getNodes().get(i)))) {
-					System.out.print(DeviceList.getNodes().get(i)+" ");
+		for (int i = 0; i < DeviceList.sensors.size(); i++) {
+			if(this != DeviceList.sensors.get(i)) 
+				if((DeviceList.sensors.get(i).radioDetect(this)) || (radioDetect((DeviceWithRadio)DeviceList.sensors.get(i)))) {
+					System.out.print(DeviceList.sensors.get(i)+" ");
 				}
 		}
 		System.out.println();
 	}
 	
-	public void drawRadioLinks(Graphics g) {
-		for(DeviceWithRadio device : DeviceList.getSensorNodes()) {
-			if(this!=device) {
-				if(radioDetect(device) && !isDead() && !device.isDead()) {
-					Visualisation.arrowDrawing((SensorNode)this, (SensorNode)device, 1, 0, 1);
-					drawRadioLink(device, g, 1);
-					if (DeviceParameters.displayRLDistance) {
-						drawDistance(longitude, latitude, elevation, device.getLongitude(), device.getLatitude(), device.getElevation(), (int) distance(device), 0/*getPowerReception(device)*/, g);
+	public void drawRadioLinks2(Graphics g) {
+		numberOfNeighbors = 0;
+		for(SensorNode sensor : DeviceList.sensors) {
+			if(this!=sensor) {
+				if(radioDetect(sensor) && !isDead() && !sensor.isDead()) {
+					drawRadioLink(sensor, g, 1);
+					numberOfNeighbors++;
+					if (NetworkParameters.displayRLDistance) {
+						MapLayer.drawDistance(longitude, latitude, elevation, sensor.getLongitude(), sensor.getLatitude(), sensor.getElevation(), g);
 					}
 				}
 			}
 		}
 	}
 	
-	public void drawRadioPropagations(Graphics g) {
-		for(Device device : neighbors) {
-			Visualisation.arrowDrawing((SensorNode)this, (SensorNode)device, 0, 0, 1);
-			drawRadioLink(device, g, 0);
-			if (DeviceParameters.displayRLDistance) {
-				drawDistance(longitude, latitude, elevation, device.getLongitude(), device.getLatitude(), device.getElevation(), (int) distance(device), 0/*getPowerReception(device)*/, g);
+	public void drawRadioLinks(int k1, Graphics g) {
+		numberOfNeighbors = 0;
+		int k2 = 0;
+		for(SensorNode sensor : DeviceList.sensors) {
+			if(k2>k1) {
+				if(this!=sensor) {
+					if(radioDetect(sensor) && !isDead() && !sensor.isDead()) {
+						drawRadioLink(sensor, g, 1);
+						numberOfNeighbors++;
+						if (NetworkParameters.displayRLDistance) {
+							MapLayer.drawDistance(longitude, latitude, elevation, sensor.getLongitude(), sensor.getLatitude(), sensor.getElevation(), g);
+						}
+					}
+				}
+			}
+			k2++;
+		}
+	}
+	
+	public void drawRadioLinkArrows(Graphics g) {
+		for(SensorNode sensor : DeviceList.sensors) {
+			if(this!=sensor) {
+				if(radioDetect(sensor) && !isDead() && !sensor.isDead()) {
+					drawRadioLinkArrows(sensor, g, 1);
+				}
 			}
 		}
 	}
 	
+	public void drawRadioPropagations(Graphics g) {
+		Device device;
+		for(int i=0; i<neighbors.size(); i++) {
+			device = neighbors.get(i);
+			drawRadioLink(device, g, 0);
+			if (NetworkParameters.displayRLDistance) {
+				MapLayer.drawDistance(longitude, latitude, elevation, device.getLongitude(), device.getLatitude(), device.getElevation(), g);
+			}
+		}
+	}
 	
 	/**
 	 * Draw the (line) radio link
@@ -401,9 +280,8 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 * @param g
 	 *            Graphics
 	 */
-	public void drawRadioLink(Device device, Graphics g, int type) {		
-		
-		if(DeviceParameters.drawRadioLinks) {	
+	public void drawRadioLink(Device device, Graphics g, int type) {				
+		if(NetworkParameters.drawRadioLinks) {	
 			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int lx1 = coord[0];
 			int ly1 = coord[1];
@@ -411,25 +289,39 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			int lx2 = coord[0];
 			int ly2 = coord[1];
 			
-			switch(DeviceParameters.drawRadioLinksColor) {
-			case 0 : g.setColor(Color.DARK_GRAY); break;
-			case 1 : g.setColor(Color.DARK_GRAY); break;
-			case 2 : g.setColor(Color.LIGHT_GRAY); break;
-			case 3 : g.setColor(UColor.RED); break;
-			case 4 : g.setColor(UColor.BLUE); break;
-			}
+			setColor(g, NetworkParameters.radioLinksColor);
 			
 			Graphics2D g2 = (Graphics2D) g;
-			Stroke dashed = new BasicStroke(0.5f);
-			if(type==1)
-				dashed = new BasicStroke(0.6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2,4,2,4}, 0);
-	        g2.setStroke(dashed);
-			g.drawLine(lx1, ly1, lx2, ly2);
-		
 			
-
-			if(DeviceParameters.drawArrows) {
-				Visualisation.arrowDrawing((SensorNode)this, (SensorNode)device, type, DeviceParameters.drawRadioLinksColor, 1);
+			Stroke dashed = new BasicStroke(0.4f);
+			if(type==1)
+				dashed = new BasicStroke(0.6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{3,3}, 0);
+				
+	        g2.setStroke(dashed);
+			g2.drawLine(lx1, ly1, lx2, ly2);
+		}
+	}
+	
+	/**
+	 * Draw the (line) radio link
+	 * 
+	 * @param device
+	 *            Device
+	 * @param g
+	 *            Graphics
+	 */
+	public void drawRadioLinkArrows(Device device, Graphics g, int type) {
+		if(NetworkParameters.drawRadioLinks) {	
+			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
+			int lx1 = coord[0];
+			int ly1 = coord[1];
+			coord = MapCalc.geoToPixelMapA(device.getLatitude(), device.getLongitude());
+			int lx2 = coord[0];
+			int ly2 = coord[1];
+			
+			setColor(g, NetworkParameters.radioLinksColor);
+			
+			if(NetworkParameters.drawSensorArrows) {
 				double dx = 0;
 				double dy = 0;
 				double alpha = 0;
@@ -451,18 +343,17 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			}
 		}
 	}
-
-	public void drawDistance(double longitude1, double latitude1, double elevation1, double longitude2, double latitude2, double elevation2, int d, double pr, Graphics g) {
-		int[] coord = MapCalc.geoToPixelMapA(latitude1, longitude1);
-		int lx1 = coord[0];
-		int ly1 = coord[1];
-		coord = MapCalc.geoToPixelMapA(latitude2, longitude2);
-		int lx2 = coord[0];
-		int ly2 = coord[1];
-		g.setColor(Color.DARK_GRAY);		
-		g.drawString("" + d, ((lx1 + lx2) / 2), ((ly1 + ly2) / 2));
-		Visualisation.drawText(((lx1 + lx2) / 2.), ((ly1 + ly2) / 2.), (elevation+elevation2)/2.);
-	}
+	
+	public void setColor(Graphics g, int intColor) {
+		switch(intColor) {
+		case 0 : g.setColor(Color.DARK_GRAY); if(MapLayer.dark) g.setColor(Color.LIGHT_GRAY); break;
+		case 1 : g.setColor(Color.BLACK); if(MapLayer.dark) g.setColor(Color.DARK_GRAY); break;
+		case 2 : g.setColor(Color.GRAY); if(MapLayer.dark) g.setColor(UColor.DWHITE); break;		
+		case 3 : g.setColor(UColor.RED); break;
+		case 4 : g.setColor(UColor.BLUE); break;
+		case 5 : g.setColor(UColor.ORANGE); if(MapLayer.dark) g.setColor(Color.ORANGE); break;
+		}
+	}	
 	
 	/**
 	 * Draw the radius
@@ -512,16 +403,16 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			return radioDetect(device);
 	}
 	
+	
 	public void calculatePropagations() {
 		SimulationInputs.radioDetectionType = RadioDetection.POWER_RECEPTION_DETECTION;
 		neighbors = new LinkedList<SensorNode> () ;
-		for(SensorNode device : DeviceList.getSensorNodes()) {
+		for(SensorNode device : DeviceList.sensors) {
 			if(this!=device) {
 				if(radioDetect(device) && !isDead() && !device.isDead()) {
 					neighbors.add(device);
 				}
-			}
-			//neighbors.add(device);						
+			}					
 		}
 	}
 	
@@ -531,23 +422,237 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	}
 	
 	public double getRequiredQuality() {
-		return requiredQuality;
+		return this.getCurrentRadioModule().getRequiredQuality();
 	}
 
 	public void setRequiredQuality(double requiredQuality) {
-		this.requiredQuality = requiredQuality;
+		this.getCurrentRadioModule().setRequiredQuality(requiredQuality);
 	}
 
 	public double getTransmitPower() {
-		double tpW = (Math.pow(10, transmitPower/10.))/1000.;
-		double nTpW = tpW * 1e6;
-		nTpW = nTpW * pl /100.;
-		double nTpDbm = 10*Math.log10(nTpW/1000.);
-		return nTpDbm;
+		return this.getCurrentRadioModule().getTransmitPower();
 	}
 
 	public void setTransmitPower(double transmitPower) {
-		this.transmitPower = transmitPower;
+		this.getCurrentRadioModule().setTransmitPower(transmitPower);
+	}
+	
+	/**
+	 * Draw the ID of the device
+	 * 
+	 * @param x
+	 *            Longitude
+	 * @param y
+	 *            Latitude
+	 * @param g
+	 *            Graphics
+	 */
+	@Override
+	public void drawId(int x, int y, Graphics g) {
+		if (NetworkParameters.displayDetails) {
+			g.setColor(UColor.PURPLE);
+			if(MapLayer.dark) g.setColor(new Color(198,232,106));
+			g.drawString(getName()+" ["+currentRadioModule.getMy()+"]", (int) (x + 10), (int) (y + 5));
+			if(!message.equals("")) {
+				g.setColor(new Color(28,64,123));
+				if(MapLayer.dark) g.setColor(new Color(116,186,209));
+				g.drawString("> "+message, (int) (x + 10), (int) (y + 15));
+			}
+			
+			if(!scriptFileName.equals("") && NetworkParameters.drawScriptFileName) {
+				g.setColor(Color.DARK_GRAY);
+				if(MapLayer.dark) g.setColor(Color.LIGHT_GRAY);
+				g.drawString(scriptFileName.substring(0, scriptFileName.indexOf('.')), (int) (x + 10), (int) (y - 6));
+				
+//				g.drawString("S : "+this.isSending(), (int) (x + 10), (int) (y + 26));
+//				g.drawString("R : "+this.isReceiving(), (int) (x + 10), (int) (y + 36));
+//				g.drawString("AW: "+this.isAckWaiting(), (int) (x + 10), (int) (y + 46));
+//				g.drawString("AR: "+this.isAckReceived(), (int) (x + 10), (int) (y + 56));
+			}
+		}
+	}
+	
+	public void setMy(int my) {
+		this.getCurrentRadioModule().setMy(my);
+	}
+	
+	public void setPl(int pl) {
+		this.getCurrentRadioModule().setPl(pl);
+	}
+	
+	public RadioModule getCurrentRadioModule() {
+		return currentRadioModule;
+	}
+	
+	public int getAttempts() {
+		return currentRadioModule.getAttempts();
+	}
+	
+	public void setAttempts(int attempts) {
+		currentRadioModule.setAttempts(attempts);
+	}
+	
+	public void incAttempts() {
+		currentRadioModule.incAttempts();
+	}
+	
+	public int getStandard() {
+		return getCurrentRadioModule().getStandard();
+	}
+		
+	public void selectCurrentRadioModule(String name) {
+		for(RadioModule rm : radioModuleList) {
+			if(rm.getName().equals(name)) {
+				currentRadioModule = rm;
+				return;
+			}
+		}
+	}
+	
+	public void removeRadioModule(String name) {
+		for(RadioModule rm : radioModuleList) {
+			if(rm.getName().equals(name) && rm!=this.getCurrentRadioModule()) {
+				radioModuleList.remove(rm);
+				return;
+			}
+		}
+	}
+	
+	public void removeRadioModule(RadioModule radioModule) {
+		for(RadioModule rm : radioModuleList) {
+			if(rm.getName().equals(radioModule.getName()) && rm!=this.getCurrentRadioModule()) {
+				radioModuleList.remove(rm);
+				return;
+			}
+		}
+	}
+	
+	public double getTimeToResend() {
+		return getCurrentRadioModule().getTimeToResend();
+	}
+	
+	public void setTimeToResend(double timeToResend) {
+		getCurrentRadioModule().setTimeToResend(timeToResend);
 	}
 
+	public int getNumberOfSends() {
+		return getCurrentRadioModule().getNumberOfSends();
+	}
+
+	public void setNumberOfSends(int numberOfSends) {
+		getCurrentRadioModule().setNumberOfSends(numberOfSends);
+	}	
+	
+	
+	/**
+	 * consumeTx
+	 * 
+	 * @param v
+	 */
+	public void consumeTx(int v) {
+		this.getCurrentRadioModule().consumeTx(v);
+	}
+	
+	/**
+	 * consumeRx
+	 * 
+	 * @param v
+	 */
+	public void consumeRx(int v) {
+		getBattery().consume(v * getCurrentRadioModule().getERx());
+	}
+	
+	
+	public double getETx() {
+		return getCurrentRadioModule().getETx();
+	}
+
+	public void setETx(double eTx) {
+		getCurrentRadioModule().setETx(eTx);
+	}
+
+	public double getERx() {
+		return getCurrentRadioModule().getERx();
+	}
+
+	public void setERx(double eRx) {
+		getCurrentRadioModule().setERx(eRx);
+	}
+	
+	public double getEL() {
+		return getCurrentRadioModule().getEListen();
+	}
+
+	public void setEL(double eL) {
+		getCurrentRadioModule().setEListen(eL);
+	}	
+	
+	public void initRadioModule(){
+		radioModuleList = new LinkedList<RadioModule>();
+	}
+	
+	public double getCurrentRadioRangeRadius() {
+		return currentRadioModule.getRadioRangeRadius();
+	}
+	
+	/**
+	 * @return the informations about the device
+	 */
+	public String[][] getInfos() {
+		super.getInfos();
+		infos[2][1] = ""+ getCurrentRadioModule().getMy();
+		infos[3][1] = ""+ getCurrentRadioModule().getNId()+" ("+Integer.toHexString(getCurrentRadioModule().getNId()).toUpperCase()+")";
+		infos[4][1] = ""+ getCurrentRadioModule().getCh()+" ("+Integer.toHexString(getCurrentRadioModule().getCh()).toUpperCase()+")";
+		return infos;
+	}
+
+	@Override
+	public void initForSimulation() {
+		super.initForSimulation();
+		//initRadioModule();
+	}
+	
+	public boolean canCommunicateWith(DeviceWithRadio device) {
+		return (
+					!isDead() && 
+					!device.isDead() &&
+					sameCh(device) && 
+					sameNId(device) && 
+					sameStandard(device)
+			);
+	}
+				
+	public boolean sameCh(DeviceWithRadio device) {
+		return (this.getCurrentRadioModule().getCh() == device.getCurrentRadioModule().getCh());
+	}
+	
+	public boolean sameNId(DeviceWithRadio device) {
+		return (this.getCurrentRadioModule().getNId() == device.getCurrentRadioModule().getNId());
+	}
+	
+	public boolean sameStandard(DeviceWithRadio device) {
+		return (getStandard() == device.getStandard());
+	}
+	
+	public int getNumberOfNeighbors() {
+		return numberOfNeighbors;
+	}
+	
+	public boolean isAckReceived() {
+		return ackReceived;
+	}
+	
+	public void setAckReceived(boolean ackReceived) {
+		this.ackReceived = ackReceived;
+	}
+	
+	public boolean isAckWaiting() {
+		return ackWaiting;
+	}
+	
+	public void setAckWaiting(boolean b) {
+		this.ackWaiting = b;
+	}
+	
 }
+

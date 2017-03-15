@@ -1,14 +1,14 @@
-package script;
+package senscript;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class VariableList {
+public class SenScriptVariableList {
 	
 	private LinkedList<String> keys;
 	private LinkedList<String> values;
 
-	public VariableList(){
+	public SenScriptVariableList(){
 		keys = new LinkedList<String>();
 		values = new LinkedList<String>();
 	}

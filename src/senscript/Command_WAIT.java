@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import arduino.Bracket;
 import device.SensorNode;

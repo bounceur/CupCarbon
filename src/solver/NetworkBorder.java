@@ -41,8 +41,8 @@ public class NetworkBorder {
 //		System.out.println("---------------------------");
 		// From sensors to Graph
 		GraphStd graphe = null;		
-		List<SensorNode> nodes = DeviceList.getSensorNodes();		
-		graphe = SensorGraph.toSensorGraph(nodes, DeviceList.size());		
+		List<SensorNode> nodes = DeviceList.sensors;		
+		graphe = SensorGraph.toSensorGraph(nodes, DeviceList.sensorListSize());		
 		
 		for (int i = 0; i < graphe.size(); i++) {
 			nodes.get(i).setValue(0);
@@ -121,7 +121,7 @@ public class NetworkBorder {
 				}
 			}
 			n1.setValue(rank);
-			System.out.println(n1.getNodeIdName()+" : "+rank);
+			System.out.println(n1.getName()+" : "+rank);
 		}
 		
 		min = 10000000;
@@ -185,7 +185,7 @@ public class NetworkBorder {
 		
 		
 		// Update sensors (coloring)
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 	
 }

@@ -1,14 +1,14 @@
-package script;
+package senscript;
 
 import device.SensorNode;
 
-public abstract class Condition {
+public abstract class SenScriptCondition {
 
 	protected SensorNode sensor ;
 	protected String arg1 = "";
 	protected String arg2 = "";
 	
-	public Condition() {}
+	public SenScriptCondition() {}
 	
 	public abstract boolean evaluate() ;
 	

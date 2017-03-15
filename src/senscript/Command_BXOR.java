@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import wisen_simulation.SimLog;
 import device.SensorNode;
@@ -21,8 +21,8 @@ public class Command_BXOR extends Command {
 		String s1 = sensor.getScript().getVariableValue(arg2);
 		String s2 = sensor.getScript().getVariableValue(arg3);
 		String s = "";
-		for(int i =0; i<s1.length(); i++) {
-			s += (s1.charAt(i) ^ s2.charAt(i));
+		for(int i =0; i<s1.length(); i++) {			
+			s += (s1.charAt(i) == s2.charAt(i)?"0":"1") ;
 		}
 
 		SimLog.add("S" + sensor.getId() + " " + arg1 + " = (" + Integer.valueOf(s1) + ") ^ (" + Integer.valueOf(s2) + ") -> " + s);

@@ -19,6 +19,12 @@
 
 package battery;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
+import device.SensorNode;
+import map.MapLayer;
+import utilities.UColor;
 
 /**
  * @author Ahcene Bounceur
@@ -28,23 +34,17 @@ package battery;
 public class Battery implements Cloneable {
 
 	public double eMax = 9580*2;
-
-	//private SensorUnit sensorUnit;
 	private double level = eMax;
+	private SensorNode sensorNode;
 
-	/**
-	 * Battery initialization
-	 * 
-	 * @param sensorUnit
-	 */
-//	public Battery(SensorUnit sensorUnit) {
-//		this.sensorUnit = sensorUnit;
-//	}
-
+	public Battery(SensorNode sensorNode) {
+		this.sensorNode = sensorNode;
+	}
+	
 	/**
 	 * @return the initial capacity of the battery
 	 */
-	public double getInitialLevel() {
+	public double getEMax() {
 		return eMax;
 	}
 	
@@ -76,7 +76,7 @@ public class Battery implements Cloneable {
 	 * @param eMax
 	 * Initialization of the battery (energy max given)
 	 */
-	public void init(double eMax) {
+	public void setEMax(double eMax) {
 		this.eMax = eMax;
 		level = eMax;
 	}
@@ -111,19 +111,22 @@ public class Battery implements Cloneable {
 		return (level <= 0);
 	}
 
-	/**
-	 * Connect to a Capture Unit
-	 * 
-	 * @param unitCapture
-	 */
-//	public void setSensorUnit(SensorUnit unitCapture) {
-//		this.sensorUnit = unitCapture;
-//	}
-
 	@Override
 	public Battery clone() throws CloneNotSupportedException {
 		Battery newBattery = (Battery) super.clone();
-		//newBattery.setSensorUnit(sensorUnit.clone());
 		return newBattery;
+	}
+	
+	public void draw(Graphics g, int x, int y) {
+		g.setColor(UColor.WHITE_LTRANSPARENT);
+		g.fillRect(x-30, y-25, 6, 50);
+		g.setColor(UColor.GREEN);
+		if (getLevel()/getEMax()<0.5) g.setColor(UColor.ORANGE);
+		if (getLevel()/getEMax()<0.2) g.setColor(UColor.RED);
+		g.fillRect(x-30, y-(int)(getLevel()/getEMax()*100./2.)+25, 6, (int)(getLevel()/getEMax()*100./2.));
+		g.setColor(Color.DARK_GRAY);
+		if(MapLayer.dark) g.setColor(Color.WHITE);
+		g.drawRect(x-30, y-25, 6, 50);
+		g.drawString("Battery"+sensorNode.getId()+": " + (int)getLevel(), x-30, y+35);		
 	}
 }

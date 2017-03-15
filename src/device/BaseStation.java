@@ -21,23 +21,29 @@ package device;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 
+import project.Project;
 import utilities.UColor;
-
 
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
  * @version 1.0
  */
+
 public class BaseStation extends StdSensorNode {
 
 	protected int type = Device.BASE_STATION;
 
-	{
-		radioRangeColor1 = UColor.YELLOW_TRANSPARENT;
-		radioRangeColor2 = UColor.YELLOWD_TRANSPARENT;
-	}
+	//{
+		//this.getCurrentRadioModule().setRadioColor();
+		//radioRangeColor1 = UColor.YELLOW_TRANSPARENT;
+		//radioRangeColor2 = UColor.YELLOWD_TRANSPARENT;
+	//}
 	
 	/**
 	 * Constructor 6
@@ -57,8 +63,8 @@ public class BaseStation extends StdSensorNode {
 	 * @param scriptFileName
 	 *            The path of the script file
 	 */
-	public BaseStation(String id, String rdInfos, String x, String y, String z, String radius, String radioRadius, String cuRadius, String gpsFileName, String scriptFileName) {
-		super(id, rdInfos,  x,  y,  z, radius, radioRadius, cuRadius, gpsFileName, scriptFileName);
+	public BaseStation(String id, String x, String y, String z, String radius, String radioRadius, String cuRadius, String gpsFileName, String scriptFileName) {
+		super(id,  x,  y,  z, radius, radioRadius, cuRadius, gpsFileName, scriptFileName);
 	}
 	
 	/**
@@ -115,13 +121,47 @@ public class BaseStation extends StdSensorNode {
 	}
 
 	@Override 
-	public void consumeTx(double v) {}
+	public void consumeTx(int v) {}
 	
 	@Override 
-	public void consumeRx(double v) {}
+	public void consumeRx(int v) {}
 
 	@Override
 	public boolean detect(Device device) {
 		return false;
-	}	
+	}
+	
+	@Override
+	public SensorNode createNewWithTheSameType() {
+		return new BaseStation(longitude, latitude, elevation, radius, 0.0, sensorUnit.getRadius(), DeviceList.number++);
+	}
+	
+	@Override
+	public void save(String ref) {
+		String fileName = Project.getProjectNodePath();
+		try {
+			PrintStream fos = null;	
+			fos = new PrintStream(new FileOutputStream(fileName + File.separator + "basestation_" + ref));
+			fos.println("List of parameters");
+			fos.println("------------------------------------------");
+			fos.println("device_type:" + getType());
+			fos.println("device_id:" + getId());
+			fos.println("device_longitude:" + getLongitude());
+			fos.println("device_latitude:" + getLatitude());
+			fos.println("device_elevation:" + getElevation());
+			fos.println("device_radius:" + getRadius());
+			fos.println("device_hide:" + getHide());
+			fos.println("device_draw_battery:" + getDrawBatteryLevel());
+			fos.println("device_sensor_unit_radius:" + getSensorUnitRadius());			
+			if (!getGPSFileName().equals(""))
+				fos.println("device_gps_file_name:" + getGPSFileName());
+			if (!getScriptFileName().equals(""))
+				fos.println("device_script_file_name:" + getScriptFileName());
+			fos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		saveRadioModule(Project.getProjectRadioPath() + File.separator + "basestation_"+ref);
+	}
+
 }

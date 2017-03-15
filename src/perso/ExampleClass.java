@@ -4,18 +4,18 @@ import java.util.List;
 
 import device.Device;
 import device.DeviceList;
-import device.Mobile;
+import device.SensorNode;
 
 public class ExampleClass extends Thread {
 		
-	protected List<Device> nodes; 
+	protected List<SensorNode> nodes; 
 	
 	@Override
 	public void run() {
 		// Get the node list
-		nodes = DeviceList.getNodes();
+		nodes = DeviceList.sensors;
 
-		Mobile s1 = (Mobile) nodes.get(0);
+		SensorNode s1 = (SensorNode) nodes.get(0);
 		//SensorNode s1 = (SensorNode) nodes.get(0);
 		s1.loadRouteFromFile();
 		s1.fixori();

@@ -1,16 +1,16 @@
-package script;
+package senscript;
 
 import device.SensorNode;
 
-public class EvalCondition {
+public class SenScriptEvalCondition {
 	
 	protected SensorNode sensor;
 	
-	public EvalCondition(SensorNode sensor){		
+	public SenScriptEvalCondition(SensorNode sensor){		
 		this.sensor = sensor;
 	}
 	
-	public ConditionElement initCondition(String condition) {		
+	public SenScriptConditionElement initCondition(String condition) {		
 		condition = condition.replaceAll(" ", "");
 		int frst = condition.indexOf("(");
 		int last = condition.lastIndexOf(")");
@@ -20,7 +20,7 @@ public class EvalCondition {
 				condition = condition.substring(frst+1,last);
 		
 		if (getNbConditions(condition) == 0) {
-			ConditionElementEnd cond = new ConditionElementEnd(this.sensor, condition);
+			SenScriptConditionElementEnd cond = new SenScriptConditionElementEnd(this.sensor, condition);
 			return cond;
 		}
 		
@@ -30,12 +30,12 @@ public class EvalCondition {
 			return null;
 		
 		if (tCondition[2] == "&&"){
-			ConditionElementAnd cond = new ConditionElementAnd(this.sensor, initCondition(tCondition[0]), initCondition(tCondition[1]));
+			SenScriptConditionElementAnd cond = new SenScriptConditionElementAnd(initCondition(tCondition[0]), initCondition(tCondition[1]));
 			return cond;
 		}
 		
 		if (tCondition[2] == "||"){
-			ConditionElementOr cond = new ConditionElementOr(this.sensor, initCondition(tCondition[0]), initCondition(tCondition[1]));
+			SenScriptConditionElementOr cond = new SenScriptConditionElementOr(initCondition(tCondition[0]), initCondition(tCondition[1]));
 			return cond;
 		}
 		

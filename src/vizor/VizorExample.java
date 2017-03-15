@@ -21,8 +21,6 @@ package vizor;
 
 /**
  * @author Ahcene Bounceur
- * @author Marc Sevaux
- * @author Reinhardt Euler
  * @version 1.0
  */
 

@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import wisen_simulation.SimLog;
 import device.SensorNode;
@@ -22,10 +22,10 @@ public class Command_ANGLE extends Command {
 	public double execute() {
 		SimLog.add("S" + sensor.getId() + " Calculate Angle.");
 		
-		String prec = sensor.getScript().getVariableValue(arg2);
+		String prev = sensor.getScript().getVariableValue(arg2);
 		String local = sensor.getScript().getVariableValue(arg3);
 		String next = sensor.getScript().getVariableValue(arg4);			
-		String[] prec_tab = prec.split("#");
+		String[] prec_tab = prev.split("#");
 		String[] local_tab = local.split("#");
 		String[] next_tab = next.split("#");
 		double prec_X = Double.valueOf(prec_tab[0]);

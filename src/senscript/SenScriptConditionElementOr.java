@@ -1,49 +1,36 @@
-package script;
+package senscript;
 
-import device.SensorNode;
+public class SenScriptConditionElementOr extends SenScriptConditionElement {
 
-public class ConditionElementOr extends ConditionElement{
-	
-	
-		
-	protected ConditionElement conditionLeft;
-	protected ConditionElement conditionRight;
-	
-	
-	
-	public ConditionElementOr(SensorNode sensor, ConditionElement conditionL, ConditionElement conditionR){
+	protected SenScriptConditionElement conditionLeft;
+	protected SenScriptConditionElement conditionRight;
+
+	public SenScriptConditionElementOr(SenScriptConditionElement conditionL, SenScriptConditionElement conditionR) {
 		this.conditionLeft = conditionL;
 		this.conditionRight = conditionR;
-		
+
 	}
-	
-	public boolean evaluate(){
-		
+
+	public boolean evaluate() {
+
 		value = conditionLeft.evaluate() || conditionRight.evaluate();
-		
+
 		return value;
 	}
-	
-	
-	public ConditionElement getConditionLeft() {
+
+	public SenScriptConditionElement getConditionLeft() {
 		return conditionLeft;
 	}
 
-
-
-	public void setConditionLeft(ConditionElement conditionLeft) {
+	public void setConditionLeft(SenScriptConditionElement conditionLeft) {
 		this.conditionLeft = conditionLeft;
 	}
 
-
-
-	public ConditionElement getConditionRight() {
+	public SenScriptConditionElement getConditionRight() {
 		return conditionRight;
 	}
 
-
-
-	public void setConditionRight(ConditionElement conditionRight) {
+	public void setConditionRight(SenScriptConditionElement conditionRight) {
 		this.conditionRight = conditionRight;
 	}
 

@@ -1,9 +1,8 @@
-package script;
+package senscript;
 
 import arduino.BeginInstructions;
 import device.SensorNode;
 import utilities.UColor;
-import visualisation.Visualisation;
 import wisen_simulation.SimLog;
 
 public class Command_LED extends Command {
@@ -24,11 +23,9 @@ public class Command_LED extends Command {
 	@Override
 	public double execute() {
 		SimLog.add("S" + sensor.getId() + " LED "+arg1+" -> Color = "+arg2);
-		int ledColor = Double.valueOf(sensor.getScript().getVariableValue(arg2)).intValue();
-		if(ledColor>UColor.colorTab.length) ledColor= ledColor % UColor.colorTab.length;
+		int ledColor = Double.valueOf(sensor.getScript().getVariableValue(arg2)).intValue(); 
+		ledColor = ledColor % (UColor.colorTab.length+1);
 		sensor.setLedColor(ledColor);
-		Visualisation.updateStdSensorNode(sensor);
-		//MapLayer.getMapViewer().repaint();
 		return 0 ;
 	}
 

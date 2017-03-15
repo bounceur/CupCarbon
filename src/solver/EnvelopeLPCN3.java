@@ -29,9 +29,6 @@ import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur
- * @author Ali Benzerbadj
- * @author Farid Lalem
- * @author Massinissa Saoudi
  * @version 1.0
  */
 public class EnvelopeLPCN3 extends Thread {
@@ -41,7 +38,7 @@ public class EnvelopeLPCN3 extends Thread {
 	@Override	
 	public void run() {
 
-		List<SensorNode> nodes = DeviceList.getSensorNodes();
+		List<SensorNode> nodes = DeviceList.sensors;
 		
 		SensorNode n1, n2;
 
@@ -93,7 +90,7 @@ public class EnvelopeLPCN3 extends Thread {
 			previous = imin;
 			current = imin;
 			nodes.get(imin).setMarked(true);
-			MapLayer.getMapViewer().repaint();
+			MapLayer.repaint();
 			DeviceList.addToLastEnvelope(imin);
 	
 			delay();
@@ -143,7 +140,7 @@ public class EnvelopeLPCN3 extends Thread {
 					imin = current;	
 				
 				nodes.get(imin).setMarked(true);
-				MapLayer.getMapViewer().repaint();
+				MapLayer.repaint();
 				DeviceList.addToLastEnvelope(imin);
 	
 				previous = current;

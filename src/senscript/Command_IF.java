@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import device.SensorNode;
 
@@ -24,9 +24,9 @@ public class Command_IF extends Command {
 	@Override
 	public double execute() {		
 		String condition = arg.replaceFirst("if", "");
-		EvalCondition evalCondtion = new EvalCondition(sensor);
+		SenScriptEvalCondition evalCondtion = new SenScriptEvalCondition(sensor);
 		
-		ConditionElement conditionElement = evalCondtion.initCondition(condition);
+		SenScriptConditionElement conditionElement = evalCondtion.initCondition(condition);
 		resultOfCondition = conditionElement.evaluate();
 		
 		
@@ -103,7 +103,4 @@ public class Command_IF extends Command {
 		return "\t"+s;
 	}
 	
-	public static void main(String [] args) {
-		System.out.println((int)'0');
-	}
 }

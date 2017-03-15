@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import wisen_simulation.SimLog;
 import device.SensorNode;
@@ -18,7 +18,7 @@ public class Command_MAX extends Command {
 
 	@Override
 	public double execute() {		
-		SimLog.add("S" + sensor.getId() + " MIN");
+		SimLog.add("S" + sensor.getId() + " MAX");
 		String arg1s = sensor.getScript().getVariableValue(arg2);
 		String arg2s = sensor.getScript().getVariableValue(arg3);
 		if(Double.valueOf(arg1s) < Double.valueOf(arg2s)){
@@ -32,7 +32,7 @@ public class Command_MAX extends Command {
 
 	@Override
 	public String toString() {
-		return "MIN";
+		return "MAX";
 	}
 	
 }

@@ -1,6 +1,6 @@
-package script;
+package senscript;
 
-public class ScriptCPUTime {
+public class SenScriptCPUTime {
 
 	public static double cpuTime_data = 0.5e-12;
 	

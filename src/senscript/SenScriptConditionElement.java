@@ -1,10 +1,10 @@
-package script;
+package senscript;
 
-public abstract class ConditionElement {
+public abstract class SenScriptConditionElement {
 	
 	protected boolean value;
 	
-	public ConditionElement(){
+	public SenScriptConditionElement(){
 
 	}
 

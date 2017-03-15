@@ -21,13 +21,11 @@ package device;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 
-import map.MapLayer;
 import utilities.MapCalc;
 import utilities.UColor;
 
-public class MobileWithRadio extends MobileGWR {
+public abstract class MobileWithRadio extends MobileGWR {
 
 	private static String idFL = "W" ; // ID First Letter 
 	
@@ -53,7 +51,7 @@ public class MobileWithRadio extends MobileGWR {
 			int y = coord[1];	
 			//int x = MapCalc.geoToIntPixelMapX(this.x,this.y) ;
 			//int y = MapCalc.geoToIntPixelMapY(this.x,this.y) ;		
-			int rayon = MapCalc.radiusInPixels(getRadioRadius()) ;
+			int rayon = MapCalc.radiusInPixels(this.getCurrentRadioModule().getRadioRangeRadius()) ;
 			int rayon2 = MapCalc.radiusInPixels(this.radius) ;
 					
 			if (inside || selected) {
@@ -84,9 +82,9 @@ public class MobileWithRadio extends MobileGWR {
 				g.drawOval(x - rayon-4, y - rayon-4, (rayon+4) * 2, (rayon+4) * 2);
 			}	
 			
-			drawMoveArrows(x,y,g) ;
-			drawIncRedDimNode(x,y,g);
-			drawIncDimRadio(x,y,g);
+			//drawMoveArrows(x,y,g) ;
+			//drawIncRedDimNode(x,y,g);
+			//drawIncDimRadio(x,y,g);
 			if(displayRadius) {
 				drawRadius(x, y, rayon, g);
 				drawRadioRadius(x, y, rayon2, g);
@@ -103,42 +101,32 @@ public class MobileWithRadio extends MobileGWR {
 			drawId(x,y,g);
 		}
 	}
-	
-	@Override
-	public int getType() {
-		return Device.MOBILE_WR;
-	}
-	
+		
 	@Override
 	public String getIdFL() {
 		return idFL ;
 	}
 	
-	@Override
-	public void keyTyped(KeyEvent key) {
-		super.keyTyped(key);
-		if(selected) {
-			if(key.getKeyChar()==';') {
-				radius+=10 ;
-				MapLayer.getMapViewer().repaint();
-			}
-			if(key.getKeyChar()==',') {
-				radius-=10 ;
-				MapLayer.getMapViewer().repaint();
-			}
-		}
-	}
+//	@Override
+//	public void keyTyped(KeyEvent key) {
+//		super.keyTyped(key);
+//		if(selected) {
+//			if(key.getKeyChar()==';') {
+//				radius+=10 ;
+//				MapLayer.repaint();
+//			}
+//			if(key.getKeyChar()==',') {
+//				radius-=10 ;
+//				MapLayer.repaint();
+//			}
+//		}
+//	}
 	
 	@Override
-	public String getNodeIdName() {
+	public String getName() {
 		return getIdFL()+id;
 	}
-	
-	@Override
-	public boolean canMove() {
-		return false;
-	}
-	
+		
 	public void loadScript() {}
 
 	@Override
@@ -156,6 +144,11 @@ public class MobileWithRadio extends MobileGWR {
 	@Override
 	public void initBuffer() {
 
+	}
+	
+	public void init() {
+		super.init();
+		getCurrentRadioModule().setPl(100);
 	}
 
 }

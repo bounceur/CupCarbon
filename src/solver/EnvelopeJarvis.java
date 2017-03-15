@@ -23,15 +23,13 @@ package solver;
 
 import java.util.List;
 
-import map.MapLayer;
 import device.Device;
 import device.DeviceList;
+import device.SensorNode;
+import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur
- * @author Ali Benzerbadj
- * @author Farid Lalem
- * @author Massinissa Saoudi
  * @version 1.0
  */
 public class EnvelopeJarvis extends Thread {
@@ -40,7 +38,7 @@ public class EnvelopeJarvis extends Thread {
 	@Override	
 	public void run() {
 
-		List<Device> nodes = DeviceList.getNodes();
+		List<SensorNode> nodes = DeviceList.sensors;
 		
 		Device n1, n2;
 		
@@ -74,7 +72,7 @@ public class EnvelopeJarvis extends Thread {
 			previous = imin;
 			current = imin;
 			nodes.get(imin).setMarked(true);
-			MapLayer.getMapViewer().repaint();
+			MapLayer.repaint();
 			DeviceList.addToLastEnvelope(imin);
 	
 			delay();
@@ -115,7 +113,7 @@ public class EnvelopeJarvis extends Thread {
 					imin = current;	
 				
 				nodes.get(imin).setMarked(true);
-				MapLayer.getMapViewer().repaint();
+				MapLayer.repaint();
 				DeviceList.addToLastEnvelope(imin);
 	
 				previous = current;

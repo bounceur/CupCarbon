@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *----------------------------------------------------------------------------------------------------------------*/
 
-package script;
+package senscript;
 
 import device.SensorNode;
 
@@ -36,7 +36,7 @@ public abstract class Command {
 	protected Command_WHILE currentWhile = null;
 	protected Command_FOR currentFor = null;
 	
-	protected boolean writing = false ;
+	protected boolean writtenInUART = false ;
 	protected boolean executing = false ;
 	
 	public Command() {

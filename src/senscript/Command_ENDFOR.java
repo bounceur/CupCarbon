@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import device.SensorNode;
 import wisen_simulation.SimLog;
@@ -16,7 +16,7 @@ public class Command_ENDFOR extends Command {
 	public double execute() {		
 		SimLog.add("S" + sensor.getId() + " END FOR.");
 		
-		Script script = sensor.getScript();
+		SenScript script = sensor.getScript();
 		
 		String n = getCurrentFor().getRight();
 		String variable = getCurrentFor().getLeft();
@@ -32,11 +32,11 @@ public class Command_ENDFOR extends Command {
 		//Command_PLUS cmd = new Command_PLUS(this.sensor, variable.substring(1, variable.length()), variable, ""+commandFor.getStep());
 		//cmd.execute();
 		
-		Condition condition = null;
+		SenScriptCondition condition = null;
 		if(commandFor.getStep()>=0)
-			condition = new Condition_LESS(sensor, variable, n);
+			condition = new SenScriptCondition_LESS(sensor, variable, n);
 		else 
-			condition = new Condition_GREATER(sensor, variable, n);
+			condition = new SenScriptCondition_GREATER(sensor, variable, n);
 		trueCondition = condition.evaluate();		
 		
 		if (trueCondition) {

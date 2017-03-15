@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import device.SensorNode;
 
@@ -15,7 +15,7 @@ public class Command_MOVE extends Command {
 	public double execute() {
 		String vArg1 = sensor.getScript().getVariableValue(arg1);
 		double t = Integer.valueOf(vArg1);
-		if (sensor.canMove()) {
+		if (!sensor.getGPSFileName().equals("")) {
 			sensor.moveToNext(true, 0);									
 		}
 		return t/1000. ;

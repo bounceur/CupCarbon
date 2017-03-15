@@ -1,4 +1,4 @@
-package geo_objects;
+package buildings;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -17,7 +17,9 @@ import javax.vecmath.Vector3d;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import device.Device;
+import geo_objects.GeoZone;
 import map.MapLayer;
+import math.Intersect;
 import utilities.MapCalc;
 
 /**
@@ -79,13 +81,9 @@ public class Building implements MouseListener, KeyListener {
 		coordX[i]=x;
 		coordY[i]=y;
 		computeIntCoord(i);
-//		System.out.println(iCoordX[i]);
-//		System.out.println(iCoordY[i]);
 	}
 	
 	public void setInt(int x, int y, int i) {
-//		System.out.println(x);
-//		System.out.println(y);
 		iCoordX[i]=x;
 		iCoordY[i]=y;
 		
@@ -138,8 +136,6 @@ public class Building implements MouseListener, KeyListener {
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(0.6f));
-		//g2.setStroke(new BasicStroke());
-		//g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		if(!hide) {
 			int newZoom = MapLayer.mapViewer.getZoom();
 			if(newZoom != mapZoom) {
@@ -150,7 +146,6 @@ public class Building implements MouseListener, KeyListener {
 			if (selected)
 				g2.setColor(new Color(194, 182, 164, 120));				
 			g2.fillPolygon(iCoordX, iCoordY, nPoints);
-			//g.setColor(UColor.BLACK_TTRANSPARENT);
 			g2.setColor(Color.GRAY);
 			if (selected)
 				g2.setColor(Color.DARK_GRAY);
@@ -162,53 +157,32 @@ public class Building implements MouseListener, KeyListener {
 	public void mouseClicked(MouseEvent arg) {
 		if(inside(arg.getX(),arg.getY())) {
 			selected = !selected;
-			MapLayer.getMapViewer().repaint();
+			MapLayer.repaint();
 		}
-		//if(shape.contains(x, y))
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseEntered(MouseEvent arg0) {}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent arg0) {}
 
 	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mousePressed(MouseEvent arg0) {}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased(MouseEvent arg0) {}
 	
 	public boolean inside(int xs, int ys) {
 		Point p = new Point(xs, ys);
-		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
-		Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
+		GeoPosition gp = MapLayer.mapViewer.convertPointToGeoPosition(p);
+		Point2D p1 = MapLayer.mapViewer.getTileFactory().geoToPixel(gp, MapLayer.mapViewer.getZoom());
 		Polygon poly = new Polygon(iCoordX,iCoordY,nPoints);
 		return (poly.contains(p1));
 	}
 
 	@Override
 	public void keyPressed(KeyEvent key) {
-		if((key.getKeyCode()==8 || key.getKeyCode()==127) && selected && !hide) {
-			selected = false;
-			MapLayer.getMapViewer().removeMouseListener(this);
-			MapLayer.getMapViewer().removeMouseListener(this);	
-			BuildingList.delete(this);
-			MapLayer.getMapViewer().repaint();
-		}
-		
 		if(key.getKeyCode() == 27) {
 			selected = false;
 		}
@@ -224,29 +198,17 @@ public class Building implements MouseListener, KeyListener {
 		if (key.getKeyChar() == 'H') {
 			if(!selected)
 				hide = !hide;
-			MapLayer.getMapViewer().repaint();
-		}
-		
-		if (key.getKeyChar() == 'w') {
-			if (type == MapLayer.selectType)
-				selected = true;
-			else 
+			if(hide)
 				selected = false;
-		}		
-		
+			MapLayer.repaint();
+		}
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyReleased(KeyEvent arg0) {}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyTyped(KeyEvent arg0) {}
 	
 	public void setSelection(boolean b) {
 		selected = b ;
@@ -256,14 +218,6 @@ public class Building implements MouseListener, KeyListener {
 		return selected ;
 	}
 	
-	public boolean intersect(Polygon p) {
-		for (int i=0; i<nPoints; i++){
-			if(p.contains(iCoordX[i], iCoordY[i]))
-				return true;
-		}
-		return false;
-	}
-
 	public int size() {
 		return nPoints;
 	}
@@ -316,21 +270,47 @@ public class Building implements MouseListener, KeyListener {
 		return false;
 	}
 	
+	public boolean intersect(Polygon p) {
+		for (int i=0; i<nPoints; i++){
+			if(p.contains(iCoordX[i], iCoordY[i]))
+				return true;
+		}
+		return false;
+	}
+
+	public boolean intersect(GeoZone zone) {
+		for (int i=0; i<nPoints; i++){
+			if(zone.toPolygon().contains(iCoordX[i], iCoordY[i]))
+				return true;
+		}
+		return false;
+	}
+
+	
 	public boolean isHide() {
 		return hide;
 	}
+	
+	public void setHide(boolean hide) {
+		this.hide = hide; 
+	}
+	
+	@Override
+	public String toString() {
+		String s = "";
+		for (int i = 0; i < coordX.length; i++) {
+			s += "(" + coordX[i] + ", "+ coordY[i] +") ";
+		}
+		return s;
+	}
 
-//	@Override
-//	public void reflect(Vector3d in, Vector3d reflected, Vector3d normal, Vector3d tangent, double[] wavelengths,
-//			Field[] result) throws ExceptionWavelengthOutOfScope, ExceptionArrayLengths {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void transmit(Vector3d in, Vector3d refracted, Vector3d normal, Vector3d tangent, double distance,
-//			double[] wavelengths, Field[] result) throws ExceptionWavelengthOutOfScope, ExceptionArrayLengths {
-//		// TODO Auto-generated method stub
-//		
-//	}
+	public boolean intersect(double x1, double y1, double x2, double y2) {
+		for(int i=0; i<nPoints-1; i++) {
+			if(Intersect.intersect(x1, y1, x2, y2, coordY[i], coordX[i], coordY[i+1], coordX[i+1]))
+				return true;
+		}
+		if(Intersect.intersect(x1, y1, x2, y2, coordY[0], coordX[0], coordY[nPoints-1], coordX[nPoints-1]))
+			return true;
+		return false;
+	}
 }

@@ -15,43 +15,43 @@ import utilities.Geometry;
 
 public class GeoZoneList extends Thread {
 
-	private LinkedList<GeoZone> geoZoneList = null;
-	public double longitude;
-	public double latitude;
+	private LinkedList<GeoZone> zones = null;
+	private double longitude;
+	private double latitude;
 
 	public GeoZoneList() {
-		geoZoneList = new LinkedList<GeoZone>();
+		zones = new LinkedList<GeoZone>();
 	}
 	
 	public GeoZoneList(LinkedList<GeoZone> geoZoneList) {
-		this.geoZoneList = geoZoneList ; 
+		this.zones = geoZoneList ; 
 	}
 		
 	public void add(GeoZone geoZone) {
-		geoZoneList.add(geoZone);		
+		zones.add(geoZone);		
 	}
 	
 	public void draw(Graphics g) {
-		for(GeoZone geoZone : geoZoneList) {
+		for(GeoZone geoZone : zones) {
 			geoZone.draw(g);
 		}
 	}
 	
 	public void init() {
 		System.out.println("INIT GZ");
-		for(GeoZone geoZone : geoZoneList) {
+		for(GeoZone geoZone : zones) {
 			delete(geoZone);
 		}
-		geoZoneList = new LinkedList<GeoZone>();
+		zones = new LinkedList<GeoZone>();
 	}
 	
 	public void delete(GeoZone geoZone) {	
 		geoZone = null;
-		geoZoneList.remove(geoZone);
+		zones.remove(geoZone);
 	}
 	
 	public boolean intersect(Polygon p) {
-		for (GeoZone geoZone : geoZoneList){
+		for (GeoZone geoZone : zones){
 			if (geoZone.intersect(p))
 				return true;
 		}
@@ -59,61 +59,58 @@ public class GeoZoneList extends Thread {
 	}
 
 	public LinkedList<GeoZone> getGeoZoneList() {
-		return geoZoneList;
+		return zones;
 	}
 	
 	public boolean contains(Point2D p) {
-		for(GeoZone geoZone : geoZoneList) {
+		for(GeoZone geoZone : zones) {
 			if(geoZone.contains(p)) return true;
 		}
 		return false;
 	}
 	
 	public boolean contains(double px, double py) {
-		for(GeoZone geoZone : geoZoneList) {
+		for(GeoZone geoZone : zones) {
 			if(geoZone.contains(px, py)) return true;
 		}
 		return false;
 	}
 	
 	public void reduce(double xref, double yref, double zm) {
-		for(GeoZone geo : geoZoneList) {
+		for(GeoZone geo : zones) {
 			geo.translate(xref, yref, zm);
 		}
 	}
 	
 	public int size() {
-		return geoZoneList.size(); 
+		return zones.size(); 
 	}
 	
 	public boolean isEmpty() {
-		return (geoZoneList.size()==0);
+		return (zones.size()==0);
 	}
 	
 	public void display() {
-		for(GeoZone gz : geoZoneList) {
+		for(GeoZone gz : zones) {
 			gz.display();
 			System.out.println();
 		}
  	}
 	
 	public void toOneGeoZone() {
-		int n = geoZoneList.size();
+		int n = zones.size();
 		GeoZone geoc = new GeoZone(n);
 		GeoZone geo = new GeoZone(2*n);
 		
 		int idx1 = 0;
 		int idx2 = 0;
 
-		for(GeoZone gz : geoZoneList) {
+		for(GeoZone gz : zones) {
 			int [] v = Geometry.getCentre(gz.getICoordX(1), gz.getICoordY(1), 0, gz.getICoordX(2), gz.getICoordY(2), 0);
 			geoc.setInt(v[0], v[1], idx1++);
 			geo.setInt(gz.getICoordX(1), gz.getICoordY(1), idx2++);
 			geo.setInt(gz.getICoordX(2), gz.getICoordY(2), idx2++);
 		}
-		
-//		int x = geoZoneList.get(0).getICoordX(0);
-//		int y = geoZoneList.get(0).getICoordY(0);
 
 		geo.setCxCy(longitude, latitude);
 		int x = geo.getCx();
@@ -123,7 +120,7 @@ public class GeoZoneList extends Thread {
 		int s2;		
 		
 		for(int i=0; i<geoc.size()-1; i++) {
-			double a = Angle.getAngle(x-100, y, x, y, geoc.getICoordX(i), geoc.getICoordY(i));;
+			double a = Angle.getAngle(x-100, y, x, y, geoc.getICoordX(i), geoc.getICoordY(i));
 			for(int j=i+1; j<geoc.size(); j++) {
 				double na = Angle.getAngle(x-100, y, x, y, geoc.getICoordX(j), geoc.getICoordY(j));
 				if (na < a) {
@@ -152,20 +149,35 @@ public class GeoZoneList extends Thread {
 	
 		geo.computeGeoCoords();
 		
-		geoZoneList = new LinkedList<GeoZone>();
-		geoZoneList.add(geo);		
+		zones = new LinkedList<GeoZone>();
+		zones.add(geo);		
 	}
 	
 	public void setSelected(boolean b) {
-		for(GeoZone gz : geoZoneList) {
+		for(GeoZone gz : zones) {
 			gz.setSelected(b);
 		}
 	}
 	
 	public void computeIntCoords() {
-		for(GeoZone gz : geoZoneList) {
+		for(GeoZone gz : zones) {
 			gz.computeIntCoords();
 		}
 	}
+	
+	public double getLongitude() {
+		return longitude; 
+	}
+	
+	public double getLatitude() {
+		return latitude; 
+	}
+	
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
 
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
 }

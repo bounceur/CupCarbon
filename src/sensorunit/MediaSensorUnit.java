@@ -28,8 +28,6 @@ import java.awt.geom.Point2D;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import device.Device;
-import flying_object.FlyingGroup;
-import flying_object.FlyingObject;
 import map.MapLayer;
 import utilities.MapCalc;
 import utilities.UColor;
@@ -39,23 +37,10 @@ import utilities.UColor;
  * @author Lounis Massinissa
  * @version 1.0
  */
-public class MediaSensorUnit implements KeyListener, Cloneable {
-
-	protected double radius = 100;
-	protected double longitude;
-	protected double latitude;
-	protected double elevation;
-	protected Device node;
-	protected boolean displayRadius = false;
+public class MediaSensorUnit extends SensorUnit implements KeyListener, Cloneable {
 	
-	
-	protected int n = 12;
 	protected double deg = 0.1;
 	protected double dec = 0;
-	
-	protected int [] polyX = new int[n];
-	protected int [] polyY = new int[n];
-
 	/**
 	 * Constructor 1 : radius is equal to 10 meter
 	 * @param x Position of the sensor unit on the map
@@ -63,12 +48,14 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	 * @param node which is associated to this sensor unit
 	 */
 	public MediaSensorUnit(double longitude, double latitude, double elevation, Device node) {
-		this.longitude = longitude;
-		this.latitude = latitude;
-		this.elevation = elevation;
-		this.node = node;
+		super(longitude, latitude, elevation, node);
+		radius = 100;
+		n = 12;
+		deg = 0.1;
+		dec = 0;
+		eSensing = 1 ;
 		calculateSensingArea();
-		MapLayer.getMapViewer().addKeyListener(this);
+		MapLayer.mapViewer.addKeyListener(this);
 	}
 	
 	/**
@@ -79,12 +66,14 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	 * @param node which is associated to this sensor unit
 	 */
 	public MediaSensorUnit(double longitude, double latitude, double elevation, double radius, double deg, double dec, int n, Device node) {
-		this(longitude, latitude, elevation, node);
+		super(longitude, latitude, elevation, node);
 		this.radius = radius;
 		this.deg = deg;
 		this.dec = dec;
 		this.n = n;
+		this.radius = radius;
 		calculateSensingArea();
+		MapLayer.mapViewer.addKeyListener(this);
 	}
 
 	public void calculateSensingArea() {
@@ -106,13 +95,6 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	}
 	
 	/**
-	 * @return radius of the sensor unit
-	 */
-	public double getRadius() {
-		return radius;
-	}
-
-	/**
 	 * Set the radius
 	 */
 	public void setRadius(double radius) {
@@ -131,20 +113,9 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	public boolean detect(Device device) {
 		if(device.getRadius()>0) {
 			Polygon poly = new Polygon(polyX, polyY, n);
-			if(device.getType()==Device.FLYING_OBJECT) {
-				for(FlyingObject d : ((FlyingGroup)device).getFlyingObjects()) {
-					GeoPosition gp = new GeoPosition(d.getLatitude(), d.getLongitude());
-					Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
-					if(poly.contains(p1))
-						return true;
-				}
-				return false;
-			}
-			else {
-				GeoPosition gp = new GeoPosition(device.getLatitude(), device.getLongitude());
-				Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());		
-				return (poly.contains(p1));
-			}
+			GeoPosition gp = new GeoPosition(device.getLatitude(), device.getLongitude());
+			Point2D p1 = MapLayer.mapViewer.getTileFactory().geoToPixel(gp, MapLayer.mapViewer.getZoom());		
+			return (poly.contains(p1));
 		}
 		else
 			return false;
@@ -155,10 +126,10 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	 */
 	public void draw(Graphics g, int mode, boolean detection, boolean buildingDetection) {
 		 calculateSensingArea();
-		if (!detection && !buildingDetection)
+		if (!detection)
 			g.setColor(UColor.BLUE_TRANSPARENT);
 		else
-			g.setColor(UColor.GREEND_TRANSPARENT);
+			g.setColor(UColor.GREEND_TTRANSPARENT);
 	
 		if (mode == 0)
 			g.fillPolygon(polyX, polyY, n);
@@ -187,7 +158,7 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 			if (key.getKeyChar() == 'O') {
 				deg-=0.01;
 			}
-			MapLayer.getMapViewer().repaint();
+			MapLayer.repaint();
 		}
 	}
 
@@ -238,12 +209,12 @@ public class MediaSensorUnit implements KeyListener, Cloneable {
 	@Override
 	public MediaSensorUnit clone() throws CloneNotSupportedException {
 		MediaSensorUnit newCU = (MediaSensorUnit) super.clone();
-		MapLayer.getMapViewer().addKeyListener(newCU);
+		MapLayer.mapViewer.addKeyListener(newCU);
 		return newCU;
 	}
 	
-	public Polygon getPoly() {
-		return new Polygon(polyX, polyY, n);
-	}
-	
+	public void incRadius(int u) {
+		radius += u;
+	}	
+
 }

@@ -1,7 +1,7 @@
-package script;
+package senscript;
 
 import device.SensorNode;
-import radio_module.Standard;
+import radio_module.RadioStandard;
 import radio_module.XBeeFrameGenerator;
 import wisen_simulation.SimLog;
 
@@ -22,23 +22,22 @@ public class Command_ATGET extends Command {
 		
 		if(arg1.equals("id")) {
 			SimLog.add("S" + sensor.getId() + " ATGET ID.");
-			//System.out.println(node.getId());
 			v = ""+sensor.getId();
 		}
 		
 		if(arg1.equals("ch")) {
 			SimLog.add("S" + sensor.getId() + " ATGET CH.");
-			v = ""+sensor.getCh();
+			v = ""+sensor.getCurrentRadioModule().getCh();
 		}
 		
 		if(arg1.equals("my")) {
 			SimLog.add("S" + sensor.getId() + " ATGET MY.");
-			v = ""+sensor.getMy();
+			v = ""+sensor.getCurrentRadioModule().getMy();
 		}
 		
 		if(arg1.equals("nid")) {
 			SimLog.add("S" + sensor.getId() + " ATGET NID.");
-			v = ""+sensor.getNId();
+			v = ""+sensor.getCurrentRadioModule().getNId();
 		}
 		
 		sensor.getScript().addVariable(arg2, v);
@@ -47,7 +46,7 @@ public class Command_ATGET extends Command {
 		//String answer = "XXXX"; //v; We assume that the answer contains 4 bytes
 		
 		String frame = message;
-		if(sensor.getStandard() == Standard.ZIGBEE_802_15_4)
+		if(sensor.getStandard() == RadioStandard.ZIGBEE_802_15_4)
 			frame = XBeeFrameGenerator.at(message);
 		String answer = frame;
 		

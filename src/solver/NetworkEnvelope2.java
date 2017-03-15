@@ -66,7 +66,7 @@ public class NetworkEnvelope2 extends Thread {
 		double ay1;
 		double ay2;		
 
-		List<SensorNode> nodes = DeviceList.getSensorNodes();
+		List<SensorNode> nodes = DeviceList.sensors;
 
 		for (int i = 0; i < nodes.size(); i++) {
 			nodes.get(i).setValue(0);
@@ -123,7 +123,7 @@ public class NetworkEnvelope2 extends Thread {
 				DeviceList.addToLastEnvelope(i); 
 			}
 
-			MapLayer.getMapViewer().repaint();
+			MapLayer.repaint();
 //			try {
 //				sleep(100);
 //			} catch (InterruptedException e) {}

@@ -35,13 +35,13 @@ import map.MapLayer;
 public class NetworkEnvelopeNAN extends Thread {
 
 	public void runs() {
-		DeviceList.getNodes().get(25).setMarked(true);
+		DeviceList.sensors.get(25).setMarked(true);
 	}
 
 	@Override	
 	public void run() {
 
-		List<SensorNode> nodes = DeviceList.getSensorNodes();
+		List<SensorNode> nodes = DeviceList.sensors;
 
 		SensorNode n1, n2, n3, n4;
 
@@ -82,7 +82,7 @@ public class NetworkEnvelopeNAN extends Thread {
 		previous = imin;
 		current = imin;
 		nodes.get(imin).setMarked(true);
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 		DeviceList.addToLastEnvelope(imin);
 
 		delay();
@@ -130,7 +130,7 @@ public class NetworkEnvelopeNAN extends Thread {
 				imin = current;			
 
 			nodes.get(imin).setMarked(true);
-			MapLayer.getMapViewer().repaint();
+			MapLayer.repaint();
 			DeviceList.addToLastEnvelope(imin);
 
 			previous = current;

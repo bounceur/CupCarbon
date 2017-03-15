@@ -1,11 +1,11 @@
-package script;
+package senscript;
 
 
 import java.util.Stack;
 
 import device.SensorNode;
 
-public final class SensorAddCommand {
+public final class SenScriptAddCommand {
 
 	public static Stack<String> endof = new Stack<String>();
 	
@@ -13,7 +13,7 @@ public final class SensorAddCommand {
 		return s.replaceFirst("\\(", " (");
 	}
 	
-	public static void addCommand(String instStr, SensorNode sensorNode, Script script) {
+	public static void addCommand(String instStr, SensorNode sensorNode, SenScript script) {
 		instStr = detectKeyWord(instStr);
 		String[] inst = instStr.split(" ");
 		
@@ -29,6 +29,9 @@ public final class SensorAddCommand {
 			addCommand(instStr, sensorNode, script);
 		}
 		
+		if (inst[0].toLowerCase().equals("simulation")) {
+			command = new Command_SIMULATION(sensorNode, inst[1], inst[2]);
+		}
 		if (inst[0].toLowerCase().equals("delay")) {
 			command = new Command_DELAY(sensorNode, inst[1]);
 		}				
@@ -38,8 +41,8 @@ public final class SensorAddCommand {
 		if (inst[0].toLowerCase().equals("read")) {
 			command = new Command_READ(sensorNode, inst[1]);
 		}
-		if (inst[0].toLowerCase().equals("flush")) {
-			command = new Command_FLUSH(sensorNode);
+		if (inst[0].toLowerCase().equals("cbuffer")) {
+			command = new Command_CBUFFER(sensorNode);
 		}
 		if (inst[0].toLowerCase().equals("send")) {			
 			if(inst.length==2) command = new Command_SEND(sensorNode, inst[1], "*");
@@ -77,11 +80,7 @@ public final class SensorAddCommand {
 		if (inst[0].toLowerCase().equals("bxor")) {
 			command = new Command_BXOR(sensorNode, inst[1], inst[2], inst[3]);
 		}
-		
-		if (inst[0].toLowerCase().equals("sxor")) {
-			command = new Command_SXOR(sensorNode, inst[1], inst[2], inst[3]);
-		}
-		
+				
 		if (inst[0].toLowerCase().equals("band")) {
 			command = new Command_BAND(sensorNode, inst[1], inst[2], inst[3]);
 		}
@@ -116,6 +115,9 @@ public final class SensorAddCommand {
 		if (inst[0].toLowerCase().equals("tab")) {
 			command = new Command_TAB(sensorNode, inst[1], inst[2], inst[3]);
 		}
+		if (inst[0].toLowerCase().equals("vec")) {
+			command = new Command_VEC(sensorNode, inst[1], inst[2]);
+		}
 		if (inst[0].toLowerCase().equals("atnd")) {
 			if(inst.length==2) command = new Command_ATND(sensorNode, inst[1]);
 			if(inst.length==3) command = new Command_ATND(sensorNode, inst[1], inst[2]);
@@ -135,6 +137,9 @@ public final class SensorAddCommand {
 		if (inst[0].toLowerCase().equals("rdata")) {
 			command = new Command_RDATA(sensorNode, inst);
 		}
+		if (inst[0].toLowerCase().equals("vdata")) {
+			command = new Command_VDATA(sensorNode, inst[1], inst[2]);
+		}
 		if (inst[0].toLowerCase().equals("angle")) {
 			command = new Command_ANGLE(sensorNode, inst[1], inst[2], inst[3], inst[4]);
 		}
@@ -146,6 +151,12 @@ public final class SensorAddCommand {
 		}
 		if (inst[0].toLowerCase().equals("mmin")) {
 			command = new Command_MMIN(sensorNode, inst[1], inst[2], inst[3], inst[4]);
+		}
+		if (inst[0].toLowerCase().equals("smin")) {
+			command = new Command_SMIN(sensorNode, inst[1], inst[2], inst[3]);
+		}
+		if (inst[0].toLowerCase().equals("smax")) {
+			command = new Command_SMAX(sensorNode, inst[1], inst[2], inst[3]);
 		}
 		if (inst[0].toLowerCase().equals("min")) {
 			command = new Command_MIN(sensorNode, inst[1], inst[2], inst[3]);
@@ -169,6 +180,9 @@ public final class SensorAddCommand {
 		if (inst[0].toLowerCase().equals("atget")) {
 			command = new Command_ATGET(sensorNode, inst[1], inst[2]);
 		}
+		if (inst[0].toLowerCase().equals("radio")) {
+			command = new Command_RADIO(sensorNode, inst[1]);
+		}
 		if (inst[0].toLowerCase().equals("rand")) {
 			command = new Command_RAND(sensorNode, inst[1]);
 		}
@@ -187,8 +201,14 @@ public final class SensorAddCommand {
 		if (inst[0].toLowerCase().equals("tset")) {
 			command = new Command_TSET(sensorNode, inst[1], inst[2], inst[3], inst[4]);
 		}
+		if (inst[0].toLowerCase().equals("vset")) {
+			command = new Command_VSET(sensorNode, inst[1], inst[2], inst[3]);
+		}
 		if (inst[0].toLowerCase().equals("tget")) {
 			command = new Command_TGET(sensorNode, inst[1], inst[2], inst[3], inst[4]);
+		}
+		if (inst[0].toLowerCase().equals("vget")) {
+			command = new Command_VGET(sensorNode, inst[1], inst[2], inst[3]);
 		}
 		if (inst[0].toLowerCase().equals("dreadsensor")) {
 			command = new Command_DREADSENSOR(sensorNode, inst[1]);
@@ -296,7 +316,7 @@ public final class SensorAddCommand {
 		}
 		
 		if (inst[0].toLowerCase().equals("int")) {
-			command = new Command_INT(sensorNode, inst[1]);
+			command = new Command_INT(sensorNode, inst[1], inst[2]);
 		}
 		
 		if (inst[0].toLowerCase().equals("conc")) {

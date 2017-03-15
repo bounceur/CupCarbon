@@ -25,73 +25,82 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import actions_ui.DeleteDevice;
-import flying_object.FlyingGroup;
+import action.CupAction;
+import action.CupActionAddSensor;
+import action.CupActionBlock;
+import action.CupActionDeleteDevice;
+import action.CupActionDeleteSensor;
+import action.CupActionStack;
+import buildings.Building;
+import buildings.BuildingList;
+import javafx.application.Platform;
 import map.MapLayer;
 import markers.Marker;
+import markers.MarkerList;
+//import markers.Marker;
 import natural_events.Gas;
+import project.Project;
 import solver.SensorGraph;
 import utilities.MapCalc;
-import visualisation.Visualisation;
+import wisen_simulation.WisenSimulation;
 
 /**
  * @author Ahcene Bounceur
- * @author Lounis Massinissa
- * @version 2.0
+ * @author Molham Darwish
+ * @version 1.0
  */
 public class DeviceList {
 
-	public static List<Device> nodes = new ArrayList<Device>();
+	public static List<SensorNode> sensors = new ArrayList<SensorNode>();
+	public static List<Device> devices = new ArrayList<Device>();
 	public static boolean drawLinks = true;
 	public static LinkedList<LinkedList<Integer>> envelopeList = new LinkedList<LinkedList<Integer>>();
 	public static int number = 1;
-	public static boolean propagationsCalculated = false; 
+	public static boolean propagationsCalculated = false;
 	
-	/**
-	 * 
-	 */
 	public DeviceList() {
 		reset();
-		// Thread th = new Thread(this);
-		// th.start();
 	}
 	
 	public static void reset() {
-		for(Device node : nodes) {
-			MapLayer.getMapViewer().removeMouseListener(node);
-			MapLayer.getMapViewer().removeMouseMotionListener(node);
-			MapLayer.getMapViewer().removeKeyListener(node);
-			node = null;
-		}
-		nodes = new ArrayList<Device>();
+		sensors = new ArrayList<SensorNode>();
+		devices = new ArrayList<Device>();
 		drawLinks = true;
-		//displayConnectionDistance = false;
 		envelopeList = new LinkedList<LinkedList<Integer>>();
-	}
-
-	/**
-	 * @return the nodes
-	 */
-	public static List<Device> getNodes() {
-		return nodes;
+		DeviceList.propagationsCalculated = false;
 	}
 	
 	/**
 	 * @return a node by its id
 	 */
 	public static Device getNodeById(int id) {
-		for(Device device : nodes) {
+		for(SensorNode sensor : sensors) {
+			if(sensor.getId() == id) return sensor;
+		}
+		for(Device device : devices) {
 			if(device.getId() == id) return device;
+		}
+		return null;
+	}
+	
+	/**
+	 * @return a node by its name
+	 */
+	public static Device getNodeByName(String name) {
+		for(SensorNode sensor : sensors) {
+			if(sensor.getName().equals(name)) return sensor;
+		}
+		for(Device device : devices) {
+			if(device.getName().equals(name)) return device;
 		}
 		return null;
 	}
@@ -100,8 +109,8 @@ public class DeviceList {
 	 * @return a sensor node by its id
 	 */
 	public static SensorNode getSensorNodeById(int id) {		
-		for(SensorNode snode : DeviceList.getSensorNodes()) {
-			if(snode.getId() == id) return snode;
+		for (SensorNode sensor : sensors) {
+			if(sensor.getId() == id) return sensor;
 		}
 		return null;
 	}
@@ -110,34 +119,10 @@ public class DeviceList {
 	 * @return a sensor node by its my
 	 */
 	public static SensorNode getSensorNodeByMy(int my) {		
-		for(SensorNode snode : DeviceList.getSensorNodes()) {
-			if(snode.getMy() == my) return snode;
+		for(SensorNode device : sensors) {
+			if(device.getCurrentRadioModule().getMy() == my) return device;
 		}
 		return null;
-	}
-	
-	/**
-	 * @return the sensor nodes
-	 */
-	public static List<SensorNode> getSensorNodes() {
-		List<SensorNode> snodes = new LinkedList<SensorNode>();
-		for(Device device : nodes) {
-			if(device.getType() == Device.SENSOR || device.getType() == Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION)
-				snodes.add((SensorNode) device);
-		}
-		return snodes;
-	}
-	
-	/**
-	 * @return the selected sensor nodes
-	 */
-	public static List<SensorNode> getSelectedSensorNodes() {
-		List<SensorNode> snodes = new LinkedList<SensorNode>();
-		for(Device device : nodes) {
-			if((device.getType() == Device.SENSOR || device.getType() == Device.MEDIA_SENSOR || device.getType()==Device.BASE_STATION) && device.isSelected())
-				snodes.add((SensorNode) device);
-		}
-		return snodes;
 	}
 	
 	/**
@@ -157,7 +142,7 @@ public class DeviceList {
 	 */
 	public static List<Device> getMobileNodes() {
 		List<Device> snodes = new ArrayList<Device>();
-		for(Device node : nodes) {
+		for(Device node : devices) {
 			if(node.getType() == Device.MOBILE)
 				snodes.add(node);
 		}
@@ -165,73 +150,395 @@ public class DeviceList {
 	}
 
 	/**
-	 * @param fileName
+	 * @return the mobile sensor nodes
 	 */
-	public static void save(String fileName) {
-		try {
-			PrintStream fos = new PrintStream(new FileOutputStream(fileName));
-			Device node;
-			for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
-				node = iterator.next();
-				//System.out.println(node.getGPSFileName());
-				fos.print(node.getType());
-				fos.print(" " + node.getId());
-				fos.print(" " + node.getMy()+"#"+node.getCh()+"#"+node.getNId());
-				fos.print(" " + node.getLongitude());
-				fos.print(" " + node.getLatitude());
-				fos.print(" " + node.getElevation());
-				fos.print(" " + node.getRadius());
-
-				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION || node.getType() == Device.MEDIA_SENSOR || node.getType() == Device.MOBILE_WR)
-					fos.print(" " + node.getRadioRadius());
-
-				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION || node.getType() == Device.MEDIA_SENSOR)
-					fos.print(" " + node.getSensorUnitRadius());
-
-				if (node.getType() == Device.FLYING_OBJECT)
-					fos.print(" " + ((FlyingGroup) node).getflyingObjectNumber());
-
-				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION 
-						|| node.getType() == Device.FLYING_OBJECT
-						|| node.getType() == Device.MOBILE
-						|| node.getType() == Device.MOBILE_WR
-						|| node.getType() == Device.MEDIA_SENSOR) {
-					//System.out.println("----> " + node.getGPSFileName());
-					fos.print(" "
-							+ ((node.getGPSFileName() == "") ? "#" : node
-									.getGPSFileName()));
-				}
-
-				if (node.getType() == Device.SENSOR || node.getType() == Device.BASE_STATION || node.getType() == Device.MEDIA_SENSOR) {
-					fos.print(" "+ ((node.getScriptFileName() == "") ? "#" : node.getScriptFileName()));
-				}
-				
-				if (node.getType() == Device.MEDIA_SENSOR) {
-					fos.print(" " + node.getSensorUnitDeg()+ " " + node.getSensorUnitDec()+ " " + node.getSensorUnitN());
-				}
-
-				fos.println();
-
-			}
-			fos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+	public static List<SensorNode> getMobileSensorNodes() {
+		List<SensorNode> snodes = new ArrayList<SensorNode>();
+		for(SensorNode sensor : sensors) {
+			if(!sensor.getGPSFileName().equals(""))
+				snodes.add(sensor);
 		}
+		return snodes;
 	}
 
 	/**
 	 * @param fileName
 	 */
-	public static void open(String fileName) {
+	public static void saveDevicesAndSensors(String fileName) {
+		Device device;
+		for (Iterator<Device> iterator = devices.iterator(); iterator.hasNext();) {
+			device = iterator.next();				
+			device.save(fileName);
+		}
+		
+		SensorNode sensor;
+		for (Iterator<SensorNode> iterator = sensors.iterator(); iterator.hasNext();) {
+			sensor = iterator.next();
+			sensor.save(""+sensor.getId());
+		}
+	}
+	
+	/**
+	 * @param fileName
+	 */
+	public static void open() {
+		try {
+			SensorNode sensor;
+			File nodeFolder = new File(Project.getProjectNodePath());
+			File [] nodeFiles = nodeFolder.listFiles();
+			int deviceType = -1;
+			String line;
+			int idMax = 0 ;
+			for(int i=0; i<nodeFiles.length; i++){	
+				if(!(nodeFiles[i].getName().split("_")[0].startsWith("."))) {
+					BufferedReader br = new BufferedReader(new FileReader(nodeFiles[i]));
+					line = br.readLine();
+					line = br.readLine();
+					line = br.readLine();
+					deviceType = Integer.parseInt(line.split(":")[1]);					
+					switch (deviceType) {
+					case MapObject.SENSOR:
+						sensor = loadSensor(nodeFiles[i].getAbsolutePath());
+						add(sensor);
+						break;
+					case MapObject.GAS:						
+						add(loadGas(nodeFiles[i].getAbsolutePath()));
+						break;
+					case MapObject.BASE_STATION:
+						sensor = loadBaseStation(nodeFiles[i].getAbsolutePath());												
+						add(sensor);
+						break;
+					case MapObject.MEDIA_SENSOR:
+						sensor = loadMediaSensor(nodeFiles[i].getAbsolutePath());
+						add(sensor);
+						break;
+					case MapObject.MOBILE:						
+						add(loadMobile(nodeFiles[i].getAbsolutePath()));
+						break;
+					}
+					int v = Integer.valueOf(nodeFiles[i].getName().split("_")[1]);
+					if (v>idMax)
+						idMax = v ;
+					MapLayer.repaint();
+					br.close();
+				}				
+			}
+			if(nodeFiles.length != 0)
+				DeviceList.number = idMax+1 ;								
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static SensorNode loadSensor(String fileName) {
+		SensorNode sensor = null;
+		try {
+			String[] str = null;
+			String line;
+			String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			line = br.readLine();
+			line = br.readLine();
+			line = br.readLine();			
+			while ((line = br.readLine()) != null) {
+				str = line.split(":");
+				switch (str[0]) {
+				case "device_longitude":
+					parameters[0] = str[1];
+					break;
+				case "device_latitude":
+					parameters[1] = str[1];
+					break;
+				case "device_elevation":
+					parameters[2] = str[1];
+					break;
+				case "device_radius":
+					parameters[3] = str[1];
+					break;
+				case "device_sensor_unit_radius":
+					parameters[4] = str[1];
+					break;
+				case "device_gps_file_name":
+					parameters[5] = str[1];
+					break;
+				case "device_script_file_name":
+					parameters[6] = str[1];
+					break;
+				case "device_type":
+					parameters[7] = str[1];
+					break;
+				case "device_id":
+					parameters[8] = str[1];
+					break;
+				case "device_hide":
+					parameters[9] = str[1];
+					break;
+				case "device_draw_battery":
+					parameters[10] = str[1];
+					break;				
+				case "spreading_factor":
+					parameters[11] = str[1];
+					break;								
+				}
+			}
+			sensor = new StdSensorNode(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6]);
+			sensor.setHide(Integer.parseInt(parameters[9]));
+			sensor.setDrawBatteryLevel(Boolean.parseBoolean(parameters[10]));
+			br.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		openRadioModule(Project.getProjectRadioPath()+File.separator+"sensor_"+sensor.getId(), sensor);
+		return sensor;
+	}
+	
+	public static SensorNode loadMediaSensor(String fileName) {
+		SensorNode sensor = null;
+		try {
+			String[] str = null;
+			String line;
+			String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+			String [] mparameters = {"","","","","","","","","",""};
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			line = br.readLine();
+			line = br.readLine();
+			line = br.readLine();			
+			while ((line = br.readLine()) != null) {
+				str = line.split(":");
+				switch (str[0]) {
+				case "device_longitude":
+					parameters[0] = str[1];
+					break;
+				case "device_latitude":
+					parameters[1] = str[1];
+					break;
+				case "device_elevation":
+					parameters[2] = str[1];
+					break;
+				case "device_radius":
+					parameters[3] = str[1];
+					break;
+				case "device_sensor_unit_radius":
+					parameters[4] = str[1];
+					break;
+				case "device_gps_file_name":
+					parameters[5] = str[1];
+					break;
+				case "device_script_file_name":
+					parameters[6] = str[1];
+					break;
+				case "device_type":
+					parameters[7] = str[1];
+					break;
+				case "device_id":
+					parameters[8] = str[1];
+					break;
+				case "device_hide":
+					parameters[9] = str[1];
+					break;
+				case "device_draw_battery":
+					parameters[10] = str[1];
+					break;
+				case "media_parameters":
+					String [] media = str[1].split(" ");
+					for (int j = 0; j< media.length; j++)
+						mparameters[j] = media[j];
+					break;
+				}
+			}
+			sensor = new MediaSensorNode(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6], mparameters[0], mparameters[1], mparameters[2]);
+			sensor.setHide(Integer.parseInt(parameters[9]));
+			sensor.setDrawBatteryLevel(Boolean.parseBoolean(parameters[10]));
+			br.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		openRadioModule(Project.getProjectRadioPath()+File.separator+"mediasensor_"+sensor.getId(), sensor);
+		return sensor;
+	}
+	
+	public static SensorNode loadBaseStation(String fileName) {
+		SensorNode sensor = null;
+		try {
+			String[] str = null;
+			String line;
+			String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			line = br.readLine();
+			line = br.readLine();
+			line = br.readLine();			
+			while ((line = br.readLine()) != null) {
+				str = line.split(":");
+				switch (str[0]) {
+				case "device_longitude":
+					parameters[0] = str[1];
+					break;
+				case "device_latitude":
+					parameters[1] = str[1];
+					break;
+				case "device_elevation":
+					parameters[2] = str[1];
+					break;
+				case "device_radius":
+					parameters[3] = str[1];
+					break;
+				case "device_sensor_unit_radius":
+					parameters[4] = str[1];
+					break;
+				case "device_gps_file_name":
+					parameters[5] = str[1];
+					break;
+				case "device_script_file_name":
+					parameters[6] = str[1];
+					break;
+				case "device_type":
+					parameters[7] = str[1];
+					break;
+				case "device_id":
+					parameters[8] = str[1];
+					break;
+				case "device_hide":
+					parameters[9] = str[1];
+					break;
+				}
+			}
+			sensor = new BaseStation(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6]);
+			sensor.setHide(Integer.parseInt(parameters[9]));
+			br.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		openRadioModule(Project.getProjectRadioPath()+File.separator+"basestation_"+sensor.getId(), sensor);		
+		return sensor;
+	}
+	
+	public static Device loadMobile(String fileName) {
+		Device device = null;
+		try {
+			String[] str = null;
+			String line;
+			String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			line = br.readLine();
+			line = br.readLine();
+			line = br.readLine();			
+			while ((line = br.readLine()) != null) {
+				str = line.split(":");
+				switch (str[0]) {
+				case "device_longitude":
+					parameters[0] = str[1];
+					break;
+				case "device_latitude":
+					parameters[1] = str[1];
+					break;
+				case "device_elevation":
+					parameters[2] = str[1];
+					break;
+				case "device_radius":
+					parameters[3] = str[1];
+					break;
+				case "device_gps_file_name":
+					parameters[4] = str[1];
+					break;
+				case "device_type":
+					parameters[5] = str[1];
+					break;
+				case "device_id":
+					parameters[6] = str[1];
+					break;
+				case "device_hide":
+					parameters[7] = str[1];
+					break;
+				}							
+			}
+			device = new Mobile(parameters[0], parameters[1], parameters[2], parameters[3],parameters[4], Integer.parseInt(parameters[6]));
+			device.setHide(Integer.parseInt(parameters[7]));
+			br.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return device;
+	}
+	
+	public static Device loadGas(String fileName) {
+		Device device = null;
+		try {
+			String[] str = null;
+			String line;
+			String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			line = br.readLine();
+			line = br.readLine();
+			line = br.readLine();			
+			while ((line = br.readLine()) != null) {
+				str = line.split(":");
+				switch (str[0]) {
+				case "device_longitude":
+					parameters[0] = str[1];
+					break;
+				case "device_latitude":
+					parameters[1] = str[1];
+					break;
+				case "device_elevation":
+					parameters[2] = str[1];
+					break;
+				case "device_radius":
+					parameters[3] = str[1];
+					break;
+				case "device_id":
+					parameters[4] = str[1];
+					break;
+				case "device_gps_file_name":
+					parameters[5] = str[1];
+					break;				
+				case "device_hide":
+					parameters[6] = str[1];
+					break;
+				case "natural_event_file_name":
+					parameters[7] = str[1];
+					break;
+				}
+			}
+			device = new Gas(parameters[0], parameters[1], parameters[2], parameters[3], parameters[5], Integer.parseInt(parameters[4]));
+			device.setHide(Integer.parseInt(parameters[6]));
+			device.setNatEventFileName(parameters[7]);
+			br.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return device;
+	}
+
+	//old version
+	public static void open1(String fileName) {
+		fileName = Project.projectPath + File.separator + "config/nodes.cfg";
+
 		reset();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			String line;
 			String[] str=null;
 			int idMax = 0 ;
+			line = br.readLine();
+			line = br.readLine();
+			line = br.readLine();
 			while ((line = br.readLine()) != null) {
 				str = line.split(" ");
 				switch (str.length) {
+				case 0:
+					break;
 				case 6:
 					addNodeByType(str[0], str[1], str[2], str[3], str[4], str[5]);
 					break;
@@ -264,19 +571,33 @@ public class DeviceList {
 			
 			//for(Device device : DeviceList.getNodes()) device.calculateNeighbours();
 			
-			MapLayer.getMapViewer().repaint();
+			MapLayer.repaint();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * @return the number of the sensor sensors
+	 */
+	public static int sensorListSize() {
+		return sensors.size();
+	}
+	
+	/**
+	 * @return the number of the devices
+	 */
+	public static int deviceListSize() {
+		return devices.size();
+	}
+	
 	/**
 	 * @return the number of the nodes
 	 */
-	public static int size() {
-		return nodes.size();
+	public static int getSize() {
+		return sensors.size()+devices.size();
 	}
 
 	/**
@@ -290,46 +611,44 @@ public class DeviceList {
 		switch (Integer.valueOf(type[0])) {
 		case Device.SENSOR:
 			if(type.length==10)
-				add(new StdSensorNode(type[1], type[2], type[4], type[3], "0.0", type[5], type[6], type[7], type[8], type[9]));
+				add(new StdSensorNode(type[1], type[2], type[4], type[3], "0.0", type[5], type[6], type[7], type[8]));
 			else
-				add(new StdSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10]));
-			
+				add(new StdSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9]));	
 			break;
 		case Device.GAS:
-			add(new Gas(type[3], type[4], type[5], type[6], id));
-			break;
-		case Device.FLYING_OBJECT:
-			add(new FlyingGroup(type[3], type[4], type[5], type[6], type[7], type[8]));
+			add(new Gas(type[3], type[4], type[5], type[6], type[7], id));
 			break;
 		case Device.BASE_STATION:
-			add(new BaseStation(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10]));
+			add(new BaseStation(type[1], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10]));
 			break;
 		case Device.MEDIA_SENSOR:
-			add(new MediaSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10], type[11], type[12], type[13]));
+			add(new MediaSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10], type[11], type[12]));
 			break;
 		case Device.MOBILE:
 			add(new Mobile(type[3], type[4], type[5], type[6], type[7], id));
 			break;
-		case Device.MARKER:
-			add(new Marker(type[3], type[4], type[5], type[6]));
-			break;
+//		case Device.MARKER:
+//			add(new Marker(type[3], type[4], type[5], type[6]));
+//			break;
 		}
 	}
 
 	/**
-	 * @param node
+	 * @param Sensor node
 	 */
-	public static void add(Device node) {
-		nodes.add(node);
+	public static void add(SensorNode sensor) {
+		sensors.add(sensor);
+		if(DeviceList.propagationsCalculated)			
+			DeviceList.calculatePropagations();
+	}
+	
+	/**
+	 * @param device
+	 */
+	public static void add(Device device) {
+		devices.add(device);
 	}
 
-	// public void drawDistance(int x, int y, int x2, int y2, int d, Graphics g)
-	// {
-	// g.setColor(UColor.WHITED_TRANSPARENT);
-	// g.drawString(""+d,(x2-x)/2,(y2-y)/2);
-	// }
-
-	
 	/**
 	 * Draw devices
 	 * 
@@ -337,42 +656,71 @@ public class DeviceList {
 	 *            Graphics
 	 */
 	public void draw(Graphics g) {
-//		for (Device n : getSensorNodes()) {
-//			if(propagationsCalculated)
-//				n.drawRadioPropagations(g);
-//			else
-//				n.drawRadioLinks(g);
-//		}
-		
-		for (Device n : getSensorNodes()) {			
-			n.drawRadioRange(g);
-		}
-		
-		for (Device n : getSensorNodes()) {
-			n.drawSensorUnit(g);
-		}
-		
-		for (Device n : nodes) {			
-			n.drawMarked(g);
-			n.draw(g);
-		}
-		
-		for (Device n : getSensorNodes()) {
-			if(propagationsCalculated)
-				n.drawRadioPropagations(g);
-			else
-				n.drawRadioLinks(g);
+		SensorNode sensor = null;
+		for (int i=0; i<sensors.size(); i++) {
+			sensor = sensors.get(i);
+			if(sensor.isInside() && sensor.isSelected()) {
+				MapLayer.numberOfInsideAndSelected++;
+			}
+			if(sensor.isSelected() || sensor.isInside())
+				MapLayer.mapViewer.setPanEnabled(false);
+			sensors.get(i).drawRadioRange(g);
 		}
 
-		Channels.drawChannelLinks(g);
-		
-		for (Device n : nodes) {
-			if(n.displayInfos()) n.drawInfos(g);
+		for (int i=0; i<sensors.size(); i++) {
+			sensors.get(i).drawSensorUnit(g);
 		}
+
+		int k1=0;
+		for (int i=0; i<sensors.size(); i++) {
+			if(propagationsCalculated)
+				sensors.get(i).drawRadioPropagations(g);
+			else
+				sensors.get(i).drawRadioLinks(k1, g);
+			k1++;
+		}
+
+		for (int i=0; i<sensors.size(); i++) {
+			sensor = sensors.get(i);		
+			sensor.drawMarked(g);
+			sensor.draw(g);
+		}
+		
+		Device device = null;
+		for (int i=0; i<devices.size(); i++) {
+			device = devices.get(i);
+			if(device.isInside() && device.isSelected()) {
+				MapLayer.numberOfInsideAndSelected++;
+			}
+			if(device.isSelected() || device.isInside())
+				MapLayer.mapViewer.setPanEnabled(false);
+			device.drawMarked(g);
+			device.draw(g);
+		}	
+
+		for (int i=0; i<sensors.size(); i++) {
+			sensor = sensors.get(i);
+			if(sensor.displayInfos()) sensor.drawInfos(g);
+		}
+		
+		for (int i=0; i<devices.size(); i++) {
+			device = devices.get(i);
+			if(device.displayInfos()) device.drawInfos(g);
+		}
+		
+		for (int i=0; i<sensors.size(); i++) {
+			sensors.get(i).drawRadioLinkArrows(g);
+		}
+		
+		MultiChannels.drawChannelLinks(g);
 	}
 
-	public Device get(int idx) {
-		return nodes.get(idx);
+	public Device getDevice(int idx) {
+		return devices.get(idx);
+	}
+	
+	public Device getSensor(int idx) {
+		return sensors.get(idx);
 	}
 
 	public void setDrawLinks(boolean b) {
@@ -383,174 +731,301 @@ public class DeviceList {
 		return drawLinks;
 	}
 
-//	public void setDisplayDistance(boolean b) {
-//		displayConnectionDistance = b;
-//	}
-//
-//	public boolean getDisplayDistance() {
-//		return displayConnectionDistance;
-//	}
+	public static void deleteAll() {
+		sensors.removeAll(sensors);
+		devices.removeAll(devices);
+	}
+	
+	public static void deleteNodeByName(String name) {
+		Device node;
+		for (Iterator<Device> iterator = devices.iterator(); iterator.hasNext();) {
+			node = iterator.next();
+			System.out.println(node.getName());
+			if (node.getName().equals(name)) {
+				iterator.remove();
+				node = null;
+			}
+		}
+		SensorNode sensor;
+		for (Iterator<SensorNode> iterator = sensors.iterator(); iterator.hasNext();) {
+			sensor = iterator.next();
+			if (sensor.getName().equals(name)) {
+				//MapLayer.mapViewer.removeMouseListener(sensor);
+				//MapLayer.mapViewer.removeMouseMotionListener(sensor);
+				//MapLayer.mapViewer.removeKeyListener(sensor);
+				iterator.remove();
+				sensor = null;
+			}
+		}
+	}
+	
+	public static void deleteAllDevices() {
+		Device node;
+		for (Iterator<Device> iterator = devices.iterator(); iterator.hasNext();) {
+			node = iterator.next();
+			if (node.getHide()==0) {
+				iterator.remove();
+				node = null;
+			}
+		}
+	}
 
-	public static void delete(int idx) {
-		Device node = nodes.get(idx);
-		MapLayer.getMapViewer().removeMouseListener(node);
-		MapLayer.getMapViewer().removeMouseMotionListener(node);
-		MapLayer.getMapViewer().removeKeyListener(node);
-		nodes.remove(idx);
-		Visualisation.removeDevice(node);
-		node = null;
+	public static void deleteAllSensors() {
+		SensorNode sensor;
+		for (Iterator<SensorNode> iterator = sensors.iterator(); iterator.hasNext();) {
+			sensor = iterator.next();
+			if (sensor.getHide()==0) {
+				iterator.remove();
+				sensor = null;
+			}
+		}
+	}
+
+	
+	public static void deleteAllNaturalEvents() {
+		Device node;
+		for (Iterator<Device> iterator = devices.iterator(); iterator.hasNext();) {
+			node = iterator.next();
+			if (node.getHide()==0 && node.getType()==Device.GAS) {
+				//MapLayer.mapViewer.removeMouseListener(node);
+				//MapLayer.mapViewer.removeMouseMotionListener(node);
+				//MapLayer.mapViewer.removeKeyListener(node);
+				iterator.remove();
+				node = null;
+			}
+		}	
+	}
+
+	public static void deleteAllBuildings() {
+		Building node;
+		for (Iterator<Building> iterator = BuildingList.buildings.iterator(); iterator.hasNext();) {
+			node = iterator.next();
+			MapLayer.mapViewer.removeMouseListener(node);
+			MapLayer.mapViewer.removeKeyListener(node);
+			iterator.remove();
+			node = null;
+		}				
+	}
+	
+	public static void deleteAllMobiles() {
+		Device node;
+		for (Iterator<Device> iterator = devices.iterator(); iterator.hasNext();) {
+			node = iterator.next();
+			if (node.getType() == MapObject.MOBILE) {
+				//MapLayer.mapViewer.removeMouseListener(node);
+				//MapLayer.mapViewer.removeMouseMotionListener(node);
+				//MapLayer.mapViewer.removeKeyListener(node);
+				iterator.remove();
+				node = null;
+			}
+		}				
+	}
+	
+	public static void deleteSensor(int idx) {		
+		//SensorNode node = sensors.get(idx);
+		//MapLayer.mapViewer.removeMouseListener(node);
+		//MapLayer.mapViewer.removeMouseMotionListener(node);
+		//MapLayer.mapViewer.removeKeyListener(node);
+		sensors.remove(idx);
+		//node = null;
+		if(DeviceList.propagationsCalculated)
+			DeviceList.calculatePropagations();
+	}
+	
+	public static void deleteDevice(int idx) {		
+		//Device node = devices.get(idx);
+		//MapLayer.mapViewer.removeMouseListener(node);
+		//MapLayer.mapViewer.removeMouseMotionListener(node);
+		//MapLayer.mapViewer.removeKeyListener(node);
+		devices.remove(idx);
+		//node = null;
 	}
 	
 	public void simulateMobiles() {
-		for (Device node : nodes) {
-			if(node.getType()==Device.MOBILE || node.getType()==Device.MOBILE_WR) {
-				node.setSelection(true);
+		for (Device node : devices) {
+			if(node.getType()==Device.MOBILE) {
+				node.setSelected(true);
 				node.start();
 			}
 		}
 	}
 
 	public static StringBuilder displaySensorGraph() {
-		return SensorGraph.toSensorGraph(DeviceList.getSensorNodes(), nodes.size()).displayNames();
+		return SensorGraph.toSensorGraph(sensors, sensors.size()).displayNames();
 	}
 
 	public static StringBuilder displaySensorTargetGraph() {
-		return SensorGraph.toSensorTargetGraph(nodes, nodes.size()).displayNames();
+		return SensorGraph.toSensorTargetGraph(sensors, sensors.size()).displayNames();
 	}
 
-	public void selectInNodeSelection(int cadreX1, int cadreY1, int cadreX2, int cadreY2) {
-		for (Device node : nodes) {
-			node.setMove(false);
-			node.setSelection(false);
+	public void selectInsideRectangle(int cadreX1, int cadreY1, int cadreX2, int cadreY2) {
+		for (SensorNode node : sensors) {
+			node.setSelected(false);
 			if (MapLayer.insideSelection(node.getLongitude(), node.getLatitude(), cadreX1, cadreX2, cadreY1, cadreY2)) {
-				node.setSelection(true);
+				node.setSelected(true);
+			}
+		}
+		for (Device node : devices) {
+			node.setSelected(false);
+			if (MapLayer.insideSelection(node.getLongitude(), node.getLatitude(), cadreX1, cadreX2, cadreY1, cadreY2)) {
+				node.setSelected(true);
 			}
 		}
 	}
 
 	public void deleteIfSelected() {
-		Device node;
-		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
-			node = iterator.next();
-			if (node.isSelected() && node.getHide()==0) {
-				MapLayer.getMapViewer().removeMouseListener(node);
-				MapLayer.getMapViewer().removeMouseMotionListener(node);
-				MapLayer.getMapViewer().removeKeyListener(node);
-				iterator.remove();
-				/* Tanguy */
-				DeleteDevice action = new DeleteDevice(node, "Device deleted");
-				action.exec();
-				/* ------ */
-				node = null;
+		CupActionBlock block = new CupActionBlock();
+		SensorNode sensor;
+		for (Iterator<SensorNode> iterator = sensors.iterator(); iterator.hasNext();) {
+			sensor = iterator.next();
+			if (sensor.isSelected()) {
+				CupActionDeleteSensor action = new CupActionDeleteSensor(sensor);
+				block.addAction(action);				
+			}			
+		}
+		
+		Device device;
+		for (Iterator<Device> iterator = devices.iterator(); iterator.hasNext();) {
+			device = iterator.next();
+			if (device.isSelected()) {
+				CupActionDeleteDevice action = new CupActionDeleteDevice(device);
+				block.addAction(action);
 			}
 		}
+		if(block.size()>0) {
+			CupActionStack.add(block);
+			CupActionStack.execute(); 
+		}
+		
+		if(DeviceList.propagationsCalculated)
+			DeviceList.calculatePropagations();
 	}
 
 	public static void setGpsFileName(String gpsFileName) {
 		Device node;
-		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
+		for (Iterator<SensorNode> iterator = sensors.iterator(); iterator.hasNext();) {
+			node = iterator.next();
+			if (node.isSelected()) {
+				node.setGPSFileName(gpsFileName);
+			}
+		}		
+		for (Iterator<Device> iterator = devices.iterator(); iterator.hasNext();) {
 			node = iterator.next();
 			if (node.isSelected()) {
 				node.setGPSFileName(gpsFileName);
 			}
 		}
+		MapLayer.repaint();
 	}
 
 	public static void setScriptFileName(String scriptFileName) {
 		Device node;
-		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
+		for (Iterator<SensorNode> iterator = sensors.iterator(); iterator.hasNext();) {
 			node = iterator.next();
 			if (node.isSelected()) {
 				node.setScriptFileName(scriptFileName);
 			}
 		}
-	}
-
-	public static void updateDeviceParaFromMap(String xS, String yS, String radiusS,
-			String captureRadiusS, String scriptFileName, String gpsFileName,
-			String eMax, String eS, String uart_dr) {
-		Device node;
-		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
+		for (Iterator<Device> iterator = devices.iterator(); iterator.hasNext();) {
 			node = iterator.next();
 			if (node.isSelected()) {
-				node.setLongitude(Double.valueOf(xS));
-				node.setLatitude(Double.valueOf(yS));
-				node.setRadius(Double.valueOf(radiusS));
-				node.setSensorUnitRadius(Double.valueOf(captureRadiusS));
 				node.setScriptFileName(scriptFileName);
-				node.setGPSFileName(gpsFileName);
-				node.getBattery().setLevel(Integer.valueOf(eMax));
-				node.setES(Double.valueOf(eS));				
 			}
 		}
-		MapLayer.getMapViewer().repaint();
-	}
-	
-	public static void updateRadioParaFromMap(String radioRadiusS, String eTx, String eRx, String beta, String eSlp, String eL) {
-		Device node;
-		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
-			node = iterator.next();
-			if (node.isSelected()) {
-				node.setRadioRadius(Double.valueOf(radioRadiusS));
-				node.setETx(Double.valueOf(eTx));
-				node.setERx(Double.valueOf(eRx));
-				node.setESlp(Double.valueOf(eSlp));
-				node.setES(Double.valueOf(eL));			
-			}
-		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 
 	public static void initAll() {
 		envelopeList = new LinkedList<LinkedList<Integer>>();
-		for (Device device : nodes) {
-			device.init();
-			device.initGeoZoneList(); 
+		WisenSimulation.sTime = 0;
+		for (SensorNode sensor : sensors) {			
+			sensor.init();
+			sensor.initGeoZoneList(); 
+		}
+		for (Device device : devices) {			
+			device.init(); 
 		}		
-		MapLayer.getMapViewer().repaint();
 	}
 	
 	public static void initAllGeoZones() {
-		for (Device device : nodes) {
+		for (SensorNode device : sensors) {
 			device.initGeoZoneList();
 		}		
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 
 	public static void initAlgoSelectedNodes() {
-		for (Device device : nodes) {
+		for (SensorNode device : sensors) {
 			if (device.isSelected()) {
 				device.setMarked(false);
 				device.setVisited(false);
 				device.setLedColor(0);
 			}
 		}
-		MapLayer.getMapViewer().repaint();
-	}
-
-	public static void setAlgoSelect(boolean b) {
-		for (Device node : nodes) {
-			node.setMarked(false);
+		for (Device device : devices) {
+			if (device.isSelected()) {
+				device.setMarked(false);
+				device.setVisited(false);
+				device.setLedColor(0);
+			}
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 
-	public void setSelectionOfAllNodes(boolean selection, int type,
-			boolean addSelect) {
-		for (Device dev : nodes) {
+	public void setSelectionOfAllNodes(boolean selection, int type, boolean addSelect) {
+//		for (Marker marker : MarkerList.markers) {
+//			if (!addSelect)
+//				marker.setSelected(false);
+//		}
+		for (SensorNode dev : sensors) {
 			if (!addSelect)
-				dev.setSelection(false);
+				dev.setSelected(false);
 			if (dev.getType() == type || type == -1)
-				dev.setSelection(selection);
+				dev.setSelected(selection);
 		}
-		MapLayer.getMapViewer().repaint();
+		
+		for (Device dev : devices) {
+			if (!addSelect)
+				dev.setSelected(false);
+			if (dev.getType() == type || type == -1)
+				dev.setSelected(selection);
+		}
+		
+		MapLayer.repaint();
+	}
+	
+	public void setSelectionOfAllMobileNodes(boolean selection, int type, boolean addSelect) {
+//		for (Building building : BuildingList.buildings) {
+//			if (!addSelect)
+//				building.setSelected(false);
+//		}
+//		for (Marker marker : MarkerList.markers) {
+//			if (!addSelect)
+//				marker.setSelected(false);
+//		}
+		for (SensorNode dev : sensors) {
+			if (!addSelect)
+				dev.setSelected(false);
+			if (!dev.getGPSFileName().equals(""))				
+				dev.setSelected(selection);
+		}
+		for (Device dev : devices) {
+			if (!addSelect)
+				dev.setSelected(false);
+			if (!dev.getGPSFileName().equals(""))				
+				dev.setSelected(selection);
+		}
+		MapLayer.repaint();
 	}
 
 	public void invertSelection() {
-		for (Device dev : nodes) {
-			dev.invSelection();
+		for (SensorNode sensor : sensors) {
+			sensor.invSelection();
 		}
-		MapLayer.getMapViewer().repaint();
+		for (Device device : devices) {
+			device.invSelection();
+		}
+		MapLayer.repaint();
 	}
 
 	public Point[] getCouple(Device n1, Device n2) {
@@ -566,30 +1041,38 @@ public class DeviceList {
 		return p;
 	}
 	
-	
-	// Note: This method is not correct for a project because it changes 
-	// the id of each sensor. It is used to validate simulation in simbox_simulation
-	// package
 	public void initId() {
 		int k = 0;
 		Device.initNumber() ;
-		for(Device d : nodes) {
+		for(SensorNode d : sensors) {
 			d.setId(k++);
 			Device.incNumber();
 		}
-		MapLayer.getMapViewer().repaint();
+		for(Device d : devices) {
+			d.setId(k++);
+			Device.incNumber();
+		}
+		MapLayer.repaint();
 	}
 	//---------
 	
 	public void loadRoutesFromFiles() {
-		for(Device d : nodes) {
+		for(SensorNode d : sensors) {
+			d.loadRouteFromFile();
+		}
+		for(Device d : devices) {
 			d.loadRouteFromFile();
 		}
 	}
 
 	public void simulate() {
 		Device node;
-		for (Iterator<Device> iterator = nodes.iterator(); iterator.hasNext();) {
+		for (Iterator<SensorNode> iterator = sensors.iterator(); iterator.hasNext();) {
+			node = iterator.next();
+			if (node.isSelected())
+				node.start();
+		}
+		for (Iterator<Device> iterator = devices.iterator(); iterator.hasNext();) {
 			node = iterator.next();
 			if (node.isSelected())
 				node.start();
@@ -597,25 +1080,31 @@ public class DeviceList {
 	}
 	
 	public void simulateAll() {	
-		for (Device node : nodes) {
-			node.setSelection(true);
+		for (SensorNode node : sensors) {
+			node.setSelected(true);
+			node.start();
+		}
+		for (Device node : devices) {
+			node.setSelected(true);
 			node.start();
 		}
 	}
 	
 	public void simulateSensors() {
-		for (Device node : nodes) {
-			if(node.getType()==Device.SENSOR) {
-				node.setSelection(true);
-				node.start();
-			}
+		for (SensorNode node : sensors) {
+			node.setSelected(true);
+			node.start();
 		}
 	}
 	
-	public static void stopSimulation() {
-		for (Device node : nodes) {
-			node.setSelection(false);
-			node.stopSimulation();
+	public static void stopAgentSimulation() {
+		for (SensorNode node : sensors) {
+			node.setSelected(false);
+			node.stopAgentSimulation();
+		}
+		for (Device node : devices) {
+			node.setSelected(false);
+			node.stopAgentSimulation();
 		}
 	}
 	
@@ -643,8 +1132,8 @@ public class DeviceList {
 	public void drawEnvelope(LinkedList<Integer> envelope, Graphics2D g) {
 		g.setStroke(new BasicStroke(2.0f));
 		if(envelope.size()>0) {
-			double x = nodes.get(envelope.get(0)).getLatitude();
-			double y = nodes.get(envelope.get(0)).getLongitude();
+			double x = sensors.get(envelope.get(0)).getLatitude();
+			double y = sensors.get(envelope.get(0)).getLongitude();
 			int lx1=0;
 			int ly1=0;
 			int lx2=0;
@@ -655,13 +1144,13 @@ public class DeviceList {
 				lx1 = coord[0];
 				ly1 = coord[1];
 				//coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(i)).getLongitude(), nodes.get(envelope.get(i)).getLatitude());
-				coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(i)).getLatitude(), nodes.get(envelope.get(i)).getLongitude());
+				coord = MapCalc.geoToPixelMapA(sensors.get(envelope.get(i)).getLatitude(), sensors.get(envelope.get(i)).getLongitude());
 				lx2 = coord[0];
 				ly2 = coord[1];
 				g.setColor(Color.BLUE);
 				g.drawLine(lx1, ly1, lx2, ly2);
-				x = nodes.get(envelope.get(i)).getLatitude();
-				y = nodes.get(envelope.get(i)).getLongitude();		
+				x = sensors.get(envelope.get(i)).getLatitude();
+				y = sensors.get(envelope.get(i)).getLongitude();		
 			}
 			//coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(0)).getLongitude(), nodes.get(envelope.get(0)).getLatitude());
 //			coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(0)).getLatitude(), nodes.get(envelope.get(0)).getLongitude());
@@ -678,246 +1167,225 @@ public class DeviceList {
 	}
 	
 	public static void selectWitoutScript() {
-		for(Device d : nodes) {
-			if((d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION) && (d.getScriptFileName().equals(""))) {
-				d.setSelection(true);
+		for(SensorNode d : sensors) {
+			if(d.getScriptFileName().equals("")) {
+				d.setSelected(true);
 			}
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 	
 	public static void selectWitoutGps() {
-		for(Device d : nodes) {
-			if((d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION) && (d.getGPSFileName().equals(""))) {
-				d.setSelection(true);
+		for(SensorNode d : sensors) {
+			if(d.getGPSFileName().equals("")) {
+				d.setSelected(true);
 			}
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 	
 	public static void selectMarkedSensors() {
-		for(Device d : nodes) {
-			if((d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION) && (d.isMarked())) {
-				d.setSelection(true);
+		for(SensorNode d : sensors) {
+			if(d.isMarked()) {
+				d.setSelected(true);
 			}
 		}
-		MapLayer.getMapViewer().repaint();
-	}
-	
-	public static void setMy(String my) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-				d.setMy(Integer.valueOf(my));
-			}
-		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 	
 	public static void setId(String id) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+		for (SensorNode d : sensors) {
+			if (d.isSelected()) {
 				d.setId(Integer.valueOf(id));
 			}
 		}
-		MapLayer.getMapViewer().repaint();
-	}
-	
-	public static void setCh(String ch) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-				d.setCh(Integer.valueOf(ch));
+		for (Device d : devices) {
+			if (d.isSelected()) {
+				d.setId(Integer.valueOf(id));
 			}
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
-	
-	public static void setNId(String NId) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-				d.setNId(Integer.valueOf(NId));
-			}
-		}
-		MapLayer.getMapViewer().repaint();
-	}
-	
+		
 	public static void setLongitude(String value) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+		for (SensorNode d : sensors) {
+			if (d.isSelected()) {
 				d.setLongitude(Double.valueOf(value));
 			}
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 	
 	public static void setLatitude(String value) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+		for (SensorNode d : sensors) {
+			if (d.isSelected()) {
 				d.setLatitude(Double.valueOf(value));
 			}
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 	
 	public static void setElevation(String value) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+		for (SensorNode d : sensors) {
+			if (d.isSelected()) {
 				d.setElevation(Double.valueOf(value));
 			}
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 	
 	public static void setRadius(String value) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+		for (SensorNode d : sensors) {
+			if (d.isSelected()) {
 				d.setRadius(Double.valueOf(value));
 			}
 		}
-		MapLayer.getMapViewer().repaint();
-	}
-	
-	public static void setRadioRadius(String value) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-				d.setRadioRadius(Double.valueOf(value));
+		for (Device d : devices) {
+			if (d.isSelected()) {
+				d.setRadius(Double.valueOf(value));
 			}
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 	
 	public static void setSensorUnitRadius(String value) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
+		for (SensorNode d : sensors) {
+			if (d.isSelected()) 
 				d.setSensorUnitRadius(Double.valueOf(value));
-			}
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 	
 	public static void setEMax(String value) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-				d.getBattery().init(Double.valueOf(value));
-			}
+		for (SensorNode d : sensors) {
+			if (d.isSelected()) 
+				d.getBattery().setEMax(Double.valueOf(value));
 		}
-		MapLayer.getMapViewer().repaint();
-	}
-	
-	public static void setTx(String value) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-				d.setETx(Double.valueOf(value));
-			}
-		}
-		MapLayer.getMapViewer().repaint();
-	}
-	
-	public static void setRx(String value) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-				d.setERx(Double.valueOf(value));
-			}
-		}
-		MapLayer.getMapViewer().repaint();
-	}
-	
-	public static void setSensingEnergy(String value) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-				d.setERx(Double.valueOf(value));
-			}
-		}
-		MapLayer.getMapViewer().repaint();
-	}
-	
-//	public static void setBeta(String value) {
-//		for (Device d : nodes) {
-//			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-//				d.setBeta(Double.valueOf(value));
-//			}
-//		}
-//		Layer.getMapViewer().repaint();
-//	}
-	
-	public static void setESlp(String value) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-				d.setESlp(Double.valueOf(value));
-			}
-		}
-		MapLayer.getMapViewer().repaint();
-	}
-	
-	public static void setEL(String value) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-				d.setEL(Double.valueOf(value));
-			}
-		}
-		MapLayer.getMapViewer().repaint();
-	}
-	
+		MapLayer.repaint();
+	}	
 
 	public static void selectById(String id) {
 		String [] ids = id.split(" ");
 		int k=0;
-		for (Device d : nodes) {
-			d.setSelection(false);
+		for (SensorNode d : sensors) {
+			d.setSelected(false);
 			if(k<ids.length)
 				if (d.getId()==Integer.valueOf(ids[k])) {
-					d.setSelection(true);
+					d.setSelected(true);
 					k++;
 				}
 		}
-		MapLayer.getMapViewer().repaint();
+		k=0;
+		for (Device d : devices) {
+			d.setSelected(false);
+			if(k<ids.length)
+				if (d.getId()==Integer.valueOf(ids[k])) {
+					d.setSelected(true);
+					k++;
+				}
+		}
+		MapLayer.repaint();
 	}
 	
 	public static void selectByMy(String my) {
 		String [] mys = my.split(" ");
-		for (Device d : nodes) {
-			d.setSelection(false);
-		}
-		for(int k=0; k<mys.length; k++) {
-			for (Device d : nodes) {
-				if (d.getMy()==Integer.valueOf(mys[k])) {
-					d.setSelection(true);
-				}			
+		for (SensorNode d : sensors) {
+			d.setSelected(false);
+			for(int k=0; k<mys.length; k++) {
+				if (d.getCurrentRadioModule().getMy()==Integer.valueOf(mys[k])) {
+					d.setSelected(true);
+				}
 			}
 		}
-		MapLayer.getMapViewer().repaint();
+		MapLayer.repaint();
 	}
 	
-	public static void selectOneFromSelected() {
-		for(Device d : nodes) {
+	public static void selectOneFromSelected() {		
+		for(SensorNode d : sensors) {
 			if(d.isSelected()) {
 				deselectAll();
-				d.setSelection(true);
+				d.setSelected(true);
+				return;
+			}
+		}
+		for(Device d : devices) {
+			if(d.isSelected()) {
+				deselectAll();
+				d.setSelected(true);
+				return;
 			}
 		}
 	}
 	
 	public static void deselectAll() {
-		for(Device d : nodes) {
-			d.setSelection(false);
+//		for(Marker marker : MarkerList.markers) {
+//			marker.setSelected(false);
+//		}
+//		for(Building building : BuildingList.buildings) {
+//			building.setSelected(false);
+//		}
+		for(SensorNode d : sensors) {
+			d.setSelected(false);
+		}
+		for(Device d : devices) {
+			d.setSelected(false);
+		}
+	}
+	
+	public static void deselectAllObjects() {
+		for(SensorNode d : sensors) {
+				d.setSelected(false);
+		}
+		for(Device d : devices) {
+			if(d.getType() != Device.GAS)
+				d.setSelected(false);
+		}
+	}
+	
+	public static void deselectAllEvents() {
+		for(Device d : devices) {
+			if(d.getType() == Device.GAS)
+				d.setSelected(false);
 		}
 	}
 	
 	public static void calculatePropagations() {
 		propagationsCalculated = true;
-		for(Device device : DeviceList.getSensorNodes()) {
-			device.calculatePropagations();
-		}
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					for(SensorNode device : sensors) {
+						device.calculatePropagations();
+					}
+				}
+				catch(Exception e) {}
+			}
+		});
 	}
+	
+//	public static void calculatePropagations(SensorNode sensor) {
+//		propagationsCalculated = true;
+//		Platform.runLater(new Runnable() {
+//			@Override
+//			public void run() {
+//				try {
+//					sensor.calculatePropagations();
+//				}
+//				catch(Exception e) {}
+//			}
+//		});
+//	}
 	
 	public static void resetPropagations() {
 		propagationsCalculated = false;
-		for(Device device : nodes) {
+		for(SensorNode device : sensors) {
 			device.resetPropagations();
 		}
 	}
 
 	public static void setUartDataRate(String selectedItem) {
-		for (Device device : nodes) {
+		for (SensorNode device : sensors) {
 			if (device.isSelected()) {
 				if (selectedItem.equals("-"))
 					device.setUartDataRate(Long.MAX_VALUE);
@@ -925,35 +1393,174 @@ public class DeviceList {
 					device.setUartDataRate(Long.parseLong(selectedItem));
 			}
 		}
-		MapLayer.getMapViewer().repaint();
-	}
-
-	public static void setRadioDataRate(String text) {
-		for (Device device : nodes) {
-			if (device.isSelected()) {
-				device.setRadioDataRate(Integer.parseInt(text));
-			}
-		}
-		MapLayer.getMapViewer().repaint();		
-		
-	}
-
-	public static void setStd(String str) {
-		for (Device d : nodes) {
-			if (d.isSelected() && (d.getType()==Device.SENSOR || d.getType()==Device.BASE_STATION)) {
-				d.setStd(str);
-				
-			}
-		}
-		MapLayer.getMapViewer().repaint();		
+		MapLayer.repaint();
 	}
 
 	public static void setSigmaOfDriftTime(double drift) {
-		for (Device device : nodes) {
-			if (device.isSelected() && (device.getType()==Device.SENSOR || device.getType()==Device.BASE_STATION)) {
+		for (SensorNode device : sensors) {
+			if (device.isSelected()) {
 				device.setSigmaOfDriftTime(drift);				
 			}
 		}		
 	}
 	
+	public static void openRadioModule(String fileName, SensorNode sensor) {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			String line;
+			String name = "";
+			String str = null;
+			line = br.readLine();
+			line = br.readLine();
+			while ((line = br.readLine()) != null) {
+				str = line.split(":")[0];				
+				if (str.equals("current_radio_name")){
+					name = line.split(":")[1];
+					line = br.readLine();
+					str = line.split(":")[0];
+					if (str.equals("radio_standard")){
+						String std = line.split(":")[1];
+						sensor.addRadioModule(name, std);
+						sensor.selectCurrentRadioModule(name);
+					}
+				}
+				if (str.equals("radio_name")){
+					name = line.split(":")[1];
+					line = br.readLine();
+					str = line.split(":")[0];
+					if (str.equals("radio_standard")){
+						String std = line.split(":")[1];
+						sensor.addRadioModule(name, std);
+					}
+				}				
+				else
+				switch (str) {
+				case "radio_my":
+					sensor.getRadioModuleByName(name).setMy(Integer.parseInt(line.split(":")[1]));
+					break;
+				case "radio_channel":
+					sensor.getRadioModuleByName(name).setCh(Integer.parseInt(line.split(":")[1]));
+					break;
+				case "radio_network_id":
+					sensor.getRadioModuleByName(name).setNId(Integer.parseInt(line.split(":")[1]));
+					break;
+				case "radio_radius":
+					sensor.getRadioModuleByName(name).setRadioRangeRadius(Double.parseDouble(line.split(":")[1]));
+					break;
+				case "radio_etx":
+					sensor.getRadioModuleByName(name).setETx(Double.parseDouble(line.split(":")[1]));
+					break;
+				case "radio_erx":
+					sensor.getRadioModuleByName(name).setERx(Double.parseDouble(line.split(":")[1]));
+					break;
+				case "radio_esleep":
+					sensor.getRadioModuleByName(name).setESleep(Double.parseDouble(line.split(":")[1]));
+					break;
+				case "radio_elisten":
+					sensor.getRadioModuleByName(name).setEListen(Double.parseDouble(line.split(":")[1]));
+					break;
+				case "radio_data_rate":
+					sensor.getRadioModuleByName(name).setRadioDataRate(Integer.parseInt(line.split(":")[1]));
+					break;
+				case "spreading_factor":
+					sensor.getRadioModuleByName(name).setSpreadingFactor(Integer.parseInt(line.split(":")[1]));
+					break;
+				}					
+			}
+			br.close();
+			MapLayer.repaint();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static int getNumberOfSelectedObjects() {
+		int n = 0;
+		for(SensorNode d : sensors) {
+			if (d.isSelected()) n++;
+		}
+		for(Device d : devices) {
+			if (d.isSelected()) n++;
+		}
+		return n;
+	}
+	
+	public static int getNumberOfInside() {
+		int n = 0;
+		for(SensorNode d : sensors) {
+			if (d.isInside()) n++;
+		}
+		for(Device d : devices) {
+			if (d.isInside()) n++;
+		}
+		return n;
+	}
+	
+	public static void delete(SensorNode sensor) {
+		SensorNode tSensor;
+		for (Iterator<SensorNode> iterator = DeviceList.sensors.iterator(); iterator.hasNext();) {
+			tSensor = iterator.next();
+			if (tSensor == sensor) {
+				iterator.remove();
+			}
+		}
+		if(DeviceList.propagationsCalculated)			
+			DeviceList.calculatePropagations();
+	}
+	
+	public static void delete(Device device) {
+		Device tDevice;
+		for (Iterator<Device> iterator = DeviceList.devices.iterator(); iterator.hasNext();) {
+			tDevice = iterator.next();
+			if (tDevice == device) {
+				iterator.remove();				
+			}
+		}
+		if(DeviceList.propagationsCalculated)			
+			DeviceList.calculatePropagations();
+	}
+	
+	public static void addRandomSensors(int n) {		
+		CupActionBlock block = new CupActionBlock();		
+		if(MarkerList.markers.size()==2) {
+			Marker marker1 = MarkerList.markers.get(0);
+			Marker marker2 = MarkerList.markers.get(1);
+			double m1x = marker1.getLongitude();
+			double m1y = marker1.getLatitude();
+			double m2x = marker2.getLongitude();
+			double m2y = marker2.getLatitude();
+	
+			double r1 ;
+			double r2 ;
+			double x ;
+			double y ;
+			
+			for (int i = 0; i < n; i++) {
+				r1 = Math.random();
+				r2 = Math.random();
+				x = ((m2x-m1x)*r1)+m1x;
+				y = ((m2y-m1y)*r2)+m1y;
+				
+				double magnetic_step = 0.000227984;
+				double delta = 0.0;
+				if (MapLayer.magnetic) {
+					x = x - (x % magnetic_step) - (delta % magnetic_step);
+					y = y - (y % magnetic_step) - (delta % magnetic_step);			
+				}
+				CupAction action = new CupActionAddSensor(new StdSensorNode(x, y, 0, 0, 100, 20, -1));
+				block.addAction(action);				
+			}
+		}
+		if(block.size()>0) {
+			CupActionStack.add(block);
+			CupActionStack.execute();
+			if(DeviceList.propagationsCalculated)
+				DeviceList.calculatePropagations();
+		}		
+		MapLayer.repaint();
+	}
+		
 }

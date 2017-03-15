@@ -1,4 +1,4 @@
-package script_functions;
+package senscript_functions;
 
 import java.util.Arrays;
 

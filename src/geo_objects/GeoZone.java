@@ -26,10 +26,8 @@ public class GeoZone {
 	
 	private double [] coordX ;
 	private double [] coordY ;
-	//private double [] coordZ ;
 	private int [] iCoordX ;
 	private int [] iCoordY ;
-	//private int [] iCoordZ ;
 	private int size = 0 ;
 	private boolean selected = false ;
 	private int mapZoom = 0;
@@ -38,33 +36,26 @@ public class GeoZone {
 	private double latitude = 0;
 	private int cx = 0;
 	private int cy = 0;
-	
-	//private static Color color = new Color(197,0,117,100);//new Color(246, 131,234, 120);
-	private static Color color = UColor.RED_TRANSPARENT;
-			//new Color(197,0,117,100);//UColor.RED_TRANSPARENT;// new Color(221, 148,32, 100);
+
 	
 	public GeoZone(int size) {
 		mapZoom = MapLayer.mapViewer.getZoom();
 		this.size = size;
 		coordX = new double [size] ;
 		coordY = new double [size] ;
-		//coordZ = new double [size] ;
 		iCoordX = new int [size] ;
-		iCoordY = new int [size] ;
-		//iCoordZ = new int [size] ;	
+		iCoordY = new int [size] ;	
 	}
 
 	public void set(double x, double y, double z, int i) {		
 		coordX[i] = x;
 		coordY[i] = y;
-		//coordZ[i] = z;
 		computeIntCoord(i);
 	}
 	
 	public void set(String x, String y, String z, int i) {
 		coordX[i] = Double.valueOf(x);
 		coordY[i] = Double.valueOf(y);
-		//coordZ[i] = Double.valueOf(z);
 		computeIntCoord(i);
 	}
 	
@@ -76,10 +67,6 @@ public class GeoZone {
 		return coordY[i];
 	}
 	
-//	public double getZCoords(int i) {
-//		return coordZ[i];
-//	}
-	
 	public double [] getXCoords() {
 		return coordX;
 	}
@@ -87,10 +74,6 @@ public class GeoZone {
 	public double [] getYCoords() {
 		return coordY;
 	}
-	
-//	public double [] getZCoords() {
-//		return coordZ;
-//	}
 	
 	public int size() {
 		return size;
@@ -131,45 +114,46 @@ public class GeoZone {
 			mapZoom = newZoom;
 			computeIntCoords() ;
 		}	
-		
-//		if (color==0)
-//			g.setColor(UColor.RED_TTRANSPARENT);//.ORANGE_TRANSPARENT2);
-//		if (color==1)
-//			g.setColor(UColor.GREEND_TRANSPARENT);
-//		if (color==2)
-//			g.setColor(UColor.PURPLE_TRANSPARENT);
 
 		Graphics2D g2 = (Graphics2D) g;
 		
 		Point2D center = new Point2D.Float(cx, cy);
+		
 		double paintRadius = 300 * (4.00/Math.pow(2, MapLayer.mapViewer.getZoom()));
-		float[] dist = {0.0f, 0.2f, 0.5f};
-		//float[] dist = {0.0f, 0.5f};
-		Color[] colors = {color, new Color(221, 148,32, 100), UColor.TRANSPARENT};
-		//Color[] colors = {UColor.RED_TRANSPARENT, new Color(221, 148,32, 100), UColor.TRANSPARENT};
-		//Color[] colors = {UColor.ORANGE_TRANSPARENT2, UColor.YELLOW_TRANSPARENT, UColor.TRANSPARENT};
+		
+		
+		float[] dist = {0.0f, 0.2f, 0.7f};
+		Color [] colors = new Color[3];
+		colors[0] = new Color(255, 0, 0, 80);
+		colors[1] = new Color(221, 148, 32, 50);
+		colors[2] = new Color(255, 255, 255, 0);
+		if(MapLayer.dark) {			
+			colors[0] = new Color(255, 0, 0, 80);
+			colors[1] = new Color(221, 148,32, 50);
+			colors[2] = new Color(221, 0,32, 0);
+		}
+		if(selected) {			
+			colors[0] = new Color(250, 5, 0, 80);
+			colors[1] = new Color(250, 5, 0, 30);
+			colors[2] = new Color(250, 5, 0, 0);			
+		}
 		RadialGradientPaint p = new RadialGradientPaint(center, (float) paintRadius, dist, colors);
 		g2.setPaint(p);
-		
-		//g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-		//Paint p = new GradientPaint(0, 0, UColor.RED_TRANSPARENT, 100, 100, UColor.ORANGE_TRANSPARENT2, true);
 
-		//g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-		//g.setColor(UColor.ORANGE_TRANSPARENT2);
-		g.fillPolygon(iCoordX, iCoordY, size);
+		g2.fillPolygon(iCoordX, iCoordY, size);
+		g2.setColor(UColor.RED_TRANSPARENT);
 		if(selected) {
-			g.setColor(UColor.BLACK_TRANSPARENT);
-			g.drawPolygon(iCoordX, iCoordY, size);
-//			for(int i=0; i<size; i++) {
-//				g.fillOval(iCoordX[i]-2, iCoordY[i]-2, 4, 4);
-//			}
-		}	
+			g2.setColor(UColor.RED);
+			if(MapLayer.dark)
+				g2.setColor(UColor.ORANGE);			
+		}
+		g2.drawPolygon(iCoordX, iCoordY, size);
 	}
 	
 	public boolean inside(int xs, int ys) {
 		Point p = new Point(xs, ys);
-		GeoPosition gp = MapLayer.getMapViewer().convertPointToGeoPosition(p);
-		Point2D p1 = MapLayer.getMapViewer().getTileFactory().geoToPixel(gp, MapLayer.getMapViewer().getZoom());
+		GeoPosition gp = MapLayer.mapViewer.convertPointToGeoPosition(p);
+		Point2D p1 = MapLayer.mapViewer.getTileFactory().geoToPixel(gp, MapLayer.mapViewer.getZoom());
 		Polygon poly = new Polygon(iCoordX,iCoordY,size);
 		return (poly.contains(p1));
 	}
@@ -189,22 +173,6 @@ public class GeoZone {
 		}
 		return false;
 	}
-	
-//	public Vector3d [] toVector3d() {
-//		Vector3d [] vector = new Vector3d [size] ;
-//		for(int i=0; i<size; i++) {
-//			vector[i] = new Vector3d(coordY[i], coordX[i], 10.0);
-//		}
-//		return vector;
-//	}
-//	
-//	public Vector3d [] toVector3d(int m) {
-//		Vector3d [] vector = new Vector3d [size] ;
-//		for(int i=0; i<size; i++) {
-//			vector[i] = new Vector3d(coordY[i]/m, coordX[i]/m, 10.0);
-//		}
-//		return vector;
-//	}
 
 	public void translate(double xref, double yref, double zm) {
 		for(int i=0; i<size; i++) {
@@ -224,6 +192,11 @@ public class GeoZone {
 		return poly.contains(px, py);
 	}
 	
+	public Polygon toPolygon() {
+		Polygon poly = new Polygon(iCoordX, iCoordY, size);
+		return poly;
+	}
+	
 	public void display() {
 		for(int i=0; i<size; i++) {
 			System.out.print("("+iCoordX[i]+", "+iCoordY[i]+") ");
@@ -241,25 +214,15 @@ public class GeoZone {
 	
 	public void setICoordX(int i, int v) {
 		iCoordX[i] = v;
-		//System.out.println("x : "+iCoordX[i]);
-		//System.out.println("y : "+iCoordY[i]);
-		//coordX[i] = MapCalc.pixelMapToGeo(iCoordX[i], iCoordY[i]).getLatitude();
-		
-		//GeoPosition gg = MapLayer.getMapViewer().getTileFactory().pixelToGeo(new Point((int)p.getX(), (int)p.getY()), MapLayer.getMapViewer().getZoom());
-		
-		//System.out.println("i : "+coordX[i]);
 	}
 	
 	public void setICoordY(int i, int v) {
 		iCoordY[i] = v;
-		//coordY[i] = MapCalc.pixelMapToGeo(iCoordX[i], iCoordY[i]).getLongitude();
 	}	
 
 	public void setInt(int x, int y, int i) {
 		iCoordX[i]=x;
 		iCoordY[i]=y;
-//		coordX[i] = MapCalc.pixelMapToGeo(x, y).getLatitude();
-//		coordY[i] = MapCalc.pixelMapToGeo(x, y).getLongitude();
 	}
 
 	public void setCxCy(double longitude, double latitude) {

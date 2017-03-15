@@ -19,8 +19,8 @@
 
 package wisen_simulation;
 
-import propagation.RadioDetection;
-import radio_module.Ber;
+import radio_module.ErrorBits;
+import radio_module.RadioDetection;
 
 /**
  * @author Ahcene Bounceur
@@ -34,24 +34,24 @@ public class SimulationInputs {
 	public static final int NONE = 0;
 	public static final int CSMA = 1;	
 	
-	public static boolean cpuDrift = false;
+	public static boolean clockDrift = false;
 	
-	public static boolean mobility = false;
+	public static boolean mobilityAndEvents = false;
 	public static double simulationTime = 86400.0;
+	public static double resultsWritingPeriod = 0.1;  // The period in seconds, of writing the battery level in the results csv file
 	
 	public static int visualDelay = 10;
 	public static int arrowsDelay = 50;
 	public static boolean showInConsole = false;
-	public static boolean displayLog = true;
-	public static boolean displayResults = true;
+	public static boolean displayLog = false;
+	public static boolean displayResults = false;
 	public static boolean showAckLinks = false;
 	
 	public static boolean ack = false ;
-	public static double ackType = Ber.PROBABILITY;
+	public static double ackType = ErrorBits.PROBABILITY;	// Type of the interference calculation
 	public static double ackProba = 1.0 ;
-	public static int protocol = SimulationInputs.CSMA ;
 	
-	public static boolean symmetricalLinks = true;
+	public static boolean symmetricalLinks = false;
 	public static int radioDetectionType = RadioDetection.SIMPLE_DETECTION;
 	public static boolean visibility = false; 
 }

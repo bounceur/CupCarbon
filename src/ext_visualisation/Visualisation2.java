@@ -1,6 +1,5 @@
-package visualisation;
+package ext_visualisation;
 
-import cupcarbon.CupCarbon;
 import device.BaseStation;
 import device.Device;
 import device.Mobile;
@@ -305,7 +304,7 @@ public class Visualisation2 {
 	//------------------------------------------------------------------
 	
 	public static boolean visual() {
-		return CupCarbon.ihmType == CupCarbon.THREE_D_UNITY;
+		return true; //CupCarbon_old.ihmType == CupCarbon_old.THREE_D_UNITY;
 	}
 	
 }

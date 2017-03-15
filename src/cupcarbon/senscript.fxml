@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0" prefWidth="684.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.SenScriptController">
+   <center>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextArea fx:id="zone" layoutX="168.0" layoutY="40.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: rgb(200,222,222);" text="loop" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                     <font>
+                        <Font name="Courier New Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                     </padding>
+                  </TextArea>
+               </children>
+            </AnchorPane>
+         </center>
+      </BorderPane>
+   </center>
+   <top>
+      <BorderPane prefHeight="53.0" prefWidth="684.0" BorderPane.alignment="CENTER">
+         <bottom>
+            <HBox alignment="CENTER" prefHeight="7.0" prefWidth="590.0" spacing="5.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#loopCom" text="loop">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#setCom" text="set">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#sendCom" text="send">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#waitCom" text="wait">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#readCom" text="read">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#delayCom" text="delay">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <Button mnemonicParsing="false" onAction="#ifthenelseCom" text="If then else">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#forCom" text="for">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#incCom" text="inc">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <MenuButton mnemonicParsing="false" style="-fx-font-size: 10;" text="Transmitter">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#example1_1Com" text="Version 1" />
+                      <MenuItem mnemonicParsing="false" onAction="#example1_2Com" text="Version 2" />
+                    </items>
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </MenuButton>
+                  <MenuButton mnemonicParsing="false" style="-fx-font-size: 10;" text="Router">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#example2_1Com" text="Version 1" />
+                        <MenuItem mnemonicParsing="false" onAction="#example2_2Com" text="Version 2" />
+                     </items>
+                  </MenuButton>
+                  <MenuButton mnemonicParsing="false" style="-fx-font-size: 10;" text="Receiver">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#example3_1Com" text="Version 1" />
+                        <MenuItem mnemonicParsing="false" onAction="#example3_2Com" text="Version 2" />
+                     </items>
+                  </MenuButton>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+               </BorderPane.margin>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+         </bottom>
+         <top>
+            <GridPane hgap="10.0" prefHeight="61.0" prefWidth="600.0" vgap="5.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="128.0" minWidth="10.0" prefWidth="72.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="432.0" minWidth="10.0" prefWidth="376.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="196.0" minWidth="10.0" prefWidth="104.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints maxHeight="42.0" minHeight="0.0" prefHeight="24.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                     <children>
+                        <Label layoutX="51.0" layoutY="8.0" text="Script List" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <Label text="File name">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtFileName" GridPane.columnIndex="1">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </TextField>
+                  <Button mnemonicParsing="false" onAction="#save" prefHeight="21.0" prefWidth="200.0" text="Save" GridPane.columnIndex="2">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <ComboBox fx:id="txtLoadFileName" onAction="#load" prefHeight="22.0" prefWidth="627.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </GridPane>
+         </top>
+      </BorderPane>
+   </top>
+</BorderPane>

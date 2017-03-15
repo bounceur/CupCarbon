@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import wisen_simulation.SimLog;
 import device.SensorNode;
@@ -28,7 +28,7 @@ public class Command_WHILE extends Command {
 		this.sensor = sensor ;
 		this.arg = arg;
 		
-		String[] inst = Condition.getTwoParts(arg); 			
+		String[] inst = SenScriptCondition.getTwoParts(arg); 			
 
 		left = inst[0];
 		right = inst[1];

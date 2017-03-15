@@ -1,4 +1,4 @@
-package script;
+package senscript;
 
 import device.SensorNode;
 import wisen_simulation.SimLog;
