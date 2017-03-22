@@ -29,6 +29,7 @@
 
 package wisen_simulation;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -112,6 +113,7 @@ public class WisenSimulation implements Runnable {
 					device.setEvent2(device.getNextTime());
 				else
 					device.setEvent2(Double.MAX_VALUE);
+
 				if (!device.getNatEventFileName().equals(""))
 					device.setEvent3(device.getNextValueTime());
 				else
@@ -133,9 +135,7 @@ public class WisenSimulation implements Runnable {
 		System.out.println("Start Simulation (WISEN : D-Event) ... ");
 		MapLayer.repaint();
 		try {
-			String as = "";
-			if (mobilityAndEvents) as = "_mob";
-			PrintStream ps = new PrintStream(new FileOutputStream(Project.getProjectResultPath() + "/wisen_simulation" + as + ".csv"));
+			PrintStream ps = new PrintStream(new FileOutputStream(Project.getProjectResultPath() + File.separator + "wisen_simulation" + ".csv"));
 			if (generateResults) {
 				ps.print("Time (Sec);");
 				for (SensorNode sensor : DeviceList.sensors) {											
@@ -174,7 +174,7 @@ public class WisenSimulation implements Runnable {
 					CupCarbon.cupCarbonController.simulationTimeLabel.setText("RT");
 				}
 			});
-			
+			//--------> Loop - Simulation starts here
 			while (time <= SimulationInputs.simulationTime) {
 				
 				isSimulating = true;
@@ -198,17 +198,6 @@ public class WisenSimulation implements Runnable {
 				
 				if(stopCondition) {
 					System.out.println("Simulation stopped!");
-//					Platform.runLater(new Runnable() {
-//						@Override
-//						public void run() {
-//							isSimulating = false;
-//							Alert alert = new Alert(AlertType.INFORMATION);
-//							alert.setTitle("Simulation");
-//							alert.setHeaderText(null);
-//							alert.setContentText("Simulation stopped! [time = "+String.format("%4.4f", sTime)+"]");
-//							alert.showAndWait();							
-//						}
-//					});
 					CupCarbon.cupCarbonController.monitor.setFill(Color.GREENYELLOW);
 					break;
 				}
@@ -239,11 +228,6 @@ public class WisenSimulation implements Runnable {
 				
 				consolPrintln("--------------------------------------");
 				consolPrint(""+time);
-
-				//time += min;
-				
-//				SimLog.add("Next time (milliseconds) : "+time);
-//				SimLog.add("--------------------------------------");
 				
 				if(!fMessage.replace("\n", "").equals("")) 
 					SimLog.add(fMessage);

@@ -32,7 +32,6 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.LinkedList;
-import java.util.Random;
 
 import device.Device;
 import device.DeviceList;
@@ -44,82 +43,37 @@ import project.Project;
 import utilities.MapCalc;
 import utilities.UColor;
 
-public class Gas extends MobileG {
+public class Meteo extends MobileG {
 
+	
+	//http://a.basemaps.cartocdn.com/light_all/0/0/0.png
 	protected LinkedList<Integer> valueTime;
 	protected LinkedList<Double> values;
 	protected int valueIndex = 0;
 
-	protected int[] polyX = new int[62];
-	protected int[] polyY = new int[62];
-	protected double[] factor = new double[62];
+	private String idFL = "T"; // ID First Letter (Temperature of the meteo)
 
-	private int xc;
-	private int yc;
-
-	private String idFL = "A"; // ID First Letter
-
-	public Gas(double x, double y, double z, double radius) {
+	public Meteo(double x, double y, double z, double radius) {
 		super(x, y, z, radius, "", DeviceList.number++);
-		setContours();
 	}
 
-	public Gas(double x, double y, double z, double radius, int id) {
+	public Meteo(double x, double y, double z, double radius, int id) {
 		super(x, y, z, radius, "", id);
-		setContours();
 	}
 
-	public Gas(double x, double y, double z, double radius, String gpsFileName, int id) {
+	public Meteo(double x, double y, double z, double radius, String gpsFileName, int id) {
 		super(x, y, z, radius, gpsFileName, id);
-		setContours();
 	}
 
-	public Gas(String x, String y, String z, String radius, String gpsFileName, int id) {
+	public Meteo(String x, String y, String z, String radius, String gpsFileName, int id) {
 		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(radius), gpsFileName, id);
-		setContours();
 	}
 
-	public void setContours() {
-		int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
-		xc = coord[0];
-		yc = coord[1];
 
-		double radius2 = 0;
-		double radius3 = 0;
-
-		Random rnd = new Random();
-		int k = 0;
-		for (double i = 0.1; i < 6.28; i += .1) {
-			factor[k] = MapCalc.radiusInPixels(radius) * (rnd.nextInt(8)) / 100.;
-			radius2 = MapCalc.radiusInPixels((radius + factor[k]) * Math.cos(i) / 1.);
-			radius3 = MapCalc.radiusInPixels((radius + factor[k]) * Math.sin(i) / 1.);
-			polyX[k] = (int) (xc + radius2);
-			polyY[k] = (int) (yc + radius3);
-			k++;
-		}
-	}
-
-	public void updateContours() {
-		int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
-		xc = coord[0];
-		yc = coord[1];
-		double radius2 = 0;
-		double radius3 = 0;
-		int k = 0;
-		for (double i = 0.1; i < 6.28; i += .1) {
-			radius2 = MapCalc.radiusInPixels((radius + factor[k]) * Math.cos(i) / 1.);
-			radius3 = MapCalc.radiusInPixels((radius + factor[k]) * Math.sin(i) / 1.);
-			polyX[k] = (int) (xc + radius2);
-			polyY[k] = (int) (yc + radius3);
-			k++;
-		}
-	}
-
-	public void draw(Graphics g2) {
+	public void draw(Graphics g2) {		
 		if (visible) {
 			Graphics2D g = (Graphics2D) g2;
 			g.setStroke(new BasicStroke(0.6f));
-			updateContours();
 			initDraw(g);
 			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int x = coord[0];
@@ -128,62 +82,59 @@ public class Gas extends MobileG {
 
 			if (inside || selected) {
 				g.setColor(UColor.ORANGE);
-				g.drawLine(x - radius - 3, y - radius - 3, x - radius + 2, y - radius - 3);
-				g.drawLine(x - radius - 3, y - radius - 3, x - radius - 3, y - radius + 2);
-				g.drawLine(x - radius - 3, y + radius + 3, x - radius + 2, y + radius + 3);
-				g.drawLine(x - radius - 3, y + radius + 3, x - radius - 3, y + radius - 2);
-				g.drawLine(x + radius + 3, y - radius - 3, x + radius - 2, y - radius - 3);
-				g.drawLine(x + radius + 3, y - radius - 3, x + radius + 3, y - radius + 2);
-				g.drawLine(x + radius + 3, y + radius + 3, x + radius - 2, y + radius + 3);
-				g.drawLine(x + radius + 3, y + radius + 3, x + radius + 3, y + radius - 2);
+				g.drawLine(x - radius - 30, y - radius - 8, x - radius - 25, y - radius - 8);
+				g.drawLine(x - radius - 30, y - radius - 8, x - radius - 30, y - radius - 2);
+				g.drawLine(x - radius - 30, y + radius + 8, x - radius - 25, y + radius + 8);
+				g.drawLine(x - radius - 30, y + radius + 8, x - radius - 30, y + radius + 2);
+				g.drawLine(x + radius + 30, y - radius - 8, x + radius + 25, y - radius - 8);
+				g.drawLine(x + radius + 30, y - radius - 8, x + radius + 30, y - radius - 2);
+				g.drawLine(x + radius + 30, y + radius + 8, x + radius + 25, y + radius + 8);
+				g.drawLine(x + radius + 30, y + radius + 8, x + radius + 30, y + radius + 2);
 			}
 
 			if (selected) {
 				g.setColor(Color.GRAY);
-				g.drawOval(x - radius - 4, y - radius - 4, (radius + 4) * 2, (radius + 4) * 2);
+				g.drawRect(x - radius -25, y - radius - 5, (radius + 25) * 2, (radius + 5) * 2);
 			}
 
-			if (hide != 2) {
-				g.setColor(UColor.ORANGE);
-				g.drawPolygon(polyX, polyY, 62);
-			}
-			if (hide == 0) {
-				g.setColor(UColor.ORANGE_TRANSPARENT);
-				g.fillPolygon(polyX, polyY, 62);
-			}
+			g.setColor(UColor.ORANGE);
+			g.drawRect(x-30, y-10, 60, 20);
+
+			g.setColor(UColor.ORANGE_TRANSPARENT);
+			g.fillRect(x-32, y-12, 64, 24);
 
 			drawRadius(x, y, radius, g);
+			
 			if (displayRadius) {
 				drawRadius(x, y, radius, g);
 			}
 
 			if (NetworkParameters.displayDetails) {
-				g.setColor(Color.RED);
+				g.setColor(Color.BLACK);
 				String s = String.format("%2.2f", getValue());
-				g.drawString("[" + s + "]", x + 15, y + 3);
+				g.drawString("METEO", x-15 , y-15 );
+				g.drawString("" + s , x-8 , y+3 );
 			}
 
 			g.setColor(Color.ORANGE);
 			if (this.nateventFileName.equals(""))
 				g.setColor(Color.WHITE);
-			g.fillOval(x - 6, y - 6, 12, 12);
+			g.fillRect(x - 27, y - 6, 12, 12);
+			
+			g.setColor(Color.DARK_GRAY);
+			g.drawRect(x - 27, y - 6, 12, 12);
 
 			if (underSimulation) {
 				g.setColor(UColor.GREEN);
-				g.fillOval(x - 3, y - 3, 6, 6);
+				g.fillRect(x - 24, y - 3, 6, 6);
 			} else {
 				g.setColor(UColor.ORANGE);
 				if (gpsFileName.equals(""))
 					g.setColor(UColor.RED);
-				g.fillOval(x - 3, y - 3, 6, 6);
+				g.fillRect(x - 24, y - 3, 6, 6);
 			}
+			
 			//drawId(x, y, g);
-			if (NetworkParameters.displayDetails) {
-				g.setColor(Color.BLACK);
-				if (MapLayer.dark)
-					g.setColor(new Color(179, 221, 67));
-				g.drawString(getName(), (int) (x + 12), (int) (y-6));
-			}
 		}
 	}
 
@@ -209,7 +160,7 @@ public class Gas extends MobileG {
 
 	@Override
 	public int getType() {
-		return Device.GAS;
+		return Device.METEO;
 	}
 
 	@Override
@@ -274,9 +225,9 @@ public class Gas extends MobileG {
 	}
 
 	@Override
-	public Gas duplicate() {
+	public Meteo duplicate() {
 		selected = false;
-		Gas gas = new Gas(longitude, latitude, elevation, radius);
+		Meteo gas = new Meteo(longitude, latitude, elevation, radius);
 		gas.setHide(hide);
 		gas.setDrawBatteryLevel(drawBatteryLevel);
 		gas.setScriptFileName(scriptFileName);
@@ -287,8 +238,8 @@ public class Gas extends MobileG {
 	}
 
 	@Override
-	public Gas duplicateWithShift(double sLongitude, double sLatitude, double sElevation) {
-		Gas gas = duplicate();
+	public Meteo duplicateWithShift(double sLongitude, double sLatitude, double sElevation) {
+		Meteo gas = duplicate();
 		gas.shift(sLongitude, sLatitude, sElevation);
 		return gas;
 	}
@@ -307,7 +258,7 @@ public class Gas extends MobileG {
 	public void save(String fileName) {
 		try {
 			PrintStream fos = null;
-			fos = new PrintStream(new FileOutputStream(fileName + File.separator + "gas_" + getId()));
+			fos = new PrintStream(new FileOutputStream(fileName + File.separator + "meteo_" + getId()));
 			fos.println("List of parameters");
 			fos.println("------------------------------------------");
 			fos.println("device_type:" + getType());
@@ -375,7 +326,7 @@ public class Gas extends MobileG {
 	// ------------------------------------------------------------------------
 	@Override
 	public double getNextValueTime() {
-		if (valueTime.size() > 0) {				
+		if (valueTime.size() > 0) {
 			return valueTime.get(valueIndex);
 		}
 		return 0;
@@ -397,6 +348,5 @@ public class Gas extends MobileG {
 			}
 		}
 	}
-
 
 }

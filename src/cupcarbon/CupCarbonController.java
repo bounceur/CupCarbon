@@ -8,7 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -415,18 +417,16 @@ public class CupCarbonController implements Initializable {
 			undoItem.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCombination.META_DOWN));
 			redoItem.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCombination.META_DOWN));
 			newProjectItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.META_DOWN));
-			newProjectFromCurrentItem.setAccelerator(
-					new KeyCodeCombination(KeyCode.N, KeyCombination.META_DOWN, KeyCombination.SHIFT_DOWN));
+			newProjectFromCurrentItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.META_DOWN, KeyCombination.SHIFT_DOWN));
 			openProjectItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.META_DOWN));
-			openLastProjectItem.setAccelerator(
-					new KeyCodeCombination(KeyCode.O, KeyCombination.META_DOWN, KeyCombination.SHIFT_DOWN));
+			openLastProjectItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.META_DOWN, KeyCombination.SHIFT_DOWN));
 			saveProjectItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.META_DOWN));
-			resetItem.setAccelerator(
-					new KeyCodeCombination(KeyCode.R, KeyCombination.META_DOWN, KeyCombination.SHIFT_DOWN));
+			resetItem.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.META_DOWN, KeyCombination.SHIFT_DOWN));
+			
+			menuBar.useSystemMenuBarProperty().set(true);
 		}
 		initComboBoxes();
-		if (CupCarbon.macos)
-			menuBar.useSystemMenuBarProperty().set(true);
+			
 		deviceListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		eventListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -434,6 +434,24 @@ public class CupCarbonController implements Initializable {
 
 		initMap();
 
+		if(internetIsAvailable()) {
+			System.out.println("Connection: OK");
+			WorldMap.changeMap(0);
+		}
+		else
+			System.out.println("Connection: NO");
+	}
+	private static boolean internetIsAvailable() {
+	    try {
+	        final URL url = new URL("http://a.basemaps.cartocdn.com/light_all/0/0/0.png");
+	        final URLConnection connection = url.openConnection();
+	        connection.connect();
+	        return true;
+	    } catch (MalformedURLException e) {
+	        throw new RuntimeException(e);
+	    } catch (IOException e) {
+	        return false;
+	    }
 	}
 	// -----
 
@@ -563,6 +581,14 @@ public class CupCarbonController implements Initializable {
 	public void addGas() {
 		WorldMap.addNodeInMap('2');
 		mapFocus();
+	}
+	
+	@FXML
+	public void addMeteo() {
+		if(DeviceList.meteo==null) {
+			WorldMap.addNodeInMap('7');
+			mapFocus();
+		}
 	}
 
 	@FXML
@@ -898,9 +924,9 @@ public class CupCarbonController implements Initializable {
 		File file = fileChooser.showOpenDialog(CupCarbon.stage);
 		if (file != null) {
 			Project.openProject(file.getParentFile().toString(), file.getName().toString());
-		}
-		CupCarbon.stage.setTitle("CupCarbon " + Version.VERSION + " [" + file.getName().toString() + "]");
-		openProjectLoadParameters();
+			CupCarbon.stage.setTitle("CupCarbon " + Version.VERSION + " [" + file.getName().toString() + "]");
+			openProjectLoadParameters();
+		}		
 	}
 
 	public void openProjectLoadParameters() {

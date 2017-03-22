@@ -35,7 +35,7 @@ import utilities.UColor;
  * @author Lounis Massinissa
  * @version 1.0
  */
-public class StdSensorUnit extends SensorUnit implements Cloneable {
+public class StdSensorUnit extends SensorUnit {
 	
 	protected double deg = 0.209333;
 

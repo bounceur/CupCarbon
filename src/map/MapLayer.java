@@ -72,6 +72,7 @@ import geo_objects.GeoZoneList;
 import markers.Marker;
 import markers.MarkerList;
 import natural_events.Gas;
+import natural_events.Meteo;
 import overpass.OsmOverpass;
 import utilities.MapCalc;
 import utilities.UColor;
@@ -179,6 +180,14 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			addThing = true;
 		}
+		if (lastKey == '7') {
+			if(DeviceList.meteo==null) {
+				mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				addThing = true;
+			}
+			else
+				lastKey = 0;
+		}
 		if (lastKey == '8') {
 			mapViewer.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 			addThing = true;
@@ -233,7 +242,8 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		g.drawString("Number of SENT messages:"+Channels.numberOfSentMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+26);
 		g.drawString("Number of ACK messages:"+Channels.numberOfAckMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+36);
 		g.drawString("Number of LOST messages:"+Channels.numberOfLostMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+46);
-		//g.drawString(Project.saved?"SAVED":"NOT SAVED" , (int)mapViewer.getCenter().getX()+(mapViewer.getWidth()/2)-60, (int)mapViewer.getCenter().getY()+(mapViewer.getHeight()/2)-8);
+		if(DeviceList.meteo != null)
+			g.drawString("Temperature: "+ String.format("%2.2f", DeviceList.meteo.getValue()) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+56);
 		g.dispose();
 	}
 	
@@ -302,6 +312,15 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			addAction(action);
 			CupActionStack.execute();
 			repaint();
+		}
+		if (lastKey == '7') {
+			if(DeviceList.meteo==null) {
+				CupAction action = new CupActionAddDevice(new Meteo(gp.getLongitude(), gp.getLatitude(), 0, 8, -1));
+				addAction(action);
+				CupActionStack.execute();
+				lastKey = 0;
+				repaint();
+			}
 		}
 		if (lastKey == '8') {
 			CupAction action = new CupActionAddMarker(new Marker(gp.getLongitude(), gp.getLatitude(), 0, 4));

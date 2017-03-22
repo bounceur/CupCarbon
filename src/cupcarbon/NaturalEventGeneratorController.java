@@ -124,8 +124,10 @@ public class NaturalEventGeneratorController implements Initializable{
 				int period = Integer.parseInt(periodField.getText());
 				int mean = Integer.parseInt(meanField.getText());
 				int std = Integer.parseInt(stdField.getText());
-				for(int i=0; i< Integer.parseInt(sizeField.getText()); i++) {
-					double v = random.nextGaussian()*std+mean;
+				double v = random.nextGaussian()*std+mean;
+				zone.setText(0+" "+ v +"\n");	
+				for(int i=1; i< Integer.parseInt(sizeField.getText()); i++) {
+					v = random.nextGaussian()*std+mean;
 					zone.setText(zone.getText()+period+" "+ v +"\n");			
 				}
 			}

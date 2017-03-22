@@ -29,7 +29,7 @@ import device.Device;
  * @author Lounis Massinissa
  * @version 1.0
  */
-public abstract class SensorUnit implements Cloneable {
+public abstract class SensorUnit {
 
 	protected double radius = 10;
 	protected double longitude;

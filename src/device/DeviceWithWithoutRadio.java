@@ -70,18 +70,19 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	// ------------------------------------------------------------------------
 	// Load Route from file to Lists
 	// ------------------------------------------------------------------------
-	public void loadRouteFromFile() {
-		routeIndex = 0;
-		routeTime = new LinkedList<Long>();
-		routeX = new LinkedList<Double>();
-		routeY = new LinkedList<Double>();
-		routeZ = new LinkedList<Double>();
-		FileInputStream fis;
-		BufferedReader b = null;
-		String s;
-		String[] ts;
+	public void loadRouteFromFile() {		
 		try {
 			if (!gpsFileName.equals("")) {
+				//routeIndex = 0;
+				routeTime = new LinkedList<Long>();
+				routeX = new LinkedList<Double>();
+				routeY = new LinkedList<Double>();
+				routeZ = new LinkedList<Double>();
+				FileInputStream fis;
+				BufferedReader b = null;
+				String s;
+				String[] ts;
+				
 				readyForMobility = true;
 				fis = new FileInputStream(Project.getProjectGpsPath() + File.separator + gpsFileName);				
 				b = new BufferedReader(new InputStreamReader(fis));
@@ -106,6 +107,10 @@ public abstract class DeviceWithWithoutRadio extends Device {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+//		if(routeX.size()>0)
+//			System.out.println(id + " " + routeX.get(routeIndex));
+//		else
+//			System.out.println(id);
 	}
 
 	// ------------------------------------------------------------------------
@@ -120,7 +125,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 		loadRouteFromFile();
 		fixori();
 		angle = 0;
-		routeIndex=-1;
+		routeIndex=0;
 	}
 	
 	// ------------------------------------------------------------------------
@@ -155,7 +160,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				goToNext();								
+				goToNext();
 			} while (hasNext());			
 			try {
 				Thread.sleep(toWait * Device.moveSpeed);
@@ -184,12 +189,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	@Override
 	public double getNextTime() {
 		if (routeTime.size() > 0) {
-			double diff = 0;
-			if (routeIndex <= 0)
-				diff = routeTime.get(0);
-			else 
-				diff = routeTime.get(routeIndex);// - routeTime.get(routeIndex - 1);
-			return diff;
+			return routeTime.get(routeIndex);
 		}
 		return 0;
 	}
@@ -199,18 +199,8 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	// ------------------------------------------------------------------------
 	@Override
 	public void moveToNext(boolean visual, int visualDelay) {
-		if (routeTime != null && nLoop > 0) {
-			routeIndex++;
-			angle += 0.1;
-			if ((routeIndex == (routeTime.size()))) {
-				nLoop--;
-				if (!loop || nLoop == 0) {
-					routeIndex--;
-				} else {
-					routeIndex = 0;
-				}
-
-			}
+		if (routeTime != null && nLoop > 0) {			
+			angle += 0.1;			
 			longitude = routeX.get(routeIndex);
 			latitude = routeY.get(routeIndex);
 			elevation = routeZ.get(routeIndex);		
@@ -219,6 +209,16 @@ public abstract class DeviceWithWithoutRadio extends Device {
 					VisibilityZones vz = new VisibilityZones((SensorNode) this);
 					vz.run();
 				}
+			}
+			routeIndex++;
+			if ((routeIndex >= (routeTime.size()))) {
+				nLoop--;
+				if (!loop || nLoop == 0) {
+					routeIndex--;
+				} else {
+					routeIndex = 0;
+				}
+
 			}
 			if (DeviceList.propagationsCalculated)
 				DeviceList.calculatePropagations();

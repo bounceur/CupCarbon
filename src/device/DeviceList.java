@@ -48,6 +48,7 @@ import markers.Marker;
 import markers.MarkerList;
 //import markers.Marker;
 import natural_events.Gas;
+import natural_events.Meteo;
 import project.Project;
 import solver.SensorGraph;
 import utilities.MapCalc;
@@ -60,6 +61,8 @@ import wisen_simulation.WisenSimulation;
  */
 public class DeviceList {
 
+	public static Meteo meteo = null;
+	
 	public static List<SensorNode> sensors = new ArrayList<SensorNode>();
 	public static List<Device> devices = new ArrayList<Device>();
 	public static boolean drawLinks = true;
@@ -72,6 +75,7 @@ public class DeviceList {
 	}
 	
 	public static void reset() {
+		meteo = null;
 		sensors = new ArrayList<SensorNode>();
 		devices = new ArrayList<Device>();
 		drawLinks = true;
@@ -214,6 +218,9 @@ public class DeviceList {
 						break;
 					case MapObject.MOBILE:						
 						add(loadMobile(nodeFiles[i].getAbsolutePath()));
+						break;
+					case MapObject.METEO:						
+						add(loadMeteo(nodeFiles[i].getAbsolutePath()));
 						break;
 					}
 					int v = Integer.valueOf(nodeFiles[i].getName().split("_")[1]);
@@ -512,6 +519,58 @@ public class DeviceList {
 			device = new Gas(parameters[0], parameters[1], parameters[2], parameters[3], parameters[5], Integer.parseInt(parameters[4]));
 			device.setHide(Integer.parseInt(parameters[6]));
 			device.setNatEventFileName(parameters[7]);
+			br.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return device;
+	}
+	
+	public static Device loadMeteo(String fileName) {
+		Meteo device = null;
+		try {
+			String[] str = null;
+			String line;
+			String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			line = br.readLine();
+			line = br.readLine();
+			line = br.readLine();			
+			while ((line = br.readLine()) != null) {
+				str = line.split(":");
+				switch (str[0]) {
+				case "device_longitude":
+					parameters[0] = str[1];
+					break;
+				case "device_latitude":
+					parameters[1] = str[1];
+					break;
+				case "device_elevation":
+					parameters[2] = str[1];
+					break;
+				case "device_radius":
+					parameters[3] = str[1];
+					break;
+				case "device_id":
+					parameters[4] = str[1];
+					break;
+				case "device_gps_file_name":
+					parameters[5] = str[1];
+					break;				
+				case "device_hide":
+					parameters[6] = str[1];
+					break;
+				case "natural_event_file_name":
+					parameters[7] = str[1];
+					break;
+				}
+			}
+			device = new Meteo(parameters[0], parameters[1], parameters[2], parameters[3], parameters[5], Integer.parseInt(parameters[4]));			
+			device.setHide(Integer.parseInt(parameters[6]));
+			device.setNatEventFileName(parameters[7]);
+			DeviceList.meteo = device;			
 			br.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -1500,25 +1559,28 @@ public class DeviceList {
 	}
 	
 	public static void delete(SensorNode sensor) {
-		SensorNode tSensor;
-		for (Iterator<SensorNode> iterator = DeviceList.sensors.iterator(); iterator.hasNext();) {
-			tSensor = iterator.next();
-			if (tSensor == sensor) {
-				iterator.remove();
-			}
-		}
+//		SensorNode tSensor;
+//		for (Iterator<SensorNode> iterator = DeviceList.sensors.iterator(); iterator.hasNext();) {
+//			tSensor = iterator.next();
+//			if (tSensor == sensor) {
+//				iterator.remove();
+//			}
+//		}
+		sensors.remove(sensor);
 		if(DeviceList.propagationsCalculated)			
 			DeviceList.calculatePropagations();
 	}
 	
 	public static void delete(Device device) {
-		Device tDevice;
-		for (Iterator<Device> iterator = DeviceList.devices.iterator(); iterator.hasNext();) {
-			tDevice = iterator.next();
-			if (tDevice == device) {
-				iterator.remove();				
-			}
-		}
+//		Device tDevice;
+//		for (Iterator<Device> iterator = DeviceList.devices.iterator(); iterator.hasNext();) {
+//			tDevice = iterator.next();
+//			if (tDevice == device) {
+//				iterator.remove();				
+//			}
+//		}
+		if(device.getClass().equals(Meteo.class)) meteo = null;
+		devices.remove(device);
 		if(DeviceList.propagationsCalculated)			
 			DeviceList.calculatePropagations();
 	}

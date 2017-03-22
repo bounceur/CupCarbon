@@ -264,13 +264,19 @@ public class MarkerList {
 			Marker marker;
 
 			int s = 0;
-
+			boolean first = true;
 			for (Iterator<Marker> iterator = markers.iterator(); iterator.hasNext();) {
 				marker = iterator.next();
-				if(iterator.hasNext() || !loop)
-					s = 1;
+				if(first) {
+					first = false;
+					s = 0;
+				}
 				else {
-					s = delay;
+					if(iterator.hasNext() || !loop)
+						s = 1;
+					else {
+						s = delay;
+					}
 				}
 				ps.println(s + " " + marker.getLongitude() + " " + marker.getLatitude() + " " + marker.getElevation() + " " + marker.getRadius());				
 			}

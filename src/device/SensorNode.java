@@ -41,6 +41,7 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import battery.Battery;
 //import cupcarbon.RadioModuleWindow;
 import map.MapLayer;
+import natural_events.Meteo;
 import project.Project;
 import radio_module.RadioModule;
 import radio_module.RadioStandard;
@@ -602,12 +603,14 @@ public abstract class SensorNode extends DeviceWithRadio {
 		String s = "";
 		boolean first = true; 
 		for(Device device : DeviceList.devices) {
-			if(detect(device)) {
-				if (!first) {
-					s += "#";
+			if(!device.getClass().equals(Meteo.class)) {
+				if(detect(device)) {
+					if (!first) {
+						s += "#";
+					}
+					s += device.getId()+"#"+device.getValue();
+					first = false;
 				}
-				s += device.getId()+"#"+device.getValue();
-				first = false;
 			}
 		}
 		return s ;
@@ -648,7 +651,8 @@ public abstract class SensorNode extends DeviceWithRadio {
 	
 	public boolean isSensorDetecting() {
 		for(Device d : DeviceList.devices) {
-			if(detect(d) && this!=d) return true;
+			if(!d.getClass().equals(Meteo.class))
+				if(detect(d) && this!=d) return true;
 		}
 		return false ;
 	}

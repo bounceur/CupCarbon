@@ -139,7 +139,7 @@ public class WorldMap extends JXMapKit {
 		mapIdx = i;
 		switch(i) {
 		case 0 : CupCarbon.cupCarbonController.checkMapMenuItem(0); changeTiles(Tiles.TILE0, false); darkMap(false); break;
-		case 1 : MapLayer.mapViewer.setLoadingImage(Toolkit.getDefaultToolkit().getImage("tiles/cuptile_black.png")); CupCarbon.cupCarbonController.checkMapMenuItem(1); changeTiles(Tiles.TILE1, false); darkMap(true); break;
+		case 1 : MapLayer.mapViewer.setLoadingImage(Toolkit.getDefaultToolkit().getImage("tiles/cuptile_black.png"));CupCarbon.cupCarbonController.checkMapMenuItem(1); changeTiles(Tiles.TILE1, false); darkMap(true); break;
 		case 2 : CupCarbon.cupCarbonController.checkMapMenuItem(2); changeLocalTiles(Tiles.TILE2); darkMap(false); break;
 		case 3 : CupCarbon.cupCarbonController.checkMapMenuItem(3); changeLocalTiles(Tiles.TILE3); darkMap(false); break;
 		case 4 : CupCarbon.cupCarbonController.checkMapMenuItem(4); changeLocalTiles(Tiles.TILE4); darkMap(true); break;

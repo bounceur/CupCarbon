@@ -2,6 +2,7 @@ package action;
 
 import device.Device;
 import device.DeviceList;
+import natural_events.Meteo;
 
 public class CupActionAddDevice extends CupAction {	
 	
@@ -14,11 +15,17 @@ public class CupActionAddDevice extends CupAction {
 
 	@Override
 	public void execute() {
+		if(device.getClass().equals(Meteo.class)) {
+			if(DeviceList.meteo == null) DeviceList.meteo = (Meteo) device;			
+		}
 		DeviceList.add(device);
 	}
 
 	@Override
 	public void antiExecute() {
+		if(device.getClass().equals(Meteo.class)) {
+			if(DeviceList.meteo == null) DeviceList.meteo = null;			
+		}
 		DeviceList.delete(device);
 	}
 
