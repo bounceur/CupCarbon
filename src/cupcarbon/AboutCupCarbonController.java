@@ -25,6 +25,6 @@ public class AboutCupCarbonController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		label.setText("CupCarbon v."+Version.VERSION + " - " + Version.YEAR);
+		label.setText("CupCarbon v."+CupCarbonVersion.VERSION + " - " + CupCarbonVersion.YEAR);
 	}
 }

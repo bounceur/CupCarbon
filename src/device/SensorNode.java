@@ -364,16 +364,20 @@ public abstract class SensorNode extends DeviceWithRadio {
 		if(!getGPSFileName().equals("")) {
 			r = 6;
 			//g.setColor(UColor.WHITE_TRANSPARENT);
-			g.setColor(Color.ORANGE);
+			g.setColor(Color.ORANGE);			
 			g.fillOval(x - r, y - r, r*2, r*2);
 			g.setColor(UColor.BLACK_TTRANSPARENT);
 			g.drawOval(x - r, y - r, r*2, r*2);
 		}
 		
 		if (underSimulation) {
-			g.setColor(UColor.GREEN);
+			g.setColor(new Color(38, 194, 27));
+			//@g.setColor(UColor.GREEN);
 		} else {
 			g.setColor(UColor.ORANGE);
+			if(getScript() != null) {				
+				if(getScript().isWaiting()) g.setColor(Color.RED);
+			}
 		}			
 
 		if(getScriptFileName().equals(""))
@@ -574,6 +578,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	@Override
 	public void init() {
 		super.init();
+		this.getScript().setWaiting(false);
 		this.getCurrentRadioModule().setPl(100);
 	}
 

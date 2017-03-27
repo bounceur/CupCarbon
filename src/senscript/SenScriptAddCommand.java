@@ -123,8 +123,16 @@ public final class SenScriptAddCommand {
 			if(inst.length==3) command = new Command_ATND(sensorNode, inst[1], inst[2]);
 		}
 		
+		if (inst[0].toLowerCase().equals("route")) {
+			command =  new Command_ROUTE(sensorNode, inst[1]);
+		}
+		
 		if (inst[0].toLowerCase().equals("println")) {
-			command =  new Command_PRINTLN(sensorNode, inst);
+			command =  new Command_PRINT(sensorNode, inst);
+		}
+		
+		if (inst[0].toLowerCase().equals("print")) {
+			command =  new Command_PRINT(sensorNode, inst);
 		}
 		
 		if (inst[0].toLowerCase().equals("printfile")) {

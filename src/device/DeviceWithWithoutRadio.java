@@ -292,4 +292,30 @@ public abstract class DeviceWithWithoutRadio extends Device {
 		return false;
 	}
 	
+	public void setRoute(String name)  {
+		gpsFileName = name + ".gps"; 
+	}
+	
+	public void setRouteIndex(int index) {
+		this.routeIndex = index;
+	}
+	
+//	public int getClosestRouteIndex() {
+//		int idx = 0;
+//		double distance = 0;
+//		double distMin = Double.MAX_VALUE;
+// 		for(int i=0; i<routeX.size(); i++) {
+//			distance = MapLayer.distance(longitude, latitude, routeX.get(i), routeY.get(i));
+// 			//distance = MapLayer.distance(routeX.get(routeIndex), routeY.get(routeIndex), routeX.get(i), routeY.get(i));
+//			if(distance < distMin) {
+//				distMin = distance;
+//				idx = i;
+//			}
+//		}
+//		return idx;
+//	}
+	
+	public int getRouteIndex() {
+		return routeIndex;
+	}
 }

@@ -45,6 +45,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
 import map.MapLayer;
+import markers.Routes;
 import project.Project;
 
 public class WisenSimulation implements Runnable {
@@ -88,6 +89,7 @@ public class WisenSimulation implements Runnable {
 	}
 
 	public void start_simulation() {
+		Routes.loadRoutes();
 		resultsWritingTime = 0.0;
 		SimLog.init();
 		mobilityAndEvents = SimulationInputs.mobilityAndEvents;
@@ -184,6 +186,7 @@ public class WisenSimulation implements Runnable {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
+							updateButtons();
 							isSimulating = false;
 							Alert alert = new Alert(AlertType.INFORMATION);
 							alert.setTitle("Simulation");
@@ -207,6 +210,7 @@ public class WisenSimulation implements Runnable {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
+							updateButtons();
 							isSimulating = false;
 							Alert alert = new Alert(AlertType.INFORMATION);
 							alert.setTitle("Simulation");
@@ -449,17 +453,7 @@ public class WisenSimulation implements Runnable {
 			ps.close();		
 			MultiChannels.init();
 			isSimulating = false;
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					CupCarbon.cupCarbonController.runSimulationButton.setDisable(false);
-					CupCarbon.cupCarbonController.qRunSimulationButton.setDisable(false);
-					CupCarbon.cupCarbonController.qRunSimulationButton.setDefaultButton(true);
-					CupCarbon.cupCarbonController.qStopSimulationButton.setDefaultButton(false);
-					CupCarbon.cupCarbonController.monitor.setFill(Color.YELLOWGREEN);
-					CupCarbon.cupCarbonController.stateLabel.setText("Ready");
-				}
-			});						
+			updateButtons();			
 		} 
 		catch (FileNotFoundException e) {e.printStackTrace();} 
 		catch (InterruptedException e) {e.printStackTrace();}
@@ -478,7 +472,7 @@ public class WisenSimulation implements Runnable {
 			}
 		});
 		
-		displaySimProgress(" | Simulation: 0%");
+		//displaySimProgress(" | Simulation: 0%");
 
 		for (SensorNode device : DeviceList.sensors) {
 			device.toOri();
@@ -512,7 +506,9 @@ public class WisenSimulation implements Runnable {
 	}
 
 	private boolean stopCondition = false;
+	
 	public void stopSimulation() {
+		updateButtons();
 		MultiChannels.init();
 		isSimulating = false;
 		stopCondition = true;
@@ -533,6 +529,7 @@ public class WisenSimulation implements Runnable {
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
+						updateButtons();
 						Alert alert = new Alert(AlertType.WARNING);
 						alert.setTitle("Warning");
 						alert.setHeaderText(null);
@@ -547,6 +544,7 @@ public class WisenSimulation implements Runnable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				updateButtons();
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Valid");
 				alert.setHeaderText(null);
@@ -565,8 +563,18 @@ public class WisenSimulation implements Runnable {
 		return true;
 	}
 	
-	public void displaySimProgress(String s) {
-		
+	public static void updateButtons() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				CupCarbon.cupCarbonController.runSimulationButton.setDisable(false);
+				CupCarbon.cupCarbonController.qRunSimulationButton.setDisable(false);
+				CupCarbon.cupCarbonController.qRunSimulationButton.setDefaultButton(true);
+				CupCarbon.cupCarbonController.qStopSimulationButton.setDefaultButton(false);
+				CupCarbon.cupCarbonController.monitor.setFill(Color.YELLOWGREEN);
+				CupCarbon.cupCarbonController.stateLabel.setText("Ready");
+			}
+		});				
 	}
 	
 }

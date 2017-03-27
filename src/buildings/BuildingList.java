@@ -132,7 +132,7 @@ public class BuildingList extends Thread {
 					br.close();
 					MapLayer.repaint();
 				} catch (FileNotFoundException e) {
-					System.out.println("No buildings.");
+					System.out.println("[BuildingList] No buildings.");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

@@ -5,19 +5,19 @@ import java.util.Arrays;
 import device.SensorNode;
 import wisen_simulation.SimLog;
 
-public class Command_PRINTLN extends Command {
+public class Command_PRINT extends Command {
 
 	private String message = "";
 	protected String [] arg ;
 	
-	public Command_PRINTLN(SensorNode sensor, String [] arg) {
+	public Command_PRINT(SensorNode sensor, String [] arg) {
 		this.sensor = sensor ;
 		this.arg = arg ;
 	}
 
 	@Override
 	public double execute() {
-		SimLog.add("S" + sensor.getId() + " PRINTLN "+Arrays.toString(arg));		
+		SimLog.add("S" + sensor.getId() + " PRINT "+Arrays.toString(arg));		
 		String part = "";
 		message = "";
 		for (int i=1; i<arg.length; i++) {
@@ -30,7 +30,7 @@ public class Command_PRINTLN extends Command {
 	
 	@Override
 	public String toString() {
-		return "PRINTLN";
+		return "PRINT";
 	}
 	
 	@Override

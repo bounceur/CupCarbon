@@ -76,6 +76,7 @@ public abstract class Device extends MapObject implements Runnable, _Constantes,
 	
 	protected String scriptFileName = "";
 	protected String gpsFileName = "";
+	protected String gpsFileName_ori = "";	
 	protected String nateventFileName = "";
 	protected SenScript script = null;
 	protected String targetName = ""; 
@@ -567,6 +568,7 @@ public abstract class Device extends MapObject implements Runnable, _Constantes,
 		longitude_ori = longitude;
 		latitude_ori = latitude;
 		elevation_ori = elevation;
+		gpsFileName_ori = gpsFileName;
 	}
 	
 	protected boolean readyForMobility = false;
@@ -575,6 +577,7 @@ public abstract class Device extends MapObject implements Runnable, _Constantes,
 		longitude = longitude_ori;
 		latitude = latitude_ori;
 		elevation = elevation_ori;
+		gpsFileName = gpsFileName_ori;
 		if (readyForMobility && SimulationInputs.visibility) {
 			if(this.getType()==Device.SENSOR) {
 				VisibilityZones vz = new VisibilityZones((SensorNode) this);
@@ -709,7 +712,7 @@ public abstract class Device extends MapObject implements Runnable, _Constantes,
 
 		//if(getType()==Device.SENSOR) {
 		setSending(false);
-		setReceiving(false);
+		setReceiving(false);		
 		//}		
 	}
 	

@@ -8,9 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -97,6 +95,7 @@ import map.MapLayer;
 import map.NetworkParameters;
 import map.WorldMap;
 import markers.MarkerList;
+import markers.Routes;
 import perso.ExampleClass;
 import perso.MonAlgoClass;
 import perso.MyClass;
@@ -434,27 +433,14 @@ public class CupCarbonController implements Initializable {
 
 		initMap();
 
-		if(internetIsAvailable()) {
+		if(CupCarbon.internetIsAvailable()) {
 			System.out.println("Connection: OK");
 			WorldMap.changeMap(0);
 		}
 		else
 			System.out.println("Connection: NO");
 	}
-	private static boolean internetIsAvailable() {
-	    try {
-	        final URL url = new URL("http://a.basemaps.cartocdn.com/light_all/0/0/0.png");
-	        final URLConnection connection = url.openConnection();
-	        connection.connect();
-	        return true;
-	    } catch (MalformedURLException e) {
-	        throw new RuntimeException(e);
-	    } catch (IOException e) {
-	        return false;
-	    }
-	}
-	// -----
-
+	
 	@FXML
 	public void zoomP() {
 		map.setZoom(map.getZoomSlider().getValue() - 1);
@@ -682,6 +668,7 @@ public class CupCarbonController implements Initializable {
 						Thread th = new Thread(wisenSimulation);
 						th.start();
 					} else {
+						WisenSimulation.updateButtons();
 						Alert alert = new Alert(AlertType.ERROR);
 						alert.setTitle("SenScript");
 						alert.setHeaderText(null);
@@ -894,7 +881,7 @@ public class CupCarbonController implements Initializable {
 		if (file != null) {
 			Project.newProject(file.getParentFile().toString() + File.separator + file.getName().toString(),
 					file.getName().toString(), true);
-			CupCarbon.stage.setTitle("CupCarbon " + Version.VERSION + " [" + file.getName().toString() + "]");
+			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getName().toString() + "]");
 		}
 		initScriptGpsEventComboBoxes();
 	}
@@ -910,7 +897,7 @@ public class CupCarbonController implements Initializable {
 		if (file != null) {
 			Project.newProject(file.getParentFile().toString() + File.separator + file.getName().toString(),
 					file.getName().toString(), false);
-			CupCarbon.stage.setTitle("CupCarbon " + Version.VERSION + " [" + file.getName().toString() + "]");
+			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getName().toString() + "]");
 		}
 	}
 
@@ -924,7 +911,7 @@ public class CupCarbonController implements Initializable {
 		File file = fileChooser.showOpenDialog(CupCarbon.stage);
 		if (file != null) {
 			Project.openProject(file.getParentFile().toString(), file.getName().toString());
-			CupCarbon.stage.setTitle("CupCarbon " + Version.VERSION + " [" + file.getName().toString() + "]");
+			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getName().toString() + "]");
 			openProjectLoadParameters();
 		}		
 	}
@@ -940,7 +927,7 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void reset() {
-		CupCarbon.stage.setTitle("CupCarbon " + Version.VERSION);
+		CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION);
 		Project.reset();
 	}
 
@@ -2086,7 +2073,7 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void selectAllSensors() {
-		WorldMap.setSelectionOfAllNodes(true, Device.SENSOR, addSelectionMenuItem.isSelected());
+		WorldMap.setSelectionOfAllNodes(true, Device.SENSOR, addSelectionMenuItem.isSelected());		
 		updateSelectionInListView();
 	}
 
@@ -2335,15 +2322,14 @@ public class CupCarbonController implements Initializable {
 			public void run() {				
 				if (!gpsListView.getSelectionModel().isEmpty()) {
 					saveButton.setDisable(false);
-					String gps = Project.getProjectGpsPath();
-					String gpsFile = gpsListView.getItems().get(gpsListView.getSelectionModel().getSelectedIndex());
+					String gpsFileName = gpsListView.getItems().get(gpsListView.getSelectionModel().getSelectedIndex());
 		
-					MarkerList.open(Project.getProjectGpsPath() + File.separator + gpsFile);
+					MarkerList.open(Project.getProjectGpsPath() + File.separator + gpsFileName);
 		
 					try {
-						BufferedReader br = new BufferedReader(new FileReader(gps + File.separator + gpsFile));
+						BufferedReader br = new BufferedReader(new FileReader(Project.getProjectGpsPath() + File.separator + gpsFileName));
 						String line;
-						txtFileName.setText(gpsFile);
+						txtFileName.setText(gpsFileName);
 						line = br.readLine();
 						txtTitle.setText(line);
 						line = br.readLine();
@@ -2813,7 +2799,7 @@ public class CupCarbonController implements Initializable {
 					String name = s.split(":")[1];
 					br.close();
 
-					CupCarbon.stage.setTitle("CupCarbon " + Version.VERSION + " [" + name + "]");
+					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + name + "]");
 
 					Project.openProject(path, name);
 				} catch (FileNotFoundException e) {
@@ -2824,6 +2810,21 @@ public class CupCarbonController implements Initializable {
 				openProjectLoadParameters();
 			}
 		});
+	}
+	
+	@FXML
+	public void insertMarkers() {
+		MarkerList.insertMarkers();
+	}
+	
+	@FXML
+	public void drawAllRoutes() {
+		Routes.loadRoutes();
+	}
+	
+	@FXML
+	public void hideAllRoutes() {
+		Routes.hideAll();
 	}
 
 }

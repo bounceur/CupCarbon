@@ -4,7 +4,7 @@ Copyright (C) 2013-2017 CupCarbon
 Laboratory Lab-STICC CNRS UMR 6285
 University of Bretagne Occidentale
 -------------------------------------------------------------------------------------
-CupCarbon V 3.0.0 (U-ONE): A Smart City & IoT Wireless Sensor Network Simulator
+CupCarbon V 3.1.0 (U-ONE): A Smart City & IoT Wireless Sensor Network Simulator
 SenScript V 3.0
 -------------------------------------------------------------------------------------
 www.cupcarbon.com

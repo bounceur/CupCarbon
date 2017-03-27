@@ -452,22 +452,25 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		if (NetworkParameters.displayDetails) {
 			g.setColor(UColor.PURPLE);
 			if(MapLayer.dark) g.setColor(new Color(198,232,106));
-			g.drawString(getName()+" ["+currentRadioModule.getMy()+"]", (int) (x + 10), (int) (y + 5));
-			if(!message.equals("")) {
+			g.drawString(getName()+" ["+currentRadioModule.getMy()+"]", (int) (x + 10), (int) (y + 5));			
+		}
+		
+		if(!scriptFileName.equals("") && NetworkParameters.drawScriptFileName) {
+			g.setColor(Color.DARK_GRAY);
+			if(MapLayer.dark) g.setColor(Color.LIGHT_GRAY);
+			g.drawString(scriptFileName.substring(0, scriptFileName.indexOf('.')), (int) (x + 10), (int) (y - 6));
+			
+//			g.drawString("S : "+this.isSending(), (int) (x + 10), (int) (y + 26));
+//			g.drawString("R : "+this.isReceiving(), (int) (x + 10), (int) (y + 36));
+//			g.drawString("AW: "+this.isAckWaiting(), (int) (x + 10), (int) (y + 46));
+//			g.drawString("AR: "+this.isAckReceived(), (int) (x + 10), (int) (y + 56));
+		}
+		
+		if(!message.equals("")) {
+			if(NetworkParameters.displayPrintMessage) {
 				g.setColor(new Color(28,64,123));
 				if(MapLayer.dark) g.setColor(new Color(116,186,209));
-				g.drawString("> "+message, (int) (x + 10), (int) (y + 15));
-			}
-			
-			if(!scriptFileName.equals("") && NetworkParameters.drawScriptFileName) {
-				g.setColor(Color.DARK_GRAY);
-				if(MapLayer.dark) g.setColor(Color.LIGHT_GRAY);
-				g.drawString(scriptFileName.substring(0, scriptFileName.indexOf('.')), (int) (x + 10), (int) (y - 6));
-				
-//				g.drawString("S : "+this.isSending(), (int) (x + 10), (int) (y + 26));
-//				g.drawString("R : "+this.isReceiving(), (int) (x + 10), (int) (y + 36));
-//				g.drawString("AW: "+this.isAckWaiting(), (int) (x + 10), (int) (y + 46));
-//				g.drawString("AR: "+this.isAckReceived(), (int) (x + 10), (int) (y + 56));
+				g.drawString(message, (int) (x + 10), (int) (y + 15));
 			}
 		}
 	}

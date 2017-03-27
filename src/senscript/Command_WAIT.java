@@ -24,14 +24,12 @@ public class Command_WAIT extends Command {
 
 		if (sensor.dataAvailable()) {			
 			SimLog.add("S" + sensor.getId() + " Buffer available, exit waiting.");
-			sensor.getScript().setWiting(false);
+			sensor.getScript().setWaiting(false);
 			return 0 ;
 		} 
 		else {
-			SimLog.add("S" + sensor.getId() + " is waiting for data ...");
-			
-			sensor.getScript().setWiting(true);
-			
+			SimLog.add("S" + sensor.getId() + " is waiting for data ...");			
+			sensor.getScript().setWaiting(true);			
 			if (arg.equals(""))
 				event = Double.MAX_VALUE;
 			else {

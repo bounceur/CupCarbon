@@ -47,7 +47,7 @@ import action.CupActionDeleteMarker;
 import action.CupActionInsertMarker;
 import action.CupActionRouteFromMarkers;
 import action.CupActionStack;
-import cupcarbon.Version;
+import cupcarbon.CupCarbonVersion;
 import device.DeviceList;
 import device.StdSensorNode;
 import map.NetworkParameters;
@@ -77,7 +77,7 @@ public class MarkerList {
 		try {
 			PrintStream fos = new PrintStream(new FileOutputStream(fileName));
 			Marker marker;
-			fos.println("# CupCarbon v."+Version.VERSION+" ("+Version.YEAR+")");
+			fos.println("# CupCarbon v."+CupCarbonVersion.VERSION+" ("+CupCarbonVersion.YEAR+")");
 			fos.println("# Markers");
 			fos.println("# -----------------------");
 			fos.println("# -----------------------");
@@ -98,29 +98,30 @@ public class MarkerList {
 	}
 
 	public static void open(String fileName) {
-				reset();
-				try {
-					BufferedReader br = new BufferedReader(new FileReader(fileName));
-					String line;
-					String[] str;
-					line = br.readLine();
-					line = br.readLine();
-					line = br.readLine();
-					line = br.readLine();
-					line = br.readLine();
-					while ((line = br.readLine()) != null) {
-						str = line.split(" ");
-						addNodeByType(str[1], str[2], str[3], str[4]);
-					}
-					br.close();
-					MapLayer.repaint();
-				} 
-				catch (FileNotFoundException e) {
-					System.out.println("No Markers!");
-				} 
-				catch (IOException e) {
-					e.printStackTrace();
-				}
+		Routes.reset();
+		reset();		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			String line;
+			String[] str;
+			line = br.readLine();
+			line = br.readLine();
+			line = br.readLine();
+			line = br.readLine();
+			line = br.readLine();
+			while ((line = br.readLine()) != null) {
+				str = line.split(" ");
+				addNodeByType(str[1], str[2], str[3], str[4]);
+			}
+			br.close();
+			MapLayer.repaint();
+		} 
+		catch (FileNotFoundException e) {
+			System.out.println("[MarkerList] No Markers!");
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void addNodeByType(String... type) {
@@ -160,7 +161,7 @@ public class MarkerList {
 			int[] coord ;
 
 			if (markers.size() > 0) {
-				boolean firstTime = true;
+				boolean first = true;
 				for (Marker marker : markers) {
 					if(marker.isInside() && marker.isSelected())
 						MapLayer.numberOfInsideAndSelected++;
@@ -170,8 +171,8 @@ public class MarkerList {
 					// Draw the marker
 					marker.draw(g);
 					
-					if (firstTime) {
-						firstTime = false;
+					if (first) {
+						first = false;
 						x1 = marker.getLongitude();
 						y1 = marker.getLatitude();
 						coord = MapCalc.geoToPixelMapA(y1, x1);

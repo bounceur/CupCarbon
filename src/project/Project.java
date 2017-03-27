@@ -35,7 +35,7 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import action.CupActionStack;
 import buildings.BuildingList;
 import cupcarbon.CupCarbon;
-import cupcarbon.Version;
+import cupcarbon.CupCarbonVersion;
 import device.DeviceList;
 import device.MultiChannels;
 import javafx.application.Platform;
@@ -372,7 +372,10 @@ public final class Project {
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
-					WorldMap.changeMap(mapIndex);				
+					if(CupCarbon.internetIsAvailable())
+						WorldMap.changeMap(mapIndex);
+					else
+						WorldMap.changeMap(2);
 				}
 			});
 			
@@ -390,7 +393,7 @@ public final class Project {
 	public static void saveParameters() {
 		try {
 			PrintStream fos = new PrintStream(new FileOutputStream(getProjectPathName()));
-			fos.println("CupCarbon v. "+Version.VERSION);
+			fos.println("CupCarbon v. "+CupCarbonVersion.VERSION);
 			fos.println("----------------");
 			fos.println("name:" + projectName.substring(0, projectName.length() - 4));
 			fos.println("zoom:" + MapLayer.mapViewer.getZoom());

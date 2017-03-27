@@ -10,8 +10,6 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -156,11 +154,11 @@ public class SenScriptController implements Initializable{
 				
 				CupCarbon.cupCarbonController.initScriptGpsEventComboBoxes();
 				
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Save Script File!");
-				alert.setHeaderText(null);
-				alert.setContentText("File saved !");
-				alert.showAndWait();
+//				Alert alert = new Alert(AlertType.INFORMATION);
+//				alert.setTitle("Save Script File!");
+//				alert.setHeaderText(null);
+//				alert.setContentText("File saved !");
+//				alert.showAndWait();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}

@@ -26,6 +26,10 @@ package cupcarbon;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
 import action.CupActionStack;
 import javafx.application.Application;
@@ -39,7 +43,7 @@ import solver.SolverProxyParams;
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
- * @version 3.0.0 (U-One)
+ * @version 3.1.0 (U-One)
  */
 
 public class CupCarbon extends Application {
@@ -74,7 +78,7 @@ public class CupCarbon extends Application {
 		}
 		setUserAgentStylesheet(STYLESHEET_MODENA);
 	    
-		stage.setTitle("CupCarbon "+Version.VERSION);
+		stage.setTitle("CupCarbon "+CupCarbonVersion.VERSION);
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("cupcarbon_logo_small.png")));		
 		stage.setMaximized(true);
 		FXMLLoader loader = new FXMLLoader();
@@ -99,4 +103,30 @@ public class CupCarbon extends Application {
 		System.getProperties().put("http.proxyHost", SolverProxyParams.host);
 		System.getProperties().put("http.proxyPort", SolverProxyParams.port); 		
 	}
+	
+	public static boolean internetIsAvailable() {
+	    try {
+	        final URL url = new URL("http://a.basemaps.cartocdn.com/light_all/0/0/0.png");
+	        final URLConnection connection = url.openConnection();
+	        InputStream is = connection.getInputStream();
+	        System.out.println("Internet ok");
+	        int x1 = is.read();
+	        int x2 = is.read();
+	        int x3 = is.read();
+	        int x4 = is.read();
+	        int x5 = is.read();
+	        is.close();
+	        
+	        if(x1==137 && x2==80 && x3==78 && x4==71 && x5==13)
+	        	return true;
+	        else
+	        	return false;
+	    } catch (MalformedURLException e) {
+	        return false;
+	    } catch (IOException e) {
+	        return false;
+	    }
+	}
+	// -----
+
 }

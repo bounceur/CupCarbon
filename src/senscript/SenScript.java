@@ -138,7 +138,7 @@ public class SenScript {
 
 	public void executeCommand() {
 		event = getCurrent().execute();
-		waiting = false;
+		//waiting = false;
 	}
 
 	public double getEvent() {
@@ -177,12 +177,16 @@ public class SenScript {
 		loopIndex = index;
 	}
 
-	public void setBreaked(boolean b) {
-		breaked = b;
+	public void setBreaked(boolean breaked) {
+		this.breaked = breaked;
 	}
 
-	public void setWiting(boolean b) {
-		waiting = b;
+	public void setWaiting(boolean waiting) {
+		this.waiting = waiting;
+	}
+	
+	public boolean isWaiting() {
+		return waiting;
 	}
 	
 	public int getIndex() {

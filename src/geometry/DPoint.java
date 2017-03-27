@@ -1,23 +1,22 @@
 package geometry;
 
-import java.io.Serializable;
-
-public class Point implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class DPoint {
 
 	private double x;	
 	private  double y;
-	public static Point lastPoint ;
 
-	public Point() {
+	public DPoint() {
 		super();
 	}
 
-	public Point(double x, double y) {
-		super();
+	public DPoint(double x, double y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public DPoint(String sx, String sy) {
+		x = Double.parseDouble(sx);
+		y = Double.parseDouble(sy);
 	}
 
 	/**
@@ -32,20 +31,6 @@ public class Point implements Serializable {
 	 */
 	public double getY() {
 		return y;
-	}
-
-	/**
-	 * @return the lastPoint
-	 */
-	public static Point getLastPoint() {
-		return lastPoint;
-	}
-
-	/**
-	 * @param lastPoint the lastPoint to set
-	 */
-	public static void setLastPoint(Point lastPoint) {
-		Point.lastPoint = lastPoint;
 	}
 
 	/**

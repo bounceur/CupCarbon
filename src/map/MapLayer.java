@@ -71,6 +71,7 @@ import device.StdSensorNode;
 import geo_objects.GeoZoneList;
 import markers.Marker;
 import markers.MarkerList;
+import markers.Routes;
 import natural_events.Gas;
 import natural_events.Meteo;
 import overpass.OsmOverpass;
@@ -206,6 +207,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		}
 		
 		numberOfInsideAndSelected = 0;
+		
+		if(Routes.routes != null)
+			if(Routes.routes.size()>0 && NetworkParameters.displayAllRoutes)
+				Routes.draw(g);
 		
 		markerList.draw(g);		
 		nodeList.draw(g);
@@ -706,6 +711,14 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			NetworkParameters.displayDetails = !NetworkParameters.displayDetails;
 		}
 		
+		if (key.getKeyChar() == 'D') {
+			NetworkParameters.displayPrintMessage = !NetworkParameters.displayPrintMessage;
+		}
+		
+		if (key.getKeyChar() == 'R') {
+			NetworkParameters.displayAllRoutes = !NetworkParameters.displayAllRoutes;
+		}
+		
 		if (key.getKeyChar() == 'm') {
 			NetworkParameters.displayRadioMessages = !NetworkParameters.displayRadioMessages ;
 		}
@@ -954,7 +967,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	
 				if (key.getKeyChar() == 'r') {
 					sensor.setDisplaydInfos(!sensor.getDisplaydInfos());
-				}
+				}				
 						
 				if (key.getKeyChar() == '1' || key.getKeyChar() == '2' || key.getKeyChar() == '3' || key.getKeyChar() == '4' || key.getKeyChar() == '5'
 						|| key.getKeyChar() == '6' || key.getKeyChar() == '7' || key.getKeyChar() == '8') {
