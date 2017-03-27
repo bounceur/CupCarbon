@@ -372,7 +372,6 @@ public abstract class SensorNode extends DeviceWithRadio {
 		
 		if (underSimulation) {
 			g.setColor(new Color(38, 194, 27));
-			//@g.setColor(UColor.GREEN);
 		} else {
 			g.setColor(UColor.ORANGE);
 			if(getScript() != null) {				
