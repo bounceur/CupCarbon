@@ -2820,6 +2820,7 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	public void drawAllRoutes() {
 		NetworkParameters.displayAllRoutes = true;
+		MarkerList.reset();
 		Routes.loadRoutes();
 	}
 	

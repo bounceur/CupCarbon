@@ -81,8 +81,7 @@ public class Routes {
 		}
 	}
 
-	public static void loadRoutes() {
-		MarkerList.reset();
+	public static void loadRoutes() {		
 		reset();
 		String path = Project.getProjectGpsPath();
 		File root = new File(path);
@@ -128,10 +127,11 @@ public class Routes {
 	}
 	
 	public static NamedRoute getRouteByName(String name) {
-		for(NamedRoute route: routes) {
-			if(route.getName().equals(name)) 
-				return route;
-		}
+		if(routes !=null)
+			for(NamedRoute route: routes) {
+				if(route.getName().equals(name)) 
+					return route;
+			}
 		return null;
 	}
 	
