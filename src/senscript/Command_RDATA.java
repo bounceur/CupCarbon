@@ -24,7 +24,8 @@ public class Command_RDATA extends Command {
 				sensor.getScript().addVariable(args[i], tab[i-2]);
 			} 
 			catch(Exception e) {
-				System.err.println("S"+sensor.getId()+" [ERROR RDATA: IDX OUT OF RANGE]!");
+				if(data.length()>0)
+					System.err.println("S"+sensor.getId()+" [ERROR RDATA: IDX OUT OF RANGE]! -> "+data);
 			}
 		}
 		return 0 ;

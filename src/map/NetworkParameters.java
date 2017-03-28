@@ -12,5 +12,5 @@ public class NetworkParameters {
 	public static boolean drawRadioLinks = true;	
 	public static int radioLinksColor = 0;
 	public static boolean displayPrintMessage = true;
-	public static boolean displayAllRoutes = true;
+	public static boolean displayAllRoutes = false;
 }
