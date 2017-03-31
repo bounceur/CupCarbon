@@ -577,8 +577,8 @@ public abstract class SensorNode extends DeviceWithRadio {
 	@Override
 	public void init() {
 		super.init();
-		this.getScript().setWaiting(false);
-		this.getCurrentRadioModule().setPl(100);
+		if(getScript()!=null) getScript().setWaiting(false);
+		getCurrentRadioModule().setPl(100);
 	}
 
 	public int getBufferIndex() {

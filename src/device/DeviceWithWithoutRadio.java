@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import map.MapLayer;
@@ -47,11 +48,13 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	
 	protected double angle = 0.0;
 	
+	protected ArrayList<LocationEvent> locEvents ;
+	
 	/**
 	 * Empty constructor
 	 */
 	public DeviceWithWithoutRadio() {
-		
+		locEvents = new ArrayList<LocationEvent>();
 	}
 
 	/**
@@ -62,6 +65,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	 */
 	public DeviceWithWithoutRadio(double x, double y, double z, double radius, int id) {
 		super(x, y, z, radius, id);
+		locEvents = new ArrayList<LocationEvent>();
 	}
 
 	// --------------------------------------------------------------------------------
@@ -126,6 +130,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 		fixori();
 		angle = 0;
 		routeIndex=0;
+		locEvents = new ArrayList<LocationEvent>();
 	}
 	
 	// ------------------------------------------------------------------------
@@ -300,22 +305,33 @@ public abstract class DeviceWithWithoutRadio extends Device {
 		this.routeIndex = index;
 	}
 	
-//	public int getClosestRouteIndex() {
-//		int idx = 0;
-//		double distance = 0;
-//		double distMin = Double.MAX_VALUE;
-// 		for(int i=0; i<routeX.size(); i++) {
-//			distance = MapLayer.distance(longitude, latitude, routeX.get(i), routeY.get(i));
-// 			//distance = MapLayer.distance(routeX.get(routeIndex), routeY.get(routeIndex), routeX.get(i), routeY.get(i));
-//			if(distance < distMin) {
-//				distMin = distance;
-//				idx = i;
-//			}
-//		}
-//		return idx;
-//	}
-	
 	public int getRouteIndex() {
 		return routeIndex;
+	}
+	
+	public void initLocEvents() {
+		locEvents = new ArrayList<LocationEvent>();
+	}
+	
+	public void addLocEvent(double time, double longitude, double latitude, double elevation) {
+		locEvents.add(new LocationEvent(time, longitude, latitude, elevation));
+	}
+	
+	public void executeLocEvent() {
+		if(locEvents.get(0).getTime() == 0) {
+			this.setLatitude(locEvents.get(0).getLatitude());
+			this.setLongitude(locEvents.get(0).getLongitude());
+			this.setElevation(locEvents.get(0).getElevation());
+		}
+	}
+	
+	public void goToNextLocEvent(double time) {
+		for(LocationEvent lev : locEvents) {
+			lev.setTime(lev.getTime()-time);
+		}
+	}
+	
+	public double getNextLocEventTime() {
+		return locEvents.get(0).getTime();
 	}
 }
