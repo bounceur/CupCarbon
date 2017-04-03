@@ -318,20 +318,38 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	}
 	
 	public void executeLocEvent() {
-		if(locEvents.get(0).getTime() == 0) {
-			this.setLatitude(locEvents.get(0).getLatitude());
-			this.setLongitude(locEvents.get(0).getLongitude());
-			this.setElevation(locEvents.get(0).getElevation());
-		}
+		if(locEvents!=null) 
+			if(locEvents.size()>0)
+				if(locEvents.get(0).getTime() == 0) {
+					this.setLatitude(locEvents.get(0).getLatitude());
+					this.setLongitude(locEvents.get(0).getLongitude());
+					this.setElevation(locEvents.get(0).getElevation());
+					locEvents.remove(0);
+					if (SimulationInputs.visibility) {
+						VisibilityZones vz = new VisibilityZones((SensorNode) this);
+						vz.run();
+					}
+					if (DeviceList.propagationsCalculated)
+						DeviceList.calculatePropagations();
+				}		
 	}
 	
 	public void goToNextLocEvent(double time) {
-		for(LocationEvent lev : locEvents) {
-			lev.setTime(lev.getTime()-time);
-		}
+		if(locEvents!=null) 
+			if(locEvents.size()>0)
+				locEvents.get(0).setTime(locEvents.get(0).getTime()-time);
 	}
 	
-	public double getNextLocEventTime() {
-		return locEvents.get(0).getTime();
+	public double getLocEventTime() {
+		if(locEvents!=null) 
+			if(locEvents.size()>0)
+				return locEvents.get(0).getTime();
+		return Double.MAX_VALUE;
+	}
+	
+	public void displayLocs() {
+		for(LocationEvent ev : locEvents) {
+			System.out.println(ev);
+		}
 	}
 }

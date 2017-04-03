@@ -20,7 +20,7 @@ public class CupActionModifDeviceElevation extends CupAction {
 	public void execute() {
 		if(!CupCarbon.cupCarbonController.deviceParamPane.isExpanded())
 			CupCarbon.cupCarbonController.deviceParamPane.setExpanded(true);
-		device.setSelected(true);
+		device.setSelected(true);		
 		
 		device.setElevation(elevation);
 	}

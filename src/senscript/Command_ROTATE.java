@@ -22,7 +22,7 @@ public class Command_ROTATE extends Command {
 		double t = Integer.valueOf(vArg2);
 		((MediaSensorNode) sensor).setSensorUnitDec(n);
 		//MapLayer.repaint();	
-		return t ;
+		return t/1000. ;
 	}
 
 	@Override

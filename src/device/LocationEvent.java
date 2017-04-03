@@ -39,6 +39,9 @@ public class LocationEvent {
 		this.elevation = elevation;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return time + ": " + longitude + " " + latitude + " " + elevation;
+	}
 	
 }

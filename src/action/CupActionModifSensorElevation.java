@@ -1,7 +1,10 @@
 package action;
 
 import cupcarbon.CupCarbon;
+import device.DeviceList;
 import device.SensorNode;
+import visibility.VisibilityZones;
+import wisen_simulation.SimulationInputs;
 
 public class CupActionModifSensorElevation extends CupAction {	
 	
@@ -21,6 +24,12 @@ public class CupActionModifSensorElevation extends CupAction {
 		if(!CupCarbon.cupCarbonController.deviceParamPane.isExpanded())
 			CupCarbon.cupCarbonController.deviceParamPane.setExpanded(true);
 		sensorNode.setSelected(true);
+		if (SimulationInputs.visibility) {
+			VisibilityZones vz = new VisibilityZones(sensorNode);
+			vz.run();
+		}
+		if (DeviceList.propagationsCalculated)
+			DeviceList.calculatePropagations();
 		
 		sensorNode.setElevation(elevation);
 	}
@@ -30,6 +39,12 @@ public class CupActionModifSensorElevation extends CupAction {
 		if(!CupCarbon.cupCarbonController.deviceParamPane.isExpanded())
 			CupCarbon.cupCarbonController.deviceParamPane.setExpanded(true);
 		sensorNode.setSelected(true);
+		if (SimulationInputs.visibility) {
+			VisibilityZones vz = new VisibilityZones(sensorNode);
+			vz.run();
+		}
+		if (DeviceList.propagationsCalculated)
+			DeviceList.calculatePropagations();
 		
 		sensorNode.setElevation(cElevation);
 	}

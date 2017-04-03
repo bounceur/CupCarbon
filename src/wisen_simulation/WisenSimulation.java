@@ -47,6 +47,7 @@ import javafx.scene.paint.Color;
 import map.MapLayer;
 import markers.Routes;
 import project.Project;
+import visibility.VisibilityZones;
 
 public class WisenSimulation implements Runnable {
 	
@@ -249,7 +250,9 @@ public class WisenSimulation implements Runnable {
 						consolPrint(sensor + " [" +sensor.getScript().getCurrent().toString()+"] - ");
 						sensor.execute();
 						if ((min > sensor.getEvent()))
-							min = sensor.getEvent();					
+							min = sensor.getEvent();	
+						if ((min > sensor.getLocEventTime()))
+							min = sensor.getLocEventTime();	
 					}
 				}
 				
@@ -260,7 +263,7 @@ public class WisenSimulation implements Runnable {
 					for (SensorNode sensor : DeviceList.sensors) {
 						if(!sensor.isDead()) {
 							if (sensor.getEvent2() == 0) {
-								SimLog.add(sensor.getIdFL()+sensor.getId()+" DEPLACEMENT");
+								SimLog.add(sensor.getIdFL()+sensor.getId()+" SENSOR MOVING");
 								if (!sensor.getGPSFileName().equals("")) {
 									sensor.moveToNext(true, 0);
 									sensor.setEvent2(sensor.getNextTime());									
@@ -273,7 +276,7 @@ public class WisenSimulation implements Runnable {
 					for (Device device : DeviceList.devices) {
 						if(!device.isDead()) {
 							if (device.getEvent2() == 0) {
-								SimLog.add(device.getIdFL()+device.getId()+" DEPLACEMENT");
+								SimLog.add(device.getIdFL()+device.getId()+" DEVICE MOVING");
 								if (!device.getGPSFileName().equals("")) {
 									device.moveToNext(true, 0);
 									device.setEvent2(device.getNextTime());									
@@ -281,7 +284,7 @@ public class WisenSimulation implements Runnable {
 							}
 							
 							if (device.getEvent3() == 0) {
-								SimLog.add(device.getIdFL()+device.getId()+" VELUE GENERATION");
+								SimLog.add(device.getIdFL()+device.getId()+" VALUE GENERATION");
 								if (!device.getNatEventFileName().equals("")) {
 									device.generateNextValue();
 									device.setEvent3(device.getNextValueTime());									
@@ -309,25 +312,12 @@ public class WisenSimulation implements Runnable {
 						min = minmv;
 						moving = true;
 					}
-				}
+				}				
 				
-//				if (wheather) {
-//					
-//				}
-	
-				consolPrintln("");		
+				// min ready 
 				
-//				for (WisenEvent event : WisenEventList.eventList) {
-//					
-//				}
-
 				consolPrintln("");
 				if((min > 0) || (moving)) {
-					
-//					if (generateResults) {
-//						if(resultsWritingTime<=time)
-//							ps.print(time + ";");
-//					}
 					
 					if (generateResults && resultsWritingTime<=time) {
 						ps.print(time + ";");
@@ -340,23 +330,8 @@ public class WisenSimulation implements Runnable {
 							resultsWritingTime += SimulationInputs.resultsWritingPeriod;
 						}
 					}
-					
-//					for (Device device : DeviceList.devices) {
-//						if (generateResults) {
-//							if(writingTime<=time) {
-//								ps.print(device.getBatteryLevel() + ";");								
-//							}
-//						}
-//						consolPrint(device.getBatteryLevel()+" | ");
-//					}
 										
 					consolPrintln("");
-					
-//					if (generateResults) {
-//						if(writingTime<=time)
-//							ps.println();										
-//					}
-					
 					
 				}			
 								
@@ -378,7 +353,9 @@ public class WisenSimulation implements Runnable {
 					if(!sensor.isDead()) {
 						consolPrint(sensor.getEvent()+" : ");
 						
-						sensor.gotoTheNextEvent(min);								
+						sensor.gotoTheNextEvent(min);
+						sensor.goToNextLocEvent(min);
+						sensor.executeLocEvent();
 						
 						if(sensor.getEvent() == 0) {
 							fMessage += sensor.getScript().getCurrent().finishMessage() + "\n";
@@ -471,12 +448,14 @@ public class WisenSimulation implements Runnable {
 				CupCarbon.cupCarbonController.simulationTimeLabel.setText(String.format("RT = %4.4f s", ((endTime - startTime) / 1000.)));
 			}
 		});
-		
-		//displaySimProgress(" | Simulation: 0%");
 
-		for (SensorNode device : DeviceList.sensors) {
-			device.toOri();
-			device.stopAgentSimulation();				
+		for (SensorNode sensorNode : DeviceList.sensors) {
+			sensorNode.toOri();
+			sensorNode.stopAgentSimulation();
+			if (SimulationInputs.visibility) {
+				VisibilityZones vz = new VisibilityZones(sensorNode);
+				vz.run();
+			}
 		}
 		for (Device device : DeviceList.devices) {
 			device.toOri();

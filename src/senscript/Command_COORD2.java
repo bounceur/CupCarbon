@@ -2,13 +2,13 @@ package senscript;
 
 import device.SensorNode;
 
-public class Command_COORD extends Command {
+public class Command_COORD2 extends Command {
 
 	protected String arg1 = "" ;
 	protected String arg2 = "" ;
 	protected String arg3 = "" ;
 	
-	public Command_COORD(SensorNode sensor, String arg1, String arg2, String arg3) {
+	public Command_COORD2(SensorNode sensor, String arg1, String arg2, String arg3) {
 		this.sensor = sensor ;
 		this.arg1 = arg1 ;
 		this.arg2 = arg2 ;

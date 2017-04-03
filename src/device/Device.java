@@ -101,7 +101,7 @@ public abstract class Device extends MapObject implements Runnable, _Constantes,
 	
 	protected double event = Double.MAX_VALUE;		// Event relied to actions = sending/receiving
 	protected double event2 = Double.MAX_VALUE;		// Event relied to mobility
-	protected double event3 = Double.MAX_VALUE;		// Event relied to natural events	
+	protected double event3 = Double.MAX_VALUE;		// Event relied to natural events
 	
 	protected Thread thread;	
 	

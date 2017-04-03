@@ -1559,26 +1559,12 @@ public class DeviceList {
 	}
 	
 	public static void delete(SensorNode sensor) {
-//		SensorNode tSensor;
-//		for (Iterator<SensorNode> iterator = DeviceList.sensors.iterator(); iterator.hasNext();) {
-//			tSensor = iterator.next();
-//			if (tSensor == sensor) {
-//				iterator.remove();
-//			}
-//		}
 		sensors.remove(sensor);
 		if(DeviceList.propagationsCalculated)			
 			DeviceList.calculatePropagations();
 	}
 	
 	public static void delete(Device device) {
-//		Device tDevice;
-//		for (Iterator<Device> iterator = DeviceList.devices.iterator(); iterator.hasNext();) {
-//			tDevice = iterator.next();
-//			if (tDevice == device) {
-//				iterator.remove();				
-//			}
-//		}
 		if(device.getClass().equals(Meteo.class)) meteo = null;
 		devices.remove(device);
 		if(DeviceList.propagationsCalculated)			

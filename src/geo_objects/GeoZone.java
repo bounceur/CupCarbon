@@ -36,7 +36,6 @@ public class GeoZone {
 	private double latitude = 0;
 	private int cx = 0;
 	private int cy = 0;
-
 	
 	public GeoZone(int size) {
 		mapZoom = MapLayer.mapViewer.getZoom();

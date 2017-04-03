@@ -40,6 +40,8 @@ public class Building implements MouseListener, KeyListener {
 	private boolean hide = false ;
 	private int mapZoom = 0;
 	
+	private double height = 10 ;
+	
 	
 	public Building(int nPoints) {
 		mapZoom = MapLayer.mapViewer.getZoom();
@@ -313,4 +315,13 @@ public class Building implements MouseListener, KeyListener {
 			return true;
 		return false;
 	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
+	}
+	
 }

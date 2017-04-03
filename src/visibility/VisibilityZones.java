@@ -89,30 +89,31 @@ public class VisibilityZones extends Thread {
 		// -----------------------------------------------------------------------------------------
 		ArrayList<Building> buildings = new ArrayList<Building>();
 		for (Building building : BuildingList.buildings) {
-			if (building.intersect(zoneOfInterest)) {
-				buildings.add(building);
-			}
+			if(sensorNode.getElevation()<building.getHeight())
+				if (building.intersect(zoneOfInterest)) {
+					buildings.add(building);
+				}
 		}
 
 		// -----------------------------------------------------------------------------------------
-		// We will take each point of a building and test if the edge formed
-		// with this point
-		// and the center of the sensor node don't intersect any edge of the
-		// buildings
+		// We will take each point of a building and test if the edge formed with this point
+		// and the center of the sensor node don't intersect any edge of the buildings
 		// -----------------------------------------------------------------------------------------
 		for (Building building : buildings) {
+			double z = building.getHeight();
 			for (int i = 0; i < building.getNPoints(); i++) {				
 				double[] t = new double[2];
 				t[0] = building.getYCoords(i);
 				t[1] = building.getXCoords(i);
 				if(sensorNode.distance(t[1], t[0])<(sensorNode.getCurrentRadioRangeRadius())) {
 					boolean intersection = false;
-					for (Building building2 : buildings) {					
-						if (building2.intersect(sensorNode.getLatitude(), sensorNode.getLongitude(), t[0], t[1])) {
-							intersection = true;
-							break;
+					if(sensorNode.getElevation()<z)
+						for (Building building2 : buildings) {					
+							if (building2.intersect(sensorNode.getLatitude(), sensorNode.getLongitude(), t[0], t[1])) {
+								intersection = true;
+								break;
+							}
 						}
-					}
 					if (!intersection)
 						visibilityPointList.add(t);
 				}
@@ -120,8 +121,7 @@ public class VisibilityZones extends Thread {
 		}
 
 		// -----------------------------------------------------------------------------------------
-		// We will test that the edge which is formed by each point of the
-		// zoneOfInterest
+		// We will test that the edge which is formed by each point of the zoneOfInterest
 		// and the center of the current sensor node does not intersect
 		// all the edges of the buildings
 		// -----------------------------------------------------------------------------------------
@@ -129,8 +129,7 @@ public class VisibilityZones extends Thread {
 			boolean intersection = false;
 			for (Building building : buildings) {
 				if (building.intersect(zoneOfInterest)) {
-					if (building.intersect(sensorNode.getLatitude(), sensorNode.getLongitude(),
-							zoneOfInterest.getXCoord(k), zoneOfInterest.getYCoord(k))) {
+					if (building.intersect(sensorNode.getLatitude(), sensorNode.getLongitude(), zoneOfInterest.getXCoord(k), zoneOfInterest.getYCoord(k))) {
 						intersection = true;
 						break;
 					}
