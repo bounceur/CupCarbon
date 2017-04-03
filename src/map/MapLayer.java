@@ -332,11 +332,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			addAction(action);
 			CupActionStack.execute();
 			repaint();
-		}		
-
-//		if(DeviceList.propagationsCalculated) {					
-//			DeviceList.calculatePropagations();
-//		}
+		}
 		
 		if(e.getClickCount()==2) {
 			MarkerList.insertMarkers();
@@ -569,6 +565,13 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	
 	public void addActionAfterMoving() {	
 		if(dragging) {
+			if(CupCarbon.cupCarbonController!=null) {
+				CupCarbon.cupCarbonController.updateObjectListView();
+				CupCarbon.cupCarbonController.getNodeInformations();
+				CupCarbon.cupCarbonController.getRadioInformations();
+				CupCarbon.cupCarbonController.updateSelectionInListView();
+			}
+			
 			dragging = false;
 			CupActionBlock block = new CupActionBlock();
 			for(SensorNode sensor : DeviceList.sensors) {

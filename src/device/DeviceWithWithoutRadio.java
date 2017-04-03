@@ -87,7 +87,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 				String s;
 				String[] ts;
 				
-				readyForMobility = true;
+				//readyForMobility = true;
 				fis = new FileInputStream(Project.getProjectGpsPath() + File.separator + gpsFileName);				
 				b = new BufferedReader(new InputStreamReader(fis));
 				underSimulation = true;
@@ -106,8 +106,9 @@ public abstract class DeviceWithWithoutRadio extends Device {
 				b.close();
 				fis.close();
 
-			} else
-				readyForMobility = false;
+			} 
+			//else
+			//	readyForMobility = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -139,7 +140,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	public void runSimulation() {
 		loadRouteFromFile();
 		fixori();
-		if (readyForMobility) {
+		//if (readyForMobility) {
 			underSimulation = true;
 			routeIndex = 0;
 			long tmpTime = 0;
@@ -177,7 +178,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 			thread = null;
 			underSimulation = false;
 			MapLayer.repaint();
-		}
+		//}
 	}
 	
 	// ------------------------------------------------------------------------

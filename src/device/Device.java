@@ -569,17 +569,21 @@ public abstract class Device extends MapObject implements Runnable, _Constantes,
 		latitude_ori = latitude;
 		elevation_ori = elevation;
 		gpsFileName_ori = gpsFileName;
+		if (SimulationInputs.visibility) {
+			if(getType()==Device.SENSOR || getType()==Device.MEDIA_SENSOR) {
+				VisibilityZones vz = new VisibilityZones((SensorNode) this);
+				vz.run();
+			}
+		}
 	}
-	
-	protected boolean readyForMobility = false;
 	
 	public void toOri() {
 		longitude = longitude_ori;
 		latitude = latitude_ori;
 		elevation = elevation_ori;
 		gpsFileName = gpsFileName_ori;
-		if (readyForMobility && SimulationInputs.visibility) {
-			if(this.getType()==Device.SENSOR) {
+		if (SimulationInputs.visibility) {
+			if(getType()==Device.SENSOR || getType()==Device.MEDIA_SENSOR) {
 				VisibilityZones vz = new VisibilityZones((SensorNode) this);
 				vz.run();
 			}

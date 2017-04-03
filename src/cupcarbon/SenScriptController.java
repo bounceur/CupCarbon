@@ -18,7 +18,7 @@ import project.Project;
 public class SenScriptController implements Initializable{
 	
 	@FXML
-	private TextArea zone;
+	private TextArea zone;	
 	
 	@FXML
 	private void loopCom() {

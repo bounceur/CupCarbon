@@ -47,7 +47,6 @@ import javafx.scene.paint.Color;
 import map.MapLayer;
 import markers.Routes;
 import project.Project;
-import visibility.VisibilityZones;
 
 public class WisenSimulation implements Runnable {
 	
@@ -90,6 +89,7 @@ public class WisenSimulation implements Runnable {
 	}
 
 	public void start_simulation() {
+		DeviceList.initAll();
 		Routes.loadRoutes();
 		resultsWritingTime = 0.0;
 		SimLog.init();
@@ -451,11 +451,7 @@ public class WisenSimulation implements Runnable {
 
 		for (SensorNode sensorNode : DeviceList.sensors) {
 			sensorNode.toOri();
-			sensorNode.stopAgentSimulation();
-			if (SimulationInputs.visibility) {
-				VisibilityZones vz = new VisibilityZones(sensorNode);
-				vz.run();
-			}
+			sensorNode.stopAgentSimulation();			
 		}
 		for (Device device : DeviceList.devices) {
 			device.toOri();

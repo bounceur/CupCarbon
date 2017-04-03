@@ -116,8 +116,8 @@ import wisen_simulation.WisenSimulation;
 
 public class CupCarbonController implements Initializable {
 
-	private WorldMap map;
-	private SwingNode sn;
+	private WorldMap map = null;
+	private SwingNode sn = null;
 	protected FaultInjector faultInjector = null;
 
 	@FXML

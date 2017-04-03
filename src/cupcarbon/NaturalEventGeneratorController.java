@@ -23,7 +23,7 @@ public class NaturalEventGeneratorController implements Initializable{
 	
 	@FXML
 	private TextArea zone;
-	
+		
 	@FXML
 	private ComboBox<String> txtLoadFileName;
 	
