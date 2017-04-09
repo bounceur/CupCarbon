@@ -144,12 +144,13 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	
 	@Override
 	public void paint(Graphics2D g, Object arg1, int arg2, int arg3) {
-		if(mapViewer.getZoom()==0) g.setFont(new Font("arial", 1, 14));
-		if(mapViewer.getZoom()==1) g.setFont(new Font("arial", 1, 10));
-		if(mapViewer.getZoom()==2) g.setFont(new Font("arial", 1, 8));
-		if(mapViewer.getZoom()==3) g.setFont(new Font("arial", 1, 8));
-		if(mapViewer.getZoom()==4) g.setFont(new Font("arial", 1, 7));
-		if(mapViewer.getZoom()>4) g.setFont(new Font("arial", 1, 5));
+		//g.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
+		if(mapViewer.getZoom()==0) g.setFont(new Font("arial", Font.PLAIN, 14));
+		if(mapViewer.getZoom()==1) g.setFont(new Font("arial", Font.BOLD, 10));
+		if(mapViewer.getZoom()==2) g.setFont(new Font("arial", Font.BOLD, 8));
+		if(mapViewer.getZoom()==3) g.setFont(new Font("arial", Font.BOLD, 8));
+		if(mapViewer.getZoom()==4) g.setFont(new Font("arial", Font.BOLD, 7));
+		if(mapViewer.getZoom()>4) g.setFont(new Font("arial", Font.BOLD, 5));
 		
 		Rectangle rect = mapViewer.getViewportBounds();
 		g.translate(-rect.x, -rect.y);				
@@ -215,7 +216,8 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		markerList.draw(g);		
 		nodeList.draw(g);
 		
-		nodeList.drawEnvelopeList(g);		
+		nodeList.drawHulls(g);
+		nodeList.drawMarkedEdges(g);
 
 		if (drawSelectionRectangle) {
 			g.setStroke(new BasicStroke(0.5f));
@@ -233,7 +235,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 					(int) (p2.getY() - p1.getY()));
 		}
 		
-		g.setFont(new Font("courier", 1, 10));
+		g.setFont(new Font("courier", Font.BOLD, 10));
 		g.setColor(Color.DARK_GRAY);
 		if(dark) g.setColor(new Color(198,232,106));
 
@@ -726,12 +728,12 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			NetworkParameters.displayRadioMessages = !NetworkParameters.displayRadioMessages ;
 		}
 		
-		if (key.isShiftDown()) {
-			shiftDown = true;
-		}
-		
-		if (key.isAltDown())
-			altDown = true;
+//		if (key.isShiftDown()) {
+//			shiftDown = true;
+//		}
+//		
+//		if (key.isAltDown())
+//			altDown = true;
 		
 		if (key.getKeyCode() == 27) { // escape
 			addActionAfterMoving();

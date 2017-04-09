@@ -72,9 +72,9 @@ protected boolean loop = true ;
 		}
 		
 		DeviceList.initAll();
-		DeviceList.addEnvelope();
+		DeviceList.addHull();
 		while(loop) {		
-			DeviceList.initLastEnvelope();
+			DeviceList.initLastHull();
 			min = 1000;
 			imin = 0;
 			for (int i = 0; i < nodes.size(); i++) {
@@ -91,7 +91,7 @@ protected boolean loop = true ;
 			current = imin;
 			nodes.get(imin).setMarked(true);
 			MapLayer.repaint();
-			DeviceList.addToLastEnvelope(imin);
+			DeviceList.addToLastHull(imin);
 	
 			delay();
 	
@@ -122,12 +122,12 @@ protected boolean loop = true ;
 								y2 = n2.getLatitude();
 								angle = getAngle(x1 - xc, y1 - yc, x2 - xc, y2 - yc);
 								intersection = false;
-								int k = DeviceList.getLastEnvelopeSize()-1;
+								int k = DeviceList.getLastHullSize()-1;
 								while(k>0 && !intersection) {
-									xp1 = nodes.get(DeviceList.getLastEnvelope().get(k-1)).getLongitude();
-									yp1 = nodes.get(DeviceList.getLastEnvelope().get(k-1)).getLatitude();
-									xp2 = nodes.get(DeviceList.getLastEnvelope().get(k)).getLongitude();
-									yp2 = nodes.get(DeviceList.getLastEnvelope().get(k)).getLatitude();
+									xp1 = nodes.get(DeviceList.getLastHull().get(k-1)).getLongitude();
+									yp1 = nodes.get(DeviceList.getLastHull().get(k-1)).getLatitude();
+									xp2 = nodes.get(DeviceList.getLastHull().get(k)).getLongitude();
+									yp2 = nodes.get(DeviceList.getLastHull().get(k)).getLatitude();
 									intersection = intersect(xp1, yp1, xp2, yp2, xc, yc, x2, y2);
 									k--;
 								}
@@ -147,7 +147,7 @@ protected boolean loop = true ;
 				
 				nodes.get(imin).setMarked(true);
 				MapLayer.repaint();				
-				DeviceList.addToLastEnvelope(imin);
+				DeviceList.addToLastHull(imin);
 	
 				previous = current;
 				n1 = nodes.get(imin);

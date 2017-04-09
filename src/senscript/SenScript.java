@@ -138,7 +138,6 @@ public class SenScript {
 
 	public void executeCommand() {
 		event = getCurrent().execute();
-		//waiting = false;
 	}
 
 	public double getEvent() {

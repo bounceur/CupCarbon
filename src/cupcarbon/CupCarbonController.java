@@ -895,25 +895,29 @@ public class CupCarbonController implements Initializable {
 
 		File file = fileChooser.showSaveDialog(CupCarbon.stage);
 		if (file != null) {
-			Project.newProject(file.getParentFile().toString() + File.separator + file.getName().toString(),
-					file.getName().toString(), false);
+			Project.newProject(file.getParentFile().toString() + File.separator + file.getName().toString(), file.getName().toString(), false);
 			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getName().toString() + "]");
 		}
 	}
 
 	@FXML
 	public void openProject() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Open CupCarbon file");
-
-		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CupCarbon Sources", "*.cup"));
-
-		File file = fileChooser.showOpenDialog(CupCarbon.stage);
-		if (file != null) {
-			Project.openProject(file.getParentFile().toString(), file.getName().toString());
-			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getName().toString() + "]");
-			openProjectLoadParameters();
-		}		
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Open CupCarbon file");
+		
+				fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CupCarbon Sources", "*.cup"));
+		
+				File file = fileChooser.showOpenDialog(CupCarbon.stage);
+				if (file != null) {
+					Project.openProject(file.getParentFile().toString(), file.getName().toString());
+					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getName().toString() + "]");
+					openProjectLoadParameters();
+				}
+			}
+		});
 	}
 
 	public void openProjectLoadParameters() {
@@ -2225,11 +2229,12 @@ public class CupCarbonController implements Initializable {
 			public void run() {
 				deviceListView.getItems().removeAll(deviceListView.getItems());
 				eventListView.getItems().removeAll(eventListView.getItems());
-				for (int i = 0; i < DeviceList.devices.size(); i++) {
-					if (DeviceList.devices.get(i).getType() == Device.GAS) {
-						eventListView.getItems().add(DeviceList.devices.get(i).getName());
+				//for (int i = 0; i < DeviceList.devices.size(); i++) {
+				for(Device device : DeviceList.devices) {
+					if (device.getType() == Device.GAS) {
+						eventListView.getItems().add(device.getName());
 					} else
-						deviceListView.getItems().add(DeviceList.devices.get(i).getName());
+						deviceListView.getItems().add(device.getName());
 				}
 				for (int i = 0; i < DeviceList.sensors.size(); i++) {
 					deviceListView.getItems().add(DeviceList.sensors.get(i).getName());

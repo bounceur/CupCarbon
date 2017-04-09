@@ -738,7 +738,7 @@
                      </graphic>
                   </MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem disable="true" mnemonicParsing="false" onAction="#generateArduinoCode" text="Generate Arduino Code">
+                  <MenuItem mnemonicParsing="false" onAction="#generateArduinoCode" text="Generate Arduino Code">
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>

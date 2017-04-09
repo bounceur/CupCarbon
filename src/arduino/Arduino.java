@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 import device.DeviceList;
 import device.SensorNode;
@@ -26,10 +28,13 @@ public class Arduino {
 	//"4:BLEU:D:0X13A200:0X40BEBA04"
 	//"5:NEUTRE:FFFF:0X13A200:406E5E6F"
 	public static ArrayList<String []> xbeeList ;
+	public static Set<String> variables ;
 	
 	public static void generateCode() {
 		
 		try {
+			System.out.println("XBEE File OK");
+			System.out.println(Project.projectPath + File.separator + "xbee" + File.separator + "xbee.txt");
 			FileReader xbeeFile = new FileReader(Project.projectPath + File.separator + "xbee" + File.separator + "xbee.txt");
 			BufferedReader br = new BufferedReader(xbeeFile);
 			
@@ -43,32 +48,38 @@ public class Arduino {
 				}
 				br.close();
 				xbeeFile.close();
+				for(String [] st : xbeeList) {				
+					System.out.println(Arrays.toString(st));
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}			
 			
 		} catch (FileNotFoundException e1) {
+			System.out.println("No XBEE File");
 			xbeeList = new ArrayList<String []>();
 			String [] row = new String [5];
-			row[0] = "1"; row[1] = "VERT";   row[2] = "A"; row[3] = "0X13A200"; row[4] = "0X40B5EF9E";
+			row[0] = "1"; row[1] = "GREEN";   row[2] = "A"; row[3] = "0X13A200"; row[4] = "0X40B5EF9E";
 			xbeeList.add(row);
 			row = new String [5];
-			row[0] = "2"; row[1] = "JAUNE";  row[2] = "B"; row[3] = "0X13A200"; row[4] = "0X40B58284";
+			row[0] = "2"; row[1] = "YELLOW";  row[2] = "B"; row[3] = "0X13A200"; row[4] = "0X40B58284";
 			xbeeList.add(row);
 			row = new String [5];
-			row[0] = "3"; row[1] = "ROUGE";  row[2] = "C"; row[3] = "0X13A200"; row[4] = "0X40B5EFA6";
+			row[0] = "3"; row[1] = "RED";  row[2] = "C"; row[3] = "0X13A200"; row[4] = "0X40B5EFA6";
 			xbeeList.add(row);
 			row = new String [5];
-			row[0] = "4"; row[1] = "BLEU";   row[2] = "D"; row[3] = "0X13A200"; row[4] = "0X40BEBA04";
+			row[0] = "4"; row[1] = "BLUE";   row[2] = "D"; row[3] = "0X13A200"; row[4] = "0X40BEBA04";
 			xbeeList.add(row);
 			row = new String [5];
-			row[0] = "5"; row[1] = "NEUTRE"; row[2] = "E"; row[3] = "0X13A200"; row[4] = "0x406E5E6F";
+			row[0] = "5"; row[1] = "WHITE"; row[2] = "E"; row[3] = "0X13A200"; row[4] = "0x406E5E6F";
 			xbeeList.add(row);
 			
 			for(String [] st : xbeeList) {				
 				System.out.println(Arrays.toString(st));
 			}
 		}
+		
+		variables = new HashSet<String>();
 		
 		File arduinoDir = new File(Project.projectPath + File.separator + "arduino" + File.separator);
 		

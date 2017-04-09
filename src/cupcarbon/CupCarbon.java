@@ -109,7 +109,7 @@ public class CupCarbon extends Application {
 	        final URL url = new URL("http://a.basemaps.cartocdn.com/light_all/0/0/0.png");
 	        final URLConnection connection = url.openConnection();
 	        InputStream is = connection.getInputStream();
-	        System.out.println("Internet ok");
+	        System.out.println("Internet: OK");
 	        int x1 = is.read();
 	        int x2 = is.read();
 	        int x3 = is.read();

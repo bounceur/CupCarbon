@@ -23,7 +23,7 @@ public class Command_MARMOVE extends Command {
 
 	@Override
 	public String toString() {
-		return "MOVE";
+		return "MARMOVE";
 	}
 	
 }

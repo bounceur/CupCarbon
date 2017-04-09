@@ -156,6 +156,7 @@ public final class Project {
 	public static void openProject(String path, String name) {
 		System.out.println(path);
 		System.out.println(name);
+		CupActionStack.init();
 		reset();
 		setProjectName(path, name);
 		saveRecentPath();		
@@ -166,20 +167,7 @@ public final class Project {
 		if(DeviceList.propagationsCalculated) DeviceList.calculatePropagations();
 		CupCarbon.cupCarbonController.loadSimulationParams();
 		CupCarbon.cupCarbonController.applyParameters();
-		CupCarbon.cupCarbonController.saveButton.setDisable(false);
-	}
-	
-	public static void openProject1(String path, String name) {
-		System.out.println(path);
-		System.out.println(name);
-		reset();
-		setProjectName(path, name);
-		saveRecentPath();
-		BuildingList.open(getProjectBuildingPathName());
-		MarkerList.open(getProjectMarkerPath());		
-		DeviceList.open1(getProjectNodePath());
-		if(DeviceList.propagationsCalculated) DeviceList.calculatePropagations();
-		CupCarbon.cupCarbonController.saveButton.setDisable(false);
+		CupCarbon.cupCarbonController.saveButton.setDisable(false);	
 	}
 
 	public static void newProject(String path, String name, boolean reset) {
@@ -192,6 +180,8 @@ public final class Project {
 		if(!file.exists()) {
 			if(reset) reset();
 			setProjectName(path, name + ".cup");
+			file.mkdir();
+			file = new File(path + File.separator + "xbee");
 			file.mkdir();
 			file = new File(path + File.separator + "gps");
 			file.mkdir();
@@ -256,6 +246,7 @@ public final class Project {
 		copyFromTo(path1, path2, "scripts");
 		copyFromTo(path1, path2, "gps");
 		copyFromTo(path1, path2, "natevents");
+		copyFromTo(path1, path2, "xbee");
 		try {
 			FileInputStream copy = new FileInputStream(path1+File.separator+"config"+File.separator+"simulationParams.cfg");
 			FileOutputStream past = new FileOutputStream(path2+File.separator+"config"+File.separator+"simulationParams.cfg");

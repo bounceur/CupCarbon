@@ -62,9 +62,9 @@ public class NetworkEnvelopeNAN extends Thread {
 		boolean stop = false;
 
 		DeviceList.initAll();
-		DeviceList.addEnvelope();
+		DeviceList.addHull();
 		// while(true) {
-		DeviceList.initLastEnvelope();
+		DeviceList.initLastHull();
 		min = 10000000;
 		imin = 0;
 		for (int i = 0; i < nodes.size(); i++) {
@@ -83,7 +83,7 @@ public class NetworkEnvelopeNAN extends Thread {
 		current = imin;
 		nodes.get(imin).setMarked(true);
 		MapLayer.repaint();
-		DeviceList.addToLastEnvelope(imin);
+		DeviceList.addToLastHull(imin);
 
 		delay();
 
@@ -131,7 +131,7 @@ public class NetworkEnvelopeNAN extends Thread {
 
 			nodes.get(imin).setMarked(true);
 			MapLayer.repaint();
-			DeviceList.addToLastEnvelope(imin);
+			DeviceList.addToLastHull(imin);
 
 			previous = current;
 			n3 = n4;

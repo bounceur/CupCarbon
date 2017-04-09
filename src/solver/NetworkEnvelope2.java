@@ -115,12 +115,12 @@ public class NetworkEnvelope2 extends Thread {
 			}
 			if ((rank1 < k) || (rank2 < k) || (rank3 < k) || (rank4 < k)) { 
 				n1.setMarked(true); 
-				DeviceList.addToLastEnvelope(i); 
+				DeviceList.addToLastHull(i); 
 			}
 			else
 			if ((rank5 < k) || (rank6 < k) || (rank7 < k) || (rank8 < k)) { 
 				n1.setMarked(true); 
-				DeviceList.addToLastEnvelope(i); 
+				DeviceList.addToLastHull(i); 
 			}
 
 			MapLayer.repaint();

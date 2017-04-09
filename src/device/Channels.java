@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,7 +23,8 @@ public class Channels {
 	public static int numberOfAckMessages = 0;
 	public static int numberOfLostMessages = 0;
 	
-	protected LinkedList<List<PacketEvent>> channelEventList = new LinkedList<List<PacketEvent>>();
+	protected List<List<PacketEvent>> channelEventList = Collections.synchronizedList(new LinkedList<List<PacketEvent>>()); 
+	//protected LinkedList<List<PacketEvent>> channelEventList = new LinkedList<List<PacketEvent>>();
 	
 	public Channels(int std) {
 		super();
@@ -82,13 +84,14 @@ public class Channels {
 				SensorNode tSensor = packetEventList.get(0).getSSensor();	
 				SensorNode rSensor = packetEventList.get(0).getRSensor();
 				
+				rSensor.setDrssi(tSensor.distance(rSensor));
+				
 				rSensor.consumeRx(RadioPacketGenerator.packetLengthInBits(type, tSensor.getStandard()));
 				
 				boolean errorBitsOk = ErrorBits.errorBitsOk(message, tSensor, rSensor);
 				
 				tSensor.setSending(false);
 				rSensor.setReceiving(false);				
-				//MapLayer.repaint();
 				
 				// type=0 : Direct sending
 				// type=1 : ACK sending
@@ -109,18 +112,13 @@ public class Channels {
 				}
 				
 				if (type == 1) {
-					//tSensor.setAckReceived(true);
 					tSensor.setAckWaiting(false);
 					rSensor.setAckReceived(true);
 					rSensor.setAckWaiting(false);
 					rSensor.setEvent(0);
 				}
 				
-				packetEventList.remove(0);						
-//				if(packetEventList.size()>0) {
-//					packetEventList.get(0).getSSensor().setSending(true);
-//					packetEventList.get(0).getRSensor().setReceiving(true);
-//				}
+				packetEventList.remove(0);
 			}
 		}
 	}
@@ -164,8 +162,8 @@ public class Channels {
 				double dx = 0;
 				double dy = 0;
 				double alpha = 0;
-
 				for(int idx=0; idx<packetEventList.size(); idx++) {
+				//for(PacketEvent packetEvent : packetEventList) {
 					try {
 						PacketEvent packetEvent = packetEventList.get(idx);
 						if(packetEvent.getSSensor().isSending() && packetEvent.getRSensor().isReceiving()) {

@@ -154,6 +154,9 @@ public final class SenScriptAddCommand {
 		if (inst[0].toLowerCase().equals("angle2")) {
 			command = new Command_ANGLE2(sensorNode, inst[1], inst[2], inst[3], inst[4], inst[5], inst[6], inst[7]);
 		}
+		if (inst[0].toLowerCase().equals("edge")) {
+			command = new Command_EDGE(sensorNode, inst[1], inst[2]);
+		}
 		if (inst[0].toLowerCase().equals("mark")) {
 			command = new Command_MARK(sensorNode, inst[1]);
 		}
@@ -311,8 +314,16 @@ public final class SenScriptAddCommand {
 			command = new Command_MARMOVE(sensorNode, inst[1]);
 		}
 		
+		if (inst[0].toLowerCase().equals("cdistance")) {
+			command = new Command_CDISTANCE(sensorNode, inst[1], inst[2], inst[3], inst[4], inst[5]);
+		}
+		
 		if (inst[0].toLowerCase().equals("distance")) {
 			command = new Command_DISTANCE(sensorNode, inst[1], inst[2]);
+		}
+		
+		if (inst[0].toLowerCase().equals("drssi")) {
+			command = new Command_DRSSI(sensorNode, inst[1]);
 		}
 		
 		if (inst[0].toLowerCase().equals("inc")) {

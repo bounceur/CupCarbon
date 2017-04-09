@@ -50,9 +50,9 @@ public class NetworkEnvelopeByAngle extends Thread {
 		int sm = 0;
 		
 		DeviceList.initAll();
-		DeviceList.addEnvelope();
+		DeviceList.addHull();
 		//while(true) {		
-			DeviceList.initLastEnvelope();
+			DeviceList.initLastHull();
 			min = 10000000;
 			imin = 0;
 			for (int i = 0; i < DeviceList.sensors.size(); i++) {
@@ -70,7 +70,7 @@ public class NetworkEnvelopeByAngle extends Thread {
 			DeviceList.sensors.get(imin).setMarked(true);
 			DeviceList.sensors.get(imin).setVisited(true);
 			MapLayer.repaint();
-			DeviceList.addToLastEnvelope(imin);
+			DeviceList.addToLastHull(imin);
 			
 			delay();
 			
@@ -105,7 +105,7 @@ public class NetworkEnvelopeByAngle extends Thread {
 						DeviceList.sensors.get(imin).setMarked(true);
 						DeviceList.sensors.get(imin).setVisited(true);
 						MapLayer.repaint();
-						DeviceList.addToLastEnvelope(imin);
+						DeviceList.addToLastHull(imin);
 						
 						n1 = DeviceList.sensors.get(imin);
 						cur = imin;

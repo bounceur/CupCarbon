@@ -57,7 +57,7 @@ public class Command_MOVE extends Command {
 
 	@Override
 	public String toString() {
-		return "COORD";
+		return "MOVE";
 	}
 	
 }

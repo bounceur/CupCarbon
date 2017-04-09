@@ -31,4 +31,10 @@ public class Command_PLUS extends Command {
 	public String toString() {
 		return "PLUS";
 	}
+	
+	@Override
+	public String getArduinoForm() {
+		String s = arg1 + " = " + arg2.replace("$", "") + "+" + arg3.replace("$", "") + ";";
+		return s;
+	}
 }

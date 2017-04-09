@@ -74,6 +74,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	protected int bufferIndex = 0 ;
 	protected byte [] buffer = new byte [bufferSize];
 	protected boolean bufferReady = false;
+	protected double drssi = 0; // rssi in distance (meter)
 	
 	/**
 	 * Constructor 1 Instanciate the sensor unit 
@@ -333,17 +334,6 @@ public abstract class SensorNode extends DeviceWithRadio {
 			
 			if (drawBatteryLevel) {
 				battery.draw(g, x, y);
-//				g.setColor(UColor.WHITE_LTRANSPARENT);
-//				g.fillRect(x-30, y-25, 6, 50);
-//				g.setColor(UColor.GREEN);
-//				if (battery.getLevel()/battery.getEMax()<0.5) g.setColor(UColor.ORANGE);
-//				if (battery.getLevel()/battery.getEMax()<0.2) g.setColor(UColor.RED);
-//				g.fillRect(x-30, y-(int)(battery.getLevel()/battery.getEMax()*100./2.)+25, 6, (int)(battery.getLevel()/battery.getEMax()*100./2.));
-//				g.setColor(Color.DARK_GRAY);
-//				if(MapLayer.dark) g.setColor(Color.WHITE);
-//				g.drawRect(x-30, y-25, 6, 50);
-//				g.drawString("Battery"+id+": " + (int)battery.getLevel(), x-30, y+35);
-
 				g.setColor(UColor.WHITE_LTRANSPARENT);
 				g.fillRect(x-20, y-25, 6, 50);
 				g.setColor(Color.DARK_GRAY);
@@ -762,6 +752,14 @@ public abstract class SensorNode extends DeviceWithRadio {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}	
+	}
+
+	public double getDrssi() {
+		return drssi;
+	}
+
+	public void setDrssi(double drssi) {
+		this.drssi = drssi;
 	}
 	
 }

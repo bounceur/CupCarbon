@@ -69,7 +69,7 @@ public class EnvelopeLPCN3 extends Thread {
 		while(loop && thefirst<nodes.size()) {
 			//envelopeSize = 0;
 			//DeviceList.initLastEnvelope();
-			DeviceList.addEnvelope();
+			DeviceList.addHull();
 			min = 1000;
 			imin = 0;
 			for (int i = 0; i < nodes.size(); i++) {
@@ -91,7 +91,7 @@ public class EnvelopeLPCN3 extends Thread {
 			current = imin;
 			nodes.get(imin).setMarked(true);
 			MapLayer.repaint();
-			DeviceList.addToLastEnvelope(imin);
+			DeviceList.addToLastHull(imin);
 	
 			delay();
 	
@@ -116,12 +116,12 @@ public class EnvelopeLPCN3 extends Thread {
 								y2 = n2.getLatitude();
 								angle = getAngle(x1 - xc, y1 - yc, x2 - xc, y2 - yc);
 								intersection = false;
-								int k = DeviceList.getLastEnvelopeSize()-1;
+								int k = DeviceList.getLastHullSize()-1;
 								while(k>0 && !intersection) {
-									xp1 = nodes.get(DeviceList.getLastEnvelope().get(k-1)).getLongitude();
-									yp1 = nodes.get(DeviceList.getLastEnvelope().get(k-1)).getLatitude();
-									xp2 = nodes.get(DeviceList.getLastEnvelope().get(k)).getLongitude();
-									yp2 = nodes.get(DeviceList.getLastEnvelope().get(k)).getLatitude();
+									xp1 = nodes.get(DeviceList.getLastHull().get(k-1)).getLongitude();
+									yp1 = nodes.get(DeviceList.getLastHull().get(k-1)).getLatitude();
+									xp2 = nodes.get(DeviceList.getLastHull().get(k)).getLongitude();
+									yp2 = nodes.get(DeviceList.getLastHull().get(k)).getLatitude();
 									intersection = intersect(xp1, yp1, xp2, yp2, xc, yc, x2, y2);
 									k--;
 								}
@@ -141,7 +141,7 @@ public class EnvelopeLPCN3 extends Thread {
 				
 				nodes.get(imin).setMarked(true);
 				MapLayer.repaint();
-				DeviceList.addToLastEnvelope(imin);
+				DeviceList.addToLastHull(imin);
 	
 				previous = current;
 				n1 = nodes.get(imin);
@@ -151,7 +151,7 @@ public class EnvelopeLPCN3 extends Thread {
 				xc = nodes.get(imin).getLongitude();
 				yc = nodes.get(imin).getLatitude();
 				delay();
-				System.out.println(DeviceList.getLastEnvelopeSize());
+				System.out.println(DeviceList.getLastHullSize());
 			}
 			
 			try {

@@ -27,4 +27,10 @@ public class Command_SET extends Command {
 		return "SET";
 	}
 	
+	@Override
+	public String getArduinoForm() {
+		String s = arg1 + " = " + arg2.replace("$", "") + ";";
+		return s;
+	}
+	
 }

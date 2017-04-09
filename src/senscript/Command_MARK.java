@@ -25,8 +25,6 @@ public class Command_MARK extends Command {
 			sensor.setMarked(true);
 			SimLog.add("S" + sensor.getId() + " MARK");
 		}
-		//Visualisation.updateStdSensorNode(sensor);
-		//Layer.getMapViewer().repaint();	
 		return 0 ;
 	}
 	

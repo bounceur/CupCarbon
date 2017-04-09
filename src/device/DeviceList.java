@@ -30,6 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,6 +43,7 @@ import action.CupActionDeleteSensor;
 import action.CupActionStack;
 import buildings.Building;
 import buildings.BuildingList;
+import geometry.SNEdge;
 import javafx.application.Platform;
 import map.MapLayer;
 import markers.Marker;
@@ -62,11 +64,14 @@ import wisen_simulation.WisenSimulation;
 public class DeviceList {
 
 	public static Meteo meteo = null;
-	
+	//public static List<SensorNode> sensors = Collections.synchronizedList(new ArrayList<SensorNode>());
+	//public static List<Device> devices = Collections.synchronizedList(new ArrayList<Device>());
 	public static List<SensorNode> sensors = new ArrayList<SensorNode>();
 	public static List<Device> devices = new ArrayList<Device>();
+	public static List<SNEdge> markedEdges = new ArrayList<SNEdge>();
+	
 	public static boolean drawLinks = true;
-	public static LinkedList<LinkedList<Integer>> envelopeList = new LinkedList<LinkedList<Integer>>();
+	public static LinkedList<LinkedList<Integer>> hulls = new LinkedList<LinkedList<Integer>>();
 	public static int number = 1;
 	public static boolean propagationsCalculated = false;
 	
@@ -76,10 +81,13 @@ public class DeviceList {
 	
 	public static void reset() {
 		meteo = null;
-		sensors = new ArrayList<SensorNode>();
+		sensors = Collections.synchronizedList(new ArrayList<SensorNode>());
+		//devices = Collections.synchronizedList(new ArrayList<Device>());
+		//sensors = new ArrayList<SensorNode>();
 		devices = new ArrayList<Device>();
 		drawLinks = true;
-		envelopeList = new LinkedList<LinkedList<Integer>>();
+		hulls = new LinkedList<LinkedList<Integer>>();
+		markedEdges = new ArrayList<SNEdge>();
 		DeviceList.propagationsCalculated = false;
 	}
 	
@@ -193,7 +201,7 @@ public class DeviceList {
 			int deviceType = -1;
 			String line;
 			int idMax = 0 ;
-			for(int i=0; i<nodeFiles.length; i++){	
+			for(int i=0; i<nodeFiles.length; i++){
 				if(!(nodeFiles[i].getName().split("_")[0].startsWith("."))) {
 					BufferedReader br = new BufferedReader(new FileReader(nodeFiles[i]));
 					line = br.readLine();
@@ -995,7 +1003,8 @@ public class DeviceList {
 	}
 
 	public static void initAll() {
-		envelopeList = new LinkedList<LinkedList<Integer>>();
+		hulls = new LinkedList<LinkedList<Integer>>();
+		markedEdges = new ArrayList<SNEdge>();		
 		WisenSimulation.sTime = 0;
 		for (SensorNode sensor : sensors) {			
 			sensor.init();
@@ -1168,60 +1177,75 @@ public class DeviceList {
 	}
 	
 	//------
-	public static int getLastEnvelopeSize() {
-		return envelopeList.getLast().size();
+	public static void addEdge(SensorNode sn1, SensorNode sn2) {
+		markedEdges.add(new SNEdge(sn1, sn2));
 	}
 	
-	public static void initLastEnvelope() {
-		envelopeList.getLast().clear();
+	public static void removeEdge(SensorNode sn1, SensorNode sn2) {
+		for(SNEdge edge : markedEdges) {
+			if((sn1==edge.getSN1() && sn2==edge.getSN2()) || (sn1==edge.getSN2() && sn2==edge.getSN1())) {
+				markedEdges.remove(edge);
+				return;
+			}
+		}
 	}
 	
-	public static void addEnvelope() {
-		envelopeList.add(new LinkedList<Integer>());
+	public void drawMarkedEdges(Graphics2D g) {			
+		if(markedEdges.size()>0) {
+			for(int i=0; i<markedEdges.size(); i++) {
+				markedEdges.get(i).draw(g);		
+			}
+		}
 	}
 	
-	public static void addToLastEnvelope(Integer d) {
-		envelopeList.getLast().add(d);
+	public static int getLastHullSize() {
+		return hulls.getLast().size();
 	}
 	
-	public static LinkedList<Integer> getLastEnvelope() {
-		return envelopeList.getLast();
+	public static void initLastHull() {
+		hulls.getLast().clear();
 	}
 	
-	public void drawEnvelope(LinkedList<Integer> envelope, Graphics2D g) {
+	public static void addHull() {
+		hulls.add(new LinkedList<Integer>());
+	}
+	
+	public static void addToLastHull(Integer d) {
+		hulls.getLast().add(d);
+	}
+	
+	public static LinkedList<Integer> getLastHull() {
+		return hulls.getLast();
+	}
+	
+	public void drawHull(LinkedList<Integer> hull, Graphics2D g) {
 		g.setStroke(new BasicStroke(2.0f));
-		if(envelope.size()>0) {
-			double x = sensors.get(envelope.get(0)).getLatitude();
-			double y = sensors.get(envelope.get(0)).getLongitude();
+		if(hull.size()>0) {
+			double x = sensors.get(hull.get(0)).getLatitude();
+			double y = sensors.get(hull.get(0)).getLongitude();
 			int lx1=0;
 			int ly1=0;
 			int lx2=0;
 			int ly2=0;
 			int[] coord ;
-			for(int i=1; i<envelope.size(); i++) {
+			for(int i=1; i<hull.size(); i++) {
 				coord = MapCalc.geoToPixelMapA(x, y);
 				lx1 = coord[0];
 				ly1 = coord[1];
-				//coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(i)).getLongitude(), nodes.get(envelope.get(i)).getLatitude());
-				coord = MapCalc.geoToPixelMapA(sensors.get(envelope.get(i)).getLatitude(), sensors.get(envelope.get(i)).getLongitude());
+				coord = MapCalc.geoToPixelMapA(sensors.get(hull.get(i)).getLatitude(), sensors.get(hull.get(i)).getLongitude());
 				lx2 = coord[0];
 				ly2 = coord[1];
 				g.setColor(Color.BLUE);
 				g.drawLine(lx1, ly1, lx2, ly2);
-				x = sensors.get(envelope.get(i)).getLatitude();
-				y = sensors.get(envelope.get(i)).getLongitude();		
+				x = sensors.get(hull.get(i)).getLatitude();
+				y = sensors.get(hull.get(i)).getLongitude();		
 			}
-			//coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(0)).getLongitude(), nodes.get(envelope.get(0)).getLatitude());
-//			coord = MapCalc.geoToPixelMapA(nodes.get(envelope.get(0)).getLatitude(), nodes.get(envelope.get(0)).getLongitude());
-//			lx1 = coord[0];
-//			ly1 = coord[1];
-//			g.drawLine(lx2, ly2, lx1, ly1);
 		}
 	}
 	
-	public void drawEnvelopeList(Graphics2D g) {
-		for(LinkedList<Integer> envelope : envelopeList) {
-			drawEnvelope(envelope, g);
+	public void drawHulls(Graphics2D g) {
+		for(LinkedList<Integer> hull : hulls) {
+			drawHull(hull, g);
 		}
 	}
 	

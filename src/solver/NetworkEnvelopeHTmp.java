@@ -58,9 +58,9 @@ public class NetworkEnvelopeHTmp extends Thread {
 				
 		
 		DeviceList.initAll();
-		DeviceList.addEnvelope();
+		DeviceList.addHull();
 		//while(true) {
-			DeviceList.initLastEnvelope();
+			DeviceList.initLastHull();
 			min = 10000000;
 			imin = 0;
 			for (int i = 0; i < DeviceList.sensors.size(); i++) {
@@ -79,7 +79,7 @@ public class NetworkEnvelopeHTmp extends Thread {
 			DeviceList.sensors.get(imin).setMarked(true);
 			//DeviceList.sensors.get(imin).setVisited(true);
 			MapLayer.repaint();
-			DeviceList.addToLastEnvelope(imin);
+			DeviceList.addToLastHull(imin);
 			
 			delay();
 			
@@ -134,7 +134,7 @@ public class NetworkEnvelopeHTmp extends Thread {
 						DeviceList.sensors.get(imin).setMarked(true);
 						//DeviceList.sensors.get(imin).setVisited(true);
 						MapLayer.repaint();
-						DeviceList.addToLastEnvelope(imin);
+						DeviceList.addToLastHull(imin);
 						
 						n3 = n4;
 						n4 = n1;			

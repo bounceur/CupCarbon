@@ -37,12 +37,12 @@
 
 package senscript;
 
+import arduino.Arduino;
 import device.Channels;
 import device.DeviceList;
 import device.MultiChannels;
 import device.SensorNode;
 import radio_module.RadioPacketGenerator;
-import radio_module.XBeeToArduinoFrameGenerator;
 import utilities.UColor;
 import wisen_simulation.SimLog;
 import wisen_simulation.SimulationInputs;
@@ -208,16 +208,75 @@ public class Command_SEND extends Command {
 	// ---------------------------------------------------------------------------------------------------------------------
 	// Generate Arduino Code for the SEND function
 	// ---------------------------------------------------------------------------------------------------------------------
+	//@Override
+//	public String getArduinoForm2() {
+//		String s1 = sensor.getScript().getVariableValue(arg1);
+//		String s2 = sensor.getScript().getVariableValue(arg2);
+//		String s3 = sensor.getScript().getVariableValue(arg3);
+//		System.out.println(arg1);
+//		System.out.println(arg2);
+//		System.out.println(arg3);
+//		System.out.println(s1);
+//		System.out.println(s2);
+//		System.out.println(s3);
+//		String s = XBeeToArduinoFrameGenerator.data16(s1, s2, s3);
+//		return s;
+//	}
+	
 	@Override
 	public String getArduinoForm() {
-		String s1 = sensor.getScript().getVariableValue(arg1);
-		String s2 = sensor.getScript().getVariableValue(arg2);
-		String s3 = sensor.getScript().getVariableValue(arg3);
-		System.out.println(s1);
-		System.out.println(s2);
-		System.out.println(s3);
-		String s = XBeeToArduinoFrameGenerator.data16(s1, s2, s3);
+		String s = "";
+
+		if(arg1.charAt(0)=='$') {			
+			s += "\tfor(int i=0; i<30; i++) {\n";				
+			s += "\t\tsdata[i] = " + arg1.substring(1) + ".charAt(i);\n";
+			s += "\t}\n";
+		}
+		else {
+			for(int i=0; i<arg1.length();i++) {
+				s += "\tsdata["+ i +"] = '" + arg1.charAt(i) + "';\n";
+			}
+			s +="\tfor(int i="+arg1.length()+"; i < 30; i++) {\n";
+			s +="\t\tsdata[i] = ' ';\n\t}\n";
+		}
+		
+		String [] info ;
+		if (arg2.equals("") || arg2.equals("*")) {
+			s += "\taddr = XBeeAddress64(0x0, 0xFFFF);\n";
+		}
+		else
+			if (arg2.equals("0")) {
+				info = getXBeeInfoById(arg2);
+				s += "\taddr = XBeeAddress16(0x0, "+info[1]+");\n";
+			} 
+			else {
+				info = getXBeeInfoById(arg2);
+				s += "\taddr = XBeeAddress64("+info[2]+", "+info[3]+");\n";
+			}
+		s +=  "\ttx = Tx64Request(addr, sdata, sizeof(sdata));\n";
+		s +=  "\txbee.send(tx);";
 		return s;
+	}
+	
+	public String [] getXBeeInfoById(String id) {
+		String [] info = {"", "", "", ""};
+		for(String [] s : Arduino.xbeeList) {
+			if(s[0].equals(id)) {
+				info[0] = s[1];
+				info[1] = s[2];
+				info[2] = s[3];
+				info[3] = s[4];
+			}
+		}		
+//		for(int i=0; i<5; i++) {
+//			if(Arduino.xbeeList.get(i)[0].equals(id)) {
+//				info[0] = Arduino.xbeeList.get(i)[1];
+//				info[1] = Arduino.xbeeList.get(i)[2];
+//				info[2] = Arduino.xbeeList.get(i)[3];
+//				info[3] = Arduino.xbeeList.get(i)[4];
+//			}
+//		}
+		return info;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
