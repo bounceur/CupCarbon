@@ -109,12 +109,12 @@ public class Meteo extends MobileG {
 				drawRadius(x, y, radius, g);
 			}
 
-			if (NetworkParameters.displayDetails) {
+			//if (NetworkParameters.displayDetails) {
 				g.setColor(Color.BLACK);
 				String s = String.format("%2.2f", getValue());
 				g.drawString("METEO", x-15 , y-15 );
 				g.drawString("" + s , x-8 , y+3 );
-			}
+			//}
 
 			g.setColor(Color.ORANGE);
 			if (this.nateventFileName.equals(""))

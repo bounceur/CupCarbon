@@ -1,13 +1,12 @@
 package geometry;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 
 import device.DeviceList;
 import device.SensorNode;
-import map.MapLayer;
 import utilities.MapCalc;
+import utilities.UColor;
 
 public class SNEdge {
 
@@ -57,7 +56,7 @@ public class SNEdge {
 	}
 
 	public void draw(Graphics2D g) {
-		g.setStroke(new BasicStroke(2.0f));
+		g.setStroke(new BasicStroke(3.4f));
 		int[] coord;
 		coord = MapCalc.geoToPixelMapA(sn1.getLatitude(), sn1.getLongitude());
 		int lx1 = coord[0];
@@ -65,9 +64,7 @@ public class SNEdge {
 		coord = MapCalc.geoToPixelMapA(sn2.getLatitude(), sn2.getLongitude());
 		int lx2 = coord[0];
 		int ly2 = coord[1];
-		g.setColor(Color.BLUE);
-		if(MapLayer.dark)
-			g.setColor(Color.CYAN);
+		g.setColor(UColor.BLUEM);
 		g.drawLine(lx1, ly1, lx2, ly2);
 	}
 

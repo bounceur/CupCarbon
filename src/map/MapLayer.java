@@ -213,11 +213,15 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			if(Routes.routes.size()>0 && NetworkParameters.displayAllRoutes)
 				Routes.draw(g);
 		
-		markerList.draw(g);		
+		
+		markerList.draw(g);
+		
+		nodeList.drawMarkedEdges(g);
+		
 		nodeList.draw(g);
 		
 		nodeList.drawHulls(g);
-		nodeList.drawMarkedEdges(g);
+		
 
 		if (drawSelectionRectangle) {
 			g.setStroke(new BasicStroke(0.5f));
@@ -243,14 +247,13 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			g.setColor(Color.RED);
 			g.setStroke(new BasicStroke(1.0f));
 			g.drawRect((int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+5, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+5, mapViewer.getWidth()-10, mapViewer.getHeight()-10);
-		}
-		
+		}		
 		g.drawString(String.format("Simulation Time: %4.4f s", WisenSimulation.sTime) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+16);
 		g.drawString("Number of SENT messages:"+Channels.numberOfSentMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+26);
 		g.drawString("Number of ACK messages:"+Channels.numberOfAckMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+36);
 		g.drawString("Number of LOST messages:"+Channels.numberOfLostMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+46);
 		if(DeviceList.meteo != null)
-			g.drawString("Temperature: "+ String.format("%2.2f", DeviceList.meteo.getValue()) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+56);
+			g.drawString("Temperature: "+ String.format("%2.2f", DeviceList.meteo.getValue()) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+56);		
 		g.dispose();
 	}
 	

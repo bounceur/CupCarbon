@@ -281,7 +281,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 *            Graphics
 	 */
 	public void drawRadioLink(Device device, Graphics g, int type) {				
-		if(NetworkParameters.drawRadioLinks) {	
+		if(NetworkParameters.drawRadioLinks) {
 			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int lx1 = coord[0];
 			int ly1 = coord[1];

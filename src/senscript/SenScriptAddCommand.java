@@ -310,8 +310,8 @@ public final class SenScriptAddCommand {
 			command = new Command_MOVE(sensorNode, inst[1], inst[2], inst[3], inst[4]);
 		}
 		
-		if (inst[0].toLowerCase().equals("marmove")) {
-			command = new Command_MARMOVE(sensorNode, inst[1]);
+		if (inst[0].toLowerCase().equals("rmove")) {
+			command = new Command_RMOVE(sensorNode, inst[1]);
 		}
 		
 		if (inst[0].toLowerCase().equals("cdistance")) {

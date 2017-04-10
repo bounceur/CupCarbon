@@ -42,7 +42,9 @@ public final class UColor {
 	public static final Color RED_TRANSPARENT = new Color(255, 0, 0, 70);
 	public static final Color REDD_TRANSPARENT = new Color(255, 0, 0, 150);
 	public static final Color RED = new Color(216, 0, 0);
+	public static final Color CYANT = new Color(0, 204, 204,200);
 	public static final Color BLUE = new Color(81, 127, 190);
+	public static final Color BLUEM = new Color(0, 178, 255, 180);
 	public static final Color BLUE1 = new Color(89, 154, 178);
 	public static final Color BLUE2 = new Color(89, 154, 178, 150);
 	public static final Color BLUE3 = new Color(89, 154, 178, 100);

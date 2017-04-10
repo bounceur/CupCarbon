@@ -2,11 +2,11 @@ package senscript;
 
 import device.SensorNode;
 
-public class Command_MARMOVE extends Command {
+public class Command_RMOVE extends Command {
 
 	protected String arg1 = "" ;
 	
-	public Command_MARMOVE(SensorNode sensor, String arg1) {
+	public Command_RMOVE(SensorNode sensor, String arg1) {
 		this.sensor = sensor ;
 		this.arg1 = arg1 ;
 	}

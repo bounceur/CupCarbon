@@ -52,7 +52,7 @@ public class Command_MOVE extends Command {
 		}
 		if(d>0)
 			sensor.addLocEvent(d, newLongitude, newLatitude, newElevation);
-		return 0. ;
+		return 0 ;
 	}
 
 	@Override
