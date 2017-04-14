@@ -86,7 +86,7 @@ public final class UColor {
 	public static final Color [] colorTab2 = {
 		new Color(221,0,0),
 		new Color(37,105,219),
-		new Color(0,143,3),
+		new Color(0,153,76),
 		new Color(197,120,0),
 		new Color(238,224,0),
 		new Color(26,191,185),

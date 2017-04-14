@@ -57,6 +57,9 @@ public final class SenScriptAddCommand {
 			if(inst.length==1) command = new Command_WAIT(sensorNode);
 			if(inst.length==2) command = new Command_WAIT(sensorNode, inst[1]);
 		}
+		if (inst[0].toLowerCase().equals("receive")) {
+			command = new Command_RECEIVE(sensorNode, inst[1]);
+		}
 		if (inst[0].toLowerCase().equals("stop")) {
 			command = new Command_STOP(sensorNode);
 		}

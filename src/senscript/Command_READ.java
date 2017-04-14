@@ -23,14 +23,11 @@ public class Command_READ extends Command {
 		String s = "";
 		s += "\txbee.getResponse().getRx64Response(rx);\n";
 		s += "\trdata = rx.getData();\n";
-		//String ss = "";		
 		s += "\tString "+arg+" = \"\" ;\n";
 		
 		s += "\tfor(int i=0; i<20; i++) {\n";
 		s += "\t\t" + arg + " += (char) rdata[i];\n";
 		s += "\t}\n";
-		
-		//s += "\t" + arg + " = \""+ss+"\";\n";
 		
 		return s;
 	}

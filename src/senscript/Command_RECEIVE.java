@@ -4,15 +4,15 @@ import arduino.Bracket;
 import device.SensorNode;
 import wisen_simulation.SimLog;
 
-public class Command_WAIT extends Command {
+public class Command_RECEIVE extends Command {
 	
 	protected String arg = "";
 	
-	public Command_WAIT(SensorNode sensor) {
+	public Command_RECEIVE(SensorNode sensor) {
 		this.sensor = sensor ;
 	}
 	
-	public Command_WAIT(SensorNode sensor, String arg) {
+	public Command_RECEIVE(SensorNode sensor, String arg) {
 		this.sensor = sensor ;
 		this.arg = arg;
 	}
@@ -24,18 +24,14 @@ public class Command_WAIT extends Command {
 		if (sensor.dataAvailable()) {			
 			SimLog.add("S" + sensor.getId() + " Buffer available, exit waiting.");
 			sensor.getScript().setWaiting(false);
+			sensor.readMessage(arg);
 			return 0 ;
 		} 
 		else {
 			SimLog.add("S" + sensor.getId() + " is waiting for data ...");			
 			sensor.getScript().setWaiting(true);			
-			if (arg.equals(""))
-				event = Double.MAX_VALUE;
-			else {
-				event = (Double.parseDouble(sensor.getScript().getVariableValue(arg))/1000.);
-			}
-		}
-		
+			event = Double.MAX_VALUE;
+		}		
 		return event;
 	}
 
