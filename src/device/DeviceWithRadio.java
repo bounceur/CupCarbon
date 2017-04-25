@@ -466,12 +466,14 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 //			g.drawString("AR: "+this.isAckReceived(), (int) (x + 10), (int) (y + 56));
 		}
 		
-		if(!message.equals("")) {
-			if(NetworkParameters.displayPrintMessage) {
-				g.setColor(new Color(28,64,123));
-				if(MapLayer.dark) g.setColor(new Color(116,186,209));
+		if(NetworkParameters.displayPrintMessage) {
+			g.setColor(new Color(28,64,123));
+			if(MapLayer.dark) g.setColor(new Color(116,186,209));
+			if(!message.equals("")) {				
 				g.drawString(message, (int) (x + 10), (int) (y + 15));
 			}
+			else
+				g.drawString(">", (int) (x + 10), (int) (y + 15));
 		}
 	}
 	

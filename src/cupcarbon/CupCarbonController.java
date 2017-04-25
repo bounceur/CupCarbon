@@ -2790,7 +2790,7 @@ public class CupCarbonController implements Initializable {
 	}
 
 	public void opneIthRecentProject(int index) {
-		// idx = 1 .. 10
+		// index = 1 .. 10
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -2811,6 +2811,8 @@ public class CupCarbonController implements Initializable {
 					System.err.println("recent.rec doesn't exist");
 				} catch (IOException e) {
 					System.err.println("error in recent.rec file");
+				} catch (NullPointerException e) {
+					System.err.println("ne recent files");
 				}
 				openProjectLoadParameters();
 			}

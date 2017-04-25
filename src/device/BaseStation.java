@@ -98,10 +98,14 @@ public class BaseStation extends StdSensorNode {
 		triangleY[2] = y+sz ;
 		
 		if (underSimulation) {
-			g.setColor(UColor.GREEN);
+			g.setColor(new Color(38, 194, 27));
 		} else {
-			g.setColor(UColor.RED);
-		}			
+			g.setColor(UColor.ORANGE);
+			if(getScript() != null) {				
+				if(getScript().isWaiting()) g.setColor(Color.RED);
+			}
+		}	
+		
 		if(isDead()) g.setColor(Color.BLACK);
 		if(!getScriptFileName().equals(""))
 			g.fillPolygon(triangleX, triangleY, 3);

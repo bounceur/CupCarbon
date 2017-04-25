@@ -395,6 +395,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 		return getIdFL() + id;
 	}		
 	
+	@Override
 	public void loadScript() {
 		script = new SenScript(this);		
 		String projectTmpScriptPath = Project.getProjectScriptPath() + File.separator + scriptFileName;
@@ -410,8 +411,20 @@ public abstract class SensorNode extends DeviceWithRadio {
 		} catch (Exception e) {e.printStackTrace();}
 	}
 
-
-	//protected boolean receivedEvent = false;		
+	public void loadScript(String fileName) {
+		script = new SenScript(this);		
+		String projectTmpScriptPath = Project.getProjectScriptPath() + File.separator + fileName;
+		String tmp = projectTmpScriptPath;
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(tmp));
+		
+			String s = "";
+			while ((s = br.readLine()) != null) {										
+				addCommand(s);
+			}
+			br.close();
+		} catch (Exception e) {e.printStackTrace();}
+	}
 	
 	public void addMessageToBuffer(String message) {		
 		try {
@@ -567,6 +580,8 @@ public abstract class SensorNode extends DeviceWithRadio {
 	@Override
 	public void init() {
 		super.init();
+		setSending(false);
+		setReceiving(false);
 		if(getScript()!=null) getScript().setWaiting(false);
 		getCurrentRadioModule().setPl(100);
 	}

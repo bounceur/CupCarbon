@@ -712,12 +712,7 @@ public abstract class Device extends MapObject implements Runnable, _Constantes,
 		setDead(false);			
 		setLedColor(0);
 		initBattery();
-		initBuffer();		
-
-		//if(getType()==Device.SENSOR) {
-		setSending(false);
-		setReceiving(false);		
-		//}		
+		initBuffer();
 	}
 	
 	public abstract void initBattery() ;
