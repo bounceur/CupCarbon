@@ -24,6 +24,8 @@ public class Command_MATH extends Command {
 		
 		double r = 0;
 		
+		if(arg1.toLowerCase().equals("round"))
+			r = Math.round(a);
 		if(arg1.toLowerCase().equals("sqrt"))
 			r = Math.sqrt(a);
 		if(arg1.toLowerCase().equals("sin"))

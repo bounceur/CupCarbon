@@ -1002,6 +1002,10 @@ public class DeviceList {
 		MapLayer.repaint();
 	}
 
+	public static void initMarkedEdges() {
+		markedEdges = new ArrayList<SNEdge>();
+	}
+	
 	public static void initAll() {
 		hulls = new LinkedList<LinkedList<Integer>>();
 		markedEdges = new ArrayList<SNEdge>();		

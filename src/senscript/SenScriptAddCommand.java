@@ -44,6 +44,9 @@ public final class SenScriptAddCommand {
 		if (inst[0].toLowerCase().equals("cbuffer")) {
 			command = new Command_CBUFFER(sensorNode);
 		}
+		if (inst[0].toLowerCase().equals("scolor")) {
+			command = new Command_SCOLOR(sensorNode, inst[1]);
+		}
 		if (inst[0].toLowerCase().equals("send")) {			
 			if(inst.length==2) command = new Command_SEND(sensorNode, inst[1], "*");
 			if(inst.length==3) command = new Command_SEND(sensorNode, inst[1], inst[2]);
@@ -147,6 +150,21 @@ public final class SenScriptAddCommand {
 		}
 		if (inst[0].toLowerCase().equals("rdata")) {
 			command = new Command_RDATA(sensorNode, inst);
+		}
+		if (inst[0].toLowerCase().equals("last")) {
+			command = new Command_LAST(sensorNode, inst);
+		}
+		if (inst[0].toLowerCase().equals("wlast")) {
+			command = new Command_WLAST(sensorNode, inst);
+		}
+		if (inst[0].toLowerCase().equals("first")) {
+			command = new Command_FIRST(sensorNode, inst);
+		}
+		if (inst[0].toLowerCase().equals("wfirst")) {
+			command = new Command_WFIRST(sensorNode, inst);
+		}
+		if (inst[0].toLowerCase().equals("nth")) {
+			command = new Command_NTH(sensorNode, inst);
 		}
 		if (inst[0].toLowerCase().equals("vdata")) {
 			command = new Command_VDATA(sensorNode, inst[1], inst[2]);
@@ -342,7 +360,11 @@ public final class SenScriptAddCommand {
 		}
 		
 		if (inst[0].toLowerCase().equals("conc")) {
-			command = new Command_CONC(sensorNode, inst[1], inst[2], inst[3]);
+			command = new Command_CONC(sensorNode, inst[1], inst[2], inst[3], inst[4]);
+		}
+		
+		if (inst[0].toLowerCase().equals("deconc")) {
+			command = new Command_DECONC(sensorNode, inst[1], inst[2], inst[3], inst[4]);
 		}
 		
 		if (inst[0].toLowerCase().equals("getinfo")) {

@@ -2,6 +2,7 @@ package senscript;
 
 import device.SensorNode;
 import markers.Routes;
+import wisen_simulation.WisenSimulation;
 
 public class Command_ROUTE extends Command {
 
@@ -24,12 +25,16 @@ public class Command_ROUTE extends Command {
 		
 		int n = Routes.numberOfClosestNodes(sensor.getRouteIndex(), Routes.getRouteByName(route1), closeIdx, Routes.getRouteByName(route2));
 		
+		System.out.println(WisenSimulation.time + " "+sensor.getRoute());
+		
 		if(!once) {
+			System.out.println(WisenSimulation.time + " "+n);
 			executing = true;
 			once = true;
 			return n;
 		}
-		
+		System.out.println(WisenSimulation.time + " "+sensor.getRoute());
+		System.out.println("-------");
 		executing = false;
 		
 		sensor.setRoute(route2);

@@ -33,6 +33,8 @@
                <children>
                   <Button mnemonicParsing="false" onAction="#battery" prefHeight="27.0" prefWidth="375.0" text="Battery Level" />
                   <Button mnemonicParsing="false" onAction="#consumption" prefHeight="27.0" prefWidth="375.0" text="Consumption" />
+                  <Button mnemonicParsing="false" onAction="#batteryTotal" prefHeight="27.0" prefWidth="375.0" text="Battery Level (Total)" />
+                  <Button mnemonicParsing="false" onAction="#batteryAverage" prefHeight="27.0" prefWidth="375.0" text="Battery Level (Average)" />
                </children>
                <StackPane.margin>
                   <Insets />

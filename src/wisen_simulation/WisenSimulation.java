@@ -106,7 +106,8 @@ public class WisenSimulation implements Runnable {
 		
 		MultiChannels.init();
 		Channels.numberOfSentMessages = 0;
-		Channels.numberOfAckMessages = 0;
+		Channels.numberOfReceivedMessages = 0;
+		Channels.numberOfAckMessages = 0;		
 		Channels.numberOfLostMessages = 0;
 		
 		for (Device device : DeviceList.devices) {
@@ -243,7 +244,7 @@ public class WisenSimulation implements Runnable {
 				
 				MultiChannels.goToTheNextTime(min);
 				MultiChannels.receivedMessages();
-				
+								
 				min = Double.MAX_VALUE;
 				for (SensorNode sensor : DeviceList.sensors) {
 					if(!sensor.isDead()) {
@@ -255,7 +256,7 @@ public class WisenSimulation implements Runnable {
 							min = sensor.getLocEventTime();	
 					}
 				}
-				
+
 				consolPrintln("");
 				
 				double minmv = Double.MAX_VALUE;
@@ -305,7 +306,7 @@ public class WisenSimulation implements Runnable {
 					min = MultiChannels.getMin();
 					waitArrow = true;
 				}
-
+				
 				if (mobilityAndEvents) {
 					moving = false;
 					if (minmv < min) {
@@ -313,7 +314,6 @@ public class WisenSimulation implements Runnable {
 						moving = true;
 					}
 				}				
-				
 				// min ready 
 				
 				consolPrintln("");
@@ -397,25 +397,15 @@ public class WisenSimulation implements Runnable {
 				if (waitArrow && SimulationInputs.arrowsDelay > 0) {
 					Thread.sleep((int)(SimulationInputs.arrowsDelay));
 				}
-				else {					
+				else {
 					int d = (int)(SimulationInputs.visualDelay*(time - previousTime));					
-					if(time < SimulationInputs.simulationTime) 
+					if(time < SimulationInputs.simulationTime) {
 						Thread.sleep(d);
+					}
 					else {
 						isSimulating = false;
 						System.out.println("Infinite Times!");
-//						Platform.runLater(new Runnable() {
-//							@Override
-//							public void run() {
-//								Alert alert = new Alert(AlertType.INFORMATION);
-//								alert.setTitle("Simulation");
-//								alert.setHeaderText(null);
-//								alert.setContentText("Infinite Time! [time = "+sTime+"]");
-//								alert.showAndWait();
-//							}
-//						});
 					}
-						
 				}
 				previousTime = time;
 				ps.flush();
@@ -460,6 +450,14 @@ public class WisenSimulation implements Runnable {
 		if(DeviceList.propagationsCalculated)
 			DeviceList.calculatePropagations();
 		MapLayer.repaint();
+		
+		System.out.println(String.format("Simulation Time: %4.4f s", WisenSimulation.sTime));
+		System.out.println("Number of SENT messages:"+Channels.numberOfSentMessages );
+		System.out.println("Number of RECEIVED messages:"+Channels.numberOfReceivedMessages);
+		System.out.println("Number of SENT & RECEIVED messages:"+(Channels.numberOfReceivedMessages+Channels.numberOfSentMessages));
+		System.out.println("Number of ACK messages:"+Channels.numberOfAckMessages);
+		System.out.println("Number of LOST messages:"+Channels.numberOfLostMessages);
+		
 	}
 
 	// ------------------------------------------------------------

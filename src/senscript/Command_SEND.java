@@ -107,12 +107,16 @@ public class Command_SEND extends Command {
 	// No ACK for the broadcast sending : arg2.equals("*") && arg3.equals("")
 	// ---------------------------------------------------------------------------------------------------------------------
 	@Override
-	public double execute() {	
+	public double execute() {
+		if(sensor.getScript().getVariableValue(arg1)==null || sensor.getScript().getVariableValue(arg2)==null) {
+			return 0;
+		}
 		//System.out.println("===================================");
 		//System.out.println("           CALL  " + sensor.getId()+" "+sensor.ackOk());
 		//System.out.println("===================================");
 		if (arg1.equals("!color")) {
-			sensor.setRadioLinkColor(UColor.colorTab2[Integer.parseInt(arg2)]);
+			Double v = Double.parseDouble(sensor.getScript().getVariableValue(arg2));
+			sensor.setRadioLinkColor(UColor.colorTab2[v.intValue()]);
 			return 0;
 		}
 		String message = arg1;
@@ -169,7 +173,7 @@ public class Command_SEND extends Command {
 			sensor.setAckWaiting(false);
 			writtenInUART = false;
 			executing = false;
-			sensor.setAttempts(0);
+			sensor.setAttempts(0);			
 			sendOperation(message);
 			return 0;
 		}
@@ -297,7 +301,7 @@ public class Command_SEND extends Command {
 		// ---------------------------------------------------------------------------------------------------------------------
 		public void sendOperation(String message) {
 			//String packet = RadioPacketGenerator.generate(sensor.getStandard());
-			
+			Channels.numberOfSentMessages++;
 			sensor.consumeTx(RadioPacketGenerator.packetLengthInBits(0, sensor.getStandard()));
 			
 			if (arg2.equals("*")) {

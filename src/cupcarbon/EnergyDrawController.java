@@ -103,4 +103,14 @@ public class EnergyDrawController {
 		}
 	}
 	
+	@FXML
+	public void batteryTotal() {
+		//TODO
+	}
+	
+	@FXML
+	public void batteryAverage() {
+		//TODO
+	}
+	
 }

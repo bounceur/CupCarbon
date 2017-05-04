@@ -250,8 +250,9 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		}		
 		g.drawString(String.format("Simulation Time: %4.4f s", WisenSimulation.sTime) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+16);
 		g.drawString("Number of SENT messages:"+Channels.numberOfSentMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+26);
-		g.drawString("Number of ACK messages:"+Channels.numberOfAckMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+36);
-		g.drawString("Number of LOST messages:"+Channels.numberOfLostMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+46);
+		g.drawString("Number of RECEIVED messages:"+Channels.numberOfReceivedMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+36);
+		g.drawString("Number of ACK messages:"+Channels.numberOfAckMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+46);
+		g.drawString("Number of LOST messages:"+Channels.numberOfLostMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+56);
 		if(DeviceList.meteo != null)
 			g.drawString("Temperature: "+ String.format("%2.2f", DeviceList.meteo.getValue()) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+56);		
 		g.dispose();
@@ -513,7 +514,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	
 	private boolean dragging = false;
 	@Override
-	public void mouseDragged(MouseEvent e) {
+	public void mouseDragged(MouseEvent e) {		
 		if (shiftDown || e.getButton()==MouseEvent.BUTTON3) {
 			cadreX2 = e.getX();
 			cadreY2 = e.getY();
@@ -525,6 +526,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				for(SensorNode sensor : DeviceList.sensors) {
 					if (sensor.isSelected()) {
 						if(!dragging) {
+							DeviceList.initMarkedEdges();
 							sensor.calculateDxDy(e.getX(), e.getY());
 							sensor.setPrevLongitude(sensor.getLongitude());
 							sensor.setPrevLatitude(sensor.getLatitude());
@@ -537,7 +539,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				
 				for(Device device : DeviceList.devices) {
 					if (device.isSelected()) {
-						if(!dragging) {
+						if(!dragging) {							
 							device.calculateDxDy(e.getX(), e.getY());
 							device.setPrevLongitude(device.getLongitude());
 							device.setPrevLatitude(device.getLatitude());

@@ -18,15 +18,13 @@ public class Command_EDGE extends Command {
 	public double execute() {
 		int v = Integer.parseInt(sensor.getScript().getVariableValue(arg1));
 		int id = Integer.parseInt(sensor.getScript().getVariableValue(arg2));
-		SensorNode sensor2 = DeviceList.getSensorNodeById(id);
-//		double x1 = sensor.getLatitude();
-//		double y1 = sensor.getLongitude();
-//		double x2 = sensor2.getLatitude();
-//		double y2 = sensor2.getLongitude();
-		if(v==1)
-			DeviceList.addEdge(sensor, sensor2);
-		else
-			DeviceList.removeEdge(sensor, sensor2);
+		if(sensor.getId()!=id) {
+			SensorNode sensor2 = DeviceList.getSensorNodeById(id);
+			if(v==1)
+				DeviceList.addEdge(sensor, sensor2);
+			else
+				DeviceList.removeEdge(sensor, sensor2);
+		}
 		return 0 ;
 	}
 

@@ -70,7 +70,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	protected double variation = rnd.nextGaussian();
 		
 	//
-	protected int bufferSize = 4096;
+	protected int bufferSize = 14096;
 	protected int bufferIndex = 0 ;
 	protected byte [] buffer = new byte [bufferSize];
 	protected boolean bufferReady = false;

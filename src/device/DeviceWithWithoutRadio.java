@@ -302,6 +302,10 @@ public abstract class DeviceWithWithoutRadio extends Device {
 		gpsFileName = name + ".gps"; 
 	}
 	
+	public String getRoute()  {
+		return gpsFileName; 
+	}
+	
 	public void setRouteIndex(int index) {
 		this.routeIndex = index;
 	}

@@ -159,7 +159,8 @@ public class Routes {
 		
 		double distance_ref = MapLayer.distance(x1, y1, x2, y2);
 
-		int k = 0;
+		int k = 1;
+		
  		for(int i=routeIndex1+1; i<nr1.size(); i++) {
  			x1 = nr1.getRoute().get(i).getX();
  			y1 = nr1.getRoute().get(i).getY();
@@ -168,8 +169,8 @@ public class Routes {
 				return k-1;
 			}
 			k++;
-		}
-		return -1;
+		} 		
+		return 1;
 	}
 
 }

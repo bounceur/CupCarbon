@@ -20,6 +20,7 @@ import wisen_simulation.SimulationInputs;
 public class Channels {
 	
 	public static int numberOfSentMessages = 0;
+	public static int numberOfReceivedMessages = 0;
 	public static int numberOfAckMessages = 0;
 	public static int numberOfLostMessages = 0;
 	
@@ -49,9 +50,7 @@ public class Channels {
 		
 		if((!rSensor.isReceiving() || !SimulationInputs.ack)  || type==1) {
 			if(type == 1)
-				numberOfAckMessages++;
-			else
-				numberOfSentMessages++;				
+				numberOfAckMessages++;				
 				
 			SimLog.add("S" + rSensor.getId() +" (radio: " + rSensor.getCurrentRadioModule().getName() + ") is receiving the message : \"" + message + "\" in its buffer.");
 			double ratio1 = 1.0/tSensor.getCurrentRadioModule().getRadioDataRate();
@@ -75,7 +74,7 @@ public class Channels {
 			//System.out.println(WisenSimulation.time+ " " + channelEventList);
 		}
 	}
-		
+
 	public void receivedMessages() {
 		for (List<PacketEvent> packetEventList : channelEventList) {			
 			while(packetEventList.size()>0 && packetEventList.get(0).getTime()==0) {
@@ -83,8 +82,10 @@ public class Channels {
 				String message = packetEventList.get(0).getMessage();
 				SensorNode tSensor = packetEventList.get(0).getSSensor();	
 				SensorNode rSensor = packetEventList.get(0).getRSensor();
-				
+
 				rSensor.setDrssi(tSensor.distance(rSensor));
+				
+				numberOfReceivedMessages++;
 				
 				rSensor.consumeRx(RadioPacketGenerator.packetLengthInBits(type, tSensor.getStandard()));
 				
@@ -116,8 +117,7 @@ public class Channels {
 					rSensor.setAckReceived(true);
 					rSensor.setAckWaiting(false);
 					rSensor.setEvent(0);
-				}
-				
+				}				
 				packetEventList.remove(0);
 			}
 		}
