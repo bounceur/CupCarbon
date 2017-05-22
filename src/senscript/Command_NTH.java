@@ -18,7 +18,7 @@ public class Command_NTH extends Command {
 	public double execute() {
 		try {
 			int nth;
-			String symbole = "#";
+			String symbole = "&";
 			if(args[1].charAt(0)=='!') {
 				symbole = "" + args[1].charAt(1);
 				data = sensor.getScript().getVariableValue(args[4]);

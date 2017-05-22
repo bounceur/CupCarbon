@@ -47,6 +47,7 @@ import javafx.scene.paint.Color;
 import map.MapLayer;
 import markers.Routes;
 import project.Project;
+import senscript.MarkTmp;
 
 public class WisenSimulation implements Runnable {
 	
@@ -89,6 +90,8 @@ public class WisenSimulation implements Runnable {
 	}
 
 	public void start_simulation() {
+		MarkTmp.v = 0;
+		
 		DeviceList.initAll();
 		Routes.loadRoutes();
 		resultsWritingTime = 0.0;
@@ -457,6 +460,7 @@ public class WisenSimulation implements Runnable {
 		System.out.println("Number of SENT & RECEIVED messages:"+(Channels.numberOfReceivedMessages+Channels.numberOfSentMessages));
 		System.out.println("Number of ACK messages:"+Channels.numberOfAckMessages);
 		System.out.println("Number of LOST messages:"+Channels.numberOfLostMessages);
+		System.out.println("MARKS "+MarkTmp.v);
 		
 	}
 

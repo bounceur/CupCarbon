@@ -166,6 +166,12 @@ public final class SenScriptAddCommand {
 		if (inst[0].toLowerCase().equals("nth")) {
 			command = new Command_NTH(sensorNode, inst);
 		}
+		if (inst[0].toLowerCase().equals("sadd")) {
+			command = new Command_SADD(sensorNode, inst[1], inst[2]);
+		}
+		if (inst[0].toLowerCase().equals("spop")) {
+			command = new Command_SPOP(sensorNode, inst[1], inst[2]);
+		}
 		if (inst[0].toLowerCase().equals("vdata")) {
 			command = new Command_VDATA(sensorNode, inst[1], inst[2]);
 		}

@@ -356,6 +356,7 @@ public final class Project {
 				case "display_marker_distance": NetworkParameters.displayMarkerDistance = Boolean.parseBoolean(keyVal[1]); break;
 				case "display_radio_messages": NetworkParameters.displayRadioMessages = Boolean.parseBoolean(keyVal[1]); break;
 				case "draw_script_file_name":  NetworkParameters.drawScriptFileName = Boolean.parseBoolean(keyVal[1]); break;
+				case "display_print_messages":  NetworkParameters.displayPrintMessage = Boolean.parseBoolean(keyVal[1]); break;
 				}
 			}
 			br.close();
@@ -401,6 +402,7 @@ public final class Project {
 			fos.println("display_marker_distance:" + NetworkParameters.displayMarkerDistance);
 			fos.println("display_radio_messages:" + NetworkParameters.displayRadioMessages);
 			fos.println("draw_script_file_name:" + NetworkParameters.drawScriptFileName);
+			fos.println("display_print_messages:" + NetworkParameters.displayPrintMessage);
 			fos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

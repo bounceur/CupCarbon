@@ -114,6 +114,8 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	public static boolean multipleSelection = false;
 	public static boolean button3Clicked = false;
 	
+	public static boolean showInfos = true;
+	
 	public MapLayer() {}
 	
 	public MapLayer(JXMapViewer mapViewer) {		
@@ -247,14 +249,16 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			g.setColor(Color.RED);
 			g.setStroke(new BasicStroke(1.0f));
 			g.drawRect((int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+5, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+5, mapViewer.getWidth()-10, mapViewer.getHeight()-10);
-		}		
-		g.drawString(String.format("Simulation Time: %4.4f s", WisenSimulation.sTime) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+16);
-		g.drawString("Number of SENT messages:"+Channels.numberOfSentMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+26);
-		g.drawString("Number of RECEIVED messages:"+Channels.numberOfReceivedMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+36);
-		g.drawString("Number of ACK messages:"+Channels.numberOfAckMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+46);
-		g.drawString("Number of LOST messages:"+Channels.numberOfLostMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+56);
-		if(DeviceList.meteo != null)
-			g.drawString("Temperature: "+ String.format("%2.2f", DeviceList.meteo.getValue()) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+56);		
+		}
+		if(showInfos) {
+			g.drawString(String.format("Simulation Time: %4.4f s", WisenSimulation.sTime) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+16);
+			g.drawString("Number of SENT messages:"+Channels.numberOfSentMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+26);
+			g.drawString("Number of RECEIVED messages:"+Channels.numberOfReceivedMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+36);
+			g.drawString("Number of ACK messages:"+Channels.numberOfAckMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+46);
+			g.drawString("Number of LOST messages:"+Channels.numberOfLostMessages , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+56);
+			if(DeviceList.meteo != null)
+				g.drawString("Temperature: "+ String.format("%2.2f", DeviceList.meteo.getValue()) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+56);
+		}
 		g.dispose();
 	}
 	
@@ -692,6 +696,9 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		shiftDown = key.isShiftDown();
 		altDown = key.isAltDown();
 		lastKeyCode = key.getKeyCode();
+		
+		if(key.getKeyCode()==68 && altDown)
+			showInfos = !showInfos;
 		
 		if(key.getKeyChar()=='a' && !ctrlDown && !cmdDown && !shiftDown && !altDown ) {
 			NetworkParameters.drawSensorArrows = !NetworkParameters.drawSensorArrows; 

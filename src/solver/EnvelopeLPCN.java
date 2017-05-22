@@ -33,7 +33,7 @@ import map.MapLayer;
  */
 public class EnvelopeLPCN extends Thread {
  
-	protected int delayTime = 50;
+	protected int delayTime = 100;
 	//protected boolean loop = true;
 	
 	@Override	
@@ -57,6 +57,7 @@ public class EnvelopeLPCN extends Thread {
 		double angle = 0;
 		int current = 0;
 		int first = 0;
+		int next = 0;
 		double min = 0;
 		int imin = 0;
 		boolean stop = false;		
@@ -82,6 +83,7 @@ public class EnvelopeLPCN extends Thread {
 
 			first = imin;
 			current = imin;
+			next = -1;
 			nodes.get(imin).setMarked(true);
 			MapLayer.repaint();
 			DeviceList.addToLastHull(imin);
@@ -94,9 +96,10 @@ public class EnvelopeLPCN extends Thread {
 	
 			x1 = xc - 0.1;
 			y1 = yc;
-	
+			nodes.get(first).setMessage("BEGIN");
 			stop = false;
 			boolean intersection = false ;
+			boolean once = false;
 			while (!stop) {
 				min = 1000;
 				imin = -1;
@@ -126,9 +129,18 @@ public class EnvelopeLPCN extends Thread {
 						}
 					}
 				}
-	
-				if (imin == first)
+					
+				System.out.println(imin+" "+next+" | "+current+" "+first);
+				if ((imin == next) && (current== first)) {
+					nodes.get(first).setMessage("END");
 					stop = true;	
+				}
+	
+				if(!once) {
+					next = imin;
+					System.out.println(next);
+					once = true;
+				}
 				
 				nodes.get(imin).setMarked(true);
 				MapLayer.repaint();

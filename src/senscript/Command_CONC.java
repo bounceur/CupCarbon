@@ -32,6 +32,6 @@ public class Command_CONC extends Command {
 
 	@Override
 	public String toString() {
-		return "PLUS";
+		return "CONC";
 	}
 }
