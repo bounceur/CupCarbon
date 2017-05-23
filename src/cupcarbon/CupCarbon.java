@@ -43,7 +43,7 @@ import solver.SolverProxyParams;
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
- * @version 3.1.0 (U-One)
+ * @version 3.2.0 (U-One)
  */
 
 public class CupCarbon extends Application {
@@ -80,7 +80,7 @@ public class CupCarbon extends Application {
 	    
 		stage.setTitle("CupCarbon "+CupCarbonVersion.VERSION);
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("cupcarbon_logo_small.png")));		
-		stage.setMaximized(true);
+		//stage.setMaximized(true);
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(CupCarbon.class.getResource("cupcarbon.fxml"));
 		BorderPane panneau = (BorderPane) loader.load();
