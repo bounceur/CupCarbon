@@ -54,6 +54,9 @@ package cupcarbon_script;
  */
 
 import buildings.BuildingList;
+import device.Device;
+import device.DeviceList;
+import device.SensorNode;
 import map.NetworkParameters;
 import map.MapLayer;
 
@@ -85,49 +88,61 @@ public class CupCommand_DISPLAY extends CupCommand {
 			case ("details") : 
 				NetworkParameters.displayDetails = !NetworkParameters.displayDetails;
 				MapLayer.repaint();
-				rep = " 000 The Details have been Shown";
+				rep = "000 The Details have been Shown";
 				currentExecution = true;
 				break;
 			case ("rdistances") : 
 				NetworkParameters.displayRLDistance = !NetworkParameters.displayRLDistance; 
 	 			MapLayer.repaint();
-	 			rep = " 000 The Distances have been Shown";
+	 			rep = "000 The Distances have been Shown";
 				currentExecution = true;
 				break;
 			case ("rmessages") : 
 				NetworkParameters.displayRadioMessages = !NetworkParameters.displayRadioMessages; 
 	 			MapLayer.repaint();
-	 			rep = " 000 The Distances have been Shown";
+	 			rep = "000 The Distances have been Shown";
 				currentExecution = true;
 				break;
 			case ("mdistances") : 
 				NetworkParameters.displayMarkerDistance = !NetworkParameters.displayMarkerDistance; 
 	 			MapLayer.repaint();
-	 			rep = " 000 The Distances have been Shown";
+	 			rep = "000 The Distances have been Shown";
 				currentExecution = true;
 				break;
 			case ("links") : 
 				NetworkParameters.drawRadioLinks = !NetworkParameters.drawRadioLinks; 
 				MapLayer.repaint();
-				rep = " 000 The Links have been Shown";
+				rep = "000 The Links have been Shown";
 				currentExecution = true;
 				break;
 			case ("narrows") : 
 				NetworkParameters.drawSensorArrows = !NetworkParameters.drawSensorArrows;
 				MapLayer.repaint();
-				rep = " 000 The Netowrks Arrows have been Shown";
+				rep = "000 The Netowrks Arrows have been Shown";
 				currentExecution = true;
 				break;
 			case ("marrows") : 
 				NetworkParameters.drawMarkerArrows = !NetworkParameters.drawMarkerArrows;
 				MapLayer.repaint();
-				rep = " 000 The Markes Arrows have been Shown";
+				rep = "000 The Markes Arrows have been Shown";
+				currentExecution = true;
+				break;
+			case ("nodes") :
+				for (SensorNode d : DeviceList.sensors) {
+					d.setHide(1);
+				}
+				for (Device d : DeviceList.devices) {
+					d.setHide(1);
+				}
+				NetworkParameters.drawRadioLinks = false;
+				MapLayer.repaint();
+				rep = "000 The nodes Only will be Shown";
 				currentExecution = true;
 				break;
 			case ("buildings") : 
 				BuildingList.showHideBuildings();
 				MapLayer.repaint();
-				rep = " 000 The Buildings have been Shown";
+				rep = "000 The Buildings have been Shown";
 				currentExecution = true;
 				break;
 			default :

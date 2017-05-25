@@ -38,13 +38,13 @@ public final class CupScriptAddCommand {
 
 	public static Stack<String> endof = new Stack<String>();
 
-	public static String detectKeyWord(String s) {
-		return s.replaceFirst("\\(", " (");
-	}
+//	public static String detectKeyWord(String s) {
+//		return s.replaceFirst("\\(", "(");
+//	}
 
 	public static void addCommand(CupScript script, String instStr) {
 		
-		instStr = detectKeyWord(instStr);
+//		instStr = detectKeyWord(instStr);
 		List<String> objectsList = new ArrayList<String>();
 
 		
@@ -160,13 +160,11 @@ public final class CupScriptAddCommand {
 		}
 		
 		if (inst[0].toLowerCase().equals("setparameter")) {
-			if(inst.length==4) command = new CupCommand_SETPARAMETER(script, inst[1], inst[2], inst[3]);
 			if(inst.length==5) command = new CupCommand_SETPARAMETER(script, inst[1], inst[2], "", inst[3], inst[4]);
 			if(inst.length==6) command = new CupCommand_SETPARAMETER(script, inst[1], inst[2], inst[3], inst[4], inst[5]);
 		}
 		
 		if (inst[0].toLowerCase().equals("getparameter")) {
-			if(inst.length==4) command = new CupCommand_GETPARAMETER(script, inst[1], inst[2], inst[3]);
 			if(inst.length==5) command = new CupCommand_GETPARAMETER(script, inst[1], inst[2], "", inst[3], inst[4]);
 			if(inst.length==6) command = new CupCommand_GETPARAMETER(script, inst[1], inst[2], inst[3], inst[4], inst[5]);
 		}
@@ -180,16 +178,22 @@ public final class CupScriptAddCommand {
 			command = new CupCommand_PLUS(script, inst[1], inst[2], inst[3]);
 		}
 		
-		if (inst[0].toLowerCase().equals("stop")) {
-			command = new CupCommand_STOP(script);
+		if (inst[0].toLowerCase().equals("quit")) {
+			command = new CupCommand_QUIT(script);
 		}
 		
+		if (inst[0].toLowerCase().equals("reset")) {
+			command = new CupCommand_RESET(script);
+		}
+		
+		if (inst[0].toLowerCase().equals("init_id")) {
+			command = new CupCommand_INIT_ID(script);
+		}
 		
 		if (inst[0].toLowerCase().equals("set")) {
 			command = new CupCommand_SET(script, inst[1], inst[2]);
 		}
 		
-
 		if (inst[0].toLowerCase().equals("println")) {
 			command = new CupCommand_PRINTLN(script, inst);
 		}

@@ -53,6 +53,7 @@ import action.CupActionModifSensorUnitRadius;
 import action.CupActionStack;
 import arduino.Arduino;
 import buildings.BuildingList;
+import cupcarbon_script.CupCarbonServer;
 import device.Device;
 import device.DeviceList;
 import device.SensorNode;
@@ -2836,5 +2837,17 @@ public class CupCarbonController implements Initializable {
 		NetworkParameters.displayAllRoutes = false;
 		Routes.hideAll();
 	}
+	
+	@FXML
+	public void runServer() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				new CupCarbonServer().start();		
+				mapFocus();
+			}
+		});
+	}
+
 
 }

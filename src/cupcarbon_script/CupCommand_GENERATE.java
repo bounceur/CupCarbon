@@ -71,7 +71,7 @@ public class CupCommand_GENERATE extends CupCommand {
 			switch(sOption) {
 			case ("random") : 
 				DeviceList.addRandomSensors(Integer.parseInt(sValue));
-				rep = " 000 The " + sValue + " Sensors have been generated Randomly";
+				rep = "000 The " + sValue + " Sensors have been generated Randomly";
 				currentExecution = true;
 				break;
 			default :

@@ -19,7 +19,7 @@ public class Command_SADD extends Command {
 	public double execute() {
 		String v1 = sensor.getScript().getVariableValue(arg1);
 		String v2 = sensor.getScript().getVariableValue("$"+arg2);
-		System.out.println(">>>> "+v1+" "+v2);
+		//System.out.println(">>>> "+v1+" "+v2);
 		String z = v2;
 		if((z == null) || (z.equals(""))) {
 			z = v1;

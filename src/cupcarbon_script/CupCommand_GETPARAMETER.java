@@ -114,15 +114,6 @@ public class CupCommand_GETPARAMETER extends CupCommand {
 		this.value = value;		
 	}
 
-	//---------------------------------------------------------------------------------------------------------------------
-	// Constructor 
-	// ---------------------------------------------------------------------------------------------------------------------
-	public CupCommand_GETPARAMETER(CupScript script, String option, String parameter, String value) {
-		this.script = script ;
-		this.option = option;
-		this.parameter = parameter;
-		this.value = value;
-		}
 
 	//---------------------------------------------------------------------------------------------------------------------
 	// execute getparameter

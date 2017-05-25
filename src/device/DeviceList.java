@@ -1113,15 +1113,14 @@ public class DeviceList {
 		return p;
 	}
 	
-	public void initId() {
-		int k = 0;
+	public static void initId() {
 		Device.initNumber() ;
 		for(SensorNode d : sensors) {
-			d.setId(k++);
+			d.setId(number);
 			Device.incNumber();
 		}
 		for(Device d : devices) {
-			d.setId(k++);
+			d.setId(number);
 			Device.incNumber();
 		}
 		MapLayer.repaint();
@@ -1444,7 +1443,8 @@ public class DeviceList {
 				try {
 					for(SensorNode device : sensors) {
 						device.calculatePropagations();
-					}
+						MapLayer.repaint();
+					}					
 				}
 				catch(Exception e) {}
 			}

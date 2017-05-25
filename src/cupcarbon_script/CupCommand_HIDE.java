@@ -85,49 +85,49 @@ public class CupCommand_HIDE extends CupCommand {
 			case ("details") : 
 				NetworkParameters.displayDetails = !NetworkParameters.displayDetails;
 				MapLayer.repaint();
-				rep = " 000 The Details have been Hidden";
+				rep = "000 The Details have been Hidden";
 				currentExecution = true;
 				break;
 			case ("rdistances") : 
 				NetworkParameters.displayRLDistance = !NetworkParameters.displayRLDistance; 
 	 			MapLayer.repaint();
-	 			rep = " 000 The Distances have been Hidden";
+	 			rep = "000 The Distances have been Hidden";
 				currentExecution = true;
 				break;
 			case ("rmessages") : 
 				NetworkParameters.displayRadioMessages = !NetworkParameters.displayRadioMessages; 
 	 			MapLayer.repaint();
-	 			rep = " 000 The Distances have been Hidden";
+	 			rep = "000 The Distances have been Hidden";
 				currentExecution = true;
 				break;
 			case ("mdistances") : 
 				NetworkParameters.displayMarkerDistance = !NetworkParameters.displayMarkerDistance; 
 	 			MapLayer.repaint();
-	 			rep = " 000 The Distances have been Hidden";
+	 			rep = "000 The Distances have been Hidden";
 				currentExecution = true;
 				break;
 			case ("links") : 
 				NetworkParameters.drawRadioLinks = !NetworkParameters.drawRadioLinks; 
 				MapLayer.repaint();
-				rep = " 000 The Links have been Hidden";
+				rep = "000 The Links have been Hidden";
 				currentExecution = true;
 				break;
 			case ("narrows") : 
 				NetworkParameters.drawSensorArrows = !NetworkParameters.drawSensorArrows;
 				MapLayer.repaint();
-				rep = " 000 The Netowrks Arrows have been Hidden";
+				rep = "000 The Netowrks Arrows have been Hidden";
 				currentExecution = true;
 				break;
 			case ("marrows") : 
 				NetworkParameters.drawMarkerArrows = !NetworkParameters.drawMarkerArrows;
 				MapLayer.repaint();
-				rep = " 000 The Markers Arrows have been Hidden";
+				rep = "000 The Markers Arrows have been Hidden";
 				currentExecution = true;
 				break;
 			case ("buildings") : 
 				BuildingList.showHideBuildings();
 				MapLayer.repaint();
-				rep = " 000 The Buildings have been Hidden";
+				rep = "000 The Buildings have been Hidden";
 				currentExecution = true;
 				break;
 			default :

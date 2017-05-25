@@ -301,7 +301,8 @@ public class Command_SEND extends Command {
 		// ---------------------------------------------------------------------------------------------------------------------
 		public void sendOperation(String message) {
 			//String packet = RadioPacketGenerator.generate(sensor.getStandard());
-			Channels.numberOfSentMessages++;
+			Channels.numberOfSentMessages++;			
+			//DeviceList.meteo.getValue()			
 			sensor.consumeTx(RadioPacketGenerator.packetLengthInBits(0, sensor.getStandard()));
 			
 			if (arg2.equals("*")) {

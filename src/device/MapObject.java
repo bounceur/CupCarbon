@@ -32,6 +32,7 @@ public abstract class MapObject implements Runnable, Cloneable {
 	public static final int VERTEX = 9;
 	public static final int BUILDING = 10;
 	public static final int GEOZONE = 11;
+	public static final int RSENSOR = 12;
 	
 	protected int id = 0;
 	protected String userId = "";

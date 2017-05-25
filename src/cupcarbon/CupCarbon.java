@@ -24,17 +24,21 @@
 
 package cupcarbon;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 
 import action.CupActionStack;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -106,9 +110,8 @@ public class CupCarbon extends Application {
 	
 	public static boolean internetIsAvailable() {
 	    try {
-	        final URL url = new URL("http://a.basemaps.cartocdn.com/light_all/0/0/0.png");
-	        final URLConnection connection = url.openConnection();
-	        InputStream is = connection.getInputStream();
+	        URL url = new URL("http://a.basemaps.cartocdn.com/light_all/0/0/0.png");
+	        InputStream is = url.openStream();
 	        System.out.println("Internet: OK");
 	        int x1 = is.read();
 	        int x2 = is.read();
@@ -116,9 +119,29 @@ public class CupCarbon extends Application {
 	        int x4 = is.read();
 	        int x5 = is.read();
 	        is.close();
-	        
-	        if(x1==137 && x2==80 && x3==78 && x4==71 && x5==13)
+	        if(x1==137 && x2==80 && x3==78 && x4==71 && x5==13) {
+	        	URL url2 = new URL("http://www.cupcarbon.com/download/cupcarbon_update.txt");
+		        InputStream is2 = url2.openStream();
+	        	BufferedReader br = new BufferedReader(new InputStreamReader(is2));
+	        	int u = Integer.parseInt(br.readLine());
+	        	if(u>CupCarbonVersion.UPDATE) {
+	        		System.out.println("NEW VERSION AVAILABE");
+	        		Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setTitle("New Version");
+							alert.setHeaderText("New Version is available.");
+							alert.setContentText("Visit www.cupcarbon.com");
+							alert.showAndWait();
+						}
+					});
+	        	} 
+	        	else {
+	        		System.out.println("UPDATED VERSION");
+	        	}
 	        	return true;
+	        }
 	        else
 	        	return false;
 	    } catch (MalformedURLException e) {

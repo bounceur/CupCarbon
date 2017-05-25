@@ -31,7 +31,7 @@ public class Command_SPOP extends Command {
 			ret = data.substring(data.indexOf(symbole)+1);
 		}
 		
-		System.out.println("<<<< "+v+" "+ret);
+		//System.out.println("<<<< "+v+" "+ret);
 		
 		sensor.getScript().addVariable(arg1, v);
 		sensor.getScript().addVariable(arg2, ret);

@@ -76,6 +76,8 @@
 
 package cupcarbon_script;
 
+import java.util.ArrayList;
+import java.util.List;
 import cupcarbon.CupCarbon;
 
 /**
@@ -88,6 +90,7 @@ import device.Device;
 import device.DeviceList;
 import device.MediaSensorNode;
 import device.SensorNode;
+import map.WorldMap;
 
 
 public class CupCommand_SETPARAMETER extends CupCommand {
@@ -116,15 +119,7 @@ public class CupCommand_SETPARAMETER extends CupCommand {
 		this.value = value;		
 	}
 
-	//---------------------------------------------------------------------------------------------------------------------
-	// Constructor 
-	// ---------------------------------------------------------------------------------------------------------------------
-	public CupCommand_SETPARAMETER(CupScript script, String option, String parameter, String value) {
-		this.script = script ;
-		this.option = option;
-		this.parameter = parameter;
-		this.value = value;
-	}
+	
 
 	//---------------------------------------------------------------------------------------------------------------------
 	// execute setparameter
@@ -137,8 +132,9 @@ public class CupCommand_SETPARAMETER extends CupCommand {
 		String rep = "";
 		sOption = script.getVariableValue(option);
 		sDevice = script.getVariableValue(device);
-		Device node = DeviceList.getNodeByName(sDevice);
-		SensorNode sensorNode = (SensorNode) DeviceList.getNodeByName(sDevice);
+		Device node = null;
+		SensorNode sensorNode = null;
+		List<String> sObjects = new ArrayList<String>();
 		sRadio = script.getVariableValue(radio);
 		sParameter = script.getVariableValue(parameter);
 		sValue = script.getVariableValue(value);
@@ -153,87 +149,116 @@ public class CupCommand_SETPARAMETER extends CupCommand {
 					CupCarbon.cupCarbonController.getRadioInformations();
 					CupCarbon.cupCarbonController.updateSelectionInListView();
 				}
-				node.setSelected(true);
-				switch (sParameter) {
-				case("senscript") :
-					if (node.getType() != Device.GAS || node.getType() != Device.MOBILE || node.getType() != Device.MARKER) {
-						node.setScriptFileName(sValue);
-						rep = "000 Device: "+ sDevice + " has a new senscript file = " + sValue;
+				
+				if (sDevice.equals("all")) {
+					WorldMap.setSelectionOfAllNodes(true, -1, true);
+					for(SensorNode sensor : DeviceList.sensors)
+						sObjects.add(sensor.getName());
+					for(Device device : DeviceList.devices)
+						sObjects.add(device.getName());
+				}
+				
+				else if (sDevice.equals("selected")) {
+					for(SensorNode sensor : DeviceList.sensors)
+						if (sensor.isSelected())
+							sObjects.add(sensor.getName());
+					for(Device device : DeviceList.devices)
+						if (device.isSelected())
+							sObjects.add(device.getName());
+				}
+				else if ((sDevice.charAt(0) == '(') && (sDevice.charAt(sDevice.length()-1) == ')')) {
+					sDevice.trim();
+					sDevice = sDevice.substring(1, sDevice.length()-1);
+					String[] listOfObjects = sDevice.split(",");
+					for (int i = 0; i< listOfObjects.length; i++)
+						sObjects.add(listOfObjects[i]);
+				}
+				for (int i = 0; i < sObjects.size(); i++) {
+					node = DeviceList.getNodeByName(sObjects.get(i));
+					node.setSelected(true);
+					
+					switch (sParameter) {
+					case("senscript") :
+						if (node.getType() != Device.GAS || node.getType() != Device.MOBILE || node.getType() != Device.MARKER) {
+							node.setScriptFileName(sValue);
+							rep = rep + System.lineSeparator() + "000 The Device: "+ sObjects.get(i) + " has a new senscript file = " + sValue;
+							currentExecution = true;
+						}
+						break;
+					case("gps") :
+						if (node.getType() != Device.GAS || node.getType() != Device.MARKER) {
+							node.setGPSFileName(sValue);
+							rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new gps file = " + sValue;
+							currentExecution = true;
+						}
+						break;
+						case("longitude") :
+						node.setLongitude(Double.parseDouble(sValue));
+						rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new longitude value = " + sValue;
 						currentExecution = true;
-					}
-					break;
-				case("gps") :
-					if (node.getType() != Device.GAS || node.getType() != Device.MARKER) {
-						node.setGPSFileName(sValue);
-						rep = "000 Device: "+ sDevice + " has a new gps file = " + sValue;
+						break;
+					case("latitude") :
+						node.setLatitude(Double.parseDouble(sValue));
+						rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new latidtude value = " + sValue;
 						currentExecution = true;
-					}
-					break;
-					case("longitude") :
-					node.setLongitude(Double.parseDouble(sValue));
-					rep = "000 Device: "+ sDevice + " has a new longitude value = " + sValue;
-					currentExecution = true;
-					break;
-				case("latitude") :
-					node.setLatitude(Double.parseDouble(sValue));
-					rep = "000 Device: "+ sDevice + " has a new latidtude value = " + sValue;
-					currentExecution = true;
-					break;
-				case("elevation") :
-					node.setElevation(Double.parseDouble(sValue));
-					rep = "000 Device: "+ sDevice + " has a new elevation value = " + sValue;
-					currentExecution = true;
-					break;
-				case("radius") :
-					node.setRadius(Double.parseDouble(sValue));
-					rep = "000 Device: "+ sDevice + " has a new radius value = " + sValue;
-					currentExecution = true;
-					break;
-				case("suradius") :
-					sensorNode.setSensorUnitRadius(Double.parseDouble(sValue));
-					rep = "000 Device: "+ sDevice + " has a new sensor unit radius value = " + sValue;
-					currentExecution = true;
-					break;
-				case("emax") :
-					node.getBattery().setEMax(Double.parseDouble(sValue));
-					rep = "000 Device: "+ sDevice + " has a new energy value = " + sValue;
-					currentExecution = true;
-					break;
-				case("esensing") :
-					sensorNode.getSensorUnit().setESensing(Double.parseDouble(sValue));
-					rep = "000 Device: "+ sDevice + " has a new consumption value = " + sValue;
-					currentExecution = true;
-					break;
-				case("datarate") :
-					node.setUartDataRate(Long.parseLong(sValue));
-					rep = "000 Device: "+ sDevice + " has a new UART data rate value = " + sValue;
-					currentExecution = true;
-					break;
-				case("drfit") :
-					node.setSigmaOfDriftTime(Double.parseDouble(sValue));
-					rep = "000 Device: "+ sDevice + " has a new drift time value = " + sValue;
-					currentExecution = true;
-					break;
-				case("deg") :
-					if (node.getType() == Device.MEDIA_SENSOR) {
-						((MediaSensorNode) sensorNode).setSensorUnitDeg(Double.parseDouble(sValue));
-						rep = "000 Device: "+ sDevice + " has a new drift time value = " + sValue;
+						break;
+					case("elevation") :
+						node.setElevation(Double.parseDouble(sValue));
+						rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new elevation value = " + sValue;
 						currentExecution = true;
-					}
-					break;
-				case("dec") :
-					if (node.getType() == Device.MEDIA_SENSOR) {
-						((MediaSensorNode) sensorNode).setSensorUnitDec(Double.parseDouble(sValue));
-						rep = "000 Device: "+ sDevice + " has a new drift time value = " + sValue;
+						break;
+					case("radius") :
+						node.setRadius(Double.parseDouble(sValue));
+						rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new radius value = " + sValue;
 						currentExecution = true;
+						break;
+					case("suradius") :
+						((SensorNode) node).setSensorUnitRadius(Double.parseDouble(sValue));
+						rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new sensor unit radius value = " + sValue;
+						currentExecution = true;
+						break;
+					case("emax") :
+						node.getBattery().setEMax(Double.parseDouble(sValue));
+						rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new energy value = " + sValue;
+						currentExecution = true;
+						break;
+					case("esensing") :
+						((SensorNode) node).getSensorUnit().setESensing(Double.parseDouble(sValue));
+						rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new consumption value = " + sValue;
+						currentExecution = true;
+						break;
+					case("datarate") :
+						node.setUartDataRate(Long.parseLong(sValue));
+						rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new UART data rate value = " + sValue;
+						currentExecution = true;
+						break;
+					case("drfit") :
+						node.setSigmaOfDriftTime(Double.parseDouble(sValue));
+						rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new drift time value = " + sValue;
+						currentExecution = true;
+						break;
+					case("deg") :
+						if (node.getType() == Device.MEDIA_SENSOR) {
+							((MediaSensorNode) node).setSensorUnitDeg(Double.parseDouble(sValue));
+							rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new drift time value = " + sValue;
+							currentExecution = true;
+						}
+						break;
+					case("dec") :
+						if (node.getType() == Device.MEDIA_SENSOR) {
+							((MediaSensorNode) node).setSensorUnitDec(Double.parseDouble(sValue));
+							rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new drift time value = " + sValue;
+							currentExecution = true;
+						}
+						break;
+					default:
+						rep = rep + System.lineSeparator() + "[ERROR] Unknown paramerter or not accepted value ";
+						currentExecution = false;
 					}
-					break;
-				default:
-					rep = "[ERROR] Unknown paramerter or not accepted value ";
-					currentExecution = false;
 				}
 				break;
 			case("radio"):
+				sensorNode = (SensorNode) DeviceList.getNodeByName(sDevice);
 				if(!CupCarbon.cupCarbonController.radioParamPane.isExpanded())
 					CupCarbon.cupCarbonController.radioParamPane.setExpanded(true);
 				if (CupCarbon.cupCarbonController != null) {
@@ -243,7 +268,7 @@ public class CupCommand_SETPARAMETER extends CupCommand {
 					CupCarbon.cupCarbonController.updateSelectionInListView();
 				}
 				sensorNode.setSelected(true);
-				if (node.getType() != Device.GAS || node.getType() != Device.MOBILE || node.getType() != Device.MARKER) {
+				if (sensorNode.getType() != Device.GAS || sensorNode.getType() != Device.MOBILE || sensorNode.getType() != Device.MARKER) {
 					switch (sParameter) {
 					case("my") :
 						sensorNode.getRadioModuleByName(sRadio).setMy(Integer.parseInt(sValue));
