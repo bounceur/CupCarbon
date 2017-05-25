@@ -132,6 +132,8 @@
                         <KeyCodeCombination alt="UP" code="BACK_SPACE" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#initIDs" text="Init IDs" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Add">
@@ -220,6 +222,24 @@
                            </graphic>
                         </MenuItem>
                         <MenuItem mnemonicParsing="false" onAction="#generateRandomNetwork200" text="200 Sensor Nodes">
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/blank_badge_mauve.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#generateRandomNetwork500" text="500 Sensor Nodes">
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/blank_badge_mauve.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#generateRandomNetwork1000" text="1000 Sensor Nodes">
                            <graphic>
                               <ImageView pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -962,6 +982,8 @@
                       <MenuItem mnemonicParsing="false" onAction="#generateRandomNetwork50" style="-fx-font-size: 10;" text="50" />
                       <MenuItem mnemonicParsing="false" onAction="#generateRandomNetwork100" style="-fx-font-size: 10;" text="100" />
                         <MenuItem mnemonicParsing="false" onAction="#generateRandomNetwork200" style="-fx-font-size: 10;" text="200" />
+                        <MenuItem mnemonicParsing="false" onAction="#generateRandomNetwork500" style="-fx-font-size: 10;" text="500" />
+                        <MenuItem mnemonicParsing="false" onAction="#generateRandomNetwork1000" style="-fx-font-size: 10;" text="1000" />
                     </items>
                      <font>
                         <Font size="10.0" />

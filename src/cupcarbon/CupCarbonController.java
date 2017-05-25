@@ -2407,7 +2407,7 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				DeviceList.addRandomSensors(50);
+				DeviceList.addRandomSensors(50,0);
 				mapFocus();
 			}
 		});
@@ -2418,7 +2418,7 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				DeviceList.addRandomSensors(100);
+				DeviceList.addRandomSensors(100,0);
 				mapFocus();
 			}
 		});
@@ -2429,7 +2429,31 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				DeviceList.addRandomSensors(200);
+				DeviceList.addRandomSensors(200,0);
+				mapFocus();
+			}
+		});
+	}
+	
+	@FXML
+	public void generateRandomNetwork500() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				displayNodes();
+				DeviceList.addRandomSensors(500,1);
+				mapFocus();
+			}
+		});
+	}
+	
+	@FXML
+	public void generateRandomNetwork1000() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				displayNodes();
+				DeviceList.addRandomSensors(1000,1);
 				mapFocus();
 			}
 		});
@@ -2848,6 +2872,12 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
-
+	
+	@FXML
+	public void initIDs() {
+		DeviceList.initIDs();
+		MapLayer.repaint();
+		mapFocus();
+	}
 
 }

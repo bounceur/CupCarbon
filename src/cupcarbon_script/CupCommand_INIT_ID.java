@@ -59,7 +59,7 @@ public class CupCommand_INIT_ID extends CupCommand {
 		currentExecution = false;
 		String rep = "";
 		if (isExecuted) {
-			DeviceList.initId();
+			DeviceList.initIDs();
 			rep = "000 Device Ids have been Initialized";
 			
 			currentExecution = true;

@@ -1113,7 +1113,7 @@ public class DeviceList {
 		return p;
 	}
 	
-	public static void initId() {
+	public static void initIDs() {
 		Device.initNumber() ;
 		for(SensorNode d : sensors) {
 			d.setId(number);
@@ -1599,7 +1599,7 @@ public class DeviceList {
 			DeviceList.calculatePropagations();
 	}
 	
-	public static void addRandomSensors(int n) {		
+	public static void addRandomSensors(int n, int hide) {		
 		CupActionBlock block = new CupActionBlock();		
 		if(MarkerList.markers.size()==2) {
 			Marker marker1 = MarkerList.markers.get(0);
@@ -1626,7 +1626,9 @@ public class DeviceList {
 					x = x - (x % magnetic_step) - (delta % magnetic_step);
 					y = y - (y % magnetic_step) - (delta % magnetic_step);			
 				}
-				CupAction action = new CupActionAddSensor(new StdSensorNode(x, y, 0, 0, 100, 20, -1));
+				StdSensorNode sensor = new StdSensorNode(x, y, 0, 0, 100, 20, -1);
+				sensor.setHide(hide);
+				CupAction action = new CupActionAddSensor(sensor);
 				block.addAction(action);				
 			}
 		}
