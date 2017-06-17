@@ -154,20 +154,21 @@ public final class Project {
 	}
 	
 	public static void openProject(String path, String name) {
+		DeviceList.propagationsCalculated = false;
 		System.out.println(path);
 		System.out.println(name);
 		CupActionStack.init();
 		reset();
 		setProjectName(path, name);
-		saveRecentPath();		
-		loadParameters();		
+		saveRecentPath();				
 		BuildingList.open(getProjectBuildingPathName());
 		MarkerList.open(getProjectMarkerPath());		
 		DeviceList.open();
-		if(DeviceList.propagationsCalculated) DeviceList.calculatePropagations();
+		loadParameters();		
 		CupCarbon.cupCarbonController.loadSimulationParams();
 		CupCarbon.cupCarbonController.applyParameters();
-		CupCarbon.cupCarbonController.saveButton.setDisable(false);	
+		CupCarbon.cupCarbonController.saveButton.setDisable(false);
+		if(DeviceList.propagationsCalculated) DeviceList.calculatePropagations();
 	}
 
 	public static void newProject(String path, String name, boolean reset) {

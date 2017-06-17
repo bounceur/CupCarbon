@@ -18,12 +18,10 @@ public class Command_MARK extends Command {
 		String args = sensor.getScript().getVariableValue(arg);
 		int n = 1-Integer.valueOf('1'-args.charAt(0));
 		if(n==0) {
-			MarkTmp.v--;
 			sensor.setMarked(false);
 			SimLog.add("S" + sensor.getId() + " UNMARK");
 		}
 		else {
-			MarkTmp.v++;
 			sensor.setMarked(true);
 			SimLog.add("S" + sensor.getId() + " MARK");
 		}

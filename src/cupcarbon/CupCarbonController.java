@@ -445,6 +445,7 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	public void zoomP() {
 		map.setZoom(map.getZoomSlider().getValue() - 1);
+		simulationTimeLabel.setText(" ("+MapLayer.mapViewer.getZoom()+")");
 		SensorNode sensor = null;
 		for (SensorNode s : DeviceList.sensors) {
 			if (s.isSelected()) {
@@ -461,6 +462,7 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	public void zoomM() {
 		map.setZoom(map.getZoomSlider().getValue() + 1);
+		simulationTimeLabel.setText(" ("+MapLayer.mapViewer.getZoom()+")");
 		mapFocus();
 	}
 
@@ -2441,6 +2443,7 @@ public class CupCarbonController implements Initializable {
 			@Override
 			public void run() {
 				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
 				DeviceList.addRandomSensors(500,1);
 				mapFocus();
 			}
@@ -2452,8 +2455,25 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				boolean b = DeviceList.propagationsCalculated;
+				DeviceList.propagationsCalculated = false;
 				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
 				DeviceList.addRandomSensors(1000,1);
+				DeviceList.propagationsCalculated = b;
+				mapFocus();
+			}
+		});
+	}
+	
+	@FXML
+	public void generateRandomNetwork10() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				displayNodes();
+				NetworkParameters.drawRadioLinks = false ;
+				DeviceList.addRandomSensors(10,0);
 				mapFocus();
 			}
 		});
@@ -2863,7 +2883,7 @@ public class CupCarbonController implements Initializable {
 	}
 	
 	@FXML
-	public void runServer() {
+	public void startServer() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {

@@ -29,6 +29,8 @@ public class Command_ATND extends Command {
 	public double execute() {
 		List<SensorNode> snList = sensor.getSensorNodeNeighbors();		
 		int n = snList.size();
+		//System.out.println(n);
+		
 		sensor.getScript().addVariable(arg1, ""+n);
 		
 		if(!arg2.equals("")) {

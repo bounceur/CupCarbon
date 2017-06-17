@@ -46,6 +46,7 @@ import buildings.BuildingList;
 import geometry.SNEdge;
 import javafx.application.Platform;
 import map.MapLayer;
+import map.NetworkParameters;
 import markers.Marker;
 import markers.MarkerList;
 //import markers.Marker;
@@ -1631,14 +1632,15 @@ public class DeviceList {
 				CupAction action = new CupActionAddSensor(sensor);
 				block.addAction(action);				
 			}
+			if(block.size()>0) {
+				CupActionStack.add(block);
+				CupActionStack.execute();
+				if(DeviceList.propagationsCalculated && NetworkParameters.drawRadioLinks)
+					DeviceList.calculatePropagations();
+			}		
+			MapLayer.repaint();
 		}
-		if(block.size()>0) {
-			CupActionStack.add(block);
-			CupActionStack.execute();
-			if(DeviceList.propagationsCalculated)
-				DeviceList.calculatePropagations();
-		}		
-		MapLayer.repaint();
+		
 	}
 		
 }
