@@ -2,6 +2,7 @@ package senscript;
 
 import device.DeviceList;
 import device.SensorNode;
+import map.MapLayer;
 import radio_module.RadioStandard;
 import radio_module.XBeeFrameGenerator;
 import radio_module.XBeeToArduinoFrameGenerator;
@@ -24,6 +25,7 @@ public class Command_ATPL extends Command {
 		int v = (Double.valueOf(args)).intValue();
 		
 		sensor.setPl(v);
+		MapLayer.repaint();
 		if (DeviceList.propagationsCalculated)
 			DeviceList.calculatePropagations();
 		

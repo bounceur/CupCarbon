@@ -488,11 +488,13 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	}
 	
 	public void movingSensors(int x, int y) {
+		boolean selection = false;
 		for(SensorNode sensor : DeviceList.sensors) {			
 			sensor.calculateDxDy(cx, cy);	
 			boolean tmp_inside = sensor.isInside();	
 			sensor.inside(x, y);	
 			if (sensor.isInside() != tmp_inside) {
+				selection = true;
 				repaint();
 			}
 		}
@@ -502,6 +504,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			boolean tmp_inside = device.isInside();	
 			device.inside(x, y);	
 			if (device.isInside() != tmp_inside) {
+				selection = true;
 				repaint();
 			}
 		}
@@ -511,9 +514,17 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			boolean tmp_inside = marker.isInside();	
 			marker.inside(x, y);	
 			if (marker.isInside() != tmp_inside) {
+				selection = true;
 				repaint();
 			}
 		}
+		if(selection)
+			if(CupCarbon.cupCarbonController!=null) {
+				CupCarbon.cupCarbonController.updateObjectListView();
+				CupCarbon.cupCarbonController.getNodeInformations();
+				CupCarbon.cupCarbonController.getRadioInformations();
+				CupCarbon.cupCarbonController.updateSelectionInListView();
+			}
 	}
 	
 	private boolean dragging = false;
@@ -526,7 +537,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			repaint();
 		}
 		else {
-			if(e.getButton() == MouseEvent.BUTTON1) {				
+			if(e.getButton() == MouseEvent.BUTTON1) {
 				for(SensorNode sensor : DeviceList.sensors) {
 					if (sensor.isSelected()) {
 						if(!dragging) {

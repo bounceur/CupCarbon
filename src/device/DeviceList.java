@@ -43,6 +43,7 @@ import action.CupActionDeleteSensor;
 import action.CupActionStack;
 import buildings.Building;
 import buildings.BuildingList;
+import cupcarbon.CupCarbon;
 import geometry.SNEdge;
 import javafx.application.Platform;
 import map.MapLayer;
@@ -927,18 +928,28 @@ public class DeviceList {
 	}
 
 	public void selectInsideRectangle(int cadreX1, int cadreY1, int cadreX2, int cadreY2) {
+		boolean selection = false;
 		for (SensorNode node : sensors) {
 			node.setSelected(false);
 			if (MapLayer.insideSelection(node.getLongitude(), node.getLatitude(), cadreX1, cadreX2, cadreY1, cadreY2)) {
 				node.setSelected(true);
+				selection = true;
 			}
 		}
 		for (Device node : devices) {
 			node.setSelected(false);
 			if (MapLayer.insideSelection(node.getLongitude(), node.getLatitude(), cadreX1, cadreX2, cadreY1, cadreY2)) {
 				node.setSelected(true);
+				selection = true;
 			}
 		}
+		if(selection)
+			if(CupCarbon.cupCarbonController!=null) {
+				CupCarbon.cupCarbonController.updateObjectListView();
+				CupCarbon.cupCarbonController.getNodeInformations();
+				CupCarbon.cupCarbonController.getRadioInformations();
+				CupCarbon.cupCarbonController.updateSelectionInListView();
+			}
 	}
 
 	public void deleteIfSelected() {

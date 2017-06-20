@@ -11,7 +11,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="638.0" prefWidth="1197.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.CupCarbonController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="699.0" prefWidth="1197.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.CupCarbonController">
    <top>
       <MenuBar fx:id="menuBar" style="-fx-border-width: 2; -fx-font-size: 11;" BorderPane.alignment="CENTER">
         <menus>
@@ -1886,32 +1886,32 @@
                                                       <Font size="9.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="Radius" GridPane.rowIndex="3">
+                                                <Label text="Radius" GridPane.rowIndex="4">
                                                    <font>
                                                       <Font size="9.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="E_Tx" GridPane.rowIndex="4">
+                                                <Label text="E_Tx" GridPane.rowIndex="5">
                                                    <font>
                                                       <Font size="9.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="E_Rx" GridPane.rowIndex="5">
+                                                <Label text="E_Rx" GridPane.rowIndex="6">
                                                    <font>
                                                       <Font size="9.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="Sleeping Energy" GridPane.rowIndex="6">
+                                                <Label text="Sleeping Energy" GridPane.rowIndex="7">
                                                    <font>
                                                       <Font size="9.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="Listening Energy" GridPane.rowIndex="7">
+                                                <Label text="Listening Energy" GridPane.rowIndex="8">
                                                    <font>
                                                       <Font size="9.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="Data Rate" GridPane.rowIndex="8">
+                                                <Label text="Data Rate" GridPane.rowIndex="9">
                                                    <font>
                                                       <Font size="9.0" />
                                                    </font>
@@ -1931,32 +1931,32 @@
                                                       <Font size="10.0" />
                                                    </font>
                                                 </TextField>
-                                                <TextField fx:id="radio_radius" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                <TextField fx:id="radio_radius" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>
                                                 </TextField>
-                                                <TextField fx:id="radio_etx" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                                <TextField fx:id="radio_etx" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>
                                                 </TextField>
-                                                <TextField fx:id="radio_erx" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                                <TextField fx:id="radio_erx" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>
                                                 </TextField>
-                                                <TextField fx:id="radio_esleep" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                                <TextField fx:id="radio_esleep" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>
                                                 </TextField>
-                                                <TextField fx:id="radio_elisten" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                                <TextField fx:id="radio_elisten" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>
                                                 </TextField>
-                                                <TextField fx:id="radio_drate" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                                <TextField fx:id="radio_drate" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>
@@ -1988,7 +1988,7 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" onAction="#radio_radius_Apply" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                                <Button mnemonicParsing="false" onAction="#radio_radius_Apply" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                                    <graphic>
                                                       <ImageView pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -1997,7 +1997,7 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" onAction="#radio_etx_Apply" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                                                <Button mnemonicParsing="false" onAction="#radio_etx_Apply" GridPane.columnIndex="2" GridPane.rowIndex="5">
                                                    <graphic>
                                                       <ImageView pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -2006,7 +2006,7 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" onAction="#radio_erx_Apply" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                                                <Button mnemonicParsing="false" onAction="#radio_erx_Apply" GridPane.columnIndex="2" GridPane.rowIndex="6">
                                                    <graphic>
                                                       <ImageView pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -2015,7 +2015,7 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" onAction="#radio_esleep_Apply" GridPane.columnIndex="2" GridPane.rowIndex="6">
+                                                <Button mnemonicParsing="false" onAction="#radio_esleep_Apply" GridPane.columnIndex="2" GridPane.rowIndex="7">
                                                    <graphic>
                                                       <ImageView pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -2024,7 +2024,7 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" onAction="#radio_elisten_Apply" GridPane.columnIndex="2" GridPane.rowIndex="7">
+                                                <Button mnemonicParsing="false" onAction="#radio_elisten_Apply" GridPane.columnIndex="2" GridPane.rowIndex="8">
                                                    <graphic>
                                                       <ImageView pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -2033,7 +2033,7 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" onAction="#radio_drate_Apply" GridPane.columnIndex="2" GridPane.rowIndex="8">
+                                                <Button mnemonicParsing="false" onAction="#radio_drate_Apply" GridPane.columnIndex="2" GridPane.rowIndex="9">
                                                    <graphic>
                                                       <ImageView pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -2042,12 +2042,12 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <Label text="Spreading Factor" GridPane.rowIndex="9">
+                                                <Label text="Spreading Factor" GridPane.rowIndex="10">
                                                    <font>
                                                       <Font size="9.0" />
                                                    </font>
                                                 </Label>
-                                                <Button fx:id="spreading_factor_apply_button" disable="true" mnemonicParsing="false" onAction="#spreading_factor_Apply" GridPane.columnIndex="2" GridPane.rowIndex="9">
+                                                <Button fx:id="spreading_factor_apply_button" disable="true" mnemonicParsing="false" onAction="#spreading_factor_Apply" GridPane.columnIndex="2" GridPane.rowIndex="10">
                                                    <graphic>
                                                       <ImageView pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -2056,7 +2056,26 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <ComboBox fx:id="radio_spreading_factor" disable="true" prefHeight="22.0" prefWidth="105.0" style="-fx-font-size: 8pt;" visibleRowCount="7" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                                                <ComboBox fx:id="radio_spreading_factor" disable="true" prefHeight="22.0" prefWidth="105.0" style="-fx-font-size: 8pt;" visibleRowCount="7" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                                                <Label text="PL" GridPane.rowIndex="3">
+                                                   <font>
+                                                      <Font size="9.0" />
+                                                   </font>
+                                                </Label>
+                                                <TextField fx:id="radio_pl" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                   <font>
+                                                      <Font size="10.0" />
+                                                   </font>
+                                                </TextField>
+                                                <Button mnemonicParsing="false" onAction="#radio_pl_Apply" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                                   <graphic>
+                                                      <ImageView pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../images/b_next.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </Button>
                                              </children>
                                              <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="10.0" prefWidth="84.0" />
@@ -2064,6 +2083,7 @@
                                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="67.0" minWidth="10.0" prefWidth="33.0" />
                                              </columnConstraints>
                                              <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

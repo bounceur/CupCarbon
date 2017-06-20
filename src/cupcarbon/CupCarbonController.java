@@ -35,6 +35,7 @@ import action.CupActionModifRadioESleep;
 import action.CupActionModifRadioETx;
 import action.CupActionModifRadioMy;
 import action.CupActionModifRadioNId;
+import action.CupActionModifRadioPl;
 import action.CupActionModifRadioRadius;
 import action.CupActionModifRadioSF;
 import action.CupActionModifSensorCurrentRadio;
@@ -313,6 +314,9 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public TextField radio_ch;
+	
+	@FXML
+	public TextField radio_pl;
 
 	@FXML
 	public TextField radio_radius;
@@ -1346,6 +1350,25 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
+	
+	@FXML
+	public void radio_pl_Apply() {
+		CupActionBlock block = new CupActionBlock();
+		for (SensorNode sensor : DeviceList.sensors) {
+			if (sensor.isSelected()) {
+				String s = radioListView.getItems().get(radioListView.getSelectionModel().getSelectedIndex());
+				String radioName = s.split(" ")[0];
+				RadioModule rm = sensor.getRadioModuleByName(radioName);
+				double currentPl = rm.getPl();
+				double newPl = Double.parseDouble(radio_pl.getText());
+				CupActionModifRadioPl action = new CupActionModifRadioPl(rm, currentPl, newPl);
+				block.addAction(action);
+			}
+		}
+		CupActionStack.add(block);
+		CupActionStack.execute();
+		MapLayer.repaint();
+	}
 
 	@FXML
 	public void radio_radius_Apply() {
@@ -1889,6 +1912,7 @@ public class CupCarbonController implements Initializable {
 					RadioModule rm = ((SensorNode) currentDevice).getRadioModuleByName(radioName);
 					radio_my.setText("" + rm.getMy());
 					radio_ch.setText("" + rm.getCh());
+					radio_pl.setText("" + rm.getPl());
 					radio_nid.setText("" + rm.getNId());
 					radio_radius.setText("" + rm.getRadioRangeRadius());
 					radio_etx.setText("" + rm.getETx());
@@ -2208,6 +2232,7 @@ public class CupCarbonController implements Initializable {
 		radioNameComboBox.getSelectionModel().select(0);
 		radio_my.setText("");
 		radio_ch.setText("");
+		radio_pl.setText("");
 		radio_nid.setText("");
 		radio_radius.setText("");
 		radio_etx.setText("");

@@ -47,6 +47,7 @@ import action.CupActionDeleteMarker;
 import action.CupActionInsertMarker;
 import action.CupActionRouteFromMarkers;
 import action.CupActionStack;
+import cupcarbon.CupCarbon;
 import cupcarbon.CupCarbonVersion;
 import device.DeviceList;
 import device.StdSensorNode;
@@ -287,17 +288,24 @@ public class MarkerList {
 		}
 	}
 
-	public void selectInsideRectangle(int cadreX1, int cadreY1, int cadreX2,
-			int cadreY2) {
+	public void selectInsideRectangle(int cadreX1, int cadreY1, int cadreX2, int cadreY2) {
+		boolean selection = false;
 		Marker marker;
 		for (Iterator<Marker> iterator = markers.iterator(); iterator.hasNext();) {
 			marker = iterator.next();
 			marker.setSelected(false);
-			if (MapLayer.insideSelection(marker.getLongitude(), marker.getLatitude(),
-					cadreX1, cadreX2, cadreY1, cadreY2)) {
+			if (MapLayer.insideSelection(marker.getLongitude(), marker.getLatitude(), cadreX1, cadreX2, cadreY1, cadreY2)) {
 				marker.setSelected(true);
+				selection = true;
 			}
 		}
+		if(selection)
+			if(CupCarbon.cupCarbonController!=null) {
+				CupCarbon.cupCarbonController.updateObjectListView();
+				CupCarbon.cupCarbonController.getNodeInformations();
+				CupCarbon.cupCarbonController.getRadioInformations();
+				CupCarbon.cupCarbonController.updateSelectionInListView();
+			}
 	}
 
 	public void deleteIfSelected() {
