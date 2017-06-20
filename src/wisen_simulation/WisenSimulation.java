@@ -109,6 +109,10 @@ public class WisenSimulation implements Runnable {
 		Channels.numberOfReceivedMessages = 0;
 		Channels.numberOfAckMessages = 0;		
 		Channels.numberOfLostMessages = 0;
+		Channels.numberOfSentMessages_b = 0;
+		Channels.numberOfReceivedMessages_b = 0;
+		Channels.numberOfAckMessages_b = 0;		
+		Channels.numberOfLostMessages_b = 0;
 		
 		for (Device device : DeviceList.devices) {
 			device.initForSimulation();
@@ -451,11 +455,11 @@ public class WisenSimulation implements Runnable {
 			DeviceList.calculatePropagations();		
 		
 		System.out.println(String.format("Simulation Time: %4.4f s", WisenSimulation.sTime));
-		System.out.println("Number of SENT messages:"+Channels.numberOfSentMessages );
-		System.out.println("Number of RECEIVED messages:"+Channels.numberOfReceivedMessages);
-		System.out.println("Number of SENT & RECEIVED messages:"+(Channels.numberOfReceivedMessages+Channels.numberOfSentMessages));
-		System.out.println("Number of ACK messages:"+Channels.numberOfAckMessages);
-		System.out.println("Number of LOST messages:"+Channels.numberOfLostMessages);
+		System.out.println("Number of SENT messages:"+Channels.numberOfSentMessages + "["+ Channels.numberOfSentMessages_b +"]" );
+		System.out.println("Number of RECEIVED messages:"+Channels.numberOfReceivedMessages + "["+ Channels.numberOfReceivedMessages_b +"]");
+		System.out.println("Number of SENT & RECEIVED messages:"+(Channels.numberOfReceivedMessages+Channels.numberOfSentMessages) + "["+ (Channels.numberOfReceivedMessages_b+Channels.numberOfSentMessages_b) +"]");
+		System.out.println("Number of ACK messages:"+Channels.numberOfAckMessages + "["+ Channels.numberOfAckMessages_b +"]");
+		System.out.println("Number of LOST messages:"+Channels.numberOfLostMessages + "["+ Channels.numberOfLostMessages_b +"]");
 	}
 
 	// ------------------------------------------------------------

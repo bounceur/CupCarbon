@@ -25,7 +25,7 @@ public abstract class RadioModule {
 	protected double eListen = 0.000001;//Listening energy	
 	
 	protected int my = 0;
-	protected int pl = 100;
+	protected double pl = 100;
 	protected int ch = 0x0;
 	protected int nId = 0x3334;
 	
@@ -146,10 +146,14 @@ public abstract class RadioModule {
 		this.my = my;
 	}
 	
-	public void setPl(int pl) {
+	public void setPl(double pl) {
 		this.pl = pl;
 	}
 	
+	public double getPl() {
+		return pl;
+	}
+		
 	public double getETx() {
 		return eTx;
 	}
@@ -219,10 +223,6 @@ public abstract class RadioModule {
 
 	public void setRequiredQuality(double requiredQuality) {
 		this.requiredQuality = requiredQuality;
-	}
-
-	public int getPl() {
-		return pl;
 	}
 
 	public int getMy() {

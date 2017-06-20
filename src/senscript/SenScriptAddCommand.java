@@ -384,6 +384,10 @@ public final class SenScriptAddCommand {
 			command = new Command_TIME(sensorNode, inst[1]);
 		}
 		
+		if (inst[0].toLowerCase().equals("cprint")) {
+			command = new Command_CPRINT(sensorNode, inst);
+		}
+		
 		//-------
 		// This part must be here (at the end). All new commands must be added before (above)
 		

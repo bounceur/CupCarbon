@@ -428,21 +428,23 @@ public abstract class SensorNode extends DeviceWithRadio {
 	
 	public void addMessageToBuffer(String message) {		
 		try {
-			for(int i=0; i< message.length(); i++) {
+			for(int i=0; i < message.length(); i++) {
 				buffer[bufferIndex] = (byte) message.charAt(i);
 				bufferIndex++;
-				if(bufferIndex >= bufferSize)
+				if(bufferIndex >= bufferSize) {
 					System.err.println("S"+getId()+": ERROR FULL BUFFER!");
+					break;
+				}
 			}		
 			buffer[bufferIndex] = '\r';
 			bufferIndex++;
-			}
+		}
 		catch(Exception e) {
 			System.err.println("S"+getId()+" [EMPTY MESSAGE]");
 		}		
 	}
 	
-	public int readMessage(String var) {		
+	public int readMessage(String var) {
 		int i=0;
 		String s ="";
 		while(buffer[i]!='\r') {
@@ -495,7 +497,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	}
 	
 	public void verifyData() {
-		if(buffer[0]!='\r') {
+		if((buffer[0]!='\r') && bufferIndex>0) {
 			bufferReady = true;
 		} 
 		else {

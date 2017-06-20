@@ -19,10 +19,14 @@ import wisen_simulation.SimulationInputs;
 
 public class Channels {
 	
-	public static int numberOfSentMessages = 0;
-	public static int numberOfReceivedMessages = 0;
-	public static int numberOfAckMessages = 0;
-	public static int numberOfLostMessages = 0;
+	public static double numberOfSentMessages = 0; // in number
+	public static double numberOfReceivedMessages = 0; // in number
+	public static double numberOfAckMessages = 0; // in number
+	public static double numberOfLostMessages = 0; // in number
+	public static double numberOfSentMessages_b = 0; // in bytes
+	public static double numberOfReceivedMessages_b = 0; // in bytes
+	public static double numberOfAckMessages_b = 0; // in bytes
+	public static double numberOfLostMessages_b = 0; // in bytes
 	
 	protected List<List<PacketEvent>> channelEventList = Collections.synchronizedList(new LinkedList<List<PacketEvent>>()); 
 	//protected LinkedList<List<PacketEvent>> channelEventList = new LinkedList<List<PacketEvent>>();
@@ -49,8 +53,10 @@ public class Channels {
 		// type=2 : Broadcast sending 		
 		
 		if((!rSensor.isReceiving() || !SimulationInputs.ack)  || type==1) {
-			if(type == 1)
-				numberOfAckMessages++;				
+			if(type == 1) {
+				numberOfAckMessages += tSensor.getPl()/100.;
+				numberOfAckMessages_b += message.length() * (tSensor.getPl()/100.);
+			}
 				
 			SimLog.add("S" + rSensor.getId() +" (radio: " + rSensor.getCurrentRadioModule().getName() + ") is receiving the message : \"" + message + "\" in its buffer.");
 			double ratio1 = 1.0/tSensor.getCurrentRadioModule().getRadioDataRate();
@@ -85,7 +91,8 @@ public class Channels {
 
 				rSensor.setDrssi(tSensor.distance(rSensor));
 				
-				numberOfReceivedMessages++;
+				numberOfReceivedMessages += tSensor.getPl()/100.;
+				numberOfReceivedMessages_b += message.length() * (tSensor.getPl()/100.);
 				
 				rSensor.consumeRx(RadioPacketGenerator.packetLengthInBits(type, tSensor.getStandard()));
 				

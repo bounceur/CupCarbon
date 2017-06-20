@@ -482,10 +482,14 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		this.getCurrentRadioModule().setMy(my);
 	}
 	
-	public void setPl(int pl) {
+	public void setPl(double  pl) {
 		this.getCurrentRadioModule().setPl(pl);
 	}
 	
+	public double getPl() {
+		return this.getCurrentRadioModule().getPl();
+	}
+		
 	public RadioModule getCurrentRadioModule() {
 		return currentRadioModule;
 	}

@@ -193,7 +193,8 @@ public class Command_SEND extends Command {
 				 return sensor.getTimeToResend();
 			}
 			else {
-				Channels.numberOfLostMessages++;
+				Channels.numberOfLostMessages += sensor.getPl()/100.;
+				Channels.numberOfLostMessages_b += messageLength * (sensor.getPl()/100.);
 				//System.out.println("MESSAGE LOST");
 				sensor.setAckWaiting(false);
 				checkForAckMessage = false;
@@ -301,7 +302,8 @@ public class Command_SEND extends Command {
 		// ---------------------------------------------------------------------------------------------------------------------
 		public void sendOperation(String message) {
 			//String packet = RadioPacketGenerator.generate(sensor.getStandard());
-			Channels.numberOfSentMessages++;			
+			Channels.numberOfSentMessages += sensor.getPl()/100.;
+			Channels.numberOfSentMessages_b += message.length() * (sensor.getPl()/100.);
 			//DeviceList.meteo.getValue()			
 			sensor.consumeTx(RadioPacketGenerator.packetLengthInBits(0, sensor.getStandard()));
 			
