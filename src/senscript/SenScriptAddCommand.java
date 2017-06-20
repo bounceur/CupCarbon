@@ -9,8 +9,10 @@ public final class SenScriptAddCommand {
 
 	public static Stack<String> endof = new Stack<String>();
 	
-	public static String detectKeyWord(String s) {		
-		return s.replaceFirst("\\(", " (");
+	public static String detectKeyWord(String s) {
+		if(!s.startsWith("set "))
+			return s.replaceFirst("\\(", " (");
+		return s;
 	}
 	
 	public static void addCommand(String instStr, SensorNode sensorNode, SenScript script) {

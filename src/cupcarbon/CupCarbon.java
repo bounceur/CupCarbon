@@ -47,7 +47,7 @@ import solver.SolverProxyParams;
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
- * @version 3.2.1 (U-One)
+ * @version 3.3 (U-One)
  */
 
 public class CupCarbon extends Application {
