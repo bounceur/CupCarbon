@@ -53,7 +53,7 @@ public class SenScript {
 	
 	protected PrintStream ps = null; 
 	
-	public SenScript(SensorNode sensor) {		
+	public SenScript(SensorNode sensor) {
 		this.sensor = sensor;
 		index = 0;
 		variables = new SenScriptVariableList();
@@ -85,7 +85,6 @@ public class SenScript {
 	}
 
 	public void init() {
-		//labels = new Hashtable<String, Integer>();
 		variables = new SenScriptVariableList();
 		sensor.initBuffer();		
 		tables = new SenScriptTabList();
@@ -96,6 +95,23 @@ public class SenScript {
 		breaked = false;
 		level = 0;
 		createFile() ;
+	}
+	
+	public void init2() {
+		 commands = new LinkedList<Command>();
+		currentIf = null;
+		currentWhile = null;
+		currentFor = null;	
+		//variables = new SenScriptVariableList();
+		//sensor.initBuffer();		
+		//tables = new SenScriptTabList();
+		index = 0;
+		waiting = false;
+		loopIndex = 0;
+		event = Integer.MAX_VALUE - 1;
+		breaked = false;
+		level = 0;
+		//createFile() ;
 	}
 	
 	public void createFile() {

@@ -397,11 +397,10 @@ public abstract class SensorNode extends DeviceWithRadio {
 	
 	@Override
 	public void loadScript() {
-		script = new SenScript(this);		
-		String projectTmpScriptPath = Project.getProjectScriptPath() + File.separator + scriptFileName;
-		String tmp = projectTmpScriptPath;
+		script = new SenScript(this);	
+		String projectScriptPath = Project.getProjectScriptPath() + File.separator + scriptFileName;
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(tmp));
+			BufferedReader br = new BufferedReader(new FileReader(projectScriptPath));
 		
 			String s = "";
 			while ((s = br.readLine()) != null) {										
@@ -412,11 +411,29 @@ public abstract class SensorNode extends DeviceWithRadio {
 	}
 
 	public void loadScript(String fileName) {
+		if(!fileName.endsWith(".csc"))
+			fileName += ".csc";
 		script = new SenScript(this);		
-		String projectTmpScriptPath = Project.getProjectScriptPath() + File.separator + fileName;
-		String tmp = projectTmpScriptPath;
+		String projectScriptPath = Project.getProjectScriptPath() + File.separator + fileName;
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(tmp));
+			BufferedReader br = new BufferedReader(new FileReader(projectScriptPath));
+		
+			String s = "";
+			while ((s = br.readLine()) != null) {										
+				addCommand(s);
+			}
+			br.close();
+		} catch (Exception e) {e.printStackTrace();}
+	}
+	
+	public void loadScript2(String fileName) {
+		if(!fileName.endsWith(".csc"))
+			fileName += ".csc";
+		script.init2();
+		//script = new SenScript(this, true);
+		String projectScriptPath = Project.getProjectScriptPath() + File.separator + fileName;
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(projectScriptPath));
 		
 			String s = "";
 			while ((s = br.readLine()) != null) {										
