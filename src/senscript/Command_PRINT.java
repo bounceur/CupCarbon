@@ -3,6 +3,7 @@ package senscript;
 import java.util.Arrays;
 
 import device.SensorNode;
+import map.MapLayer;
 import wisen_simulation.SimLog;
 
 public class Command_PRINT extends Command {
@@ -25,6 +26,7 @@ public class Command_PRINT extends Command {
 			message += part + " ";
 		}
 		sensor.setMessage(message);
+		MapLayer.repaint();
 		return 0 ;
 	}
 	

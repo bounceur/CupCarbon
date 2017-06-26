@@ -343,6 +343,13 @@ public abstract class Device extends MapObject implements Runnable, _Constantes,
 		double y2 = device.getLatitude();
 		return MapCalc.distance(longitude, latitude, x2, y2);
 	}
+	
+	public double distance2(int id) {
+		DeviceWithRadio device = (DeviceWithRadio) DeviceList.getNodeById(id);
+		double x2 = device.getLongitude();
+		double y2 = device.getLatitude();
+		return MapCalc.distance(longitude, latitude, x2, y2);
+	}
 
 	/**
 	 * @param device

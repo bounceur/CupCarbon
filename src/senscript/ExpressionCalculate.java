@@ -5,12 +5,12 @@ import java.util.StringTokenizer;
 
 import device.SensorNode;
 
-public class SenScriptExpressionCalculate {
+public class ExpressionCalculate {
 	private SenScriptTokenStack operatorStack;
 	private SenScriptTokenStack argumentStack;
 	private boolean error;
 
-	public SenScriptExpressionCalculate() {
+	public ExpressionCalculate() {
 		operatorStack = new SenScriptTokenStack();
 		argumentStack = new SenScriptTokenStack();
 		error = false;

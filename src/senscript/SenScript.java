@@ -98,7 +98,7 @@ public class SenScript {
 	}
 	
 	public void init2() {
-		 commands = new LinkedList<Command>();
+		commands = new LinkedList<Command>();
 		currentIf = null;
 		currentWhile = null;
 		currentFor = null;	

@@ -2,11 +2,11 @@ package senscript;
 
 import device.SensorNode;
 
-public class Command_LOAD extends Command {
+public class Command_RSCRIPT extends Command {
 	
 	protected String arg = "";
 	
-	public Command_LOAD(SensorNode sensor, String arg) {
+	public Command_RSCRIPT(SensorNode sensor, String arg) {
 		this.sensor = sensor ;		
 		this.arg = arg;
 	}
@@ -14,7 +14,7 @@ public class Command_LOAD extends Command {
 	@Override
 	public double execute() {
 		String file = sensor.getScript().getVariableValue(arg);
-		sensor.loadScript2(file);
+		sensor.loadScript2(file, true);
 		//sensor.getScript().init2();
 		sensor.getScript().executeCommand();
 		return 0 ;

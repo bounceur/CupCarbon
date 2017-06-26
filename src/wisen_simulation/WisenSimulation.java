@@ -460,6 +460,7 @@ public class WisenSimulation implements Runnable {
 		System.out.println("Number of SENT & RECEIVED messages:"+(Channels.numberOfReceivedMessages+Channels.numberOfSentMessages) + "["+ (Channels.numberOfReceivedMessages_b+Channels.numberOfSentMessages_b) +"]");
 		System.out.println("Number of ACK messages:"+Channels.numberOfAckMessages + "["+ Channels.numberOfAckMessages_b +"]");
 		System.out.println("Number of LOST messages:"+Channels.numberOfLostMessages + "["+ Channels.numberOfLostMessages_b +"]");
+		System.out.println("Number of Marked Sensors:"+DeviceList.getNumberOfMarkedSensors());
 	}
 
 	// ------------------------------------------------------------

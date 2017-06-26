@@ -109,9 +109,12 @@ public abstract class RadioModule {
 	 * @param v
 	 */
 	public void consumeTx(int v) {
-		//System.out.println(consumptionTx*v*eTx);
-		//this.getBattery().consume(consumptionTx*v*eTx*pl/100.);
-		sensorNode.getBattery().consume(v*eTx*pl/100.);
+		//sensorNode.getBattery().consume(v*eTx*pl/100.);
+		double d = (radioRangeRadius*pl/100.)/1000.; 
+		if(d<0.2)
+			sensorNode.getBattery().consume(v*50+v*6*d*d);
+		else
+			sensorNode.getBattery().consume(v*50+v*0.0011*d*d*d*d);
 	}
 	
 	/**
@@ -120,8 +123,8 @@ public abstract class RadioModule {
 	 * @param v
 	 */
 	public void consumeRx(int v) {
-		//this.getBattery().consume(consumptionRx*v*eRx);
-		sensorNode.getBattery().consume(v*eRx);
+		//sensorNode.getBattery().consume(v*eRx);
+		sensorNode.getBattery().consume(v*50);
 	}
 	
 	
@@ -148,6 +151,7 @@ public abstract class RadioModule {
 	
 	public void setPl(double pl) {
 		this.pl = pl;
+		this.getSensorNode().calculateRadioSpace();
 	}
 	
 	public double getPl() {

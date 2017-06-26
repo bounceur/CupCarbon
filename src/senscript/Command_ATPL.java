@@ -22,14 +22,15 @@ public class Command_ATPL extends Command {
 		SimLog.add("S" + sensor.getId() + " ATPL "+arg);
 		String args = sensor.getScript().getVariableValue(arg);
 		
-		int v = (Double.valueOf(args)).intValue();
-		
+		double v = Double.valueOf(args);
+
 		sensor.setPl(v);
+		
 		MapLayer.repaint();
 		if (DeviceList.propagationsCalculated)
 			DeviceList.calculatePropagations();
 		
-		String message = "PL" + Integer.toHexString(v).toUpperCase();
+		String message = "PL" + Integer.toHexString(Double.valueOf(v).intValue()).toUpperCase();
 		
 		String frame = message;
 		if(sensor.getStandard() == RadioStandard.ZIGBEE_802_15_4)

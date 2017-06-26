@@ -196,7 +196,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	
 	public void calculateRadioSpace() {
 		if(geoZoneList.isEmpty()) {
-			nPoint = 20;	
+			nPoint = 60;	
 			deg = 2.*Math.PI/nPoint;
 			polyX = new int [nPoint];
 			polyY = new int [nPoint];
@@ -426,10 +426,13 @@ public abstract class SensorNode extends DeviceWithRadio {
 		} catch (Exception e) {e.printStackTrace();}
 	}
 	
-	public void loadScript2(String fileName) {
+	public void loadScript2(String fileName, boolean reset) {
 		if(!fileName.endsWith(".csc"))
 			fileName += ".csc";
-		script.init2();
+		if(reset)
+			script.init();
+		else
+			script.init2();
 		//script = new SenScript(this, true);
 		String projectScriptPath = Project.getProjectScriptPath() + File.separator + fileName;
 		try {
@@ -641,6 +644,10 @@ public abstract class SensorNode extends DeviceWithRadio {
 				}
 			}
 		}
+		if(s.equals(""))
+			s = "X";
+		else
+			s = "S#"+s;
 		return s ;
 	}	
 		

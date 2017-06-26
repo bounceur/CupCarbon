@@ -17,7 +17,7 @@ public class Command_DISTANCE extends Command {
 	public double execute() {
 		String vArg2 = sensor.getScript().getVariableValue(arg2);
 		int id = Integer.valueOf(vArg2);
-		double distance = sensor.distance(id);
+		double distance = sensor.distance2(id);
 		
 		sensor.getScript().addVariable(arg1, "" + distance);
 		

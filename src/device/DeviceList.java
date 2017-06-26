@@ -1291,6 +1291,16 @@ public class DeviceList {
 		MapLayer.repaint();
 	}
 	
+	public static int getNumberOfMarkedSensors() {
+		int n = 0;
+		for(SensorNode d : sensors) {
+			if(d.isMarked()) {
+				n++;
+			}
+		}
+		return n;
+	}
+	
 	public static void setId(String id) {
 		for (SensorNode d : sensors) {
 			if (d.isSelected()) {
