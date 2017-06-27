@@ -1360,9 +1360,9 @@
                                                          </graphic>
                                                       </Button>
                                                       <Separator prefWidth="200.0" />
-                                                      <HBox prefHeight="26.0" prefWidth="286.0" spacing="10.0">
+                                                      <HBox prefHeight="26.0" prefWidth="286.0" spacing="2.0">
                                                          <children>
-                                                            <TextField fx:id="bytxtfield" alignment="CENTER" prefHeight="25.0" prefWidth="177.0">
+                                                            <TextField fx:id="bytxtfield" alignment="CENTER" prefHeight="25.0" prefWidth="140.0">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
@@ -1373,6 +1373,11 @@
                                                                </font>
                                                             </Button>
                                                             <Button mnemonicParsing="false" onAction="#selectByMy" prefHeight="25.0" prefWidth="110.0" text="MYs">
+                                                               <font>
+                                                                  <Font size="10.0" />
+                                                               </font>
+                                                            </Button>
+                                                            <Button mnemonicParsing="false" onAction="#selectByLed" prefHeight="25.0" prefWidth="110.0" text="LED">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
@@ -1394,6 +1399,11 @@
                                                          </font>
                                                       </Button>
                                                       <Button mnemonicParsing="false" onAction="#selectMarkedSensors" prefHeight="25.0" prefWidth="290.0" text="Select Marked Sensors">
+                                                         <font>
+                                                            <Font size="10.0" />
+                                                         </font>
+                                                      </Button>
+                                                      <Button mnemonicParsing="false" onAction="#selectDeadSensors" prefHeight="25.0" prefWidth="290.0" text="Select Dead Sensors">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>

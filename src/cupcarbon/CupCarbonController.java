@@ -2083,6 +2083,12 @@ public class CupCarbonController implements Initializable {
 		DeviceList.selectByMy(bytxtfield.getText());
 		updateSelectionInListView();
 	}
+	
+	@FXML
+	public void selectByLed() {
+		DeviceList.selectByLed(bytxtfield.getText());
+		updateSelectionInListView();
+	}
 
 	@FXML
 	public void selectSensorsWithoutScript() {
@@ -2099,6 +2105,12 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	public void selectMarkedSensors() {
 		DeviceList.selectMarkedSensors();
+		updateSelectionInListView();
+	}
+	
+	@FXML
+	public void selectDeadSensors() {
+		DeviceList.selectDeadSensors();
 		updateSelectionInListView();
 	}
 

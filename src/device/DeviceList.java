@@ -1291,6 +1291,15 @@ public class DeviceList {
 		MapLayer.repaint();
 	}
 	
+	public static void selectDeadSensors() {
+		for(SensorNode d : sensors) {
+			if(d.isDead()) {
+				d.setSelected(true);
+			}
+		}
+		MapLayer.repaint();
+	}
+	
 	public static int getNumberOfMarkedSensors() {
 		int n = 0;
 		for(SensorNode d : sensors) {
@@ -1403,6 +1412,18 @@ public class DeviceList {
 				if (d.getCurrentRadioModule().getMy()==Integer.valueOf(mys[k])) {
 					d.setSelected(true);
 				}
+			}
+		}
+		MapLayer.repaint();
+	}
+	
+	public static void selectByLed(String led) {
+		String [] leds = led.split(" ");
+		for (SensorNode d : sensors) {
+			d.setSelected(false);
+			for(int k=0; k<leds.length; k++) {
+				if(d.getLedColor()==Integer.valueOf(leds[k]))
+					d.setSelected(true);
 			}
 		}
 		MapLayer.repaint();
