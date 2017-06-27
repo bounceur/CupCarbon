@@ -372,7 +372,11 @@ public abstract class SensorNode extends DeviceWithRadio {
 		if(getScriptFileName().equals(""))
 			g.setColor(Color.LIGHT_GRAY);
 		
-		if(isDead()) g.setColor(Color.DARK_GRAY);
+		if(isDead())
+			if(MapLayer.dark)
+				g.setColor(Color.GRAY);
+			else
+				g.setColor(Color.GRAY);
 		
 		r = 3;
 		g.fillOval(x - r, y - r, r*2, r*2);

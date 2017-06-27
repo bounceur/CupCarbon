@@ -37,6 +37,9 @@ public final class SenScriptAddCommand {
 		if (inst[0].toLowerCase().equals("script")) {
 			command = new Command_SCRIPT(sensorNode, inst[1]);
 		}
+		if (inst[0].toLowerCase().equals("rscript")) {
+			command = new Command_RSCRIPT(sensorNode, inst[1]);
+		}
 		if (inst[0].toLowerCase().equals("kill")) {
 			command = new Command_KILL(sensorNode, inst[1]);
 		}
