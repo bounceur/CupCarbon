@@ -2674,74 +2674,47 @@
                      <font>
                         <Font size="10.0" />
                      </font>
-                     <tooltip>
-                        <Tooltip text="Display Connections" />
-                     </tooltip>
                   </Button>
                   <Button mnemonicParsing="false" onAction="#displayNodes" prefHeight="21.0" prefWidth="49.0" text="Nodes">
                      <font>
                         <Font size="10.0" />
                      </font>
-                     <tooltip>
-                        <Tooltip text="Display Nodes" />
-                     </tooltip>
                   </Button>
                   <Button mnemonicParsing="false" onAction="#displayRadios" prefHeight="21.0" prefWidth="55.0" text="Radios">
                      <font>
                         <Font size="10.0" />
                      </font>
-                     <tooltip>
-                        <Tooltip text="Display Sensors" />
-                     </tooltip>
                   </Button>
                   <Button mnemonicParsing="false" onAction="#displaySensors" prefHeight="21.0" prefWidth="64.0" text="Sensors">
                      <font>
                         <Font size="10.0" />
                      </font>
-                     <tooltip>
-                        <Tooltip text="Display Sensors" />
-                     </tooltip>
                   </Button>
                   <Button mnemonicParsing="false" onAction="#displayAll" prefHeight="21.0" prefWidth="34.0" text="All">
                      <font>
                         <Font size="10.0" />
                      </font>
-                     <tooltip>
-                        <Tooltip text="Ddisplay All" />
-                     </tooltip>
                   </Button>
                   <Separator orientation="VERTICAL" prefHeight="200.0" />
                   <Button mnemonicParsing="false" onAction="#showDetails" text="Details">
                      <font>
                         <Font size="10.0" />
                      </font>
-                     <tooltip>
-                        <Tooltip text="Ddisplay All" />
-                     </tooltip>
                   </Button>
                   <Button mnemonicParsing="false" onAction="#showRadioDistances" text="Distances">
                      <font>
                         <Font size="10.0" />
                      </font>
-                     <tooltip>
-                        <Tooltip text="Ddisplay All" />
-                     </tooltip>
                   </Button>
                   <Button mnemonicParsing="false" onAction="#showLinks" text="Links">
                      <font>
                         <Font size="10.0" />
                      </font>
-                     <tooltip>
-                        <Tooltip text="Ddisplay All" />
-                     </tooltip>
                   </Button>
                   <Button mnemonicParsing="false" onAction="#showSensorArrows" text="Node Arrows">
                      <font>
                         <Font size="10.0" />
                      </font>
-                     <tooltip>
-                        <Tooltip text="Ddisplay All" />
-                     </tooltip>
                   </Button>
                   <Separator orientation="VERTICAL" prefHeight="200.0" />
                </children>

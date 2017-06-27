@@ -888,7 +888,7 @@ public class CupCarbonController implements Initializable {
 		if (file != null) {
 			Project.newProject(file.getParentFile().toString() + File.separator + file.getName().toString(),
 					file.getName().toString(), true);
-			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getName().toString() + "]");
+			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getAbsolutePath().toString() + "]");
 		}
 		initScriptGpsEventComboBoxes();
 	}
@@ -903,7 +903,7 @@ public class CupCarbonController implements Initializable {
 		File file = fileChooser.showSaveDialog(CupCarbon.stage);
 		if (file != null) {
 			Project.newProject(file.getParentFile().toString() + File.separator + file.getName().toString(), file.getName().toString(), false);
-			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getName().toString() + "]");
+			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getAbsolutePath().toString() + "]");
 		}
 	}
 
@@ -920,7 +920,7 @@ public class CupCarbonController implements Initializable {
 				File file = fileChooser.showOpenDialog(CupCarbon.stage);
 				if (file != null) {
 					Project.openProject(file.getParentFile().toString(), file.getName().toString());
-					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getName().toString() + "]");
+					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getAbsolutePath().toString() + "]");
 					openProjectLoadParameters();
 				}
 			}
@@ -2874,9 +2874,8 @@ public class CupCarbonController implements Initializable {
 					String name = s.split(":")[1];
 					br.close();
 
-					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + name + "]");
-
 					Project.openProject(path, name);
+					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + path + "]");
 				} catch (FileNotFoundException e) {
 					System.err.println("recent.rec doesn't exist");
 				} catch (IOException e) {
