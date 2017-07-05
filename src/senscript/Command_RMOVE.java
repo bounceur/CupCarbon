@@ -14,7 +14,7 @@ public class Command_RMOVE extends Command {
 	@Override
 	public double execute() {
 		String vArg1 = sensor.getScript().getVariableValue(arg1);
-		double t = Integer.valueOf(vArg1);
+		double t = Double.valueOf(vArg1);
 		if (!sensor.getGPSFileName().equals("")) {
 			sensor.moveToNext(true, 0);									
 		}
@@ -23,7 +23,7 @@ public class Command_RMOVE extends Command {
 
 	@Override
 	public String toString() {
-		return "MARMOVE";
+		return "RMOVE";
 	}
 	
 }

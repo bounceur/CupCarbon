@@ -14,6 +14,7 @@ public class Command_AREADSENSOR extends Command {
 
 	@Override
 	public double execute() {
+		sensor.getBattery().consume(0.0001);
 		String value = sensor.getSensorValues();
 		SimLog.add("S" + sensor.getId() + " READ SENSOR: "+value);
 		sensor.getScript().addVariable(arg, value);
