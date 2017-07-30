@@ -186,6 +186,12 @@ public final class SenScriptAddCommand {
 		if (inst[0].toLowerCase().equals("vdata")) {
 			command = new Command_VDATA(sensorNode, inst[1], inst[2]);
 		}
+		if (inst[0].toLowerCase().equals("charat")) {
+			command = new Command_CHARAT(sensorNode, inst[1], inst[2], inst[3]);
+		}
+		if (inst[0].toLowerCase().equals("length")) {
+			command = new Command_LENGTH(sensorNode, inst[1], inst[2]);
+		}
 		if (inst[0].toLowerCase().equals("angle")) {
 			command = new Command_ANGLE(sensorNode, inst[1], inst[2], inst[3], inst[4]);
 		}
