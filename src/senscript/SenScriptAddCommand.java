@@ -251,7 +251,8 @@ public final class SenScriptAddCommand {
 			command = new Command_RANDB(sensorNode, inst[1], inst[2], inst[3]);
 		}
 		if (inst[0].toLowerCase().equals("math")) {
-			command = new Command_MATH(sensorNode, inst[1], inst[2], inst[3]);
+			if(inst.length==4) command = new Command_MATH(sensorNode, inst[1], inst[2], inst[3]);
+			if(inst.length==5) command = new Command_MATH(sensorNode, inst[1], inst[2], inst[3], inst[4]);
 		}
 		if (inst[0].toLowerCase().equals("tset")) {
 			command = new Command_TSET(sensorNode, inst[1], inst[2], inst[3], inst[4]);
