@@ -411,7 +411,10 @@ public abstract class SensorNode extends DeviceWithRadio {
 				addCommand(s);
 			}
 			br.close();
-		} catch (Exception e) {e.printStackTrace();}
+		} catch (Exception e) {
+			System.err.println("[CupCarbon ERROR] (S"+id+"): the load SenScript file "+scriptFileName+ " does not exist.");
+			//e.printStackTrace();
+		}
 	}
 
 	public void loadScript(String fileName) {

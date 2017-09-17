@@ -298,7 +298,7 @@ public final class Project {
 			recentProjectList = new LinkedList<String>();
 			String current = projectPath+":"+projectName;
 			recentProjectList.add(current);			
-			FileInputStream fis = new FileInputStream("utils/recent.rec");
+			FileInputStream fis = new FileInputStream("utils"+File.separator+"recent.rec");
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 			String s = "" ;
 			int n = 0;
@@ -312,7 +312,7 @@ public final class Project {
 				recentProjectList.removeLast();
 			}
 
-			FileOutputStream fos = new FileOutputStream("utils/recent.rec");
+			FileOutputStream fos = new FileOutputStream("utils"+File.separator+"recent.rec");
 			PrintStream ps = new PrintStream(fos);	
 			for(int i=0; i<recentProjectList.size(); i++) {
 				ps.println(recentProjectList.get(i));

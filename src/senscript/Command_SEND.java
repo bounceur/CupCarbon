@@ -116,7 +116,8 @@ public class Command_SEND extends Command {
 		//System.out.println("===================================");
 		if (arg1.equals("!color")) {
 			Double v = Double.parseDouble(sensor.getScript().getVariableValue(arg2));
-			sensor.setRadioLinkColor(UColor.colorTab2[v.intValue()]);
+			int iv = v.intValue()%13;
+			sensor.setRadioLinkColor(UColor.colorTab2[iv]);
 			return 0;
 		}
 		String message = arg1;

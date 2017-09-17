@@ -23,24 +23,33 @@ public class Command_RDATA extends Command {
 		}
 		else
 			data = sensor.getScript().getVariableValue(args[1]);
-		SimLog.add("S" + sensor.getId() + " Read DATA: "+data);
-		String [] tab = data.split(symbole);
-		int i = 2;
-		int j = 2;
-		if(args[1].charAt(0)=='!') {
-			i=3;
-			j=3;
+		if(data==null) {
+			String errMessage = "[CupCarbon ERROR] (S"+sensor.getId()+"): The first argument of RDATA cannot be null";
+			System.err.println(errMessage);
+			throw new SenScriptException(errMessage);
 		}
-		while(i<args.length) {
-			try {
-				sensor.getScript().addVariable(args[i], tab[i-j]);
-			} 
-			catch(Exception e) {
-				//if(data.length()>0)
-				//	System.err.println("S"+sensor.getId()+" [ERROR RDATA: IDX OUT OF RANGE]! -> "+data);
+		else {
+			SimLog.add("S" + sensor.getId() + " Read DATA: "+data);
+			String [] tab = data.split(symbole);
+			int i = 2;
+			int j = 2;
+			if(args[1].charAt(0)=='!') {
+				i=3;
+				j=3;
 			}
-			i++;
+			while(i<args.length) {
+				try {
+					sensor.getScript().addVariable(args[i], tab[i-j]);
+				} 
+				catch(Exception e) {
+					//if(data.length()>0)
+					//	System.err.println("S"+sensor.getId()+" [ERROR RDATA: IDX OUT OF RANGE]! -> "+data);
+				}
+				i++;
+			}
 		}
+		if(data==null)
+			System.err.println(sensor.getId()+" AAAA");
 		return 0 ;
 	}
 
