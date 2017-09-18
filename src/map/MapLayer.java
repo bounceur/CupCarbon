@@ -259,6 +259,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			if(DeviceList.meteo != null)
 				g.drawString("Temperature: "+ String.format("%2.2f", DeviceList.meteo.getValue()) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+66);
 		}
+		
+		//int [] coord = MapCalc.geoToPixelMapA(48.391412753283895, -4.4883012771606445);
+		//g.drawOval(coord[0], coord[1], 20, 20);
+		
 		g.dispose();
 	}
 	
@@ -635,6 +639,16 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			startSelection = false;
 			drawSelectionRectangle = false;
 			MapLayer.multipleSelection = true;
+			
+			
+			GeoPosition gp1 = mapViewer.convertPointToGeoPosition(
+					new Point(cadreX1, cadreY1));
+			GeoPosition gp2 = mapViewer.convertPointToGeoPosition(
+					new Point(cadreX2, cadreY2));
+			int [] coord1 = MapCalc.geoToPixelMapA(gp1.getLatitude(), gp1.getLongitude());
+			int [] coord2 = MapCalc.geoToPixelMapA(gp2.getLatitude(), gp2.getLongitude());
+			System.out.println(coord1[0]+" "+coord1[1]);
+			System.out.println(coord2[0]+" "+coord2[1]);
 			
 			nodeList.selectInsideRectangle(cadreX1, cadreX2, cadreY1, cadreY2);
 			markerList.selectInsideRectangle(cadreX1, cadreX2, cadreY1, cadreY2);

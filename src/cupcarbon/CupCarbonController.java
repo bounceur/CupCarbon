@@ -112,6 +112,7 @@ import solver.NetworkEnvelopeC;
 import solver.NetworkEnvelopeP;
 import solver.NetworkPerso;
 import solver.SensorSetCover;
+import utilities.MapCalc;
 import visibility.VisibilityLauncher;
 import wisen_simulation.SimulationInputs;
 import wisen_simulation.WisenSimulation;
@@ -1096,7 +1097,13 @@ public class CupCarbonController implements Initializable {
 		CupActionBlock block = new CupActionBlock();
 		double newLongitude = Double.parseDouble(device_longitude.getText());
 		for (SensorNode sensor : DeviceList.sensors) {
-			if (sensor.isSelected()) {
+			if (sensor.isSelected()) {				
+				double lo = sensor.getLongitude();
+				double la = sensor.getLatitude();
+				int [] coord = MapCalc.geoToPixelMapA(la, lo);
+                System.out.println(coord[0]);
+                System.out.println(coord[1]);
+
 				double currentLongitude = sensor.getLongitude();
 				CupActionModifSensorLongitude action = new CupActionModifSensorLongitude((SensorNode) sensor,
 						currentLongitude, newLongitude);
@@ -1106,8 +1113,7 @@ public class CupCarbonController implements Initializable {
 		for (Device device : DeviceList.devices) {
 			if (device.isSelected()) {
 				double currentLongitude = device.getLongitude();
-				CupActionModifDeviceLongitude action = new CupActionModifDeviceLongitude(device, currentLongitude,
-						newLongitude);
+				CupActionModifDeviceLongitude action = new CupActionModifDeviceLongitude(device, currentLongitude, newLongitude);
 				block.addAction(action);
 			}
 		}

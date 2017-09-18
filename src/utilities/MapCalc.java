@@ -42,23 +42,23 @@ public class MapCalc {
 
 	/**
 	 * This function returns the coordinates of the pixel of the map that
-	 * corresponds to a given GPS coordinates (x, y). Note that this pixel is
+	 * corresponds to a given GPS coordinates (latitude, longitude). Note that this pixel is
 	 * different to the one of the JFram/JPanel/... For each zoom, we have a map
 	 * that is represented by a pixels The size of this map (in pixels) depends
 	 * on the chosen zoom.
 	 * 
-	 * @param x
-	 *            The longitude
-	 * @param y
+	 * @param latitude
 	 *            The latitude
+	 * @param longitude
+	 *            The longitude
 	 * @return The pixel coordinates (Point2D) corresponding to the GPS
-	 *         coordinates (x, y)
+	 *         coordinates (latitude, longitude)
 	 */
-	public static Point2D geoToPixelMap(double x, double y) { 
+	public static Point2D geoToPixelMap(double latitude, double longitude) {
 		return MapLayer
 				.mapViewer
 				.getTileFactory()
-				.geoToPixel(new GeoPosition(x, y),
+				.geoToPixel(new GeoPosition(latitude, longitude),
 						MapLayer.mapViewer.getZoom());
 	}
 
@@ -106,18 +106,18 @@ public class MapCalc {
 
 	/**
 	 * This function returns the integer coordinates of the pixel of the map
-	 * that corresponds to a given GPS coordinates (x, y).
+	 * that corresponds to a given GPS coordinates (latitude, longitude).
 	 * 
-	 * @param x
-	 *            The longitude
-	 * @param y
+	 * @param latitude
 	 *            The latitude
+	 * @param longitude
+	 *            The longitude
 	 * @return the integer coordinates of the pixel of the map that corresponds
-	 *         to a given GPS coordinates (x, y).
+	 *         to a given GPS coordinates (latitude, longitude).
 	 */
 	
-	public static int[] geoToPixelMapA(double x, double y) {
-		Point2D p = geoToPixelMap(x, y);
+	public static int[] geoToPixelMapA(double latitude, double longitude) {
+		Point2D p = geoToPixelMap(latitude, longitude);
 		int[] v = { (int) p.getX(), (int) p.getY() };
 		return v;
 	}
