@@ -273,7 +273,14 @@ public class MediaSensorNode extends SensorNode {
 	
 	@Override	
 	public SensorNode createNewWithTheSameType() {
-		return new MediaSensorNode(longitude, latitude, elevation, radius, 0.0, DeviceList.number++);
+		MediaSensorNode n_msn = new MediaSensorNode(longitude, latitude, elevation, radius, 0.0, DeviceList.number++);
+		MediaSensorUnit c_msu = (MediaSensorUnit) this.getSensorUnit(); 
+		MediaSensorUnit n_msu = (MediaSensorUnit) n_msn.getSensorUnit();
+		
+		n_msu.setDec(c_msu.getDec());
+		n_msu.setDeg(c_msu.getDeg());
+		n_msu.setRadius(c_msu.getRadius());
+		return n_msn;
 	}
 	
 	@Override

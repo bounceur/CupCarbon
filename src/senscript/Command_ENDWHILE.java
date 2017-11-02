@@ -14,10 +14,11 @@ public class Command_ENDWHILE extends Command {
 	
 	@Override
 	public double execute() {
-		SimLog.add("S" + sensor.getId() + " END WHILE.");
+SimLog.add("S" + sensor.getId() + " END WHILE.");
 		
 		SenScript script = sensor.getScript();
 		
+		/*
 		String condition = getCurrentWhile().getArg().replaceFirst("while", "");
 		
 		SenScriptEvalCondition evalCondtion = new SenScriptEvalCondition(sensor);
@@ -28,6 +29,10 @@ public class Command_ENDWHILE extends Command {
 		Command_WHILE cmdWhile =  this.getCurrentWhile();
 		
 		if (resultOfCondition)
+			script.setIndex(cmdWhile.getIndex()-1);*/
+		
+		Command_WHILE cmdWhile =  this.getCurrentWhile();
+		if (cmdWhile.getResultOfCondition())
 			script.setIndex(cmdWhile.getIndex()-1);
 		
 		return 0 ;

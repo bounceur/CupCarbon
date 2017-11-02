@@ -187,6 +187,34 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		}
 	}
 	
+	public List<SensorNode> getNonMarkedNeighbors() {
+		if(DeviceList.propagationsCalculated)
+			return neighbors;
+		else {
+			List<SensorNode> neighnodes = new LinkedList<SensorNode>();
+			for(SensorNode sensorNode : DeviceList.sensors) {
+				if(radioDetect(sensorNode) && this!=sensorNode && !isDead() && !sensorNode.isDead() && !sensorNode.isMarked()) {
+					neighnodes.add(sensorNode);
+				}
+			}	
+			return neighnodes;
+		}
+	}
+	
+	public List<SensorNode> getMarkedNeighbors() {
+		if(DeviceList.propagationsCalculated)
+			return neighbors;
+		else {
+			List<SensorNode> neighnodes = new LinkedList<SensorNode>();
+			for(SensorNode sensorNode : DeviceList.sensors) {
+				if(radioDetect(sensorNode) && this!=sensorNode && !isDead() && !sensorNode.isDead() && sensorNode.isMarked()) {
+					neighnodes.add(sensorNode);
+				}
+			}	
+			return neighnodes;
+		}
+	}
+	
 	public List<SensorNode> getActiveNodes() {
 		List<SensorNode> neighActiveNodes = new LinkedList<SensorNode>(); 
 		for(SensorNode sensorNode : getNeighbors()) {
@@ -394,6 +422,15 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		return true;
 	}
 	
+	public boolean radioDetect_vt(DeviceWithRadio device) {		
+		if (!DeviceList.propagationsCalculated)
+			return RadioDetection.simpleDetection(this, device);
+		else {
+			// YOU
+		}
+		return true;
+	}
+	
 	/**
 	 * @param device
 	 * @return if a neighbor device is in the propagation area of the current device
@@ -410,10 +447,8 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		SimulationInputs.radioDetectionType = RadioDetection.POWER_RECEPTION_DETECTION;
 		neighbors = new LinkedList<SensorNode> () ;
 		for(SensorNode device : DeviceList.sensors) {
-			if(this!=device) {
-				if(radioDetect(device) && !isDead() && !device.isDead()) {
-					neighbors.add(device);
-				}
+			if(radioDetect(device) && !isDead() && !device.isDead()) {
+				neighbors.add(device);
 			}					
 		}
 	}

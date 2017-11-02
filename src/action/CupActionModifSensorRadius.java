@@ -20,8 +20,8 @@ public class CupActionModifSensorRadius extends CupAction {
 	public void execute() {
 		if(!CupCarbon.cupCarbonController.deviceParamPane.isExpanded())
 			CupCarbon.cupCarbonController.deviceParamPane.setExpanded(true);
-		sensorNode.setSelected(true);
 		
+		sensorNode.setSelected(true);
 		sensorNode.setRadius(radius);
 	}
 
@@ -29,8 +29,8 @@ public class CupActionModifSensorRadius extends CupAction {
 	public void antiExecute() {
 		if(!CupCarbon.cupCarbonController.deviceParamPane.isExpanded())
 			CupCarbon.cupCarbonController.deviceParamPane.setExpanded(true);
-		sensorNode.setSelected(true);
 		
+		sensorNode.setSelected(true);
 		sensorNode.setRadius(cRadius);
 	}
 

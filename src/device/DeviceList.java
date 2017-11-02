@@ -1196,6 +1196,11 @@ public class DeviceList {
 		markedEdges.add(new SNEdge(sn1, sn2));
 	}
 	
+	public static void edge(SensorNode sn1, SensorNode sn2) {
+		addEdge(sn1, sn2);
+		MapLayer.repaint();
+	}
+	
 	public static void removeEdge(SensorNode sn1, SensorNode sn2) {
 		for(SNEdge edge : markedEdges) {
 			if((sn1==edge.getSN1() && sn2==edge.getSN2()) || (sn1==edge.getSN2() && sn2==edge.getSN1())) {
@@ -1203,6 +1208,11 @@ public class DeviceList {
 				return;
 			}
 		}
+	}
+	
+	public static void noEdge(SensorNode sn1, SensorNode sn2) {
+		removeEdge(sn1, sn2);
+		MapLayer.repaint();
 	}
 	
 	public void drawMarkedEdges(Graphics2D g) {			
@@ -1479,6 +1489,22 @@ public class DeviceList {
 	}
 	
 	public static void calculatePropagations() {
+		propagationsCalculated = true;
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					for(SensorNode device : sensors) {
+						device.calculatePropagations();
+						MapLayer.repaint();
+					}					
+				}
+				catch(Exception e) {}
+			}
+		});
+	}
+	
+	public static void calculatePropagations_vt() {
 		propagationsCalculated = true;
 		Platform.runLater(new Runnable() {
 			@Override

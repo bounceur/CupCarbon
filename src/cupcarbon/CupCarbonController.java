@@ -624,6 +624,14 @@ public class CupCarbonController implements Initializable {
 		MapLayer.repaint();
 		mapFocus();
 	}
+	
+	@FXML
+	public void propagation_vt() {
+		saveButton.setDisable(false);
+		DeviceList.calculatePropagations();
+		MapLayer.repaint();
+		mapFocus();
+	}
 
 	@FXML
 	public void visibility() {

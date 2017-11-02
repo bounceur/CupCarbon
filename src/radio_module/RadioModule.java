@@ -110,6 +110,8 @@ public abstract class RadioModule {
 	 */
 	public void consumeTx(int v) {
 		sensorNode.getBattery().consume(v*eTx*pl/100.);
+		
+		// Heinzelmann Model
 //		double d = (radioRangeRadius*pl/100.); 
 //		if(d<200) {
 //			//System.out.println(v*5e-8+v*6e-12*d*d);
@@ -126,6 +128,8 @@ public abstract class RadioModule {
 	 */
 	public void consumeRx(int v) {
 		sensorNode.getBattery().consume(v*eRx);
+		
+		// Heinzelmann Model
 		//sensorNode.getBattery().consume(v*5e-8);
 	}
 	

@@ -551,6 +551,17 @@ public abstract class SensorNode extends DeviceWithRadio {
 		}
 		return neighnodes;
 	}
+	
+	/**
+	 * @return if a given node is a neighbor of the current node (this)
+	 */
+	public boolean isNeighborOf(SensorNode node) {		
+		for(SensorNode neighbor : getSensorNodeNeighbors()) {
+			if(node == neighbor)
+				return true;
+		}
+		return false;
+	}
 
 	public byte [] getBuffer() {
 		return buffer;

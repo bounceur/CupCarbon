@@ -245,6 +245,24 @@ public abstract class Device extends MapObject implements Runnable, _Constantes,
 			ledColor = 0;
 		this.marked = b;
 	}
+	
+	/**
+	 * Mark a node and refresh the MapLayer
+	 */
+	public void mark() {
+		ledColor = 1;
+		marked = true;
+		MapLayer.repaint();
+	}
+	
+	/**
+	 * Unmark a node and refresh the MapLayer
+	 */
+	public void unmark() {
+		ledColor = 0;
+		marked = false;
+		MapLayer.repaint();
+	}
 		
 	/**
 	 * Returns if the node is selected by the algorithm (yellow color)

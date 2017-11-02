@@ -21,8 +21,6 @@ package sensorunit;
 
 import java.awt.Graphics;
 import java.awt.Polygon;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
@@ -37,7 +35,7 @@ import utilities.UColor;
  * @author Lounis Massinissa
  * @version 1.0
  */
-public class MediaSensorUnit extends SensorUnit implements KeyListener, Cloneable {
+public class MediaSensorUnit extends SensorUnit implements Cloneable {
 	
 	protected double deg = 0.1;
 	protected double dec = 0;
@@ -55,7 +53,6 @@ public class MediaSensorUnit extends SensorUnit implements KeyListener, Cloneabl
 		dec = 0;
 		eSensing = 1 ;
 		calculateSensingArea();
-		MapLayer.mapViewer.addKeyListener(this);
 	}
 	
 	/**
@@ -73,7 +70,6 @@ public class MediaSensorUnit extends SensorUnit implements KeyListener, Cloneabl
 		this.n = n;
 		this.radius = radius;
 		calculateSensingArea();
-		MapLayer.mapViewer.addKeyListener(this);
 	}
 
 	public void calculateSensingArea() {
@@ -137,45 +133,6 @@ public class MediaSensorUnit extends SensorUnit implements KeyListener, Cloneabl
 		g.drawPolygon(polyX, polyY, n);
 	}
 
-	@Override
-	public void keyPressed(KeyEvent key) {
-		if (node.isSelected()) {			
-			if (key.getKeyChar() =='p') {
-				dec+=0.1;
-			}
-			if (key.getKeyChar() =='o') {
-				dec-=0.1;
-			}
-			if (key.getKeyChar() == ')') {
-				radius+=5;
-			}
-			if (key.getKeyChar() == '(') {
-				radius-=5;
-			}
-			if (key.getKeyChar() == 'P') {
-				deg+=0.01;
-			}
-			if (key.getKeyChar() == 'O') {
-				deg-=0.01;
-			}
-			MapLayer.repaint();
-		}
-	}
-
-	/**
-	 * Coming soon
-	 */
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-	}
-
-	/**
-	 * Coming soon
-	 */
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-	}
-
 	/**
 	 * Coming soon
 	 */
@@ -209,7 +166,6 @@ public class MediaSensorUnit extends SensorUnit implements KeyListener, Cloneabl
 	@Override
 	public MediaSensorUnit clone() throws CloneNotSupportedException {
 		MediaSensorUnit newCU = (MediaSensorUnit) super.clone();
-		MapLayer.mapViewer.addKeyListener(newCU);
 		return newCU;
 	}
 	

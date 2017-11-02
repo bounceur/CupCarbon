@@ -302,9 +302,13 @@ public final class SenScriptAddCommand {
 		if (inst[0].toLowerCase().equals("endwhile")) {
 			Command_ENDWHILE commandWEndhile = new Command_ENDWHILE(sensorNode);
 			commandWEndhile.setCurrentWhile(script.getCurrentWhile());
+			//----
+			script.getCurrentWhile().setEndWhileIndex(script.size());
+			//----
 			script.removeCurrentWhile();
-			script.add(commandWEndhile);
+			script.add(commandWEndhile);			
 		}
+		
 		if (inst[0].toLowerCase().equals("for")) {
 			endof.push("endfor");
 			Command_FOR cmdFor = null;
@@ -319,6 +323,11 @@ public final class SenScriptAddCommand {
 		if (inst[0].toLowerCase().equals("endfor")) {
 			Command_ENDFOR cmdEndFor = new Command_ENDFOR(sensorNode);
 			cmdEndFor.setCurrentFor(script.getCurrentFor());
+			
+			//----
+			script.getCurrentFor().setEndForIndex(script.size());
+			//----
+			
 			script.removeCurrentFor();
 			script.add(cmdEndFor);
 		}

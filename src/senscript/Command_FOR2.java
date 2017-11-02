@@ -3,9 +3,7 @@ package senscript;
 import device.SensorNode;
 import wisen_simulation.SimLog;
 
-public class Command_FOR extends Command {
-	
-	//protected boolean resultOfCondition = true ;
+public class Command_FOR2 extends Command {
 	
 	protected String arg1 ;
 	protected String arg2 ;
@@ -21,10 +19,9 @@ public class Command_FOR extends Command {
 	protected boolean first = true ;
 	protected boolean exist = false ;
 	
-	protected int index = -1;
-	protected int endForIndex = -1;
+	protected int index;
 	
-	protected Command_FOR parent = null;
+	protected Command_FOR2 parent = null;
 	
 	public boolean isCondition() {
 		return trueCondition;
@@ -34,15 +31,15 @@ public class Command_FOR extends Command {
 		this.trueCondition = isCondition;
 	}
 	
-	public Command_FOR getParent() {
+	public Command_FOR2 getParent() {
 		return parent;
 	}
 
-	public void setParent(Command_FOR parent) {
+	public void setParent(Command_FOR2 parent) {
 		this.parent = parent;
 	}
 
-	public Command_FOR(SensorNode sensor, String arg1, String arg2, String arg3, String arg4) {
+	public Command_FOR2(SensorNode sensor, String arg1, String arg2, String arg3, String arg4) {
 		// for i 0 10 1
 		this.sensor = sensor ; 	
 		
@@ -69,8 +66,7 @@ public class Command_FOR extends Command {
 	public double getStep() {
 		return step ;
 	}
-	
-	private boolean firstVerif = true ;
+
 	@Override
 	public double execute() {
 		SimLog.add("S" + sensor.getId() + " FOR ");
@@ -81,55 +77,8 @@ public class Command_FOR extends Command {
 			String arg = sensor.getScript().getVariableValue(arg2);
 			sensor.getScript().addVariable(arg1, arg);
 		}
-		
 		index = sensor.getScript().getIndex();
-		
-		SenScript script = sensor.getScript();
-		
-		String n = getRight();
-		String variable = getLeft();
-		
-		//Command_FOR commandFor =  this.getCurrentFor();
-		
-		String v1 = sensor.getScript().getVariableValue(variable);		
-		String v2 = sensor.getScript().getVariableValue(""+getStep());		
-		
-		double z = 0;
-		if(firstVerif) {
-			firstVerif = false;
-			z = Double.valueOf(v1);
-		}
-		else {
-			z = Double.valueOf(v1) + Double.valueOf(v2);
-		}
-		
-		sensor.getScript().addVariable(variable.substring(1, variable.length()), ""+z);
-		
-		SenScriptCondition condition = null;
-		
-		if(getStep()>=0)
-			condition = new SenScriptCondition_LESS(sensor, variable, n);
-		else 
-			condition = new SenScriptCondition_GREATER(sensor, variable, n);
-		
-		trueCondition = condition.evaluate();		
-		
-		if (!trueCondition) {
-		//	script.setIndex(commandFor.getIndex()-1);
-		//}
-		//else {
-			script.setIndex(endForIndex);
-			init();
-		}
-		
-		//index = sensor.getScript().getIndex();
-		
-		
 		return 0 ;
-	}
-	
-	public boolean getTrueCondition() {
-		return trueCondition;
 	}
 	
 	public int getIndex() {
@@ -140,24 +89,12 @@ public class Command_FOR extends Command {
 		this.index = index;
 	}
 	
-	
-	
-	public int getEndForIndex() {
-		return endForIndex;
-	}
-
-	public void setEndForIndex(int endForIndex) {
-		this.endForIndex = endForIndex;
-	}
-	
-	
 	public void removeVar() {
 		sensor.getScript().removeVar(arg1);
 	}
 	
 	public void init() {
-		first = true ;
-		firstVerif = true;
+		first = true ;		
 		if(!exist) {
 			String arg = sensor.getScript().getVariableValue(arg2);
 			sensor.getScript().addVariable(arg1, arg);

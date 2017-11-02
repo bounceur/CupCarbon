@@ -51,6 +51,8 @@ import action.CupActionDeleteMarker;
 import action.CupActionDeleteSensor;
 import action.CupActionMapObjectMove;
 import action.CupActionModifDeviceRadius;
+import action.CupActionModifMediaSensorUnitDec;
+import action.CupActionModifMediaSensorUnitDeg;
 import action.CupActionModifRadioRadius;
 import action.CupActionModifSensorRadius;
 import action.CupActionModifSensorUnitRadius;
@@ -919,18 +921,70 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		CupActionBlock block = new CupActionBlock();
 		for(SensorNode sensor : DeviceList.sensors) {
 			if (sensor.isSelected()) {	
-				if (key.getKeyChar() == '(') {
-					CupAction action = new CupActionModifSensorUnitRadius(sensor, sensor.getSensorUnitRadius(), sensor.getSensorUnitRadius()-5);
+				if ((key.getKeyChar() == '(') || (key.getKeyChar() == '[')) {
+					int d = 5;
+					if(key.getKeyChar() == '[') d = 1;
+					CupAction action = new CupActionModifSensorUnitRadius(sensor, sensor.getSensorUnitRadius(), sensor.getSensorUnitRadius()-d);
 					block.addAction(action);
 					if(CupCarbon.cupCarbonController!=null) {
 						CupCarbon.cupCarbonController.getSensorInformations();
 					}
 				}
-				if (key.getKeyChar() == ')') {
-					CupAction action = new CupActionModifSensorUnitRadius(sensor, sensor.getSensorUnitRadius(), sensor.getSensorUnitRadius()+5);
+				if ((key.getKeyChar() == ')') || (key.getKeyChar() == ']')) {
+					int d = 5;
+					if(key.getKeyChar() == ']') d = 1;
+					CupAction action = new CupActionModifSensorUnitRadius(sensor, sensor.getSensorUnitRadius(), sensor.getSensorUnitRadius()+d);
 					block.addAction(action);
 					if(CupCarbon.cupCarbonController!=null) {
 						CupCarbon.cupCarbonController.getSensorInformations();
+					}
+				}
+				
+				if ((key.getKeyChar() == 960) || (key.getKeyChar() == 'p')) {
+					if(sensor.getType()==Device.MEDIA_SENSOR) {
+						double d = 0.1;
+						if(key.getKeyChar() == 960) d=0.01;
+						CupAction action = new CupActionModifMediaSensorUnitDec(sensor, ((MediaSensorNode)sensor).getSensorUnitDec(), ((MediaSensorNode)sensor).getSensorUnitDec()+d);
+						block.addAction(action);
+						if(CupCarbon.cupCarbonController!=null) {
+							CupCarbon.cupCarbonController.getSensorInformations();
+						}
+					}
+				}
+				
+				if ((key.getKeyChar() == 339) || (key.getKeyChar() == 'o')) {
+					if(sensor.getType()==Device.MEDIA_SENSOR) {
+						double d = 0.1;
+						if(key.getKeyChar() == 339) d=0.01;
+						CupAction action = new CupActionModifMediaSensorUnitDec(sensor, ((MediaSensorNode)sensor).getSensorUnitDec(), ((MediaSensorNode)sensor).getSensorUnitDec()-d);
+						block.addAction(action);
+						if(CupCarbon.cupCarbonController!=null) {
+							CupCarbon.cupCarbonController.getSensorInformations();
+						}
+					}
+				}
+				
+				if ((key.getKeyChar() == 8719) || (key.getKeyChar() == 'P')) {
+					if(sensor.getType()==Device.MEDIA_SENSOR) {
+						double d = 0.01;
+						if(key.getKeyChar() == 8719) d=0.001;
+						CupAction action = new CupActionModifMediaSensorUnitDeg(sensor, ((MediaSensorNode)sensor).getSensorUnitDeg(), ((MediaSensorNode)sensor).getSensorUnitDeg()+d);
+						block.addAction(action);
+						if(CupCarbon.cupCarbonController!=null) {
+							CupCarbon.cupCarbonController.getSensorInformations();
+						}
+					}
+				}
+				
+				if ((key.getKeyChar() == 338) || (key.getKeyChar() == 'O')) {
+					if(sensor.getType()==Device.MEDIA_SENSOR) {
+						double d = 0.01;
+						if(key.getKeyChar() == 338) d=0.001;
+						CupAction action = new CupActionModifMediaSensorUnitDeg(sensor, ((MediaSensorNode)sensor).getSensorUnitDeg(), ((MediaSensorNode)sensor).getSensorUnitDeg()-d);
+						block.addAction(action);
+						if(CupCarbon.cupCarbonController!=null) {
+							CupCarbon.cupCarbonController.getSensorInformations();
+						}
 					}
 				}
 				

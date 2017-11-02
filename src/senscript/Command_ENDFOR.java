@@ -18,33 +18,9 @@ public class Command_ENDFOR extends Command {
 		
 		SenScript script = sensor.getScript();
 		
-		String n = getCurrentFor().getRight();
-		String variable = getCurrentFor().getLeft();
-		
-		Command_FOR commandFor =  this.getCurrentFor();
-		
-		String v1 = sensor.getScript().getVariableValue(variable);		
-		String v2 = sensor.getScript().getVariableValue(""+commandFor.getStep());		
-		double z = 0;
-		z = Double.valueOf(v1) + Double.valueOf(v2);
-		sensor.getScript().addVariable(variable.substring(1, variable.length()), ""+z);
-		
-		//Command_PLUS cmd = new Command_PLUS(this.sensor, variable.substring(1, variable.length()), variable, ""+commandFor.getStep());
-		//cmd.execute();
-		
-		SenScriptCondition condition = null;
-		if(commandFor.getStep()>=0)
-			condition = new SenScriptCondition_LESS(sensor, variable, n);
-		else 
-			condition = new SenScriptCondition_GREATER(sensor, variable, n);
-		trueCondition = condition.evaluate();		
-		
-		if (trueCondition) {
-			script.setIndex(commandFor.getIndex()-1);
-		}
-		else {
-			commandFor.init();
-		}
+		Command_FOR cmdFor =  this.getCurrentFor();
+		if (cmdFor.getTrueCondition())
+			script.setIndex(cmdFor.getIndex()-1);
 		
 		return 0 ;
 	}

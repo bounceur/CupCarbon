@@ -16,8 +16,11 @@ public class Command_EDGE extends Command {
 
 	@Override
 	public double execute() {
+		if(arg1.equals("")) System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function (v is null)");
+		if(arg2.equals("")) System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function (id is null)");
+		
 		int v = Integer.parseInt(sensor.getScript().getVariableValue(arg1));
-		int id = Integer.parseInt(sensor.getScript().getVariableValue(arg2));
+		int id = Integer.parseInt(sensor.getScript().getVariableValue(arg2));		
 		if(id>0) {
 			if(sensor.getId()!=id) {
 				SensorNode sensor2 = DeviceList.getSensorNodeById(id);
