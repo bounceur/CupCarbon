@@ -1,7 +1,7 @@
 package senscript;
 
 import device.SensorNode;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_NTH extends Command {
 
@@ -28,7 +28,7 @@ public class Command_NTH extends Command {
 				data = sensor.getScript().getVariableValue(args[3]);
 				nth = Double.valueOf(sensor.getScript().getVariableValue(args[2])).intValue();
 			}
-			SimLog.add("S" + sensor.getId() + " NTH: "+data);
+			WisenSimulation.simLog.add("S" + sensor.getId() + " NTH: "+data);
 			String [] t = data.split(symbole);
 			
 			//System.out.println(Arrays.toString(t));

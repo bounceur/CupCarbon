@@ -107,8 +107,9 @@ public class BaseStation extends StdSensorNode {
 		}	
 		
 		if(isDead()) g.setColor(Color.BLACK);
-		if(!getScriptFileName().equals(""))
-			g.fillPolygon(triangleX, triangleY, 3);
+		if(getScriptFileName().equals(""))
+			g.setColor(Color.LIGHT_GRAY);
+		g.fillPolygon(triangleX, triangleY, 3);
 		
 		g.setColor(UColor.BLACK_TTRANSPARENT);
 		g.drawPolygon(triangleX, triangleY, 3);

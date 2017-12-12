@@ -1,6 +1,7 @@
 package senscript;
 
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_RMOVE extends Command {
 
@@ -13,6 +14,7 @@ public class Command_RMOVE extends Command {
 
 	@Override
 	public double execute() {
+		WisenSimulation.simLog.add("S" + sensor.getId() + " RMOVE");
 		String vArg1 = sensor.getScript().getVariableValue(arg1);
 		double t = Double.valueOf(vArg1);
 		if (!sensor.getGPSFileName().equals("")) {

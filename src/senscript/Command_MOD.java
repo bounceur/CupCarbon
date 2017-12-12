@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_MOD extends Command {
 
@@ -22,7 +22,7 @@ public class Command_MOD extends Command {
 		String v2 = sensor.getScript().getVariableValue(arg3);
 		double z = 0;
 		z = Double.valueOf(v1) % Double.valueOf(v2);
-		SimLog.add("S" + sensor.getId() + " " + arg1 + "=" + Double.valueOf(v1) + "%" + Double.valueOf(v2) + " -> " + z);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " " + arg1 + "=" + Double.valueOf(v1) + "%" + Double.valueOf(v2) + " -> " + z);
 		sensor.getScript().addVariable(arg1, "" + z);
 		return 0 ;
 	}

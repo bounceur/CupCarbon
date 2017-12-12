@@ -39,9 +39,9 @@ import map.MapLayer;
 import map.NetworkParameters;
 import radio_module.RadioDetection;
 import radio_module.RadioModule;
+import simulation.SimulationInputs;
 import utilities.MapCalc;
 import utilities.UColor;
-import wisen_simulation.SimulationInputs;
 
 /**
  * @author Ahcene Bounceur

@@ -6,6 +6,7 @@ import device.SensorNode;
 import radio_module.RadioStandard;
 import radio_module.XBeeFrameGenerator;
 import radio_module.XBeeToArduinoFrameGenerator;
+import simulation.WisenSimulation;
 
 public class Command_ATND extends Command {
 	// ND: 
@@ -27,6 +28,7 @@ public class Command_ATND extends Command {
 
 	@Override
 	public double execute() {
+		WisenSimulation.simLog.add("S" + sensor.getId() + " ATND "+arg1+" "+arg2+ "+arg3");
 		List<SensorNode> snList = sensor.getSensorNodeNeighbors();		
 		int n = snList.size();
 		//System.out.println(n);

@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_SMIN extends Command {
 
@@ -18,7 +18,7 @@ public class Command_SMIN extends Command {
 
 	@Override
 	public double execute() {		
-		SimLog.add("S" + sensor.getId() + " SMIN");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " SMIN");
 		String arg1s = sensor.getScript().getVariableValue(arg2);
 		String arg2s = sensor.getScript().getVariableValue(arg3);
 		if (Double.valueOf(arg1s.split("#")[1]) < Double.valueOf(arg2s.split("#")[1]))

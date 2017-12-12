@@ -33,11 +33,11 @@ import battery.Battery;
 import map.MapLayer;
 import map.NetworkParameters;
 import senscript.SenScript;
+import simulation.SimulationInputs;
 import utilities.MapCalc;
 import utilities.UColor;
 import utilities._Constantes;
 import visibility.VisibilityZones;
-import wisen_simulation.SimulationInputs;
 
 /**
  * @author Ahcene Bounceur

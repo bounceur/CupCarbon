@@ -2,7 +2,7 @@ package senscript;
 
 import arduino.Bracket;
 import device.SensorNode;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_WAIT extends Command {
 	
@@ -18,20 +18,22 @@ public class Command_WAIT extends Command {
 	}
 
 	@Override
-	public double execute() {		
+	public double execute() {
 		double event = 0 ;
 
 		if (sensor.dataAvailable()) {			
-			SimLog.add("S" + sensor.getId() + " Buffer available, exit waiting.");
+			WisenSimulation.simLog.add("S" + sensor.getId() + " Buffer available, exit waiting.");
 			sensor.getScript().setWaiting(false);
 			return 0 ;
 		} 
 		else {
-			SimLog.add("S" + sensor.getId() + " is waiting for data ...");			
+			WisenSimulation.simLog.add("S" + sensor.getId() + " is waiting for data ...");			
 			sensor.getScript().setWaiting(true);			
 			if (arg.equals(""))
 				event = Double.MAX_VALUE;
 			else {
+				if(sensor.getScript().getVariableValue(arg)==null)
+					System.err.println("[CupCarbon ERROR] (File: "+ sensor.getScriptFileName()+") (S"+sensor.getId()+"): WAIT function ("+arg+" is null)");
 				event = (Double.parseDouble(sensor.getScript().getVariableValue(arg))/1000.);
 			}
 		}

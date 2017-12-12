@@ -1,6 +1,7 @@
 package senscript;
 
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_DISTANCE extends Command {
 
@@ -15,8 +16,13 @@ public class Command_DISTANCE extends Command {
 
 	@Override
 	public double execute() {
+		WisenSimulation.simLog.add("S" + sensor.getId() + " DISTANCE");
 		String vArg2 = sensor.getScript().getVariableValue(arg2);
 		int id = Integer.valueOf(vArg2);
+		
+		WisenSimulation.simLog.add("S" + sensor.getId() + " DISTANCE "+vArg2);
+		
+		
 		double distance = sensor.distance2(id);
 		
 		sensor.getScript().addVariable(arg1, "" + distance);

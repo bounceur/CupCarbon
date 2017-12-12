@@ -11,7 +11,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="699.0" prefWidth="1197.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.CupCarbonController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="699.0" prefWidth="1279.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.CupCarbonController">
    <top>
       <MenuBar fx:id="menuBar" style="-fx-border-width: 2; -fx-font-size: 11;" BorderPane.alignment="CENTER">
         <menus>
@@ -574,6 +574,14 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Solver">
                <items>
+               	<MenuItem mnemonicParsing="false" onAction="#sensorCycle" text="Cycle">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/edu_mathematics-1.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
                   <MenuItem mnemonicParsing="false" onAction="#sensorCoverage" text="Sensor Coverage">
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
@@ -2617,12 +2625,47 @@
               </items>
             </SplitPane>
          </center>
+         <bottom>
+            <Accordion BorderPane.alignment="CENTER">
+              <panes>
+                <TitledPane animated="false" prefWidth="1350.0" text="Console/Log">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                     <content>
+                        <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: green;">
+                                 <children>
+                                    <TextArea fx:id="textOut" opacity="0.9" prefHeight="150.0" prefWidth="1348.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <font>
+                                          <Font name="Courier" size="10.0" />
+                                       </font>
+                                    </TextArea>
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: red;">
+                                 <children>
+                                    <TextArea fx:id="textErr" opacity="0.9" prefHeight="200.0" prefWidth="200.0" scrollLeft="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <font>
+                                          <Font name="Courier" size="10.0" />
+                                       </font>
+                                    </TextArea>
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                     </content>
+                  </TitledPane>
+              </panes>
+            </Accordion>
+         </bottom>
       </BorderPane>
    </center>
    <bottom>
       <BorderPane prefHeight="0.0" prefWidth="885.0" BorderPane.alignment="CENTER">
          <left>
-            <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="794.0" spacing="5.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="855.0" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
                   <Button mnemonicParsing="false" onAction="#closeLeftMenu" prefWidth="50.0">
                      <font>
@@ -2727,13 +2770,14 @@
                      </font>
                   </Button>
                   <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <Slider fx:id="bg_slider" blockIncrement="1.0" max="1000.0" onMouseClicked="#sliderValueChanged" onMouseDragged="#sliderValueChanged" prefHeight="16.0" prefWidth="80.0" />
                </children>
             </HBox>
          </left>
          <right>
             <HBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="466.0" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label prefHeight="18.0" prefWidth="89.0" text="Simulation time">
+                  <Label fx:id="stlabel" prefHeight="18.0" prefWidth="89.0" text="Simulation time">
                      <font>
                         <Font size="10.0" />
                      </font>

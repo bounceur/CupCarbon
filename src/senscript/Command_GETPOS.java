@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_GETPOS extends Command {
 
@@ -15,7 +15,7 @@ public class Command_GETPOS extends Command {
 	@Override
 	public double execute() {
 		String v = "" ;
-		SimLog.add("S" + sensor.getId() + " GET POSITION.");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " GET POSITION.");
 		v = sensor.getLongitude()+"#"+sensor.getLatitude();		
 		sensor.getScript().addVariable(arg, v);
 		return 0 ;

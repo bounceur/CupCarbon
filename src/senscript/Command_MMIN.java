@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_MMIN extends Command {
 
@@ -20,11 +20,14 @@ public class Command_MMIN extends Command {
 
 	@Override
 	public double execute() {		
-		SimLog.add("S" + sensor.getId() + " MMIN");
+		
 		String arg = arg1;
 		String arg1s = sensor.getScript().getVariableValue("$"+arg);
 		String arg2s = sensor.getScript().getVariableValue(arg2);			  
 		String idMin = sensor.getScript().getVariableValue(arg4);
+		
+		WisenSimulation.simLog.add("S" + sensor.getId() + " MMIN "+arg+ " "+arg1s+" "+arg2s+" "+idMin);
+		
 		if(Double.valueOf(arg1s) > Double.valueOf(arg2s)){
 			sensor.getScript().addVariable(arg, arg2s);
 			sensor.getScript().addVariable(arg3, idMin);

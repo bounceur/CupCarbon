@@ -30,10 +30,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import action.CupAction;
 import action.CupActionAddSensor;
@@ -54,9 +54,9 @@ import markers.MarkerList;
 import natural_events.Gas;
 import natural_events.Meteo;
 import project.Project;
+import simulation.WisenSimulation;
 import solver.SensorGraph;
 import utilities.MapCalc;
-import wisen_simulation.WisenSimulation;
 
 /**
  * @author Ahcene Bounceur
@@ -68,9 +68,9 @@ public class DeviceList {
 	public static Meteo meteo = null;
 	//public static List<SensorNode> sensors = Collections.synchronizedList(new ArrayList<SensorNode>());
 	//public static List<Device> devices = Collections.synchronizedList(new ArrayList<Device>());
-	public static List<SensorNode> sensors = new ArrayList<SensorNode>();
-	public static List<Device> devices = new ArrayList<Device>();
-	public static List<SNEdge> markedEdges = new ArrayList<SNEdge>();
+	public static Vector<SensorNode> sensors = new Vector<SensorNode>();
+	public static Vector<Device> devices = new Vector<Device>();
+	public static Vector<SNEdge> markedEdges = new Vector<SNEdge>();
 	
 	public static boolean drawLinks = true;
 	public static LinkedList<LinkedList<Integer>> hulls = new LinkedList<LinkedList<Integer>>();
@@ -83,13 +83,14 @@ public class DeviceList {
 	
 	public static void reset() {
 		meteo = null;
-		sensors = Collections.synchronizedList(new ArrayList<SensorNode>());
+		sensors = new Vector<SensorNode>();
+		//sensors = Collections.synchronizedList(new ArrayList<SensorNode>());
 		//devices = Collections.synchronizedList(new ArrayList<Device>());
 		//sensors = new ArrayList<SensorNode>();
-		devices = new ArrayList<Device>();
+		devices = new Vector<Device>();
 		drawLinks = true;
 		hulls = new LinkedList<LinkedList<Integer>>();
-		markedEdges = new ArrayList<SNEdge>();
+		markedEdges = new Vector<SNEdge>();
 		DeviceList.propagationsCalculated = false;
 	}
 	
@@ -1015,12 +1016,12 @@ public class DeviceList {
 	}
 
 	public static void initMarkedEdges() {
-		markedEdges = new ArrayList<SNEdge>();
+		markedEdges = new Vector<SNEdge>();
 	}
 	
 	public static void initAll() {
 		hulls = new LinkedList<LinkedList<Integer>>();
-		markedEdges = new ArrayList<SNEdge>();		
+		markedEdges = new Vector<SNEdge>();		
 		WisenSimulation.sTime = 0;
 		for (SensorNode sensor : sensors) {			
 			sensor.init();

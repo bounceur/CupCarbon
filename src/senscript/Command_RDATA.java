@@ -1,7 +1,7 @@
 package senscript;
 
 import device.SensorNode;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_RDATA extends Command {
 
@@ -29,7 +29,7 @@ public class Command_RDATA extends Command {
 			throw new SenScriptException(errMessage);
 		}
 		else {
-			SimLog.add("S" + sensor.getId() + " Read DATA: "+data);
+			WisenSimulation.simLog.add("S" + sensor.getId() + " Read DATA: "+data);
 			String [] tab = data.split(symbole);
 			int i = 2;
 			int j = 2;

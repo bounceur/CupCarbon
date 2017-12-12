@@ -6,7 +6,7 @@ import map.MapLayer;
 import radio_module.RadioStandard;
 import radio_module.XBeeFrameGenerator;
 import radio_module.XBeeToArduinoFrameGenerator;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_ATPL extends Command {
 
@@ -19,7 +19,7 @@ public class Command_ATPL extends Command {
 
 	@Override
 	public double execute() {
-		SimLog.add("S" + sensor.getId() + " ATPL "+arg);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " ATPL "+arg);
 		String args = sensor.getScript().getVariableValue(arg);
 		
 		double v = Double.valueOf(args);

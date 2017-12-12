@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import device.SensorNode;
 import map.MapLayer;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_PRINT extends Command {
 
@@ -18,7 +18,7 @@ public class Command_PRINT extends Command {
 
 	@Override
 	public double execute() {
-		SimLog.add("S" + sensor.getId() + " PRINT "+Arrays.toString(arg));		
+		WisenSimulation.simLog.add("S" + sensor.getId() + " PRINT "+Arrays.toString(arg));		
 		String part = "";
 		message = "";
 		for (int i=1; i<arg.length; i++) {

@@ -2,6 +2,7 @@ package senscript;
 
 import device.DeviceList;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_EDGE extends Command {
 
@@ -16,8 +17,10 @@ public class Command_EDGE extends Command {
 
 	@Override
 	public double execute() {
-		if(arg1.equals("")) System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function (v is null)");
-		if(arg2.equals("")) System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function (id is null)");
+		if(arg1.equals("")) System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function ("+arg1+" is null)");
+		if(arg2.equals("")) System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function ("+arg2+" is null)");
+		
+		WisenSimulation.simLog.add("S" + sensor.getId() + " EDGE "+arg1+ " "+ arg2);
 		
 		int v = Integer.parseInt(sensor.getScript().getVariableValue(arg1));
 		int id = Integer.parseInt(sensor.getScript().getVariableValue(arg2));		

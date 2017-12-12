@@ -82,7 +82,7 @@ import simulation.WisenSimulation;
 import utilities.MapCalc;
 import utilities.UColor;
 
-public class MapLayer implements Painter<Object>, MouseListener, MouseMotionListener, KeyListener {
+public class MapLayer2 implements Painter<Object>, MouseListener, MouseMotionListener, KeyListener {
 
 	public static JXMapViewer mapViewer = null;
 	public static DeviceList nodeList = null;
@@ -117,13 +117,11 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	public static boolean button3Clicked = false;
 	
 	public static boolean showInfos = true;
-	public static boolean showBakhground = true;
-	public static int bg_transparency = 0;
 	
-	public MapLayer() {}
+	public MapLayer2() {}
 	
-	public MapLayer(JXMapViewer mapViewer) {		
-		MapLayer.mapViewer = mapViewer;
+	public MapLayer2(JXMapViewer mapViewer) {		
+		MapLayer2.mapViewer = mapViewer;
 		initLists();
 		mapViewer.setOverlayPainter(this);
 		mapViewer.addMouseListener(this);
@@ -161,18 +159,12 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		Rectangle rect = mapViewer.getViewportBounds();
 		g.translate(-rect.x, -rect.y);				
 		
-		if(showBakhground) {
-			g.setColor(new Color(255,255,255,bg_transparency));
-			g.fillRect((int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)-20, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)-20, mapViewer.getWidth()+40,mapViewer.getHeight()+40);
-			//g.setColor(new Color(200,200,200,bg_transparency));
-			//g.drawRect((int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+2, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+2, mapViewer.getWidth()-4,mapViewer.getHeight()-4);
-		}
-		
 		mapViewer.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		boolean addThing = false;
 		if (lastKey == '1') {					
 			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			addThing = true;
+			
 		}
 		if (lastKey == '2') {
 			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -648,7 +640,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			lastKeyCode = 0;
 			startSelection = false;
 			drawSelectionRectangle = false;
-			MapLayer.multipleSelection = true;
+			MapLayer2.multipleSelection = true;
 			
 			
 			//GeoPosition gp1 = mapViewer.convertPointToGeoPosition(new Point(cadreX1, cadreY1));
@@ -732,9 +724,6 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		
 		if(key.getKeyCode()==68 && altDown)
 			showInfos = !showInfos;
-		
-		if(key.getKeyCode()==70 && altDown)
-			showBakhground = !showBakhground;
 		
 		if(key.getKeyChar()=='a' && !ctrlDown && !cmdDown && !shiftDown && !altDown ) {
 			NetworkParameters.drawSensorArrows = !NetworkParameters.drawSensorArrows; 
@@ -838,7 +827,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		for(SensorNode sensor : DeviceList.sensors) {
 			if (sensor.isSelected()) {
 				CupAction action;
-				if(MapLayer.magnetic)
+				if(MapLayer2.magnetic)
 					action = new CupActionAddSensor(sensor.duplicate());
 				else
 					action = new CupActionAddSensor(sensor.duplicateWithShift(0.0002,0.0002,0));
@@ -848,7 +837,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		for(Device device : DeviceList.devices) {
 			if (device.isSelected()) {	
 				CupAction action;
-				if(MapLayer.magnetic)
+				if(MapLayer2.magnetic)
 					action = new CupActionAddDevice(device.duplicate());
 				else
 					action = new CupActionAddDevice(device.duplicateWithShift(0.0002,0.0002,0));
@@ -892,7 +881,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				if (key.getKeyChar() == 'c') {
 					if(!mousePressed) {
 						CupAction action;
-						if(MapLayer.magnetic)
+						if(MapLayer2.magnetic)
 							action = new CupActionAddDevice(device.duplicate());
 						else
 							action = new CupActionAddDevice(device.duplicateWithShift(0.0002,0.0002,0));
@@ -1025,7 +1014,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				if (key.getKeyChar() == 'c') {
 					if(!mousePressed) {
 						CupAction action;
-						if(MapLayer.magnetic)
+						if(MapLayer2.magnetic)
 							action = new CupActionAddSensor(sensor.duplicate());
 						else
 							action = new CupActionAddSensor(sensor.duplicateWithShift(0.0002,0.0002,0));
@@ -1197,7 +1186,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	
 	public static void selectNodesMarkers() {
 		if(selectType==MapObject.NONE) {
-			MapLayer.numberOfInsideAndSelected = 0;
+			MapLayer2.numberOfInsideAndSelected = 0;
 			selectType = MapObject.SENSOR;
 			DeviceList.deselectAll();
 			MarkerList.deselectAll();
@@ -1208,12 +1197,12 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				DeviceList.deselectAll();
 				MarkerList.deselectAll();
 				WorldMap.setSelectionOfAllMarkers(true, false);
-				MapLayer.numberOfInsideAndSelected = MarkerList.markers.size();
+				MapLayer2.numberOfInsideAndSelected = MarkerList.markers.size();
 			}
 			if(selectType==MapObject.SENSOR) {
 				selectType = MapObject.MARKER;
 				WorldMap.setSelectionOfAllNodes(true, Device.SENSOR, false);
-				MapLayer.numberOfInsideAndSelected = DeviceList.sensors.size();
+				MapLayer2.numberOfInsideAndSelected = DeviceList.sensors.size();
 			}
 		}
 	}
@@ -1271,9 +1260,9 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		int lx2 = coord[0];
 		int ly2 = coord[1];
 		g.setColor(new Color(103,103,103));
-		if(MapLayer.dark)
+		if(MapLayer2.dark)
 			g.setColor(Color.LIGHT_GRAY);
-		int d = (int) MapLayer.distance(longitude1, latitude1, longitude2, latitude2);
+		int d = (int) MapLayer2.distance(longitude1, latitude1, longitude2, latitude2);
 		g.drawString("" + d, ((lx1 + lx2) / 2), ((ly1 + ly2) / 2 + 10));
 	}
 	

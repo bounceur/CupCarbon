@@ -43,9 +43,9 @@ import device.DeviceList;
 import device.MultiChannels;
 import device.SensorNode;
 import radio_module.RadioPacketGenerator;
+import simulation.SimulationInputs;
+import simulation.WisenSimulation;
 import utilities.UColor;
-import wisen_simulation.SimLog;
-import wisen_simulation.SimulationInputs;
 
 /**
  * @author Ahcene Bounceur
@@ -152,7 +152,7 @@ public class Command_SEND extends Command {
 			sensor.setMessageLost(false);
 			sensor.setAckReceived(false);
 			sensor.setAttempts(0);
-			SimLog.add("S" + sensor.getId() + " is writing the message : \"" + message + "\" in its buffer.");
+			WisenSimulation.simLog.add("S" + sensor.getId() + " is writing the message : \"" + message + "\" in its buffer.");
 			writtenInUART = true ;
 			executing = true;
 			double ratio = 1.0/(sensor.getUartDataRate());			
@@ -167,7 +167,7 @@ public class Command_SEND extends Command {
 		// or in a broadcast mode (send x *)
 		// ---------------------------------------------------------------------------------------------------------------------		
 		if (writtenInUART && (!SimulationInputs.ack || (arg2.equals("*") && arg3.equals("")))) {
-			SimLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");
+			WisenSimulation.simLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");
 			//System.out.println(WisenSimulation.time + " SEND " + message);
 			//System.out.println("SEND");	
 			sensor.setAckReceived(false);
@@ -185,7 +185,7 @@ public class Command_SEND extends Command {
 		if (writtenInUART && SimulationInputs.ack && !sensor.isAckWaiting()) {
 		//if (writtenInUART && SimulationInputs.ack) {
 			if(sensor.getAttempts() < sensor.getNumberOfSends()) {
-				 SimLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");
+				WisenSimulation.simLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");
 				 //System.out.println(WisenSimulation.time+ " "+ sensor.getAttempts() + " SEND " + message);
 				 sensor.setAckWaiting(true);
 				 //System.out.println();				 
@@ -309,7 +309,7 @@ public class Command_SEND extends Command {
 			sensor.consumeTx(RadioPacketGenerator.packetLengthInBits(0, sensor.getStandard()));
 			
 			if (arg2.equals("*")) {
-				SimLog.add("S" + sensor.getId() + " has finished sending in a broadcast the message : \"" + message + "\" to the nodes: ");
+				WisenSimulation.simLog.add("S" + sensor.getId() + " has finished sending in a broadcast the message : \"" + message + "\" to the nodes: ");
 				double v = 0;
 				if (!arg3.equals("")) {
 					v = Double.valueOf(sensor.getScript().getVariableValue(arg3));
@@ -328,16 +328,16 @@ public class Command_SEND extends Command {
 					destNodeId = Double.valueOf(dest);
 					SensorNode rnode = DeviceList.getSensorNodeById((int) destNodeId);
 					if (rnode != null) {
-						SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
+						WisenSimulation.simLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
 						if (sensor.propagationDetect(rnode) && sensor.canCommunicateWith(rnode)) {
 							if(rRadioName.equals("") || rRadioName.equals(rnode.getCurrentRadioModule().getName())) 
 								MultiChannels.addPacketEvent(0, message, sensor, rnode);
 						}
 						else
-							SimLog.add("S" + sensor.getId() + " and S" + destNodeId + "have not the same protocol!");
+							WisenSimulation.simLog.add("S" + sensor.getId() + " and S" + destNodeId + "have not the same protocol!");
 					}
 					else 
-						SimLog.add("S" + sensor.getId() + " can not send the message : \"" + message + "\" to the non-existent node: "+destNodeId);
+						WisenSimulation.simLog.add("S" + sensor.getId() + " can not send the message : \"" + message + "\" to the non-existent node: "+destNodeId);
 				}
 				else {
 					dest = arg3;
@@ -345,10 +345,10 @@ public class Command_SEND extends Command {
 					destNodeId = Double.valueOf(dest);
 					
 					if(!dest.equals("0")) {
-						SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the nodes with MY="+destNodeId+": ");
+						WisenSimulation.simLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the nodes with MY="+destNodeId+": ");
 						for(SensorNode rnode : DeviceList.sensors) {
 							if ((sensor.propagationDetect(rnode)) && (rnode.getCurrentRadioModule().getMy()==destNodeId) && sensor.canCommunicateWith(rnode)) {
-								SimLog.add("  -> S" + rnode.getId() + " ");							
+								WisenSimulation.simLog.add("  -> S" + rnode.getId() + " ");							
 								//rnode.setReceiving(true);
 								MultiChannels.addPacketEvent(0, message, sensor, rnode);
 							}						
@@ -361,13 +361,13 @@ public class Command_SEND extends Command {
 							destNodeId = Integer.valueOf(dest);
 							SensorNode rnode = DeviceList.getSensorNodeById((int)destNodeId);
 							if (rnode != null) {
-								SimLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
+								WisenSimulation.simLog.add("S" + sensor.getId() + " has finished sending the message : \"" + message + "\" to the node: ");
 								if (sensor.canCommunicateWith(rnode)) {
 									MultiChannels.addPacketEvent(0, message, sensor, rnode);
 								}
 							}
 							else 
-								SimLog.add("S" + sensor.getId() + " can not send the message : \"" + message + "\" to the non-existent node: "+destNodeId);
+								WisenSimulation.simLog.add("S" + sensor.getId() + " can not send the message : \"" + message + "\" to the non-existent node: "+destNodeId);
 						}
 					}
 				}

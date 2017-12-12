@@ -2,8 +2,8 @@ package senscript;
 
 import java.util.Random;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_RGAUSS extends Command {
 
@@ -18,7 +18,7 @@ public class Command_RGAUSS extends Command {
 	public double execute() {	
 		Random r = new Random();
 		double rand = r.nextGaussian(); 
-		SimLog.add("S" + sensor.getId() + " GAUSS RAND: "+rand);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " GAUSS RAND: "+rand);
 		sensor.getScript().addVariable(arg, ""+rand);
 		return 0 ;
 	}

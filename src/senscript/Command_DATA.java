@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_DATA extends Command {
 
@@ -34,7 +34,7 @@ public class Command_DATA extends Command {
 		}		
 		packet += sensor.getScript().getVariableValue(args[args.length-1]);
 		sensor.getScript().addVariable(var, packet);
-		SimLog.add("S" + sensor.getId() + " DATA Creation:"+packet);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " DATA Creation:"+packet);
 		return 0 ;
 	}
 

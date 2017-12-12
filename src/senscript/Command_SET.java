@@ -1,7 +1,7 @@
 package senscript;
 
 import device.SensorNode;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_SET extends Command {
 
@@ -18,7 +18,7 @@ public class Command_SET extends Command {
 	public double execute() {
 		boolean contained = false;
 		String arg = "";
-		SimLog.add("S" + sensor.getId() + " Set " + arg1 + "=" + arg2);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " SET " + arg1 + "=" + arg2);
 		String[] match={"(",")","+","-","*","/", "%"};
 		int i = 0;
 		while (!contained && i< match.length) {

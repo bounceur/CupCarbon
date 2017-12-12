@@ -5,7 +5,7 @@ import device.SensorNode;
 import radio_module.RadioStandard;
 import radio_module.XBeeFrameGenerator;
 import radio_module.XBeeToArduinoFrameGenerator;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_ATID extends Command {
 
@@ -18,7 +18,7 @@ public class Command_ATID extends Command {
 
 	@Override
 	public double execute() {
-		SimLog.add("S" + sensor.getId() + " ATNI "+arg);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " ATNI "+arg);
 		String args = sensor.getScript().getVariableValue(arg);
 		sensor.setId(Integer.valueOf(args));
 		if (DeviceList.propagationsCalculated)

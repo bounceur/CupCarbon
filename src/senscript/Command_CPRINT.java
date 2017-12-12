@@ -3,7 +3,7 @@ package senscript;
 import java.util.Arrays;
 
 import device.SensorNode;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_CPRINT extends Command {
 
@@ -17,14 +17,14 @@ public class Command_CPRINT extends Command {
 
 	@Override
 	public double execute() {
-		SimLog.add("S" + sensor.getId() + " PRINT "+Arrays.toString(arg));		
+		WisenSimulation.simLog.add("S" + sensor.getId() + " CPRINT "+Arrays.toString(arg));		
 		String part = "";
 		message = "";
 		for (int i=1; i<arg.length; i++) {
 			part = sensor.getScript().getVariableValue(arg[i]);
 			message += part + " ";
 		}
-		System.out.println(sensor.getId()+":"+message);
+		System.out.println("S"+sensor.getId()+" >> "+message);
 		return 0 ;
 	}
 	

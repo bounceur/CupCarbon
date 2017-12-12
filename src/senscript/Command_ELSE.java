@@ -1,6 +1,5 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
 
 public class Command_ELSE extends Command {
@@ -16,7 +15,7 @@ public class Command_ELSE extends Command {
 	
 	@Override
 	public double execute() {
-		SimLog.add("S" + sensor.getId() + " ELSE");
+		//WisenSimulation.simLog.add("S" + sensor.getId() + " ELSE");
 		if (currentIf.getRestultOfCondition())
 			sensor.getScript().setIndex(currentIf.getEndIfIndex());
 		return 0 ;

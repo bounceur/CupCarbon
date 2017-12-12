@@ -2,6 +2,7 @@ package senscript;
 
 import device.SensorNode;
 import map.MapLayer;
+import simulation.WisenSimulation;
 
 public class Command_MOVE extends Command {
 
@@ -24,6 +25,8 @@ public class Command_MOVE extends Command {
 		String vArg2 = sensor.getScript().getVariableValue(arg2);
 		String vArg3 = sensor.getScript().getVariableValue(arg3);
 		String vArg4 = sensor.getScript().getVariableValue(arg4);
+		
+		WisenSimulation.simLog.add("S" + sensor.getId() + " MOVE "+vArg1+" "+vArg2+" "+vArg3+" "+vArg4);
 		
 		double currentLongitude = sensor.getLongitude();
 		double currentLatitude = sensor.getLatitude();

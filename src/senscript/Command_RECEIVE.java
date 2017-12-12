@@ -2,7 +2,7 @@ package senscript;
 
 import arduino.Bracket;
 import device.SensorNode;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_RECEIVE extends Command {
 	
@@ -22,13 +22,13 @@ public class Command_RECEIVE extends Command {
 		double event = 0 ;
 
 		if (sensor.dataAvailable()) {			
-			SimLog.add("S" + sensor.getId() + " Buffer available, exit waiting.");
+			WisenSimulation.simLog.add("S" + sensor.getId() + " Buffer available, exit waiting.");
 			sensor.getScript().setWaiting(false);
 			sensor.readMessage(arg);
 			return 0 ;
 		} 
 		else {
-			SimLog.add("S" + sensor.getId() + " is waiting for data ...");			
+			WisenSimulation.simLog.add("S" + sensor.getId() + " is waiting for data ...");			
 			sensor.getScript().setWaiting(true);			
 			event = Double.MAX_VALUE;
 		}		

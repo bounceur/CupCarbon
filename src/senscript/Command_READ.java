@@ -1,6 +1,7 @@
 package senscript;
 
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_READ extends Command {
 
@@ -14,6 +15,7 @@ public class Command_READ extends Command {
 
 	@Override
 	public double execute() {
+		WisenSimulation.simLog.add("S" + sensor.getId() + " READ");
 		sensor.readMessage(arg);
 		return 0 ;
 	}

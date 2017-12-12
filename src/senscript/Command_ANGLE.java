@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_ANGLE extends Command {
 	
@@ -20,7 +20,7 @@ public class Command_ANGLE extends Command {
 
 	@Override
 	public double execute() {
-		SimLog.add("S" + sensor.getId() + " Calculate Angle.");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " Calculate Angle.");
 		
 		String prev = sensor.getScript().getVariableValue(arg2);
 		String local = sensor.getScript().getVariableValue(arg3);

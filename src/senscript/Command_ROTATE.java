@@ -2,6 +2,7 @@ package senscript;
 
 import device.MediaSensorNode;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_ROTATE extends Command {
 
@@ -16,6 +17,7 @@ public class Command_ROTATE extends Command {
 
 	@Override
 	public double execute() {
+		WisenSimulation.simLog.add("S" + sensor.getId() + " ROTATE");
 		String vArg1 = sensor.getScript().getVariableValue(arg1);
 		String vArg2 = sensor.getScript().getVariableValue(arg2);
 		double n = Double.valueOf(vArg1);

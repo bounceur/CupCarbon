@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_CHARAT extends Command {
 
@@ -20,7 +20,7 @@ public class Command_CHARAT extends Command {
 	public double execute() {
 		String v = sensor.getScript().getVariableValue(arg2);
 		String n = sensor.getScript().getVariableValue(arg3);
-		SimLog.add("S" + sensor.getId() + " charat "+v+" "+n);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " charat "+v+" "+n);
 		String r = ""+(v.charAt(Double.valueOf(n).intValue()));
 		sensor.getScript().addVariable(arg1, "" + r);
 		return 0 ;

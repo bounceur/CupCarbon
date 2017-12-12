@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_CBUFFER extends Command {
 	
@@ -11,7 +11,7 @@ public class Command_CBUFFER extends Command {
 
 	@Override
 	public double execute() {	
-		SimLog.add("S" + sensor.getId() + " CLEAR BUFFER.");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " CBUFFER: CLEAR BUFFER");
 		sensor.initBuffer();
 		return 0 ;
 	}

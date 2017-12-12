@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_BATTERY extends Command {
 
@@ -23,13 +23,13 @@ public class Command_BATTERY extends Command {
 	public double execute() {
 		if(arg2.equals("")) {
 			String v = "" ;
-			SimLog.add("S" + sensor.getId() + " BATTERY.");
+			WisenSimulation.simLog.add("S" + sensor.getId() + " BATTERY.");
 			v = sensor.getBatteryLevel()+"";
 			sensor.getScript().addVariable(arg1, v);			
 		}
 		else {
 			if(arg1.toLowerCase().equals("set")) {
-				SimLog.add("S" + sensor.getId() + " BATTERY SET"+ arg2+".");
+				WisenSimulation.simLog.add("S" + sensor.getId() + " BATTERY SET"+ arg2+".");
 				String v = sensor.getScript().getVariableValue(arg2);
 				sensor.setBatteryLevel(Double.valueOf(v));
 			}

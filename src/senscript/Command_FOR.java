@@ -1,7 +1,6 @@
 package senscript;
 
 import device.SensorNode;
-import wisen_simulation.SimLog;
 
 public class Command_FOR extends Command {
 	
@@ -73,7 +72,7 @@ public class Command_FOR extends Command {
 	private boolean firstVerif = true ;
 	@Override
 	public double execute() {
-		SimLog.add("S" + sensor.getId() + " FOR ");
+		//WisenSimulation.simLog.add("S" + sensor.getId() + " FOR ");
 		if (first) {
 			step = Double.valueOf(sensor.getScript().getVariableValue(sStep));
 			first = false ;

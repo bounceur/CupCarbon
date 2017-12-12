@@ -28,8 +28,8 @@ import java.util.LinkedList;
 
 import map.MapLayer;
 import project.Project;
+import simulation.SimulationInputs;
 import visibility.VisibilityZones;
-import wisen_simulation.SimulationInputs;
 
 /**
  * @author Ahcene Bounceur

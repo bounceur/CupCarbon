@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_RAND extends Command {
 
@@ -15,7 +15,7 @@ public class Command_RAND extends Command {
 	@Override
 	public double execute() {	
 		double rand = Math.random();
-		SimLog.add("S" + sensor.getId() + " RAND: "+rand);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " RAND: "+rand);
 		sensor.getScript().addVariable(arg, ""+rand);
 		return 0 ;
 	}

@@ -47,7 +47,7 @@ import solver.SolverProxyParams;
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
- * @version 3.3 (U-One)
+ * @version 3.4 (U-One)
  */
 
 public class CupCarbon extends Application {
@@ -80,6 +80,7 @@ public class CupCarbon extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		setUserAgentStylesheet(STYLESHEET_MODENA);
 	    
 		stage.setTitle("CupCarbon "+CupCarbonVersion.VERSION);
@@ -121,7 +122,7 @@ public class CupCarbon extends Application {
 	        is.close();
 	        if(x1==137 && x2==80 && x3==78 && x4==71 && x5==13) {
 	        	URL url2 = new URL("http://www.cupcarbon.com/download/cupcarbon_update.txt");
-		        InputStream is2 = url2.openStream();
+	        	InputStream is2 = url2.openStream();
 	        	BufferedReader br = new BufferedReader(new InputStreamReader(is2));
 	        	int u = Integer.parseInt(br.readLine());
 	        	if(u>CupCarbonVersion.UPDATE) {

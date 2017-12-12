@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_LOOP extends Command {
 	
@@ -11,7 +11,7 @@ public class Command_LOOP extends Command {
 
 	@Override
 	public double execute() {
-		SimLog.add("S" + sensor.getId() + " Starts the loop section.");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " Starts the loop section.");
 		sensor.getScript().setIndexToLoopIndex();
 		return 0 ;
 	}

@@ -1,7 +1,7 @@
 package senscript;
 
 import device.SensorNode;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_DELAY extends Command {
 	
@@ -14,10 +14,8 @@ public class Command_DELAY extends Command {
 
 	@Override
 	public double execute() {				
-		//String carg = ""+ ((long)(Long.parseLong(sensor.getScript().getVariableValue(arg)) * sensor.getRadioDataRate() / 1000.)) ;
 		double carg = Double.parseDouble(sensor.getScript().getVariableValue(arg));
-		//SimLog.add("S" + sensor.getId() + " starts delaying for " + (Integer.valueOf(carg)/sensor.getRadioDataRate()*1000.) + " milliseconds");
-		SimLog.add("S" + sensor.getId() + " starts delaying for " + carg + " milliseconds");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " starts delaying for " + carg + " milliseconds");
 		return (carg/1000.) * sensor.getDriftTime() ;
 	}
 	

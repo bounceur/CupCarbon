@@ -1,8 +1,7 @@
 package senscript;
 
 import device.SensorNode;
-import wisen_simulation.SimLog;
-import wisen_simulation.WisenSimulation;
+import simulation.WisenSimulation;
 
 public class Command_TIME extends Command {
 
@@ -16,7 +15,7 @@ public class Command_TIME extends Command {
 	@Override
 	public double execute() {
 		String v = "" ;
-		SimLog.add("S" + sensor.getId() + " GET TIME.");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " GET TIME.");
 		v = ""+ (WisenSimulation.time * sensor.getDriftTime());
 		sensor.getScript().addVariable(arg, v);
 		return 0;

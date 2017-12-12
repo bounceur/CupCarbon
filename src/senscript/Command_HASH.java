@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_HASH extends Command {
 
@@ -17,7 +17,7 @@ public class Command_HASH extends Command {
 	@Override
 	public double execute() {
 		String s1 = sensor.getScript().getVariableValue(arg2);
-		SimLog.add("S" + sensor.getId() + " " + arg1 + " = hash = "+ s1.hashCode());
+		WisenSimulation.simLog.add("S" + sensor.getId() + " " + arg1 + " = hash = "+ s1.hashCode());
 		sensor.getScript().addVariable(arg1, "" + s1.hashCode());
 		return 0 ;
 	}

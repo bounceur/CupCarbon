@@ -1,6 +1,7 @@
 package senscript;
 
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_DRSSI extends Command {
 
@@ -13,6 +14,7 @@ public class Command_DRSSI extends Command {
 
 	@Override
 	public double execute() {
+		WisenSimulation.simLog.add("S" + sensor.getId() + " DRSSI");
 		sensor.getScript().addVariable(arg1, "" + sensor.getDrssi());
 		
 		return 0 ;

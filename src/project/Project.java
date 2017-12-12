@@ -45,7 +45,7 @@ import map.MapLayer;
 import map.NetworkParameters;
 import map.WorldMap;
 import markers.MarkerList;
-import wisen_simulation.SimulationInputs;
+import simulation.SimulationInputs;
 
 public final class Project {
 	

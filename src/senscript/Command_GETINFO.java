@@ -3,7 +3,7 @@ package senscript;
 import device.Device;
 import device.DeviceList;
 import device.SensorNode;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_GETINFO extends Command {
 
@@ -17,7 +17,7 @@ public class Command_GETINFO extends Command {
 	@Override
 	public double execute() {
 
-		SimLog.add("S" + sensor.getId() + " GET INFO.");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " GET INFO.");
 		
 		for (Device device : DeviceList.devices) {
 			if(device.getType() == Device.MOBILE) {	

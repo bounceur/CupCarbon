@@ -2,8 +2,8 @@ package senscript;
 
 import java.util.Random;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_RANDB extends Command {
 
@@ -27,7 +27,7 @@ public class Command_RANDB extends Command {
 		Random r = new Random();
 		int rand = a+r.nextInt(b-a);
 		
-		SimLog.add("S" + sensor.getId() + " RANDB: "+a+" "+b);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " RANDB: "+a+" "+b);
 		
 		sensor.getScript().addVariable(arg,""+rand);
 		return 0 ;

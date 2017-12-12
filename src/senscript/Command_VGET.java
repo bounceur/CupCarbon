@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_VGET extends Command {
 
@@ -26,7 +26,7 @@ public class Command_VGET extends Command {
 		String[] tab = sensor.getScript().getVector(tabName);
 		String val = (String) tab[x];
 		sensor.getScript().putVariable(var, val);	
-		SimLog.add("S" + sensor.getId() + " GET VECTOR VALUE "+tabName+"["+x+"] -> "+val);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " GET VECTOR VALUE "+tabName+"["+x+"] -> "+val);
 		return 0 ;
 	}
 

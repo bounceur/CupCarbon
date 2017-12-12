@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_VDATA extends Command {
 
@@ -18,9 +18,8 @@ public class Command_VDATA extends Command {
 	public double execute() {
 		String tableName = sensor.getScript().getVariableValue(arg1);
 		String data = sensor.getScript().getVariableValue(arg2);
-		SimLog.add("S" + sensor.getId() + " Put DATA " + data + " int the vector: " + tableName);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " Put DATA " + data + " int the vector: " + tableName);
 		String [] tab = data.split("#");
-		//System.out.println(data);
 		sensor.getScript().putVector(tableName, tab.length);
 		
 		String [] vector = sensor.getScript().getVector(tableName);

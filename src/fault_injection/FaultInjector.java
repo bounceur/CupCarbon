@@ -1,4 +1,4 @@
-package simulation;
+package fault_injection;
 
 import map.MapLayer;
 import device.DeviceList;

@@ -38,6 +38,7 @@
 package senscript;
 
 import device.SensorNode;
+import simulation.WisenSimulation;
 import utilities.UColor;
 
 /**
@@ -57,6 +58,9 @@ public class Command_SCOLOR extends Command {
 	@Override
 	public double execute() {		
 		Double v = Double.parseDouble(sensor.getScript().getVariableValue(arg));
+		
+		WisenSimulation.simLog.add("S" + sensor.getId() + " SCOLOR "+v);
+		
 		sensor.setRadioLinkColor(UColor.colorTab2[v.intValue()]);
 		return 0;
 	}

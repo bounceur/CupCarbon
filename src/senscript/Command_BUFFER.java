@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_BUFFER extends Command {
 
@@ -15,7 +15,7 @@ public class Command_BUFFER extends Command {
 	@Override
 	public double execute() {
 		String v = "" ;
-		SimLog.add("S" + sensor.getId() + " BUFFER .");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " BUFFER .");
 		//v = sensor.getDataSize()+"";
 		v = sensor.getBufferIndex()+"";
 		sensor.getScript().addVariable(arg, v);

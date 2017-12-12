@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_STOP extends Command {
 	
@@ -11,7 +11,7 @@ public class Command_STOP extends Command {
 
 	@Override
 	public double execute() {
-		SimLog.add("S" + sensor.getId() + " STOP !");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " STOP !");
 		sensor.getScript().setBreaked(true);		
 		return Double.MAX_VALUE;
 	}

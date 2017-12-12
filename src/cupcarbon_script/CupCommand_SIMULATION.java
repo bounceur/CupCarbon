@@ -73,8 +73,8 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
-import wisen_simulation.SimulationInputs;
-import wisen_simulation.WisenSimulation;
+import simulation.SimulationInputs;
+import simulation.WisenSimulation;
 
 
 public class CupCommand_SIMULATION extends CupCommand {

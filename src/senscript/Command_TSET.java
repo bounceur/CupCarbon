@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_TSET extends Command {
 
@@ -28,7 +28,7 @@ public class Command_TSET extends Command {
 		int y  = Double.valueOf(y_str).intValue();
 		String [][] tab = sensor.getScript().getTable(tabName);
 		tab[x][y] = var;
-		SimLog.add("S" + sensor.getId() + " SET TABLE VALUE "+tabName+"["+x+"]["+y+"] = "+var);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " SET TABLE VALUE "+tabName+"["+x+"]["+y+"] = "+var);
 		return 0 ;
 	}
 

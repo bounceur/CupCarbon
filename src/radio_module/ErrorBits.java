@@ -4,7 +4,7 @@ import device.SensorNode;
 import interference.LoRaTransceiver;
 import interference.WiFiTransceiver;
 import interference.ZigBeeTransceiver;
-import wisen_simulation.SimulationInputs;
+import simulation.SimulationInputs;
 
 public class ErrorBits {
 

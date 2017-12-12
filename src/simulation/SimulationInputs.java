@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *----------------------------------------------------------------------------------------------------------------*/
 
-package wisen_simulation;
+package simulation;
 
 import radio_module.ErrorBits;
 import radio_module.RadioDetection;

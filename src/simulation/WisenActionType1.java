@@ -1,4 +1,4 @@
-package wisen_simulation;
+package simulation;
 
 public class WisenActionType1 extends WisenAction {
 

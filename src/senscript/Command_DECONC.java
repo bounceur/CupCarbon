@@ -1,7 +1,7 @@
 package senscript;
 
 import device.SensorNode;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_DECONC extends Command {
 
@@ -32,7 +32,7 @@ public class Command_DECONC extends Command {
 		
 		sensor.getScript().addVariable(var_n, "" + n);
 		
-		SimLog.add("DECONC: " + symbol + " -> " + arg2);
+		WisenSimulation.simLog.add("DECONC: " + symbol + " -> " + arg2);
 		
 		if(!arg3.equals("")) {
 			sensor.getScript().putVector(var_v, n);		

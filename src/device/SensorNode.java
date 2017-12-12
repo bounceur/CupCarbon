@@ -48,10 +48,9 @@ import radio_module.RadioStandard;
 import senscript.SenScript;
 import senscript.SenScriptAddCommand;
 import sensorunit.SensorUnit;
+import simulation.WisenSimulation;
 import utilities.MapCalc;
 import utilities.UColor;
-import wisen_simulation.SimLog;
-import wisen_simulation.WisenSimulation;
 
 /**
  * @author Ahcene Bounceur
@@ -479,7 +478,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 			i++;
 		}
 		
-		SimLog.add("S"+getId()+" is reading from its buffer \""+s+"\" and puts it in "+var);
+		WisenSimulation.simLog.add("S"+getId()+" is reading from its buffer \""+s+"\" and puts it in "+var);
 		
 		script.putVariable(var, s);
 
@@ -503,7 +502,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 			s += (char) buffer[i];
 			i++;
 		}
-		SimLog.add("S"+getId()+" pick from its buffer \""+s+"\" and put it in "+var);
+		WisenSimulation.simLog.add("S"+getId()+" pick from its buffer \""+s+"\" and put it in "+var);
 		
 		script.putVariable(var, s);
 

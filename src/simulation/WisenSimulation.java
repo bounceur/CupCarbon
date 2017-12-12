@@ -27,7 +27,7 @@
  * @author Lounis Massinissa
  */
 
-package wisen_simulation;
+package simulation;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -63,6 +63,8 @@ public class WisenSimulation implements Runnable {
 
 	private boolean generateResults = true ;
 	
+	public static SimLog simLog; 
+	
 	public WisenSimulation() {
 		
 	}
@@ -92,7 +94,9 @@ public class WisenSimulation implements Runnable {
 		DeviceList.initAll();
 		Routes.loadRoutes();
 		resultsWritingTime = 0.0;
-		SimLog.init();
+		
+		simLog = new SimLog();
+		
 		mobilityAndEvents = SimulationInputs.mobilityAndEvents;
 		System.out.println("mobility "+mobilityAndEvents);		
 		generateResults = SimulationInputs.displayResults ;
@@ -101,8 +105,8 @@ public class WisenSimulation implements Runnable {
 
 		System.out.println("Initialization ... ");
 		
-		SimLog.add("===========================");
-		SimLog.add("Initialization");
+		simLog.add("===========================");
+		simLog.add("Initialization");
 		
 		MultiChannels.init();
 		Channels.numberOfSentMessages = 0;
@@ -155,9 +159,9 @@ public class WisenSimulation implements Runnable {
 			boolean moving = false ;
 			String fMessage = "";
 			
-			SimLog.add("======================================================");
-			SimLog.add("START SIMULATION");
-			SimLog.add("======================================================");
+			simLog.add("======================================================");
+			simLog.add("START SIMULATION");
+			simLog.add("======================================================");
 
 			// ------------------------------------------------------
 			// ------------------------------------------------------
@@ -231,16 +235,16 @@ public class WisenSimulation implements Runnable {
 				
 				consolPrint(time + " : ");	
 				
-				SimLog.add("");
-				SimLog.add("----------------------------------------------------------------------------");
-				SimLog.add("Time : "+time);
-				SimLog.add("Min (milliseconds) : "+min);
+				simLog.add("");
+				simLog.add("----------------------------------------------------------------------------");
+				simLog.add("Time : "+time);
+				simLog.add("Min (milliseconds) : "+min);
 				
 				consolPrintln("--------------------------------------");
 				consolPrint(""+time);
 				
 				if(!fMessage.replace("\n", "").equals("")) 
-					SimLog.add(fMessage);
+					simLog.add(fMessage);
 				
 				fMessage = "";
 				
@@ -268,7 +272,7 @@ public class WisenSimulation implements Runnable {
 					for (SensorNode sensor : DeviceList.sensors) {
 						if(!sensor.isDead()) {
 							if (sensor.getEvent2() == 0) {
-								SimLog.add(sensor.getIdFL()+sensor.getId()+" SENSOR MOVING");
+								simLog.add(sensor.getIdFL()+sensor.getId()+" SENSOR MOVING");
 								if (!sensor.getGPSFileName().equals("")) {
 									sensor.moveToNext(true, 0);
 									sensor.setEvent2(sensor.getNextTime());									
@@ -281,7 +285,7 @@ public class WisenSimulation implements Runnable {
 					for (Device device : DeviceList.devices) {
 						if(!device.isDead()) {
 							if (device.getEvent2() == 0) {
-								SimLog.add(device.getIdFL()+device.getId()+" DEVICE MOVING");
+								simLog.add(device.getIdFL()+device.getId()+" DEVICE MOVING");
 								if (!device.getGPSFileName().equals("")) {
 									device.moveToNext(true, 0);
 									device.setEvent2(device.getNextTime());									
@@ -289,7 +293,7 @@ public class WisenSimulation implements Runnable {
 							}
 							
 							if (device.getEvent3() == 0) {
-								SimLog.add(device.getIdFL()+device.getId()+" VALUE GENERATION");
+								simLog.add(device.getIdFL()+device.getId()+" VALUE GENERATION");
 								if (!device.getNatEventFileName().equals("")) {
 									device.generateNextValue();
 									device.setEvent3(device.getNextValueTime());									
@@ -392,6 +396,9 @@ public class WisenSimulation implements Runnable {
 			 	
 				try {
 					CupCarbon.cupCarbonController.progress.setProgress(time *1.0/ SimulationInputs.simulationTime);
+					
+					//CupCarbon.cupCarbonController.stlabel.textProperty().bind(new SimpleDoubleProperty(time *1.0/ SimulationInputs.simulationTime).asString());
+					//CupCarbon.cupCarbonController.stlabel.setText(""+(time *1.0/ SimulationInputs.simulationTime));
 				} catch(Exception e) {
 					isSimulating = false;
 					System.err.println("[CUPCARBO:WisenSimulation] Simulation Progress: "+(time *1.0/ SimulationInputs.simulationTime));
@@ -420,7 +427,7 @@ public class WisenSimulation implements Runnable {
 				isSimulating = false;
 				System.err.println("[CUPCARBO:WisenSimulation] Simulation Progress: 0");
 			}
-			SimLog.close();
+			simLog.close();
 			ps.close();		
 			MultiChannels.init();
 			isSimulating = false;

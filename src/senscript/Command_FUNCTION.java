@@ -4,7 +4,7 @@ import java.util.Random;
 
 import device.SensorNode;
 import senscript_functions.ScriptFunctions;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_FUNCTION extends Command {
 
@@ -22,7 +22,7 @@ public class Command_FUNCTION extends Command {
 
 	@Override
 	public double execute() {
-		SimLog.add("S" + sensor.getId() + " CALL FUNCTION "+arg1+"("+arg2+", "+arg3+")");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " CALL FUNCTION "+arg1+"("+arg2+", "+arg3+")");
 		String arg0 = arg1;
 		String function = arg2;			
 		String [] args = arg3.split(",");

@@ -1,6 +1,7 @@
 package senscript;
 
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_RSCRIPT extends Command {
 	
@@ -14,8 +15,10 @@ public class Command_RSCRIPT extends Command {
 	@Override
 	public double execute() {
 		String file = sensor.getScript().getVariableValue(arg);
+		
+		WisenSimulation.simLog.add("S" + sensor.getId() + " RSCRIPT "+file);
+		
 		sensor.loadScript2(file, true);
-		//sensor.getScript().init2();
 		sensor.getScript().executeCommand();
 		return 0 ;
 	}
@@ -26,7 +29,7 @@ public class Command_RSCRIPT extends Command {
 	
 	@Override
 	public String toString() {
-		return "LOAD";
+		return "RSCRIPT";
 	}
 	
 }

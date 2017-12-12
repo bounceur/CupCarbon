@@ -1,7 +1,7 @@
 package radio_module;
 
 import device.DeviceWithRadio;
-import wisen_simulation.SimulationInputs;
+import simulation.SimulationInputs;
 
 public class RadioDetection {
 	

@@ -1,7 +1,7 @@
 package senscript;
 
 import device.SensorNode;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_WFIRST extends Command {
 
@@ -23,7 +23,7 @@ public class Command_WFIRST extends Command {
 		else
 			data = sensor.getScript().getVariableValue(args[2]);
 		
-		SimLog.add("S" + sensor.getId() + " WITHOUT FIRST: "+data);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " WITHOUT FIRST: "+data);
 		String ret = data.substring(data.indexOf(symbole)+1);
 		int i = 1;
 		if(args[1].charAt(0)=='!') {

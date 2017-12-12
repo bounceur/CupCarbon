@@ -1,7 +1,7 @@
 package senscript;
 
 import device.SensorNode;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_SPOP extends Command {
 
@@ -19,7 +19,7 @@ public class Command_SPOP extends Command {
 	public double execute() {
 		char symbole = '&';
 		data = sensor.getScript().getVariableValue("$"+arg2);
-		SimLog.add("S" + sensor.getId() + " SPOP: "+data);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " SPOP: "+data);
 		String v;
 		String ret;
 		if(data.indexOf(symbole)<0) {

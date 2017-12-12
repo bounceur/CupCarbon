@@ -1,4 +1,4 @@
-package wisen_simulation;
+package simulation;
 
 public abstract class WisenAction {
 	

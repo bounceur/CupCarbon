@@ -15,6 +15,7 @@ public class Command_ENDIF extends Command {
 
 	@Override
 	public double execute() {
+		//WisenSimulation.simLog.add("S" + sensor.getId() + " END IF.");
 		return 0 ;
 	}
 	

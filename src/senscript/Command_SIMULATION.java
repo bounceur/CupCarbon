@@ -3,7 +3,8 @@ package senscript;
 import cupcarbon.CupCarbon;
 import device.SensorNode;
 import javafx.application.Platform;
-import wisen_simulation.SimulationInputs;
+import simulation.SimulationInputs;
+import simulation.WisenSimulation;
 
 public class Command_SIMULATION extends Command {
 
@@ -18,6 +19,9 @@ public class Command_SIMULATION extends Command {
 
 	@Override
 	public double execute() {
+		
+		WisenSimulation.simLog.add("S" + sensor.getId() + " SIMULATION "+arg1+" "+arg2);
+		
 		if(arg1.equals("sspeed")) {			
 			Platform.runLater(new Runnable() {
 				@Override

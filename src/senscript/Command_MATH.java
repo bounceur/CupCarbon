@@ -1,7 +1,7 @@
 package senscript;
 
 import device.SensorNode;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_MATH extends Command {
 
@@ -65,7 +65,7 @@ public class Command_MATH extends Command {
 		if(arg1.toLowerCase().equals("exp"))
 			r = Math.exp(a);
 
-		SimLog.add("S" + sensor.getId() + arg1.toUpperCase() + " : "+a+" "+b);
+		WisenSimulation.simLog.add("S" + sensor.getId() + arg1.toUpperCase() + " : "+a+" "+b);
 		
 		sensor.getScript().addVariable(arg,""+r);
 		return 0 ;

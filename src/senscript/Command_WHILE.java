@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_WHILE extends Command {
 	
@@ -50,7 +50,7 @@ public class Command_WHILE extends Command {
 	
 	@Override
 	public double execute() {
-		SimLog.add("S" + sensor.getId() + " WHILE ");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " WHILE ");
 		
 		index = sensor.getScript().getIndex();
 		

@@ -1,6 +1,7 @@
 package senscript;
 
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_PICK extends Command {
 
@@ -13,6 +14,7 @@ public class Command_PICK extends Command {
 
 	@Override
 	public double execute() {
+		WisenSimulation.simLog.add("S" + sensor.getId() + " PICK");
 		sensor.pickMessage(arg);
 		return 0 ;
 	}

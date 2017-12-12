@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_NOT extends Command {
 
@@ -21,7 +21,7 @@ public class Command_NOT extends Command {
 		int z = 0;
 		z = ~Integer.parseInt(v);
 		System.out.println("-->"+z);
-		SimLog.add("S" + sensor.getId() + " " + arg1 + " = ~" + Integer.valueOf(v) + " -> " + z);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " " + arg1 + " = ~" + Integer.valueOf(v) + " -> " + z);
 		sensor.getScript().addVariable(arg1, "" + z);
 		return 0 ;
 	}

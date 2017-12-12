@@ -13,7 +13,7 @@ public class Command_GOTO extends Command {
 	
 	@Override
 	public double execute() {
-		
+		//WisenSimulation.simLog.add("S" + sensor.getId() + " GOTO.");
 		if(arg.equals("++")) {
 			sensor.getScript().next();
 			return 0 ;

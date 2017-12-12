@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -58,6 +59,7 @@ import cupcarbon_script.CupCarbonServer;
 import device.Device;
 import device.DeviceList;
 import device.SensorNode;
+import fault_injection.FaultInjector;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
@@ -81,7 +83,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
@@ -104,7 +108,9 @@ import perso.MyClass;
 import project.Project;
 import radio_module.RadioModule;
 import radio_module.RadioModule_Lora;
-import simulation.FaultInjector;
+import simulation.SimulationInputs;
+import simulation.WisenSimulation;
+import solver.CycleFromNode;
 import solver.EnvelopeJarvis;
 import solver.EnvelopeLPCN;
 import solver.NetworkCenter;
@@ -114,8 +120,6 @@ import solver.NetworkPerso;
 import solver.SensorSetCover;
 import utilities.MapCalc;
 import visibility.VisibilityLauncher;
-import wisen_simulation.SimulationInputs;
-import wisen_simulation.WisenSimulation;
 
 public class CupCarbonController implements Initializable {
 
@@ -123,6 +127,15 @@ public class CupCarbonController implements Initializable {
 	private SwingNode sn = null;
 	protected FaultInjector faultInjector = null;
 
+	@FXML
+	public TextArea textOut;
+	
+	@FXML
+	public TextArea textErr;
+		
+	@FXML
+	public Slider bg_slider;
+	
 	@FXML
 	public Button saveButton;
 
@@ -445,6 +458,14 @@ public class CupCarbonController implements Initializable {
 		}
 		else
 			System.out.println("Connection: NO");
+
+		CupCarbonConsole consoleOut = new CupCarbonConsole(textOut);
+		PrintStream ps1 = new PrintStream(consoleOut, true);
+		System.setOut(ps1);
+		
+		CupCarbonConsole consoleErr = new CupCarbonConsole(textErr);
+		PrintStream ps2 = new PrintStream(consoleErr, true);
+		System.setErr(ps2);
 	}
 	
 	@FXML
@@ -671,6 +692,8 @@ public class CupCarbonController implements Initializable {
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
+					textOut.clear();
+					textErr.clear();
 					saveButton.setDisable(false);
 					qRunSimulationButton.setDefaultButton(false);
 					qStopSimulationButton.setDefaultButton(true);
@@ -969,6 +992,7 @@ public class CupCarbonController implements Initializable {
 		map.setMiniMapVisible(false);
 		map.getZoomSlider().setSnapToTicks(false);
 		map.getZoomSlider().setPaintTicks(false);
+		
 		sn = new SwingNode();
 		sn.setContent(map);
 
@@ -2011,6 +2035,12 @@ public class CupCarbonController implements Initializable {
 	public void sensorCoverage() {
 		SensorSetCover.sensorSetCover();
 	}
+	
+	@FXML
+	public void sensorCycle() {
+		CycleFromNode cfm = new CycleFromNode();
+		cfm.start();
+	}
 
 	@FXML
 	public void targetCoverage() {
@@ -2907,7 +2937,7 @@ public class CupCarbonController implements Initializable {
 				} catch (IOException e) {
 					System.err.println("error in recent.rec file");
 				} catch (NullPointerException e) {
-					System.err.println("ne recent files");
+					System.err.println("no recent files");
 				}
 				openProjectLoadParameters();
 			}
@@ -2950,4 +2980,14 @@ public class CupCarbonController implements Initializable {
 		mapFocus();
 	}
 
+	@FXML
+	public void sliderValueChanged() {
+		MapLayer.bg_transparency=(int)(bg_slider.getValue()*0.25);		
+		MapLayer.repaint();
+		mapFocus();
+	}
+	
+	@FXML
+	public Label stlabel;
+	
 }

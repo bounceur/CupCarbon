@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_TAB extends Command {
 
@@ -25,7 +25,7 @@ public class Command_TAB extends Command {
 		int width = Integer.valueOf(width_str);
 		sensor.getScript().putTable(name, height,width);
 		
-		SimLog.add("S" + sensor.getId() + " TABLE "+name+"["+height+"]["+width+"]");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " TABLE "+name+"["+height+"]["+width+"]");
 		
 		return 0 ;
 	}

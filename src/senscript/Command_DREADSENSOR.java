@@ -1,8 +1,8 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import arduino.BeginInstructions;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_DREADSENSOR extends Command {
 
@@ -17,7 +17,7 @@ public class Command_DREADSENSOR extends Command {
 	public double execute() {
 		sensor.getBattery().consume(0.0001);
 		String value = sensor.isSensorDetecting()?"1":"0";
-		SimLog.add("S" + sensor.getId() + " READ SENSOR: "+value);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " READ SENSOR: "+value);
 		sensor.getScript().addVariable(arg, value);
 		return 0 ;
 	}

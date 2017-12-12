@@ -1,6 +1,5 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
 
 public class Command_ENDWHILE extends Command {
@@ -14,7 +13,7 @@ public class Command_ENDWHILE extends Command {
 	
 	@Override
 	public double execute() {
-SimLog.add("S" + sensor.getId() + " END WHILE.");
+		//WisenSimulation.simLog.add("S" + sensor.getId() + " END WHILE.");
 		
 		SenScript script = sensor.getScript();
 		

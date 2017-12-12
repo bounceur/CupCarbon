@@ -3,8 +3,8 @@ package action;
 import cupcarbon.CupCarbon;
 import device.DeviceList;
 import device.SensorNode;
+import simulation.SimulationInputs;
 import visibility.VisibilityZones;
-import wisen_simulation.SimulationInputs;
 
 public class CupActionModifSensorElevation extends CupAction {	
 	

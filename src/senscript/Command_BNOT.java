@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_BNOT extends Command {
 
@@ -22,7 +22,7 @@ public class Command_BNOT extends Command {
 			s += '1'- s1.charAt(i) ;
 		}
 
-		SimLog.add("S" + sensor.getId() + " " + arg1 + " = ! (" + Integer.valueOf(s1) + ") -> " + s);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " " + arg1 + " = ! (" + Integer.valueOf(s1) + ") -> " + s);
 		sensor.getScript().addVariable(arg1, "" + s);
 		return 0 ;
 	}

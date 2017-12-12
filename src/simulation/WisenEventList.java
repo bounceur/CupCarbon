@@ -1,4 +1,4 @@
-package wisen_simulation;
+package simulation;
 
 import java.util.LinkedList;
 import java.util.List;

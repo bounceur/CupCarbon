@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_LENGTH extends Command {
 
@@ -17,7 +17,7 @@ public class Command_LENGTH extends Command {
 	@Override
 	public double execute() {
 		String v = sensor.getScript().getVariableValue(arg2);
-		SimLog.add("S" + sensor.getId() + " LENGTH "+v);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " LENGTH "+v);
 		String r = ""+(v.length());
 		sensor.getScript().addVariable(arg1, "" + r);
 		return 0 ;

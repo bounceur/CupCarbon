@@ -1,7 +1,7 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_VEC extends Command {
 
@@ -21,7 +21,7 @@ public class Command_VEC extends Command {
 		int height = Integer.valueOf(heigth_str);
 		sensor.getScript().putVector(name, height);
 		
-		SimLog.add("S" + sensor.getId() + " VECTOR "+name+"["+height+"]");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " VECTOR "+name+"["+height+"]");
 		
 		return 0 ;
 	}

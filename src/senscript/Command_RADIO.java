@@ -1,8 +1,8 @@
 package senscript;
 
-import wisen_simulation.SimLog;
 import device.DeviceList;
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_RADIO extends Command {
 
@@ -17,7 +17,7 @@ public class Command_RADIO extends Command {
 	public double execute() {
 		String sRadioName = sensor.getScript().getVariableValue(radioName);
 
-		SimLog.add("S" + sensor.getId() + " Radio module "+sRadioName+" selected");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " RADIO module "+sRadioName+" selected");
 		
 		sensor.selectCurrentRadioModule(sRadioName);
 		

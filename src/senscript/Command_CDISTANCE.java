@@ -1,6 +1,7 @@
 package senscript;
 
 import device.SensorNode;
+import simulation.WisenSimulation;
 import utilities.MapCalc;
 
 public class Command_CDISTANCE extends Command {
@@ -28,6 +29,8 @@ public class Command_CDISTANCE extends Command {
 		double la2 = Double.parseDouble(sensor.getScript().getVariableValue(arg5));
 		double distance = MapCalc.distance(lo1, la1, lo2, la2);
 		
+		WisenSimulation.simLog.add("S" + sensor.getId() + " CDISTANCE "+lo1+" "+la1+" "+lo2+" "+la2);
+		
 		sensor.getScript().addVariable(arg1, "" + distance);
 		
 		return 0 ;
@@ -35,7 +38,7 @@ public class Command_CDISTANCE extends Command {
 
 	@Override
 	public String toString() {
-		return "DISTANCE";
+		return "CDISTANCE";
 	}
 	
 }

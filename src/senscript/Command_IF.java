@@ -22,7 +22,7 @@ public class Command_IF extends Command {
 	}
 	
 	@Override
-	public double execute() {		
+	public double execute() {
 		String condition = arg.replaceFirst("if", "");
 		SenScriptEvalCondition evalCondtion = new SenScriptEvalCondition(sensor);
 		

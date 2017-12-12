@@ -3,7 +3,7 @@ package senscript;
 import device.SensorNode;
 import radio_module.RadioStandard;
 import radio_module.XBeeFrameGenerator;
-import wisen_simulation.SimLog;
+import simulation.WisenSimulation;
 
 public class Command_ATGET extends Command {
 
@@ -21,22 +21,22 @@ public class Command_ATGET extends Command {
 		String v = "" ;
 		
 		if(arg1.equals("id")) {
-			SimLog.add("S" + sensor.getId() + " ATGET ID.");
+			WisenSimulation.simLog.add("S" + sensor.getId() + " ATGET ID.");
 			v = ""+sensor.getId();
 		}
 		
 		if(arg1.equals("ch")) {
-			SimLog.add("S" + sensor.getId() + " ATGET CH.");
+			WisenSimulation.simLog.add("S" + sensor.getId() + " ATGET CH.");
 			v = ""+sensor.getCurrentRadioModule().getCh();
 		}
 		
 		if(arg1.equals("my")) {
-			SimLog.add("S" + sensor.getId() + " ATGET MY.");
+			WisenSimulation.simLog.add("S" + sensor.getId() + " ATGET MY.");
 			v = ""+sensor.getCurrentRadioModule().getMy();
 		}
 		
 		if(arg1.equals("nid")) {
-			SimLog.add("S" + sensor.getId() + " ATGET NID.");
+			WisenSimulation.simLog.add("S" + sensor.getId() + " ATGET NID.");
 			v = ""+sensor.getCurrentRadioModule().getNId();
 		}
 		

@@ -13,9 +13,9 @@ import map.NetworkParameters;
 import radio_module.ErrorBits;
 import radio_module.RadioPacketGenerator;
 import radio_module.RadioStandard;
+import simulation.SimulationInputs;
+import simulation.WisenSimulation;
 import utilities.MapCalc;
-import wisen_simulation.SimLog;
-import wisen_simulation.SimulationInputs;
 
 public class Channels {
 	
@@ -57,8 +57,7 @@ public class Channels {
 				numberOfAckMessages += tSensor.getPl()/100.;
 				numberOfAckMessages_b += message.length() * (tSensor.getPl()/100.);
 			}
-				
-			SimLog.add("S" + rSensor.getId() +" (radio: " + rSensor.getCurrentRadioModule().getName() + ") is receiving the message : \"" + message + "\" in its buffer.");
+			WisenSimulation.simLog.add("S" + rSensor.getId() +" (radio: " + rSensor.getCurrentRadioModule().getName() + ") is receiving the message : \"" + message + "\" in its buffer.");
 			double ratio1 = 1.0/tSensor.getCurrentRadioModule().getRadioDataRate();
 			double ratio2 = 1.0/rSensor.getUartDataRate();
 			
