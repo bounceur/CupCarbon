@@ -25,7 +25,6 @@
 package cupcarbon;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,7 +46,6 @@ import solver.SolverProxyParams;
 /**
  * @author Ahcene Bounceur
  * @author Lounis Massinissa
- * @version 3.4 (U-One)
  */
 
 public class CupCarbon extends Application {
@@ -67,19 +65,7 @@ public class CupCarbon extends Application {
 		
 		CupCarbon.stage = stage;
 		
-		try {
-			System.out.println("> CupCarbon U-One");
-			FileInputStream licenceFile = new FileInputStream("utils/cupcarbon_licence.txt");
-			int c;
-			while ((c = licenceFile.read()) != -1) {
-				System.out.print((char) c);
-			}
-			System.out.println();
-			licenceFile.close();
-			setProxy();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		setProxy();
 		
 		setUserAgentStylesheet(STYLESHEET_MODENA);
 	    

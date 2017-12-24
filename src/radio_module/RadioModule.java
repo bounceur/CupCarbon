@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.io.PrintStream;
 
+import cupcarbon.CupCarbon;
 import device.DeviceList;
 import device.SensorNode;
 import utilities.UColor;
@@ -106,19 +107,14 @@ public abstract class RadioModule {
 	/**
 	 * consumeTx
 	 * 
-	 * @param v
+	 * @param numberOfBits
 	 */
-	public void consumeTx(int v) {
-		sensorNode.getBattery().consume(v*eTx*pl/100.);
+	public void consumeTx(int numberOfBits) {
+		if(CupCarbon.cupCarbonController.classicRg.isSelected())
+			sensorNode.getBattery().consume((numberOfBits/8.0) * eTx * pl/100.);
 		
-		// Heinzelmann Model
-//		double d = (radioRangeRadius*pl/100.); 
-//		if(d<200) {
-//			//System.out.println(v*5e-8+v*6e-12*d*d);
-//			sensorNode.getBattery().consume(v*5e-8+v*6e-12*d*d);
-//		}
-//		else
-//			sensorNode.getBattery().consume(v*5e-8+v*1.1e-15*d*d*d*d);
+		if(CupCarbon.cupCarbonController.henzRg.isSelected()) 
+			sensorNode.getBattery().consume(50e-9*numberOfBits + 100e-12*numberOfBits * (radioRangeRadius*pl/100.));		
 	}
 	
 	/**
@@ -126,11 +122,12 @@ public abstract class RadioModule {
 	 * 
 	 * @param v
 	 */
-	public void consumeRx(int v) {
-		sensorNode.getBattery().consume(v*eRx);
+	public void consumeRx(int numberOfBits) {
+		if(CupCarbon.cupCarbonController.classicRg.isSelected())
+			sensorNode.getBattery().consume((numberOfBits/8.0) * eRx);
 		
-		// Heinzelmann Model
-		//sensorNode.getBattery().consume(v*5e-8);
+		if(CupCarbon.cupCarbonController.henzRg.isSelected()) 
+			sensorNode.getBattery().consume(50e-9*numberOfBits);
 	}
 	
 	

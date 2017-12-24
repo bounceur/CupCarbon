@@ -81,6 +81,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
@@ -127,6 +128,12 @@ public class CupCarbonController implements Initializable {
 	private SwingNode sn = null;
 	protected FaultInjector faultInjector = null;
 
+	@FXML
+	public RadioButton classicRg;
+	
+	@FXML
+	public RadioButton henzRg;
+	
 	@FXML
 	public TextArea textOut;
 	
@@ -452,13 +459,6 @@ public class CupCarbonController implements Initializable {
 
 		initMap();
 
-		if(CupCarbon.internetIsAvailable()) {
-			System.out.println("Connection: OK");
-			WorldMap.changeMap(0);
-		}
-		else
-			System.out.println("Connection: NO");
-
 		CupCarbonConsole consoleOut = new CupCarbonConsole(textOut);
 		PrintStream ps1 = new PrintStream(consoleOut, true);
 		System.setOut(ps1);
@@ -466,6 +466,26 @@ public class CupCarbonController implements Initializable {
 		CupCarbonConsole consoleErr = new CupCarbonConsole(textErr);
 		PrintStream ps2 = new PrintStream(consoleErr, true);
 		System.setErr(ps2);
+		
+		try {
+			System.out.println("> CupCarbon U-One");
+			FileInputStream licenceFile = new FileInputStream("utils/cupcarbon_licence.txt");
+			int c;
+			while ((c = licenceFile.read()) != -1) {
+				System.out.print((char) c);
+			}
+			System.out.println();
+			licenceFile.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(CupCarbon.internetIsAvailable()) {
+			System.out.println("Connection: OK");
+			WorldMap.changeMap(0);
+		}
+		else
+			System.out.println("Connection: NO");
 	}
 	
 	@FXML
@@ -522,6 +542,8 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				CupCarbonController.this.textOut.clear();
+				CupCarbonController.this.textErr.clear();
 				DeviceList.initAll();
 				MapLayer.repaint();
 				mapFocus();

@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -45,7 +46,7 @@ public class SenScript {
 	protected Command_WHILE currentWhile = null;
 	protected Command_FOR currentFor = null;	
 	
-	protected SenScriptVariableList variables ; 
+	protected HashMap<String, String> variables ;
 	protected SenScriptTabList tables;
 	protected Hashtable<String, Integer> labels;
 
@@ -56,7 +57,7 @@ public class SenScript {
 	public SenScript(SensorNode sensor) {
 		this.sensor = sensor;
 		index = 0;
-		variables = new SenScriptVariableList();
+		variables = new HashMap<String, String>() ;
 		tables = new SenScriptTabList();
 		labels = new Hashtable<String, Integer>();
 	}
@@ -75,7 +76,6 @@ public class SenScript {
 	}
 	
 	public void previous() {
-		//System.out.println("NEXT -> " + sensor.getId());
 		if (!breaked) {
 			index--;
 			if (index < 0){
@@ -85,7 +85,7 @@ public class SenScript {
 	}
 
 	public void init() {
-		variables = new SenScriptVariableList();
+		variables = new HashMap<String, String>() ;
 		sensor.initBuffer();		
 		tables = new SenScriptTabList();
 		index = 0;
@@ -102,16 +102,12 @@ public class SenScript {
 		currentIf = null;
 		currentWhile = null;
 		currentFor = null;	
-		//variables = new SenScriptVariableList();
-		//sensor.initBuffer();		
-		//tables = new SenScriptTabList();
 		index = 0;
 		waiting = false;
 		loopIndex = 0;
 		event = Integer.MAX_VALUE - 1;
 		breaked = false;
 		level = 0;
-		//createFile() ;
 	}
 	
 	public void createFile() {
@@ -174,14 +170,14 @@ public class SenScript {
 		if (arg.equals(""))
 			return ""; 
 		if(arg.charAt(0)=='$')
-			return variables.getValue(arg.substring(1));
+			return variables.get(arg.substring(1));
 		return arg;
 	}
 	
 	public void variablesToValues(String [] args) {
 		for(int i=0; i<args.length; i++)
 			if(args[i].charAt(0)=='$')
-				args[i] = variables.getValue(args[i].substring(1));
+				args[i] = variables.get(args[i].substring(1));
 	}	
 
 	public void setIndex(int index) {
@@ -277,7 +273,7 @@ public class SenScript {
 	}
 	
 	public boolean variableExist(String var) {
-		return variables.exist(var);
+		return variables.containsKey(var);
 	}
 	
 	public void removeVar(String var) {

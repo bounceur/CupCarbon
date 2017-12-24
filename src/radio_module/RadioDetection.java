@@ -7,7 +7,8 @@ public class RadioDetection {
 	
 	public static final int SIMPLE_DETECTION = 0;
 	public static final int POWER_RECEPTION_DETECTION = 1;
-	public static final int THREED_DETECTION = 2;	
+	public static final int THREED_DETECTION = 2;
+	public static final int REAL_DETECTION = 3;
 	
 	public static boolean simpleDetection(DeviceWithRadio device1, DeviceWithRadio device2) {
 		if (device1.canCommunicateWith(device2)) { 				

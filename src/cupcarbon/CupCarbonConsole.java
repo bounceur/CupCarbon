@@ -7,10 +7,10 @@ import javafx.scene.control.TextArea;
 
 public class CupCarbonConsole extends OutputStream {
     
-	private TextArea ta ;
+	private TextArea textArea ;
 	
-	public CupCarbonConsole(TextArea ta) {
-		this.ta = ta;
+	public CupCarbonConsole(TextArea textArea) {
+		this.textArea = textArea;
 	}
 	
     @Override
@@ -18,7 +18,7 @@ public class CupCarbonConsole extends OutputStream {
     	Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				ta.appendText(String.valueOf((char) v));
+				textArea.appendText(String.valueOf((char) v));
 			}
     	});
     }

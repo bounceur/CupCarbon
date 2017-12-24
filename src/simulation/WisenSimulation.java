@@ -98,9 +98,9 @@ public class WisenSimulation implements Runnable {
 		simLog = new SimLog();
 		
 		mobilityAndEvents = SimulationInputs.mobilityAndEvents;
-		System.out.println("mobility "+mobilityAndEvents);		
+		System.out.println("Mobility: "+mobilityAndEvents);		
 		generateResults = SimulationInputs.displayResults ;
-		System.out.println(generateResults);
+		System.out.println("Generate Restul File: "+generateResults);
 		showInConsole = SimulationInputs.showInConsole ;
 
 		System.out.println("Initialization ... ");
@@ -144,7 +144,7 @@ public class WisenSimulation implements Runnable {
 		}
 		System.out.println("End of Initialization.");		
 		long startTime = System.currentTimeMillis();
-		System.out.println("Start Simulation (WISEN : D-Event) ... ");
+		System.out.println("Start Simulation ... ");
 		MapLayer.repaint();
 		try {
 			PrintStream ps = new PrintStream(new FileOutputStream(Project.getProjectResultPath() + File.separator + "wisen_simulation" + ".csv"));
@@ -401,7 +401,7 @@ public class WisenSimulation implements Runnable {
 					//CupCarbon.cupCarbonController.stlabel.setText(""+(time *1.0/ SimulationInputs.simulationTime));
 				} catch(Exception e) {
 					isSimulating = false;
-					System.err.println("[CUPCARBO:WisenSimulation] Simulation Progress: "+(time *1.0/ SimulationInputs.simulationTime));
+					System.err.println("[CUPCARBO:Simulation] Simulation Progress: "+(time *1.0/ SimulationInputs.simulationTime));
 				}
 				
 				MapLayer.repaint();
@@ -425,7 +425,7 @@ public class WisenSimulation implements Runnable {
 				CupCarbon.cupCarbonController.progress.setProgress(0.0);
 			} catch(Exception e) {
 				isSimulating = false;
-				System.err.println("[CUPCARBO:WisenSimulation] Simulation Progress: 0");
+				System.err.println("[CUPCARBO:Simulation] Simulation Progress: 0");
 			}
 			simLog.close();
 			ps.close();		
@@ -438,7 +438,7 @@ public class WisenSimulation implements Runnable {
 		MapLayer.repaint();
 		long endTime = System.currentTimeMillis();
 		System.out.println();
-		System.out.println("End of Simulation (WISEN : D-Event).");
+		System.out.println("End of Simulation.");
 		System.out.println(((endTime - startTime) / 1000.) + " sec");
 		
 		isSimulating = false;
