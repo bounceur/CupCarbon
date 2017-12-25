@@ -469,7 +469,7 @@ public class CupCarbonController implements Initializable {
 		
 		try {
 			System.out.println("> CupCarbon U-One");
-			FileInputStream licenceFile = new FileInputStream("utils/cupcarbon_licence.txt");
+			FileInputStream licenceFile = new FileInputStream("utils"+File.separator+"cupcarbon_licence.txt");
 			int c;
 			while ((c = licenceFile.read()) != -1) {
 				System.out.print((char) c);
@@ -2748,61 +2748,61 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void openRecentProject1() {
-		opneIthRecentProject(1);
+		openIthRecentProject(1);
 		initRecentProjectMenu();
 	}
 
 	@FXML
 	public void openRecentProject2() {
-		opneIthRecentProject(2);
+		openIthRecentProject(2);
 		initRecentProjectMenu();
 	}
 
 	@FXML
 	public void openRecentProject3() {
-		opneIthRecentProject(3);
+		openIthRecentProject(3);
 		initRecentProjectMenu();
 	}
 
 	@FXML
 	public void openRecentProject4() {
-		opneIthRecentProject(4);
+		openIthRecentProject(4);
 		initRecentProjectMenu();
 	}
 
 	@FXML
 	public void openRecentProject5() {
-		opneIthRecentProject(5);
+		openIthRecentProject(5);
 		initRecentProjectMenu();
 	}
 
 	@FXML
 	public void openRecentProject6() {
-		opneIthRecentProject(6);
+		openIthRecentProject(6);
 		initRecentProjectMenu();
 	}
 
 	@FXML
 	public void openRecentProject7() {
-		opneIthRecentProject(7);
+		openIthRecentProject(7);
 		initRecentProjectMenu();
 	}
 
 	@FXML
 	public void openRecentProject8() {
-		opneIthRecentProject(8);
+		openIthRecentProject(8);
 		initRecentProjectMenu();
 	}
 
 	@FXML
 	public void openRecentProject9() {
-		opneIthRecentProject(9);
+		openIthRecentProject(9);
 		initRecentProjectMenu();
 	}
 
 	@FXML
 	public void openRecentProject10() {
-		opneIthRecentProject(10);
+		openIthRecentProject(10);
 		initRecentProjectMenu();
 	}
 
@@ -2811,13 +2811,12 @@ public class CupCarbonController implements Initializable {
 			@Override
 			public void run() {
 				try {
-					BufferedReader br = new BufferedReader(
-							new InputStreamReader(new FileInputStream("utils/recent.rec")));
+					BufferedReader br = new BufferedReader(new FileReader("utils"+File.separator+"recent.rec"));
 
 					for (int i = 0; i < 10; i++) {
 						String s = br.readLine();
 						if (s != null) {
-							String name = s.split(":")[1];
+							String name = s.split("#")[1];
 							if (i == 0) {
 								openRecentProjectItem1.setVisible(true);
 								openRecentProjectItem1.setText(name);
@@ -2914,7 +2913,7 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void openLastProject() {
-		opneIthRecentProject(1);
+		openIthRecentProject(1);
 		initRecentProjectMenu();
 	}
 
@@ -2937,19 +2936,19 @@ public class CupCarbonController implements Initializable {
 		});
 	}
 
-	public void opneIthRecentProject(int index) {
+	public void openIthRecentProject(int index) {
 		// index = 1 .. 10
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					BufferedReader br = new BufferedReader(
-							new InputStreamReader(new FileInputStream("utils/recent.rec")));
+							new InputStreamReader(new FileInputStream("utils"+File.separator+"recent.rec")));
 					String s = "";
 					for (int i = 0; i < index; i++)
 						s = br.readLine();
-					String path = s.split(":")[0];
-					String name = s.split(":")[1];
+					String path = s.split("#")[0];
+					String name = s.split("#")[1];
 					br.close();
 
 					Project.openProject(path, name);

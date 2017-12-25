@@ -296,7 +296,7 @@ public final class Project {
 	public static void saveRecentPath() {
 		try {
 			recentProjectList = new LinkedList<String>();
-			String current = projectPath+":"+projectName;
+			String current = projectPath+"#"+projectName;
 			recentProjectList.add(current);			
 			FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+File.separator+"utils"+File.separator+"recent.rec");
 			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
