@@ -76,7 +76,6 @@ import markers.MarkerList;
 import markers.Routes;
 import natural_events.Gas;
 import natural_events.Meteo;
-import overpass.OsmOverpass;
 import simulation.SimulationInputs;
 import simulation.WisenSimulation;
 import utilities.MapCalc;
@@ -215,10 +214,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		if(!shiftDown && !button3Clicked)
 			mapViewer.setPanEnabled(true);
 		
-		if (!OsmOverpass.isLoading) {
+		//if (!OsmOverpass.isLoading) {
 			if(buildingList != null)
 				buildingList.draw(g);
-		}
+		//}
 		
 		numberOfInsideAndSelected = 0;
 		

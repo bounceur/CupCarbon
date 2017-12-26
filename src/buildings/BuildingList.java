@@ -33,6 +33,7 @@ import utilities.MapCalc;
 public class BuildingList {
 
 	public static LinkedList<Building> buildings = null;
+	public static boolean isLoading = false;
 	
 	public BuildingList() {
 		buildings = new LinkedList<Building>();

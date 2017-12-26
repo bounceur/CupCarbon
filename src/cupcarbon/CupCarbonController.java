@@ -401,7 +401,7 @@ public class CupCarbonController implements Initializable {
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {}
-				sn.requestFocus();
+				MapLayer.repaint();
 			}
 		});
 	}
