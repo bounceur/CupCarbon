@@ -398,6 +398,10 @@ public class CupCarbonController implements Initializable {
 			public void run() {
 				numberOfDevices.setText("N = " + DeviceList.getSize());
 				sn.requestFocus();
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {}
+				sn.requestFocus();
 			}
 		});
 	}

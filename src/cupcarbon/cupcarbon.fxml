@@ -1319,11 +1319,11 @@
                                           </Tab>
                                         <Tab style="-fx-font-size: 10;" text="Selection">
                                              <content>
-                                                <VBox alignment="TOP_CENTER" prefHeight="407.0" prefWidth="289.0" spacing="10.0">
+                                                <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="407.0" spacing="10.0">
                                                    <children>
-                                                      <HBox prefHeight="26.0" prefWidth="269.0">
+                                                      <HBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="26.0">
                                                          <children>
-                                                            <Button mnemonicParsing="false" onAction="#selectAll" prefHeight="25.0" prefWidth="290.0" text="Select All">
+                                                            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAll" prefHeight="25.0" text="Select All">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
@@ -1338,7 +1338,7 @@
                                                                   </ImageView>
                                                                </graphic>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#deselectAll" prefHeight="25.0" prefWidth="290.0" text="Deselect All">
+                                                            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAll" prefHeight="25.0" text="Deselect All">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
@@ -1355,7 +1355,7 @@
                                                             </Button>
                                                          </children>
                                                       </HBox>
-                                                      <Button mnemonicParsing="false" onAction="#selectInv" prefHeight="25.0" prefWidth="290.0" text="Invert Selection">
+                                                      <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectInv" prefHeight="25.0" prefWidth="290.0" text="Invert Selection">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>
@@ -1368,7 +1368,7 @@
                                                          </graphic>
                                                       </Button>
                                                       <Separator prefWidth="200.0" />
-                                                      <HBox prefHeight="26.0" prefWidth="286.0" spacing="2.0">
+                                                      <HBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" prefHeight="26.0" spacing="8.0">
                                                          <children>
                                                             <TextField fx:id="bytxtfield" alignment="CENTER" prefHeight="25.0" prefWidth="140.0">
                                                                <font>
@@ -1423,7 +1423,7 @@
                                                          </font>
                                                       </CheckBox>
                                                       <Separator prefWidth="200.0" />
-                                                      <GridPane hgap="5.0" vgap="5.0">
+                                                      <GridPane alignment="TOP_CENTER" hgap="5.0" maxWidth="1.7976931348623157E308" vgap="5.0">
                                                         <columnConstraints>
                                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -1439,82 +1439,82 @@
                                                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                         </rowConstraints>
                                                          <children>
-                                                            <Button mnemonicParsing="false" onAction="#selectAllSensors" prefHeight="25.0" prefWidth="290.0" text="Select All Sensors">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllSensors" prefHeight="25.0" prefWidth="290.0" text="Select All Sensors">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#deselectAllSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect All Sensors" GridPane.columnIndex="1">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect All Sensors" GridPane.columnIndex="1">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#deselectAllnaturalEvents" prefHeight="25.0" prefWidth="290.0" text="Deselect All Events" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllnaturalEvents" prefHeight="25.0" prefWidth="290.0" text="Deselect All Events" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#selectAllMediaSensors" prefHeight="25.0" prefWidth="290.0" text="Select Media Sensors" GridPane.rowIndex="3">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllMediaSensors" prefHeight="25.0" prefWidth="290.0" text="Select Media Sensors" GridPane.rowIndex="3">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#deselectAllMobiles" prefHeight="25.0" prefWidth="290.0" text="Deselect All Mobiles" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllMobiles" prefHeight="25.0" prefWidth="290.0" text="Deselect All Mobiles" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#selectAllMobiles" prefHeight="25.0" prefWidth="290.0" text="Select All Mobiles" GridPane.rowIndex="2">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllMobiles" prefHeight="25.0" prefWidth="290.0" text="Select All Mobiles" GridPane.rowIndex="2">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#selectAllnaturalEvents" prefHeight="25.0" prefWidth="290.0" text="Select All Events" GridPane.rowIndex="1">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllnaturalEvents" prefHeight="25.0" prefWidth="290.0" text="Select All Events" GridPane.rowIndex="1">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#deselectAllMediaSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect Media Sensors" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllMediaSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect Media Sensors" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#selectAllBaseStations" prefHeight="25.0" prefWidth="290.0" text="Select Base Stations" GridPane.rowIndex="4">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllBaseStations" prefHeight="25.0" prefWidth="290.0" text="Select Base Stations" GridPane.rowIndex="4">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#deselectAllBaseStations" prefHeight="25.0" prefWidth="290.0" text="Deselect Base Stations" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllBaseStations" prefHeight="25.0" prefWidth="290.0" text="Deselect Base Stations" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#selectAllMarkers" prefHeight="25.0" prefWidth="290.0" text="Select All Markers" GridPane.rowIndex="5">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllMarkers" prefHeight="25.0" prefWidth="290.0" text="Select All Markers" GridPane.rowIndex="5">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#deselectAllMarkers" prefHeight="25.0" prefWidth="290.0" text="Deselect All Markers" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllMarkers" prefHeight="25.0" prefWidth="290.0" text="Deselect All Markers" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#selectAllBuildings" prefHeight="25.0" prefWidth="290.0" text="Select All Buildings" GridPane.rowIndex="6">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllBuildings" prefHeight="25.0" prefWidth="290.0" text="Select All Buildings" GridPane.rowIndex="6">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#deselectAllBuildings" prefHeight="25.0" prefWidth="290.0" text="Deselect All Buildings" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllBuildings" prefHeight="25.0" prefWidth="290.0" text="Deselect All Buildings" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#selectAllMobileSensors" prefHeight="25.0" prefWidth="290.0" text="Select Mobile Sensors" GridPane.rowIndex="7">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllMobileSensors" prefHeight="25.0" prefWidth="290.0" text="Select Mobile Sensors" GridPane.rowIndex="7">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" onAction="#deselectAllMobileSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect Mobile Sensors" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                                            <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllMobileSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect Mobile Sensors" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                                                <font>
                                                                   <Font size="10.0" />
                                                                </font>
@@ -1542,11 +1542,11 @@
                                  <content>
                                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                        <children>
-                                          <GridPane hgap="5.0" maxWidth="1.7976931348623157E308" prefHeight="338.0" prefWidth="228.0" vgap="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                          <GridPane hgap="5.0" maxWidth="1.7976931348623157E308" prefHeight="338.0" snapToPixel="false" vgap="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                             <columnConstraints>
                                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="75.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="112.0" minWidth="10.0" prefWidth="101.0" />
-                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="67.0" minWidth="10.0" prefWidth="33.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="101.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" />
                                             </columnConstraints>
                                             <rowConstraints>
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -1624,7 +1624,7 @@
                                                       <Font size="9.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="device_id" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                <TextField fx:id="device_id" maxWidth="1.7976931348623157E308" prefHeight="18.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>
@@ -1664,9 +1664,9 @@
                                                       <Font size="10.0" />
                                                    </font>
                                                 </TextField>
-                                                <ComboBox fx:id="scriptFileComboBox" prefHeight="18.0" prefWidth="150.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" />
-                                                <ComboBox fx:id="gpsFileComboBox" prefHeight="18.0" prefWidth="150.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <ComboBox fx:id="uartComboBox" editable="true" prefHeight="18.0" prefWidth="150.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                                                <ComboBox fx:id="scriptFileComboBox" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="150.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" />
+                                                <ComboBox fx:id="gpsFileComboBox" maxWidth="1.7976931348623157E308" prefHeight="18.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <ComboBox fx:id="uartComboBox" editable="true" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="150.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.rowIndex="11" />
                                                 <TextField fx:id="device_drift" prefHeight="18.0" text="0.00003" GridPane.columnIndex="1" GridPane.rowIndex="12">
                                                    <font>
                                                       <Font size="10.0" />
@@ -1780,7 +1780,7 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <ComboBox fx:id="nateventFileComboBox" prefHeight="18.0" prefWidth="150.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <ComboBox fx:id="nateventFileComboBox" maxWidth="1.7976931348623157E308" prefHeight="18.0" style="-fx-font-size: 8pt;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                 <Label text="Natural Evt  file" GridPane.rowIndex="2">
                                                    <font>
                                                       <Font size="9.0" />
@@ -1887,7 +1887,7 @@
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </padding>
                                           </ListView>
-                                          <GridPane hgap="5.0" prefHeight="291.0" prefWidth="232.0" vgap="5.0">
+                                          <GridPane hgap="5.0" maxWidth="1.7976931348623157E308" prefHeight="291.0" prefWidth="232.0" vgap="5.0">
                                              <children>
                                                 <Label text="Network Id (NID)">
                                                    <font>
@@ -2074,7 +2074,7 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <ComboBox fx:id="radio_spreading_factor" disable="true" prefHeight="22.0" prefWidth="105.0" style="-fx-font-size: 8pt;" visibleRowCount="7" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                                                <ComboBox fx:id="radio_spreading_factor" disable="true" maxWidth="1.7976931348623157E308" prefHeight="22.0" prefWidth="105.0" style="-fx-font-size: 8pt;" visibleRowCount="7" GridPane.columnIndex="1" GridPane.rowIndex="10" />
                                                 <Label text="PL" GridPane.rowIndex="3">
                                                    <font>
                                                       <Font size="9.0" />
@@ -2097,8 +2097,8 @@
                                              </children>
                                              <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="90.0" minWidth="10.0" prefWidth="84.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="112.0" minWidth="10.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="67.0" minWidth="10.0" prefWidth="33.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="33.0" />
                                              </columnConstraints>
                                              <rowConstraints>
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -2173,7 +2173,7 @@
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </padding>
                                           </Separator>
-                                          <GridPane>
+                                          <GridPane maxWidth="1.7976931348623157E308">
                                             <columnConstraints>
                                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="103.0" minWidth="10.0" prefWidth="58.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="103.0" minWidth="10.0" prefWidth="38.0" />
@@ -2188,7 +2188,7 @@
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
-                                                <TextField fx:id="txtFileName" text="route1.gps" GridPane.columnIndex="1" GridPane.columnSpan="2">
+                                                <TextField fx:id="txtFileName" maxWidth="1.7976931348623157E308" text="route1.gps" GridPane.columnIndex="1" GridPane.columnSpan="2">
                                                    <font>
                                                       <Font size="10.0" />
                                                    </font>

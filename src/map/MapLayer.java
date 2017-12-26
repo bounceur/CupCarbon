@@ -216,7 +216,8 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			mapViewer.setPanEnabled(true);
 		
 		if (!OsmOverpass.isLoading) {
-			buildingList.draw(g);
+			if(buildingList != null)
+				buildingList.draw(g);
 		}
 		
 		numberOfInsideAndSelected = 0;

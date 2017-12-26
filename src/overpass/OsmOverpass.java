@@ -39,7 +39,7 @@ import map.MapLayer;
  * @author Bounceur Ahcène
  * @version 1.0
  */
-public class OsmOverpass extends Thread {
+public class OsmOverpass {
 
 	protected double bottomLeftLat; 
 	protected double bottomLeftLng; 
@@ -54,8 +54,7 @@ public class OsmOverpass extends Thread {
 		this.topRightLng = topRightLng;
 	}
 	
-	@Override
-	public void run(){
+	public void load(){
 		isLoading = true;
 		try {
 		    URL url = new URL("http://overpass-api.de/api/map?bbox="+bottomLeftLat+","+bottomLeftLng+","+topRightLat+","+topRightLng);

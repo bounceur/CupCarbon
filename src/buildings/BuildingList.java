@@ -30,7 +30,7 @@ import utilities.MapCalc;
  * @version 1.0
  */
 
-public class BuildingList extends Thread {
+public class BuildingList {
 
 	public static LinkedList<Building> buildings = null;
 	
@@ -81,7 +81,7 @@ public class BuildingList extends Thread {
 			double m2x = marker2.getLongitude();
 			double m2y = marker2.getLatitude();
 			OsmOverpass ovp = new OsmOverpass(m1x, m1y, m2x, m2y);
-			ovp.start();
+			ovp.load();
 		}
 		else {
 			Platform.runLater(new Runnable() {
