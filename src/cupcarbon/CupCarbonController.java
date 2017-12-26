@@ -2820,87 +2820,89 @@ public class CupCarbonController implements Initializable {
 					for (int i = 0; i < 10; i++) {
 						String s = br.readLine();
 						if (s != null) {
-							String name = s.split("#")[1];
-							if (i == 0) {
-								openRecentProjectItem1.setVisible(true);
-								openRecentProjectItem1.setText(name);
-							}
-							if (i == 1) {
-								openRecentProjectItem2.setVisible(true);
-								openRecentProjectItem2.setText(name);
-							}
-							if (i == 2) {
-								openRecentProjectItem3.setVisible(true);
-								openRecentProjectItem3.setText(name);
-							}
-							if (i == 3) {
-								openRecentProjectItem4.setVisible(true);
-								openRecentProjectItem4.setText(name);
-							}
-							if (i == 4) {
-								openRecentProjectItem5.setVisible(true);
-								openRecentProjectItem5.setText(name);
-							}
-							if (i == 5) {
-								openRecentProjectItem6.setVisible(true);
-								openRecentProjectItem6.setText(name);
-							}
-							if (i == 6) {
-								openRecentProjectItem7.setVisible(true);
-								openRecentProjectItem7.setText(name);
-							}
-							if (i == 7) {
-								openRecentProjectItem8.setVisible(true);
-								openRecentProjectItem8.setText(name);
-							}
-							if (i == 8) {
-								openRecentProjectItem9.setVisible(true);
-								openRecentProjectItem9.setText(name);
-							}
-							if (i == 9) {
-								openRecentProjectItem10.setVisible(true);
-								openRecentProjectItem10.setText(name);
-							}
-						} else {
-							if (i == 0) {
-								openRecentProjectItem1.setVisible(false);
-								openRecentProjectItem1.setText("");
-							}
-							if (i == 1) {
-								openRecentProjectItem2.setVisible(false);
-								openRecentProjectItem2.setText("");
-							}
-							if (i == 2) {
-								openRecentProjectItem3.setVisible(false);
-								openRecentProjectItem3.setText("");
-							}
-							if (i == 3) {
-								openRecentProjectItem4.setVisible(false);
-								openRecentProjectItem4.setText("");
-							}
-							if (i == 4) {
-								openRecentProjectItem5.setVisible(false);
-								openRecentProjectItem5.setText("");
-							}
-							if (i == 5) {
-								openRecentProjectItem6.setVisible(false);
-								openRecentProjectItem6.setText("");
-							}
-							if (i == 6) {
-								openRecentProjectItem7.setVisible(false);
-								openRecentProjectItem7.setText("");
-							}
-							if (i == 7) {
-								openRecentProjectItem8.setVisible(false);
-								openRecentProjectItem8.setText("");
-							}
-							if (i == 8) {
-								openRecentProjectItem9.setVisible(false);
-								openRecentProjectItem9.setText("");
-							}
-							if (i == 9) {
-								openRecentProjectItem10.setVisible(false);
-								openRecentProjectItem10.setText("");
+							if(!s.trim().equals("")) {
+								String name = s.split("#")[1];
+								if (i == 0) {
+									openRecentProjectItem1.setVisible(true);
+									openRecentProjectItem1.setText(name);
+								}
+								if (i == 1) {
+									openRecentProjectItem2.setVisible(true);
+									openRecentProjectItem2.setText(name);
+								}
+								if (i == 2) {
+									openRecentProjectItem3.setVisible(true);
+									openRecentProjectItem3.setText(name);
+								}
+								if (i == 3) {
+									openRecentProjectItem4.setVisible(true);
+									openRecentProjectItem4.setText(name);
+								}
+								if (i == 4) {
+									openRecentProjectItem5.setVisible(true);
+									openRecentProjectItem5.setText(name);
+								}
+								if (i == 5) {
+									openRecentProjectItem6.setVisible(true);
+									openRecentProjectItem6.setText(name);
+								}
+								if (i == 6) {
+									openRecentProjectItem7.setVisible(true);
+									openRecentProjectItem7.setText(name);
+								}
+								if (i == 7) {
+									openRecentProjectItem8.setVisible(true);
+									openRecentProjectItem8.setText(name);
+								}
+								if (i == 8) {
+									openRecentProjectItem9.setVisible(true);
+									openRecentProjectItem9.setText(name);
+								}
+								if (i == 9) {
+									openRecentProjectItem10.setVisible(true);
+									openRecentProjectItem10.setText(name);
+								}
+							} else {
+								if (i == 0) {
+									openRecentProjectItem1.setVisible(false);
+									openRecentProjectItem1.setText("");
+								}
+								if (i == 1) {
+									openRecentProjectItem2.setVisible(false);
+									openRecentProjectItem2.setText("");
+								}
+								if (i == 2) {
+									openRecentProjectItem3.setVisible(false);
+									openRecentProjectItem3.setText("");
+								}
+								if (i == 3) {
+									openRecentProjectItem4.setVisible(false);
+									openRecentProjectItem4.setText("");
+								}
+								if (i == 4) {
+									openRecentProjectItem5.setVisible(false);
+									openRecentProjectItem5.setText("");
+								}
+								if (i == 5) {
+									openRecentProjectItem6.setVisible(false);
+									openRecentProjectItem6.setText("");
+								}
+								if (i == 6) {
+									openRecentProjectItem7.setVisible(false);
+									openRecentProjectItem7.setText("");
+								}
+								if (i == 7) {
+									openRecentProjectItem8.setVisible(false);
+									openRecentProjectItem8.setText("");
+								}
+								if (i == 8) {
+									openRecentProjectItem9.setVisible(false);
+									openRecentProjectItem9.setText("");
+								}
+								if (i == 9) {
+									openRecentProjectItem10.setVisible(false);
+									openRecentProjectItem10.setText("");
+								}
 							}
 						}
 					}
