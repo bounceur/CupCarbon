@@ -52,10 +52,11 @@ public class CupCarbon extends Application {
 
 	public static Stage stage;
 	public static CupCarbonController cupCarbonController;
-	public static boolean macos = false;
+	public static boolean macos = false;	
 	
 	@Override
-	public void start(Stage stage) throws IOException {
+	public void start(Stage mainStage) throws Exception {
+		CupCarbon.stage = mainStage;
 		String os = System.getProperty ("os.name", "UNKNOWN");
 		if(os != null && os.startsWith("Mac")) {
 			macos = true;
@@ -63,29 +64,35 @@ public class CupCarbon extends Application {
 		
 		CupActionStack.init();
 		
-		CupCarbon.stage = stage;
+		
 		
 		setProxy();
 		
 		setUserAgentStylesheet(STYLESHEET_MODENA);
+		
 	    
-		stage.setTitle("CupCarbon "+CupCarbonVersion.VERSION);
-		stage.getIcons().add(new Image(getClass().getResourceAsStream("cupcarbon_logo_small.png")));		
+		mainStage.setTitle("CupCarbon "+CupCarbonVersion.VERSION);
+		mainStage.getIcons().add(new Image(getClass().getResourceAsStream("cupcarbon_logo_small.png")));		
 		//stage.setMaximized(true);
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(CupCarbon.class.getResource("cupcarbon.fxml"));
+		
+		
+		loader.setLocation(getClass().getResource("cupcarbon.fxml"));
 		BorderPane panneau = (BorderPane) loader.load();
 		Scene scene = new Scene(panneau);
-		stage.setScene(scene);
-		stage.show();
+		mainStage.setScene(scene);
+		mainStage.show();
 	}
-
-	public static void main(String[] args) {
+	
+	public static void main(String[] args) {		
+		String r = "3111441122123263122253111131132311317312221232617123";	//Signature
+		System.out.println(r);
 		if(args.length>0) {
 			SolverProxyParams.proxyset = args[0];
 			SolverProxyParams.host = args[1];
 			SolverProxyParams.port = args[2];
-		}
+		}		
+		
 		launch(args);
 	}
 	

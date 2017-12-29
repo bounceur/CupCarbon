@@ -17,6 +17,7 @@ import javax.vecmath.Vector3d;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import device.Device;
+import device.SensorNode;
 import geo_objects.GeoZone;
 import map.MapLayer;
 import math.Intersect;
@@ -178,6 +179,20 @@ public class Building implements MouseListener, KeyListener {
 	public boolean inside(int xs, int ys) {
 		Point p = new Point(xs, ys);
 		GeoPosition gp = MapLayer.mapViewer.convertPointToGeoPosition(p);
+		Point2D p1 = MapLayer.mapViewer.getTileFactory().geoToPixel(gp, MapLayer.mapViewer.getZoom());
+		Polygon poly = new Polygon(iCoordX,iCoordY,nPoints);
+		return (poly.contains(p1));
+	}
+	
+	public boolean inside(double latitude, double longitude) {
+		GeoPosition gp = new GeoPosition(latitude, longitude);
+		Point2D p1 = MapLayer.mapViewer.getTileFactory().geoToPixel(gp, MapLayer.mapViewer.getZoom());
+		Polygon poly = new Polygon(iCoordX,iCoordY,nPoints);
+		return (poly.contains(p1));
+	}
+	
+	public boolean inside(SensorNode sn) {
+		GeoPosition gp = sn.getGeoCenter();
 		Point2D p1 = MapLayer.mapViewer.getTileFactory().geoToPixel(gp, MapLayer.mapViewer.getZoom());
 		Polygon poly = new Polygon(iCoordX,iCoordY,nPoints);
 		return (poly.contains(p1));

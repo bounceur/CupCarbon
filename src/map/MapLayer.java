@@ -117,7 +117,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	
 	public static boolean showInfos = true;
 	public static boolean showBakhground = true;
-	public static int bg_transparency = 0;
+	public static int bg_transparency = 255;
+	
+	private int cx ;
+	private int cy ;
 	
 	public MapLayer() {}
 	
@@ -477,9 +480,6 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		}
 
 	}
-
-	private int cx ;
-	private int cy ;
 	
 	@Override
 	public void mouseMoved(MouseEvent e) {

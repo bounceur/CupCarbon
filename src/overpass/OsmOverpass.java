@@ -62,6 +62,7 @@ public class OsmOverpass {
 				BuildingList.isLoading = true;
 				try {
 				    URL url = new URL("http://overpass-api.de/api/map?bbox="+bottomLeftLat+","+bottomLeftLng+","+topRightLat+","+topRightLng);
+				    System.out.println(url);		
 				    System.out.println("[Buildings] File downloading...");		    
 				    
 				    Osm data = (Osm) JAXBContext.newInstance(Osm.class).createUnmarshaller().unmarshal( url );
@@ -92,7 +93,6 @@ public class OsmOverpass {
 				        	
 				        	MapLayer.mapViewer.addMouseListener(building);
 				    		MapLayer.mapViewer.addKeyListener(building);
-				        	//BuildingList.add(building);
 				        	CupAction action = new CupActionAddBuilding(building);
 							block.addAction(action);
 			        	}

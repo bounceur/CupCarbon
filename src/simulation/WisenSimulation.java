@@ -556,6 +556,7 @@ public class WisenSimulation implements Runnable {
 				CupCarbon.cupCarbonController.qStopSimulationButton.setDefaultButton(false);
 				CupCarbon.cupCarbonController.monitor.setFill(Color.YELLOWGREEN);
 				CupCarbon.cupCarbonController.stateLabel.setText("Ready");
+				CupCarbon.cupCarbonController.updateLabeLInfos();
 			}
 		});				
 	}

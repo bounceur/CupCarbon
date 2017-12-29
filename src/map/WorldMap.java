@@ -134,10 +134,10 @@ public class WorldMap extends JXMapKit {
 		setCenterPosition(new GeoPosition(48.39188295873048, -4.44371223449707));
 	}	
 	
-	public static void changeMap(int i) {
-		MapLayer.mapViewer.setLoadingImage(Toolkit.getDefaultToolkit().getImage("tiles/mer.png"));
-		mapIdx = i;
-		switch(i) {
+	public static void changeMap(int index) {
+		MapLayer.mapViewer.setLoadingImage(Toolkit.getDefaultToolkit().getImage("tiles"+File.separator+"mer.png"));
+		mapIdx = index;
+		switch(index) {
 		case 0 : CupCarbon.cupCarbonController.checkMapMenuItem(0); changeTiles(Tiles.TILE0, false); darkMap(false); break;
 		case 1 : MapLayer.mapViewer.setLoadingImage(Toolkit.getDefaultToolkit().getImage("tiles/cuptile_black.png"));CupCarbon.cupCarbonController.checkMapMenuItem(1); changeTiles(Tiles.TILE1, false); darkMap(true); break;
 		case 2 : CupCarbon.cupCarbonController.checkMapMenuItem(2); changeLocalTiles(Tiles.TILE2); darkMap(false); break;
@@ -150,6 +150,7 @@ public class WorldMap extends JXMapKit {
 		case 9 : CupCarbon.cupCarbonController.checkMapMenuItem(9); changeLocalTiles(Tiles.TILE9); darkMap(false); break;
 		case 10 : CupCarbon.cupCarbonController.checkMapMenuItem(10); changeTiles(Tiles.TILE10, true); darkMap(false); break;
 		case 11 : CupCarbon.cupCarbonController.checkMapMenuItem(11); changeTiles(Tiles.TILE11, true); darkMap(true); break;
+		case 12 : CupCarbon.cupCarbonController.checkMapMenuItem(12); changeTiles(Tiles.TILE12, false); darkMap(false); break;
 		}
 	}
 	

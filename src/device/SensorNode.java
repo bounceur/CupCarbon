@@ -820,4 +820,8 @@ public abstract class SensorNode extends DeviceWithRadio {
 		this.drssi = drssi;
 	}
 	
+	public GeoPosition getGeoCenter() {
+		return new GeoPosition(latitude, longitude);
+	}
+	
 }

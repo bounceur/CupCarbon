@@ -14,5 +14,6 @@ public class Tiles {
 	public static final String TILE9 = "cuptile_grid2.png";
 	public static final String TILE10 = "http://mt0.google.com/vt/lyrs=m&hl=en";
 	public static final String TILE11 = "http://mt0.google.com/vt/lyrs=s&hl=en";
+	public static final String TILE12 = "https://tiles.wmflabs.org/bw-mapnik/";
 	
 }

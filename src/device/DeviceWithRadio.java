@@ -321,10 +321,10 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			
 			Graphics2D g2 = (Graphics2D) g;
 			
-			Stroke dashed = new BasicStroke(0.8f);
+			Stroke dashed = new BasicStroke(0.4f);
 			//Stroke dashed = new BasicStroke(1f);
 			if(type==1)
-				dashed = new BasicStroke(0.4f);
+				dashed = new BasicStroke(0.2f);
 			//dashed = new BasicStroke(0.6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{3,3}, 0);
 				
 	        g2.setStroke(dashed);

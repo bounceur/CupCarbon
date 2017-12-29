@@ -66,8 +66,6 @@ import utilities.MapCalc;
 public class DeviceList {
 
 	public static Meteo meteo = null;
-	//public static List<SensorNode> sensors = Collections.synchronizedList(new ArrayList<SensorNode>());
-	//public static List<Device> devices = Collections.synchronizedList(new ArrayList<Device>());
 	public static Vector<SensorNode> sensors = new Vector<SensorNode>();
 	public static Vector<Device> devices = new Vector<Device>();
 	public static Vector<SNEdge> markedEdges = new Vector<SNEdge>();
@@ -84,9 +82,6 @@ public class DeviceList {
 	public static void reset() {
 		meteo = null;
 		sensors = new Vector<SensorNode>();
-		//sensors = Collections.synchronizedList(new ArrayList<SensorNode>());
-		//devices = Collections.synchronizedList(new ArrayList<Device>());
-		//sensors = new ArrayList<SensorNode>();
 		devices = new Vector<Device>();
 		drawLinks = true;
 		hulls = new LinkedList<LinkedList<Integer>>();
@@ -650,14 +645,74 @@ public class DeviceList {
 	}
 	
 	/**
-	 * @return the number of the sensor sensors
+	 * @return the number of sensors
 	 */
 	public static int sensorListSize() {
 		return sensors.size();
 	}
 	
 	/**
-	 * @return the number of the devices
+	 * @return the number of selected sensors
+	 */
+	public static int getNumberOfSelectedSensors() {
+		int n = 0;
+		for(SensorNode sensor : sensors) {
+			if(sensor.isSelected())
+				n++;
+		}
+		return n;
+	}
+	
+	/**
+	 * @return the number of media sensors
+	 */
+	public static int getNumberOfMediaSensors() {
+		int n = 0;
+		for(SensorNode sensor : sensors) {
+			if(sensor.getType() == Device.MEDIA_SENSOR)
+				n++;
+		}
+		return n;
+	}
+	
+	/**
+	 * @return the number of base stations
+	 */
+	public static int getNumberOfBaseStations() {
+		int n = 0;
+		for(SensorNode sensor : sensors) {
+			if(sensor.getType() == Device.BASE_STATION)
+				n++;
+		}
+		return n;
+	}
+	
+	/**
+	 * @return the mobile nodes
+	 */
+	public static int getNumberOfMobiles() {
+		int n = 0;
+		for(Device node : devices) {
+			if(node.getType() == Device.MOBILE)
+				n++;
+		}
+		return n;
+	}
+	
+	/**
+	 * @return the mobile Gas
+	 */
+	public static int getNumberOfGas() {
+		int n = 0;
+		for(Device node : devices) {
+			if(node.getType() == Device.GAS)
+				n++;
+		}
+		return n;
+	}
+	
+	/**
+	 * @return the number of devices
 	 */
 	public static int deviceListSize() {
 		return devices.size();
@@ -1275,6 +1330,26 @@ public class DeviceList {
 		}
 	}
 	
+	public static int getNumberOfSensorsWithoutScript() {
+		int n = 0;
+		for(SensorNode d : sensors) {
+			if(d.getScriptFileName().equals("")) {
+				n++;
+			}
+		}
+		return n;
+	}
+	
+	public static int getNumberOfSensorsWithScript() {
+		int n = 0;
+		for(SensorNode d : sensors) {
+			if(!d.getScriptFileName().equals("")) {
+				n++;
+			}
+		}
+		return n;
+	}
+	
 	public static void selectWitoutScript() {
 		for(SensorNode d : sensors) {
 			if(d.getScriptFileName().equals("")) {
@@ -1315,6 +1390,16 @@ public class DeviceList {
 		int n = 0;
 		for(SensorNode d : sensors) {
 			if(d.isMarked()) {
+				n++;
+			}
+		}
+		return n;
+	}
+	
+	public static int getNumberOfUnmarkedSensors() {
+		int n = 0;
+		for(SensorNode d : sensors) {
+			if(!d.isMarked()) {
 				n++;
 			}
 		}
@@ -1670,6 +1755,59 @@ public class DeviceList {
 	}
 	
 	public static void addRandomSensors(int n, int hide) {		
+		CupActionBlock block = new CupActionBlock();		
+		if(MarkerList.markers.size()==2) {
+			Marker marker1 = MarkerList.markers.get(0);
+			Marker marker2 = MarkerList.markers.get(1);
+			double m1x = marker1.getLongitude();
+			double m1y = marker1.getLatitude();
+			double m2x = marker2.getLongitude();
+			double m2y = marker2.getLatitude();
+	
+			double r1 ;
+			double r2 ;
+			double x ;
+			double y ;
+			int i=0;
+			while(i < n) {
+				r1 = Math.random();
+				r2 = Math.random();
+				x = ((m2x-m1x)*r1)+m1x;
+				y = ((m2y-m1y)*r2)+m1y;
+				
+				double magnetic_step = 0.000227984;
+				double delta = 0.0;
+				if (MapLayer.magnetic) {
+					x = x - (x % magnetic_step) - (delta % magnetic_step);
+					y = y - (y % magnetic_step) - (delta % magnetic_step);			
+				}
+				boolean ex = false;
+				for(Building b : BuildingList.buildings) {
+					if((b.inside(y, x)) && (!b.isHide())) {
+						ex = true;
+						break;
+					}
+				}
+				if(!ex) {
+					i++;
+					StdSensorNode sensor = new StdSensorNode(x, y, 0, 0, 100, 20, -1);
+					sensor.setHide(hide);
+					CupAction action = new CupActionAddSensor(sensor);
+					block.addAction(action);
+				}
+			}
+			if(block.size()>0) {
+				CupActionStack.add(block);
+				CupActionStack.execute();
+				if(DeviceList.propagationsCalculated && NetworkParameters.drawRadioLinks)
+					DeviceList.calculatePropagations();
+			}		
+			MapLayer.repaint();
+		}
+		
+	}
+	
+	public static void addRandomSensors2(int n, int hide) {		
 		CupActionBlock block = new CupActionBlock();		
 		if(MarkerList.markers.size()==2) {
 			Marker marker1 = MarkerList.markers.get(0);

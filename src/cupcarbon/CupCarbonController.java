@@ -63,6 +63,8 @@ import fault_injection.FaultInjector;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -75,6 +77,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
@@ -84,6 +87,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
@@ -92,12 +96,17 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import map.MapLayer;
 import map.NetworkParameters;
 import map.WorldMap;
@@ -125,9 +134,72 @@ import visibility.VisibilityLauncher;
 public class CupCarbonController implements Initializable {
 
 	private WorldMap map = null;
-	private SwingNode sn = null;
+
 	protected FaultInjector faultInjector = null;
 
+	@FXML
+	private Label labelInfo1 ;
+	
+	@FXML
+	private Label labelInfo2 ;
+	
+	@FXML
+	private Label labelInfo3 ;
+	
+	@FXML
+	private Label labelInfo4 ;
+	
+	@FXML
+	private Label labelInfo5 ;
+	
+	@FXML
+	private Label labelInfo6 ;
+	
+	@FXML
+	private Label labelInfo7 ;
+	
+	@FXML
+	private Label labelInfo8 ;
+	
+	@FXML
+	private Label labelInfo9 ;
+	
+	@FXML
+	private Label labelInfo10 ;
+	
+	@FXML
+	private Label labelInfo11 ;
+	
+	@FXML
+	private Label labelInfo12 ;
+	
+	@FXML
+	private Label labelInfo13 ;
+	
+	@FXML
+	private Label labelInfo14 ;
+	
+	@FXML
+	private Label labelInfo15 ;
+
+	@FXML
+	private Label labelInfo16 ;
+	
+	@FXML
+	private Label labelInfo17 ;
+
+	@FXML
+	private Label labelInfo18 ;
+	
+	@FXML
+	private Text textReady;
+	
+	@FXML
+	private SwingNode sn ;
+	
+	@FXML
+	private VBox vbox ;
+	
 	@FXML
 	public RadioButton classicRg;
 	
@@ -187,6 +259,9 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public Label simulationTimeLabel;
+	
+	@FXML
+	public Label zoomLabel;
 
 	@FXML
 	public MenuItem resetItem;
@@ -398,10 +473,10 @@ public class CupCarbonController implements Initializable {
 			public void run() {
 				numberOfDevices.setText("N = " + DeviceList.getSize());
 				sn.requestFocus();
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {}
-				MapLayer.repaint();
+//				try {
+//					Thread.sleep(10);
+//				} catch (InterruptedException e) {}
+//				MapLayer.repaint();
 			}
 		});
 	}
@@ -453,7 +528,9 @@ public class CupCarbonController implements Initializable {
 			resetItem.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.META_DOWN, KeyCombination.SHIFT_DOWN));
 			
 			menuBar.useSystemMenuBarProperty().set(true);
+
 		}
+		
 		initComboBoxes();
 			
 		deviceListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -495,7 +572,7 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	public void zoomP() {
 		map.setZoom(map.getZoomSlider().getValue() - 1);
-		simulationTimeLabel.setText(" ("+MapLayer.mapViewer.getZoom()+")");
+		zoomLabel.setText(""+(19-MapLayer.mapViewer.getZoom()));
 		SensorNode sensor = null;
 		for (SensorNode s : DeviceList.sensors) {
 			if (s.isSelected()) {
@@ -512,7 +589,7 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	public void zoomM() {
 		map.setZoom(map.getZoomSlider().getValue() + 1);
-		simulationTimeLabel.setText(" ("+MapLayer.mapViewer.getZoom()+")");
+		zoomLabel.setText(""+(19-MapLayer.mapViewer.getZoom()));
 		mapFocus();
 	}
 
@@ -580,11 +657,12 @@ public class CupCarbonController implements Initializable {
 	public Menu menuSelection;
 
 	@FXML
-	public void openSenScriptWindow() throws IOException {
-		// menuEdition.setDisable(true);
-		// menuSelection.setDisable(true);
+	public void openSenScriptWindow() {
 		if (!Project.projectName.equals(""))
-			new SenScriptWindow();
+			try {
+				new SenScriptWindow();
+			}
+			catch(IOException e) {}
 		else {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Warning!");
@@ -613,7 +691,7 @@ public class CupCarbonController implements Initializable {
 			@Override
 			public void run() {
 				WorldMap.addNodeInMap('1');
-				// mapFocus();
+				mapFocus();
 			}
 		});
 	}
@@ -965,6 +1043,21 @@ public class CupCarbonController implements Initializable {
 		}
 	}
 
+	public void displayInformation(String s) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				textReady.setText(s);
+				textReady.setVisible(true);
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {}
+				textReady.setVisible(false);
+			}
+		}).start();
+	}
+	
+	
 	@FXML
 	public void openProject() {
 		Platform.runLater(new Runnable() {
@@ -980,6 +1073,7 @@ public class CupCarbonController implements Initializable {
 					Project.openProject(file.getParentFile().toString(), file.getName().toString());
 					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getAbsolutePath().toString() + "]");
 					openProjectLoadParameters();
+					displayInformation(file.getName());
 				}
 			}
 		});
@@ -1002,30 +1096,125 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void quit() {
-		// int n = JOptionPane.showConfirmDialog(map, "Would you like to quit?",
-		// "Quit", JOptionPane.YES_NO_OPTION);
-		// if (n == 0) {
 		System.exit(0);
-		// }
 	}
 
+	private boolean drag = false;
 	public void initMap() {
 		CupCarbon.cupCarbonController = this;
 		map = new WorldMap();
-		map.getMainMap().setLoadingImage(Toolkit.getDefaultToolkit().getImage("tiles/mer.png"));
+		map.getMainMap().setLoadingImage(Toolkit.getDefaultToolkit().getImage("tiles"+File.separator+"mer.png"));
 		map.setZoomSliderVisible(false);
 		map.setZoomButtonsVisible(false);
 		map.setMiniMapVisible(false);
 		map.getZoomSlider().setSnapToTicks(false);
 		map.getZoomSlider().setPaintTicks(false);
-		
-		sn = new SwingNode();
-		sn.setContent(map);
 
-		pane.getChildren().add(sn);
+		sn.setContent(map);
+		
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem item1 = new MenuItem("Add a Sensor Node");
+        item1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	addSensor();
+            }
+        });
+        MenuItem item2 = new MenuItem("Add a Marker");
+        item2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	addMarker();
+            }
+        });
+        MenuItem item3 = new MenuItem("Add a Base Station");
+        item3.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	addBaseStation();
+            }
+        });
+        MenuItem item4 = new MenuItem("Add a Mobile");
+        item4.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	addMobile();
+            }
+        });
+        MenuItem item5 = new MenuItem("Route from Markers");
+        item5.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	routeFromMarkers();
+            }
+        });
+        
+        MenuItem item6 = new MenuItem("SensScript");
+        item6.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	openSenScriptWindow();
+            }
+        });
+        
+        SeparatorMenuItem menuSep1 = new SeparatorMenuItem();
+        SeparatorMenuItem menuSep2 = new SeparatorMenuItem();
+        
+        contextMenu.getItems().addAll(item1, item6, menuSep1, item2, item5, menuSep2, item3, item4);
+
+        sn.setOnMouseDragged(new EventHandler<MouseEvent>() {
+        	@Override
+			public void handle(MouseEvent event) {
+				if(event.getButton()==MouseButton.SECONDARY) {
+					drag = true;
+				}
+			}
+        });
+        
+        sn.setOnMouseReleased(new EventHandler<MouseEvent>() {
+        	@Override
+            public void handle(MouseEvent event) {
+        		if(!drag)
+        			if(event.getButton()==MouseButton.SECONDARY) { 
+        				if(MapLayer.lastKey==0)
+        					contextMenu.show(sn, event.getScreenX(), event.getScreenY());
+        			}
+    				else
+    					contextMenu.hide();
+        		drag = false;
+        		updateLabeLInfos();
+            }
+        });
+		
 		sn.requestFocus();
-		// map.repaint();
-		// mapFocus();
+		
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				textReady.setText("CupCarbon "+CupCarbonVersion.VERSION);
+				textReady.setVisible(false);
+				sn.setVisible(false);
+				vbox.setVisible(true);
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {}
+				sn.setVisible(true);
+				vbox.setVisible(false);
+				for(int i=100; i>=0; i--) {
+					MapLayer.bg_transparency=(int)(i*2.5);
+					MapLayer.repaint();
+					try {
+						Thread.sleep(20);
+					} catch (InterruptedException e) {}
+				}
+				textReady.setVisible(true);
+				try {
+					Thread.sleep(2500);
+				} catch (InterruptedException e) {}
+				textReady.setVisible(false);
+			}
+		}).start();
+		
 	}
 
 	public void loadSimulationParams() {
@@ -1589,6 +1778,8 @@ public class CupCarbonController implements Initializable {
 	public RadioMenuItem mapItem10;
 	@FXML
 	public RadioMenuItem mapItem11;
+	@FXML
+	public RadioMenuItem mapItem12;
 
 	// mapItem1 carte noire
 	// std 1
@@ -1631,7 +1822,11 @@ public class CupCarbonController implements Initializable {
 		case 11:
 			mapItem11.setSelected(true);
 			break;
+		case 12:
+			mapItem12.setSelected(true);
+			break;
 		}
+		
 	}
 
 	@FXML
@@ -1692,6 +1887,11 @@ public class CupCarbonController implements Initializable {
 	@FXML
 	public void setMap11() {
 		WorldMap.changeMap(11);
+	}
+	
+	@FXML
+	public void setMap12() {
+		WorldMap.changeMap(12);
 	}
 
 	@FXML
@@ -1860,6 +2060,7 @@ public class CupCarbonController implements Initializable {
 				device_radius.setText("" + currentDevice.getRadius());
 				uartComboBox.setValue("" + currentDevice.getUartDataRate());
 				device_drift.setText("" + currentDevice.getSigmaOfDriftTime());
+				updateLabeLInfos();
 			}
 		});
 	}
@@ -1904,6 +2105,7 @@ public class CupCarbonController implements Initializable {
 					device_eSensing.setText("" + currentDevice.getESensing());
 					uartComboBox.setValue("" + currentDevice.getUartDataRate());
 					device_drift.setText("" + currentDevice.getSigmaOfDriftTime());
+					updateLabeLInfos();
 				}
 			}
 		});
@@ -2031,11 +2233,14 @@ public class CupCarbonController implements Initializable {
 	public void openAboutWindow() throws IOException {
 		Stage stage = new Stage();
 		stage.setTitle("About CupCarbon");
+		stage.initStyle(StageStyle.TRANSPARENT);
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(CupCarbon.class.getResource("about.fxml"));
-		BorderPane panneau = (BorderPane) loader.load();
-		Scene scene = new Scene(panneau);
+		loader.setLocation(getClass().getResource("about.fxml"));
+		VBox panneau = (VBox) loader.load();
+		Scene scene = new Scene(panneau, Color.TRANSPARENT);
 		stage.setScene(scene);
+		stage.initOwner(CupCarbon.stage);
+		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.show();
 	}
 
@@ -2520,6 +2725,7 @@ public class CupCarbonController implements Initializable {
 				mapFocus();
 			}
 		});
+		
 	}
 
 	@FXML
@@ -2955,6 +3161,9 @@ public class CupCarbonController implements Initializable {
 						s = br.readLine();
 					String path = s.split("#")[0];
 					String name = s.split("#")[1];
+					
+					displayInformation(name);
+					
 					br.close();
 
 					Project.openProject(path, name);
@@ -3009,12 +3218,90 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public void sliderValueChanged() {
-		MapLayer.bg_transparency=(int)(bg_slider.getValue()*0.25);		
+		MapLayer.bg_transparency=(int)(bg_slider.getValue()*2.5);		
 		MapLayer.repaint();
 		mapFocus();
 	}
 	
 	@FXML
 	public Label stlabel;
+	
+	public void updateLabeLInfos() {
+		int n_s = 0;
+		int n_ms = 0;
+		int n_bs = 0;
+		int n_m = 0;
+		int n_g = 0;
+		int n_r = 0;
+		int n_b = 0;
+		int n_mark = 0;
+		int n_unmark = 0;
+		
+		int n_s_o = 0;
+		int n_s_s = 0;
+		int n_s_ms = 0;
+		int n_s_bs = 0;
+		int n_s_m = 0;
+		int n_s_g = 0;
+		int n_i_s = 0;
+		int n_wi_s = 0;
+		int n_wo_s = 0;
+		
+		n_b = BuildingList.size();
+		
+		for(Device device : DeviceList.devices) {
+			if(device.getType() == Device.MOBILE) {
+				n_m++;
+				if(device.isSelected()) n_s_m++;
+			}
+			if(device.getType() == Device.GAS) {
+				n_g++;
+				if(device.isSelected()) n_s_g++;
+			}
+			if(device.isSelected()) n_s_o++;
+		}
+		
+		for(SensorNode sensor : DeviceList.sensors) {
+			if(sensor.getNeighbors().size()==0) n_i_s++;
+			if(sensor.getScriptFileName().equals("")) n_wo_s++; else n_wi_s++;
+			
+			if(sensor.getType() == Device.SENSOR) {
+				n_s++;
+				if(sensor.isSelected()) n_s_s++;
+			}
+			if(sensor.getType() == Device.MEDIA_SENSOR) {
+				n_ms++;
+				if(sensor.isSelected()) n_s_ms++;
+			}
+			if(sensor.getType() == Device.BASE_STATION) {
+				n_bs++;
+				if(sensor.isSelected()) n_s_bs++;
+			}
+			if(sensor.isMarked()) n_mark++; else n_unmark++;
+			if(sensor.isSelected()) n_s_o++;
+		}
+		
+		n_r = new File(Project.getProjectGpsPath()).list().length;
+		
+		
+		labelInfo1.setText("Number of Sensors: " + n_s);		
+		labelInfo2.setText("Number of Media Sensors: " + n_ms);
+		labelInfo3.setText("Number of Base Stations: " + n_bs);
+		labelInfo4.setText("Number of Mobiles: " + n_m);
+		labelInfo5.setText("Number of Gas: " + n_g);
+		labelInfo6.setText("Number of Routes: " + n_r);
+		labelInfo7.setText("Number of Buildings: " + n_b);
+		labelInfo8.setText("Number of Marked Sensors: " + n_mark);
+		labelInfo9.setText("Number of Unmarked Sensors: " + n_unmark);
+		labelInfo10.setText("Number of Selected Objects:  " + n_s_o);
+		labelInfo11.setText("Number of Selected Sensors: " + n_s_s);
+		labelInfo12.setText("Number of Selected Media Sensors:  " + n_s_ms);
+		labelInfo13.setText("Number of Selected Base Stations: " + n_s_bs);
+		labelInfo14.setText("Number of Selected Mobiles: " + n_s_m);
+		labelInfo15.setText("Number of Selected Gas: " + n_s_g);
+		labelInfo16.setText("Number of Isolated Sensors:  " + n_i_s);
+		labelInfo17.setText("Number of Sensors with script: " + n_wi_s);
+		labelInfo18.setText("Number of Sensors without script: " + n_wo_s);
+	}
 	
 }

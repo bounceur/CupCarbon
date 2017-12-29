@@ -1,7 +1,7 @@
 package cupcarbon;
 
 public final class CupCarbonVersion {
-	public static final String VERSION = "3.5.3 (U-One)";
-	public static final String YEAR = "2017";
-	public static final int UPDATE = 16;
+	public static final String VERSION = "U-One 3.6";
+	public static final String YEAR = "2018";
+	public static final int UPDATE = 17;
 }

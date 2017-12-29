@@ -36,7 +36,6 @@ import senscript.SenScript;
 import simulation.SimulationInputs;
 import utilities.MapCalc;
 import utilities.UColor;
-import utilities._Constantes;
 import visibility.VisibilityZones;
 
 /**
@@ -44,7 +43,7 @@ import visibility.VisibilityZones;
  * @author Lounis Massinissa
  * @version 1.0
  */
-public abstract class Device extends MapObject implements Runnable, _Constantes, Cloneable {
+public abstract class Device extends MapObject implements Runnable, Cloneable {
 	
 	public static final boolean DEAD = false;
 	public static final boolean ALIVE = true;
