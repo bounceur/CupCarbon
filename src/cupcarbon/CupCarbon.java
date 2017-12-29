@@ -63,19 +63,14 @@ public class CupCarbon extends Application {
 		}
 		
 		CupActionStack.init();
-		
-		
-		
 		setProxy();
 		
-		setUserAgentStylesheet(STYLESHEET_MODENA);
-		
+		setUserAgentStylesheet(STYLESHEET_MODENA);		
 	    
 		mainStage.setTitle("CupCarbon "+CupCarbonVersion.VERSION);
 		mainStage.getIcons().add(new Image(getClass().getResourceAsStream("cupcarbon_logo_small.png")));		
 		//stage.setMaximized(true);
 		FXMLLoader loader = new FXMLLoader();
-		
 		
 		loader.setLocation(getClass().getResource("cupcarbon.fxml"));
 		BorderPane panneau = (BorderPane) loader.load();
