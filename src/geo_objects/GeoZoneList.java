@@ -13,7 +13,7 @@ import utilities.Geometry;
  * @version 1.0
  */
 
-public class GeoZoneList extends Thread {
+public class GeoZoneList {
 
 	private LinkedList<GeoZone> zones = null;
 	private double longitude;

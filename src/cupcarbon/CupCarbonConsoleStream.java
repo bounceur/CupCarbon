@@ -5,11 +5,11 @@ import java.io.OutputStream;
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 
-public class CupCarbonConsole extends OutputStream {
+public class CupCarbonConsoleStream extends OutputStream {
     
 	private TextArea textArea ;
 	
-	public CupCarbonConsole(TextArea textArea) {
+	public CupCarbonConsoleStream(TextArea textArea) {
 		this.textArea = textArea;
 	}
 	

@@ -72,7 +72,6 @@ import javafx.application.Platform;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.paint.Color;
 import simulation.SimulationInputs;
 import simulation.WisenSimulation;
 
@@ -144,8 +143,6 @@ public class CupCommand_SIMULATION extends CupCommand {
 					public void run() {
 						CupCarbon.cupCarbonController.runSimulationButton.setDisable(false);
 						CupCarbon.cupCarbonController.qRunSimulationButton.setDisable(false);
-						CupCarbon.cupCarbonController.stateLabel.setText("END!");
-						CupCarbon.cupCarbonController.monitor.setFill(Color.YELLOWGREEN);
 						wisenSimulation.stopSimulation();
 						CupCarbon.cupCarbonController.mapFocus();
 					}

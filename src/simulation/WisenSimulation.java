@@ -43,7 +43,6 @@ import device.SensorNode;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.paint.Color;
 import map.MapLayer;
 import markers.Routes;
 import project.Project;
@@ -205,13 +204,11 @@ public class WisenSimulation implements Runnable {
 							alert.showAndWait();
 						}
 					});
-					CupCarbon.cupCarbonController.monitor.setFill(Color.GREENYELLOW);
 					break;
 				}
 				
 				if(stopCondition) {
 					System.out.println("Simulation stopped!");
-					CupCarbon.cupCarbonController.monitor.setFill(Color.GREENYELLOW);
 					break;
 				}
 				
@@ -229,7 +226,6 @@ public class WisenSimulation implements Runnable {
 							alert.showAndWait();
 						}
 					});
-					CupCarbon.cupCarbonController.monitor.setFill(Color.GREENYELLOW);
 					break;
 				}
 				
@@ -554,8 +550,6 @@ public class WisenSimulation implements Runnable {
 				CupCarbon.cupCarbonController.qRunSimulationButton.setDisable(false);
 				CupCarbon.cupCarbonController.qRunSimulationButton.setDefaultButton(true);
 				CupCarbon.cupCarbonController.qStopSimulationButton.setDefaultButton(false);
-				CupCarbon.cupCarbonController.monitor.setFill(Color.YELLOWGREEN);
-				CupCarbon.cupCarbonController.stateLabel.setText("Ready");
 				CupCarbon.cupCarbonController.updateLabeLInfos();
 			}
 		});				

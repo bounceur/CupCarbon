@@ -80,6 +80,7 @@ import simulation.SimulationInputs;
 import simulation.WisenSimulation;
 import utilities.MapCalc;
 import utilities.UColor;
+import visibility.VisibilityLauncher;
 
 public class MapLayer implements Painter<Object>, MouseListener, MouseMotionListener, KeyListener {
 
@@ -720,6 +721,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			CupActionStack.execute(); 
 		}
 
+		VisibilityLauncher.calculate();
 	}
 	
 	@Override

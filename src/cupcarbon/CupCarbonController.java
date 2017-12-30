@@ -101,7 +101,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -540,11 +539,11 @@ public class CupCarbonController implements Initializable {
 
 		initMap();
 
-		CupCarbonConsole consoleOut = new CupCarbonConsole(textOut);
+		CupCarbonConsoleStream consoleOut = new CupCarbonConsoleStream(textOut);
 		PrintStream ps1 = new PrintStream(consoleOut, true);
 		System.setOut(ps1);
 		
-		CupCarbonConsole consoleErr = new CupCarbonConsole(textErr);
+		CupCarbonConsoleStream consoleErr = new CupCarbonConsoleStream(textErr);
 		PrintStream ps2 = new PrintStream(consoleErr, true);
 		System.setErr(ps2);
 		
@@ -763,8 +762,7 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				VisibilityLauncher visibility = new VisibilityLauncher();
-				visibility.run();
+				VisibilityLauncher.calculateForSelected();
 			}
 		});
 	}
@@ -781,8 +779,6 @@ public class CupCarbonController implements Initializable {
 				qStopSimulationButton.setDefaultButton(false);
 				runSimulationButton.setDisable(false);
 				qRunSimulationButton.setDisable(false);
-				stateLabel.setText("Ready");
-				CupCarbon.cupCarbonController.monitor.setFill(Color.YELLOWGREEN);
 				if (wisenSimulation != null)
 					wisenSimulation.stopSimulation();
 				mapFocus();
@@ -803,8 +799,6 @@ public class CupCarbonController implements Initializable {
 					qStopSimulationButton.setDefaultButton(true);
 					runSimulationButton.setDisable(true);
 					qRunSimulationButton.setDisable(true);
-					stateLabel.setText("Simulating...");
-					monitor.setFill(Color.ORANGERED);
 					simulationParametersApply();
 					wisenSimulation = new WisenSimulation();
 					if (wisenSimulation.ready()) {
@@ -2912,12 +2906,6 @@ public class CupCarbonController implements Initializable {
 	}
 
 	@FXML
-	public Circle monitor;
-
-	@FXML
-	public Label stateLabel;
-
-	@FXML
 	public Button runSimulationButton;
 
 	@FXML
@@ -3227,81 +3215,84 @@ public class CupCarbonController implements Initializable {
 	public Label stlabel;
 	
 	public void updateLabeLInfos() {
-		int n_s = 0;
-		int n_ms = 0;
-		int n_bs = 0;
-		int n_m = 0;
-		int n_g = 0;
-		int n_r = 0;
-		int n_b = 0;
-		int n_mark = 0;
-		int n_unmark = 0;
-		
-		int n_s_o = 0;
-		int n_s_s = 0;
-		int n_s_ms = 0;
-		int n_s_bs = 0;
-		int n_s_m = 0;
-		int n_s_g = 0;
-		int n_i_s = 0;
-		int n_wi_s = 0;
-		int n_wo_s = 0;
-		
-		n_b = BuildingList.size();
-		
-		for(Device device : DeviceList.devices) {
-			if(device.getType() == Device.MOBILE) {
-				n_m++;
-				if(device.isSelected()) n_s_m++;
-			}
-			if(device.getType() == Device.GAS) {
-				n_g++;
-				if(device.isSelected()) n_s_g++;
-			}
-			if(device.isSelected()) n_s_o++;
-		}
-		
-		for(SensorNode sensor : DeviceList.sensors) {
-			if(sensor.getNeighbors().size()==0) n_i_s++;
-			if(sensor.getScriptFileName().equals("")) n_wo_s++; else n_wi_s++;
+		Platform.runLater(() -> {
+			int n_s = 0;
+			int n_ms = 0;
+			int n_bs = 0;
+			int n_m = 0;
+			int n_g = 0;
+			int n_r = 0;
+			int n_b = 0;
+			int n_mark = 0;
+			int n_unmark = 0;
 			
-			if(sensor.getType() == Device.SENSOR) {
-				n_s++;
-				if(sensor.isSelected()) n_s_s++;
+			int n_s_o = 0;
+			int n_s_s = 0;
+			int n_s_ms = 0;
+			int n_s_bs = 0;
+			int n_s_m = 0;
+			int n_s_g = 0;
+			int n_i_s = 0;
+			int n_wi_s = 0;
+			int n_wo_s = 0;
+			
+			n_b = BuildingList.size();
+			
+			for(Device device : DeviceList.devices) {
+				if(device.getType() == Device.MOBILE) {
+					n_m++;
+					if(device.isSelected()) n_s_m++;
+				}
+				if(device.getType() == Device.GAS) {
+					n_g++;
+					if(device.isSelected()) n_s_g++;
+				}
+				if(device.isSelected()) n_s_o++;
 			}
-			if(sensor.getType() == Device.MEDIA_SENSOR) {
-				n_ms++;
-				if(sensor.isSelected()) n_s_ms++;
+			
+			for(SensorNode sensor : DeviceList.sensors) {
+				if(sensor.getNeighbors().size()==0) n_i_s++;
+				if(sensor.getScriptFileName().equals("")) n_wo_s++; else n_wi_s++;
+				
+				if(sensor.getType() == Device.SENSOR) {
+					n_s++;
+					if(sensor.isSelected()) n_s_s++;
+				}
+				if(sensor.getType() == Device.MEDIA_SENSOR) {
+					n_ms++;
+					if(sensor.isSelected()) n_s_ms++;
+				}
+				if(sensor.getType() == Device.BASE_STATION) {
+					n_bs++;
+					if(sensor.isSelected()) n_s_bs++;
+				}
+				if(sensor.isMarked()) n_mark++; else n_unmark++;
+				if(sensor.isSelected()) n_s_o++;
 			}
-			if(sensor.getType() == Device.BASE_STATION) {
-				n_bs++;
-				if(sensor.isSelected()) n_s_bs++;
-			}
-			if(sensor.isMarked()) n_mark++; else n_unmark++;
-			if(sensor.isSelected()) n_s_o++;
-		}
-		
-		n_r = new File(Project.getProjectGpsPath()).list().length;
-		
-		
-		labelInfo1.setText("Number of Sensors: " + n_s);		
-		labelInfo2.setText("Number of Media Sensors: " + n_ms);
-		labelInfo3.setText("Number of Base Stations: " + n_bs);
-		labelInfo4.setText("Number of Mobiles: " + n_m);
-		labelInfo5.setText("Number of Gas: " + n_g);
-		labelInfo6.setText("Number of Routes: " + n_r);
-		labelInfo7.setText("Number of Buildings: " + n_b);
-		labelInfo8.setText("Number of Marked Sensors: " + n_mark);
-		labelInfo9.setText("Number of Unmarked Sensors: " + n_unmark);
-		labelInfo10.setText("Number of Selected Objects:  " + n_s_o);
-		labelInfo11.setText("Number of Selected Sensors: " + n_s_s);
-		labelInfo12.setText("Number of Selected Media Sensors:  " + n_s_ms);
-		labelInfo13.setText("Number of Selected Base Stations: " + n_s_bs);
-		labelInfo14.setText("Number of Selected Mobiles: " + n_s_m);
-		labelInfo15.setText("Number of Selected Gas: " + n_s_g);
-		labelInfo16.setText("Number of Isolated Sensors:  " + n_i_s);
-		labelInfo17.setText("Number of Sensors with script: " + n_wi_s);
-		labelInfo18.setText("Number of Sensors without script: " + n_wo_s);
+
+			File f = new File(Project.getProjectGpsPath()); 
+			if(f.list() != null)
+				n_r = new File(Project.getProjectGpsPath()).list().length;
+			
+			labelInfo1.setText("Number of Sensors: " + n_s);		
+			labelInfo2.setText("Number of Media Sensors: " + n_ms);
+			labelInfo3.setText("Number of Base Stations: " + n_bs);
+			labelInfo4.setText("Number of Mobiles: " + n_m);
+			labelInfo5.setText("Number of Gas: " + n_g);
+			labelInfo6.setText("Number of Routes: " + n_r);
+			labelInfo7.setText("Number of Buildings: " + n_b);
+			labelInfo8.setText("Number of Marked Sensors: " + n_mark);
+			labelInfo9.setText("Number of Unmarked Sensors: " + n_unmark);
+			labelInfo10.setText("Number of Selected Objects:  " + n_s_o);
+			labelInfo11.setText("Number of Selected Sensors: " + n_s_s);
+			labelInfo12.setText("Number of Selected Media Sensors:  " + n_s_ms);
+			labelInfo13.setText("Number of Selected Base Stations: " + n_s_bs);
+			labelInfo14.setText("Number of Selected Mobiles: " + n_s_m);
+			labelInfo15.setText("Number of Selected Gas: " + n_s_g);
+			labelInfo16.setText("Number of Isolated Sensors:  " + n_i_s);
+			labelInfo17.setText("Number of Sensors with script: " + n_wi_s);
+			labelInfo18.setText("Number of Sensors without script: " + n_wo_s);
+		});
 	}
 	
 }

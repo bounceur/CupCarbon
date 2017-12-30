@@ -26,29 +26,27 @@
 
 package visibility;
 
-import cupcarbon.CupCarbon;
 import device.DeviceList;
 import device.SensorNode;
-import javafx.scene.paint.Color;
-import map.MapLayer;
 
 /**
  * @author Ahcene Bounceur
- * @version 1
+ * @version 2
  */
 
-public class VisibilityLauncher extends Thread {
+public class VisibilityLauncher {
 
-	@Override
-	public void run() {
-
+	public static void calculate() {
 		//-----------------------------------------------------------------------------------------
-		// Switch on the led (on the ihm) to show that the process of calculating the 
-		// visibility is started
+		// Calculate the visiblity zone for each sensor node
 		//-----------------------------------------------------------------------------------------
-		CupCarbon.cupCarbonController.monitor.setFill(Color.ORANGERED);
-		CupCarbon.cupCarbonController.stateLabel.setText("Calculating ...");
-
+		for (SensorNode sensor : DeviceList.sensors) {
+			VisibilityZones vz = new VisibilityZones(sensor);
+			vz.start();
+		}
+	}
+	
+	public static void calculateForSelected() {
 		//-----------------------------------------------------------------------------------------
 		// Calculate the visiblity zone for each selected sensor node
 		//-----------------------------------------------------------------------------------------
@@ -59,23 +57,6 @@ public class VisibilityLauncher extends Thread {
 			}
 			
 		}
-		
-		//-----------------------------------------------------------------------------------------
-		// Onces the visibility calculation process is finished, if the mode of the propagation 
-		// is activated, we recalculate the propagation 
-		//-----------------------------------------------------------------------------------------
-		if (DeviceList.propagationsCalculated)
-			DeviceList.calculatePropagations();
-		MapLayer.repaint();
-
-		//-----------------------------------------------------------------------------------------
-		// Switch off the led (on the ihm) to show that the process of calculating the 
-		// visibility is finished
-		//-----------------------------------------------------------------------------------------
-		CupCarbon.cupCarbonController.monitor.setFill(Color.YELLOWGREEN);
-		CupCarbon.cupCarbonController.stateLabel.setText("Ready");
-		CupCarbon.cupCarbonController.mapFocus();
-
 	}
 
 }
