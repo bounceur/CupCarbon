@@ -23,6 +23,7 @@ public abstract class SenScriptCondition {
 		String[] tCondition = condition.split("<=",2);
 		
 		tReturn[2] = "<="; 
+		
 		if(tCondition.length==1) {
 			tCondition = tCondition[0].split(">=");
 			tReturn[2] = ">=";

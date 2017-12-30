@@ -131,6 +131,9 @@ public class CupCarbonController implements Initializable {
 	protected FaultInjector faultInjector = null;
 
 	@FXML
+	public TitledPane consolePane ;
+	
+	@FXML
 	private Label labelInfo1 ;
 	
 	@FXML
@@ -537,7 +540,7 @@ public class CupCarbonController implements Initializable {
 		PrintStream ps1 = new PrintStream(consoleOut, true);
 		System.setOut(ps1);
 		
-		CupCarbonConsoleStream consoleErr = new CupCarbonConsoleStream(textErr);
+		CupCarbonErrConsoleStream consoleErr = new CupCarbonErrConsoleStream(textErr);
 		PrintStream ps2 = new PrintStream(consoleErr, true);
 		System.setErr(ps2);
 		
@@ -1031,21 +1034,6 @@ public class CupCarbonController implements Initializable {
 		}
 	}
 
-	public void displayInformation(String s) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				textReady.setText(s);
-				textReady.setVisible(true);
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {}
-				textReady.setVisible(false);
-			}
-		}).start();
-	}
-	
-	
 	@FXML
 	public void openProject() {
 		Platform.runLater(new Runnable() {
@@ -1061,7 +1049,7 @@ public class CupCarbonController implements Initializable {
 					Project.openProject(file.getParentFile().toString(), file.getName().toString());
 					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getAbsolutePath().toString() + "]");
 					openProjectLoadParameters();
-					displayInformation(file.getName());
+					displayShortMessage(file.getName());
 				}
 			}
 		});
@@ -3076,7 +3064,7 @@ public class CupCarbonController implements Initializable {
 					String path = s.split("#")[0];
 					String name = s.split("#")[1];
 					
-					displayInformation(name);
+					displayShortMessage(name);
 					
 					br.close();
 
@@ -3088,7 +3076,7 @@ public class CupCarbonController implements Initializable {
 					System.err.println("Error in recent.rec file");
 				} catch (NullPointerException e) {
 					System.err.println("No recent files");
-					displayInformation("No recent files.");
+					displayShortMessage("No recent files.");
 				}
 				openProjectLoadParameters();
 			}
@@ -3220,6 +3208,52 @@ public class CupCarbonController implements Initializable {
 			labelInfo17.setText("Number of Sensors with script: " + n_wi_s);
 			labelInfo18.setText("Number of Sensors without script: " + n_wo_s);
 		});
+	}
+	
+	public void displayLongMessage(String s) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				textReady.setFill(new Color(0.4,0.52,0.75,0.5));
+				textReady.setText(s);
+				textReady.setVisible(true);
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {}
+				textReady.setVisible(false);
+			}
+		}).start();
+	}
+	
+	public void displayShortMessage(String s) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				textReady.setFill(new Color(0.4,0.52,0.75,0.5));
+				textReady.setText(s);
+				textReady.setVisible(true);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {}
+				textReady.setVisible(false);
+			}
+		}).start();
+	}
+	
+	public void displayShortErrMessage(String s) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				textReady.setFill(new Color(1,0,0,0.5));
+				textReady.setText(s);
+				textReady.setVisible(true);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {}
+				textReady.setVisible(false);
+				consolePane.setExpanded(true);
+			}
+		}).start();
 	}
 	
 }

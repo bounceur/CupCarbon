@@ -428,8 +428,8 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			button3Clicked = true;
 			mapViewer.setPanEnabled(false);
 			startSelection = true;
-			cadreX1 = e.getX();
-			cadreY1 = e.getY();
+			_cadreX1 = e.getX();
+			_cadreY1 = e.getY();
 		}
 		else {
 			int nbSelected = 0;
@@ -543,11 +543,29 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	}
 	
 	private boolean dragging = false;
+	public int _cadreX1 = 0;
+	public int _cadreY1 = 0;
+	public int _cadreX2 = 0;
+	public int _cadreY2 = 0;
+	
 	@Override
 	public void mouseDragged(MouseEvent e) {		
 		if (shiftDown || e.getButton()==MouseEvent.BUTTON3) {
-			cadreX2 = e.getX();
-			cadreY2 = e.getY();
+			_cadreX2 = e.getX();
+			_cadreY2 = e.getY();
+			
+			int mx1 = Math.min(_cadreX1, _cadreX2);
+			int my1 = Math.min(_cadreY1, _cadreY2);
+			int mx2 = Math.max(_cadreX1, _cadreX2);
+			int my2 = Math.max(_cadreY1, _cadreY2);
+			
+			cadreX1 = mx1;
+			cadreY1 = my1;
+			cadreX2 = mx2;
+			cadreY2 = my2;
+			
+			System.out.println();
+			
 			drawSelectionRectangle = true;
 			repaint();
 		}

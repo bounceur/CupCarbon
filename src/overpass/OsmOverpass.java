@@ -46,13 +46,12 @@ public class OsmOverpass {
 	protected double bottomLeftLng; 
 	protected double topRightLat;
 	protected double topRightLng;
-	//public static boolean isLoading = false;
 	
 	public OsmOverpass(double bottomLeftLat, double bottomLeftLng, double topRightLat, double topRightLng) {
-		this.bottomLeftLat = bottomLeftLat; 
-		this.bottomLeftLng = bottomLeftLng; 
-		this.topRightLat = topRightLat;
-		this.topRightLng = topRightLng;
+		this.bottomLeftLat = Math.min(bottomLeftLat, topRightLat); 
+		this.bottomLeftLng = Math.min(bottomLeftLng, topRightLng);
+		this.topRightLat = Math.max(bottomLeftLat, topRightLat);
+		this.topRightLng = Math.max(bottomLeftLng, topRightLng);
 	}
 	
 	public void load(){
@@ -64,18 +63,15 @@ public class OsmOverpass {
 				    URL url = new URL("http://overpass-api.de/api/map?bbox="+bottomLeftLat+","+bottomLeftLng+","+topRightLat+","+topRightLng);
 				    System.out.println(url);		
 				    System.out.println("[Buildings] File downloading...");		    
-				    
 				    Osm data = (Osm) JAXBContext.newInstance(Osm.class).createUnmarshaller().unmarshal( url );
 				    System.out.println("[Buildings] File downloaded.");
 				    System.out.println("[Buildings] Processing...");
-
 					List<OsmWay> ways= data.getWay();
 					List<OsmNode> nodes= data.getNode();
 					List<OsmNd> nds;
 					Building building;
 					
-					
-					CupActionBlock block = new CupActionBlock();			
+					CupActionBlock block = new CupActionBlock();
 					
 			        for(OsmWay way:ways){ // For each shape
 			        	if (way.isBuilding()){
