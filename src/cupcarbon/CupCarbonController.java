@@ -3240,6 +3240,21 @@ public class CupCarbonController implements Initializable {
 		}).start();
 	}
 	
+	public void displayShortGoodMessage(String s) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				textReady.setFill(new Color(0.2,0.72,0.1,0.5));
+				textReady.setText(s);
+				textReady.setVisible(true);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {}
+				textReady.setVisible(false);
+			}
+		}).start();
+	}
+	
 	public void displayShortErrMessage(String s) {
 		new Thread(new Runnable() {
 			@Override
