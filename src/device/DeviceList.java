@@ -987,14 +987,14 @@ public class DeviceList {
 		boolean selection = false;
 		for (SensorNode node : sensors) {
 			node.setSelected(false);
-			if (MapLayer.insideSelection(node.getLongitude(), node.getLatitude(), cadreX1, cadreX2, cadreY1, cadreY2)) {
+			if (MapLayer.insideSelection(node.getLongitude(), node.getLatitude(), cadreX1, cadreY1, cadreX2, cadreY2)) {
 				node.setSelected(true);
 				selection = true;
 			}
 		}
 		for (Device node : devices) {
 			node.setSelected(false);
-			if (MapLayer.insideSelection(node.getLongitude(), node.getLatitude(), cadreX1, cadreX2, cadreY1, cadreY2)) {
+			if (MapLayer.insideSelection(node.getLongitude(), node.getLatitude(), cadreX1, cadreY1, cadreX2, cadreY2)) {
 				node.setSelected(true);
 				selection = true;
 			}

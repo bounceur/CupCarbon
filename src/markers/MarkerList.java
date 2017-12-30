@@ -294,7 +294,7 @@ public class MarkerList {
 		for (Iterator<Marker> iterator = markers.iterator(); iterator.hasNext();) {
 			marker = iterator.next();
 			marker.setSelected(false);
-			if (MapLayer.insideSelection(marker.getLongitude(), marker.getLatitude(), cadreX1, cadreX2, cadreY1, cadreY2)) {
+			if (MapLayer.insideSelection(marker.getLongitude(), marker.getLatitude(), cadreX1, cadreY1, cadreX2, cadreY2)) {
 				marker.setSelected(true);
 				selection = true;
 			}

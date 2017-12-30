@@ -63,8 +63,6 @@ import fault_injection.FaultInjector;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingNode;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -77,7 +75,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
@@ -87,7 +84,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
@@ -96,8 +92,6 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -1072,6 +1066,10 @@ public class CupCarbonController implements Initializable {
 			}
 		});
 	}
+	
+	public void createContextMenu() {
+		CupCarbonContextMenu.create(sn, CupCarbonController.this);
+	}
 
 	public void openProjectLoadParameters() {
 		CupCarbon.cupCarbonController.simulationParametersApply();
@@ -1079,6 +1077,7 @@ public class CupCarbonController implements Initializable {
 		getListOfRoutes();
 		updateObjectListView();
 		initScriptGpsEventComboBoxes();
+		createContextMenu();
 		mapFocus();
 	}
 
@@ -1093,7 +1092,6 @@ public class CupCarbonController implements Initializable {
 		System.exit(0);
 	}
 
-	private boolean drag = false;
 	public void initMap() {
 		CupCarbon.cupCarbonController = this;
 		map = new WorldMap();
@@ -1105,80 +1103,6 @@ public class CupCarbonController implements Initializable {
 		map.getZoomSlider().setPaintTicks(false);
 
 		sn.setContent(map);
-		
-        ContextMenu contextMenu = new ContextMenu();
-        MenuItem item1 = new MenuItem("Add a Sensor Node");
-        item1.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            	addSensor();
-            }
-        });
-        MenuItem item2 = new MenuItem("Add a Marker");
-        item2.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            	addMarker();
-            }
-        });
-        MenuItem item3 = new MenuItem("Add a Base Station");
-        item3.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            	addBaseStation();
-            }
-        });
-        MenuItem item4 = new MenuItem("Add a Mobile");
-        item4.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            	addMobile();
-            }
-        });
-        MenuItem item5 = new MenuItem("Route from Markers");
-        item5.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            	routeFromMarkers();
-            }
-        });
-        
-        MenuItem item6 = new MenuItem("SensScript");
-        item6.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            	openSenScriptWindow();
-            }
-        });
-        
-        SeparatorMenuItem menuSep1 = new SeparatorMenuItem();
-        SeparatorMenuItem menuSep2 = new SeparatorMenuItem();
-        
-        contextMenu.getItems().addAll(item1, item6, menuSep1, item2, item5, menuSep2, item3, item4);
-
-        sn.setOnMouseDragged(new EventHandler<MouseEvent>() {
-        	@Override
-			public void handle(MouseEvent event) {
-				if(event.getButton()==MouseButton.SECONDARY) {
-					drag = true;
-				}
-			}
-        });
-        
-        sn.setOnMouseReleased(new EventHandler<MouseEvent>() {
-        	@Override
-            public void handle(MouseEvent event) {
-        		if(!drag)
-        			if(event.getButton()==MouseButton.SECONDARY) { 
-        				if(MapLayer.lastKey==0)
-        					contextMenu.show(sn, event.getScreenX(), event.getScreenY());
-        			}
-    				else
-    					contextMenu.hide();
-        		drag = false;
-        		updateLabeLInfos();
-            }
-        });
 		
 		sn.requestFocus();
 		
@@ -2322,6 +2246,8 @@ public class CupCarbonController implements Initializable {
 		eventListView.getSelectionModel().selectAll();
 		initScriptGpsEventComboBoxes();
 		MapLayer.multipleSelection = true;
+		getNodeInformations();
+		MapLayer.lastKey=0;
 		mapFocus();
 	}
 
@@ -3157,11 +3083,12 @@ public class CupCarbonController implements Initializable {
 					Project.openProject(path, name);
 					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + path + "]");
 				} catch (FileNotFoundException e) {
-					System.err.println("recent.rec doesn't exist");
+					System.err.println("Recent.rec doesn't exist");
 				} catch (IOException e) {
-					System.err.println("error in recent.rec file");
+					System.err.println("Error in recent.rec file");
 				} catch (NullPointerException e) {
-					System.err.println("no recent files");
+					System.err.println("No recent files");
+					displayInformation("No recent files.");
 				}
 				openProjectLoadParameters();
 			}

@@ -435,6 +435,7 @@ public class WisenSimulation implements Runnable {
 		long endTime = System.currentTimeMillis();
 		System.out.println();
 		System.out.println("End of Simulation.");
+		CupCarbon.cupCarbonController.displayInformation("End of Simulation.");
 		System.out.println(((endTime - startTime) / 1000.) + " sec");
 		
 		isSimulating = false;

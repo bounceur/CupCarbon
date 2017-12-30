@@ -153,12 +153,8 @@ public class SenScriptController implements Initializable{
 				}
 				
 				CupCarbon.cupCarbonController.initScriptGpsEventComboBoxes();
+				CupCarbon.cupCarbonController.createContextMenu();
 				
-//				Alert alert = new Alert(AlertType.INFORMATION);
-//				alert.setTitle("Save Script File!");
-//				alert.setHeaderText(null);
-//				alert.setContentText("File saved !");
-//				alert.showAndWait();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}

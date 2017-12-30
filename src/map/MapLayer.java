@@ -310,7 +310,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {		
-		if(e.getButton()==MouseEvent.BUTTON3) {
+		if(e.getButton()==MouseEvent.BUTTON3 && lastKey != 0) {
 			DeviceList.deselectAll();
 			lastKey = 0;
 		}
@@ -648,21 +648,15 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			mousePressed = false;
 			lastKeyCode = 0;
 			startSelection = false;
-			drawSelectionRectangle = false;
+			
 			MapLayer.multipleSelection = true;
 			
-			
-			//GeoPosition gp1 = mapViewer.convertPointToGeoPosition(new Point(cadreX1, cadreY1));
-			//GeoPosition gp2 = mapViewer.convertPointToGeoPosition(new Point(cadreX2, cadreY2));
-			//int [] coord1 = MapCalc.geoToPixelMapA(gp1.getLatitude(), gp1.getLongitude());
-			//int [] coord2 = MapCalc.geoToPixelMapA(gp2.getLatitude(), gp2.getLongitude());
-			//System.out.println(coord1[0]+" "+coord1[1]);
-			//System.out.println(coord2[0]+" "+coord2[1]);
-			
-			nodeList.selectInsideRectangle(cadreX1, cadreX2, cadreY1, cadreY2);
-			markerList.selectInsideRectangle(cadreX1, cadreX2, cadreY1, cadreY2);
-			buildingList.selectInsideRectangle(cadreX1, cadreY1, cadreX2, cadreY2);
-			
+			if (drawSelectionRectangle) {
+				nodeList.selectInsideRectangle(cadreX1, cadreY1, cadreX2, cadreY2);
+				markerList.selectInsideRectangle(cadreX1, cadreY1, cadreX2, cadreY2);
+				buildingList.selectInsideRectangle(cadreX1, cadreY1, cadreX2, cadreY2);
+			}
+			drawSelectionRectangle = false;
 			repaint();
 		}
 		mousePressed = false;
@@ -777,13 +771,6 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		if (key.getKeyChar() == 'm') {
 			NetworkParameters.displayRadioMessages = !NetworkParameters.displayRadioMessages ;
 		}
-		
-//		if (key.isShiftDown()) {
-//			shiftDown = true;
-//		}
-//		
-//		if (key.isAltDown())
-//			altDown = true;
 		
 		if (key.getKeyCode() == 27) { // escape
 			addActionAfterMoving();
