@@ -33,7 +33,7 @@ import utilities.UColor;
  */
 public class Battery implements Cloneable {
 
-	public double eMax = 9580*2;
+	public double eMax = 19160; // 9580*2 -> 2AA batteries
 	private double level = eMax;
 	private SensorNode sensorNode;
 

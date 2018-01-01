@@ -4,13 +4,18 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.io.PrintStream;
 
-import cupcarbon.CupCarbon;
 import device.DeviceList;
 import device.SensorNode;
+import enegy_conso_model.EnergyConsumptionModel;
 import utilities.UColor;
 
 public abstract class RadioModule {
 
+	public static final String CLASSICAL_TX = "Classical (Tx)";
+	public static final String CLASSICAL_RX = "Classical (Rx)";
+	public static final String HEINZELMAN_TX = "Heinzelman (Tx)";
+	public static final String HEINZELMAN_RX = "Heinzelman (Rx)";
+	
 	protected String name ;
 	protected int radioDataRate = 250000; // zigbee: default
 	
@@ -29,6 +34,9 @@ public abstract class RadioModule {
 	protected double pl = 100;
 	protected int ch = 0x0;
 	protected int nId = 0x3334;
+	
+	protected String radioConsoTxModel = CLASSICAL_TX;
+	protected String radioConsoRxModel = CLASSICAL_RX;
 	
 	protected double timeToResend = 3.01;//0.001 ;
 	protected int numberOfSends = 3 ;
@@ -110,11 +118,16 @@ public abstract class RadioModule {
 	 * @param numberOfBits
 	 */
 	public void consumeTx(int numberOfBits) {
-		if(CupCarbon.cupCarbonController.classicRg.isSelected())
+		if(radioConsoTxModel.equals(CLASSICAL_TX)) {
 			sensorNode.getBattery().consume((numberOfBits/8.0) * eTx * pl/100.);
-		
-		if(CupCarbon.cupCarbonController.henzRg.isSelected()) 
-			sensorNode.getBattery().consume(50e-9*numberOfBits + 100e-12*numberOfBits * (radioRangeRadius*pl/100.));		
+			return;
+		}	
+		if(radioConsoTxModel.equals(HEINZELMAN_TX)) { 
+			sensorNode.getBattery().consume(0.00000005*numberOfBits + 0.0000000001*numberOfBits * (radioRangeRadius*pl/100.));
+			return;
+		}
+		double v = EnergyConsumptionModel.evaluate(radioConsoTxModel, pl/100., numberOfBits, eTx, radioRangeRadius);
+		sensorNode.getBattery().consume(v);
 	}
 	
 	/**
@@ -123,30 +136,19 @@ public abstract class RadioModule {
 	 * @param v
 	 */
 	public void consumeRx(int numberOfBits) {
-		if(CupCarbon.cupCarbonController.classicRg.isSelected())
+		if(radioConsoRxModel.equals(CLASSICAL_RX)) {
 			sensorNode.getBattery().consume((numberOfBits/8.0) * eRx);
+			return;
+		}
 		
-		if(CupCarbon.cupCarbonController.henzRg.isSelected()) 
-			sensorNode.getBattery().consume(50e-9*numberOfBits);
+		if(radioConsoRxModel.equals(HEINZELMAN_RX)) { 
+			sensorNode.getBattery().consume(0.00000005*numberOfBits);
+			return;
+		}
+		
+		double v = EnergyConsumptionModel.evaluate(radioConsoRxModel, pl/100., numberOfBits, eRx, radioRangeRadius);
+		sensorNode.getBattery().consume(v);
 	}
-	
-	
-	/**
-	 * ConsumeTx v units
-	 * 
-	 * @param v
-	 */
-	public void consumeTx(double v) {
-	}
-	
-	/**
-	 * ConsumeRx v units
-	 * 
-	 * @param v
-	 */
-	public void consumeRx(double v) {
-	}
-
 	
 	public void setMy(int my) {
 		this.my = my;
@@ -343,4 +345,20 @@ public abstract class RadioModule {
 	}
 	
 	public void setSpreadingFactor(int v) {}
+	
+	public void setRadioConsoTxModel(String model) {
+		radioConsoTxModel = model;
+	}
+	
+	public String getRadioConsoTxModel() {
+		return radioConsoTxModel;
+	}
+	
+	public void setRadioConsoRxModel(String model) {
+		radioConsoRxModel = model;
+	}
+	
+	public String getRadioConsoRxModel() {
+		return radioConsoRxModel;
+	}
 }

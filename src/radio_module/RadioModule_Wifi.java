@@ -49,6 +49,8 @@ public class RadioModule_Wifi extends RadioModule {
 		nRadioModule.setESleep(getESleep());
 		nRadioModule.setEListen(getEListen());
 		nRadioModule.setRadioDataRate(getRadioDataRate());
+		nRadioModule.setRadioConsoTxModel(getRadioConsoTxModel());
+		nRadioModule.setRadioConsoRxModel(getRadioConsoRxModel());
 		return nRadioModule;
 	}
 
@@ -72,5 +74,7 @@ public class RadioModule_Wifi extends RadioModule {
 		fos.println("radio_esleep:" + getESleep());
 		fos.println("radio_elisten:" + getEListen());
 		fos.println("radio_data_rate:" + getRadioDataRate());
+		fos.println("conso_tx_model:" + getRadioConsoTxModel());
+		fos.println("conso_rx_model:" + getRadioConsoRxModel());
 	}
 }

@@ -56,6 +56,8 @@ public class RadioModule_Lora extends RadioModule {
 		nRadioModule.setEListen(getEListen());
 		nRadioModule.setRadioDataRate(getRadioDataRate());
 		nRadioModule.setSpreadingFactor(getSpreadingFactor());
+		nRadioModule.setRadioConsoTxModel(getRadioConsoTxModel());
+		nRadioModule.setRadioConsoRxModel(getRadioConsoRxModel());
 		return nRadioModule;
 	}
 	
@@ -80,6 +82,8 @@ public class RadioModule_Lora extends RadioModule {
 		fos.println("radio_elisten:" + getEListen());
 		fos.println("radio_data_rate:" + getRadioDataRate());
 		fos.println("spreading_factor:" + getSpreadingFactor());
+		fos.println("conso_tx_model:" + getRadioConsoTxModel());
+		fos.println("conso_rx_model:" + getRadioConsoRxModel());
 	}
 	
 	public int getSpreadingFactor() {

@@ -222,9 +222,8 @@ public abstract class DeviceWithWithoutRadio extends Device {
 				if (!loop || nLoop == 0) {
 					routeIndex--;
 				} else {
-					routeIndex = 0;
+					routeIndex = 1;
 				}
-
 			}
 			if (DeviceList.propagationsCalculated)
 				DeviceList.calculatePropagations();

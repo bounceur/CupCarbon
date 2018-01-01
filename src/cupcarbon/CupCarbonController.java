@@ -29,6 +29,8 @@ import action.CupActionModifDeviceNatEventFile;
 import action.CupActionModifDeviceRadius;
 import action.CupActionModifDeviceScriptFile;
 import action.CupActionModifRadioCh;
+import action.CupActionModifRadioConsoRxModel;
+import action.CupActionModifRadioConsoTxModel;
 import action.CupActionModifRadioDataRate;
 import action.CupActionModifRadioEListen;
 import action.CupActionModifRadioERx;
@@ -81,7 +83,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
@@ -195,13 +196,7 @@ public class CupCarbonController implements Initializable {
 	
 	@FXML
 	private VBox vbox ;
-	
-	@FXML
-	public RadioButton classicRg;
-	
-	@FXML
-	public RadioButton henzRg;
-	
+			
 	@FXML
 	public TextArea textOut;
 	
@@ -249,6 +244,12 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public ComboBox<String> radio_spreading_factor;
+	
+	@FXML
+	public ComboBox<String> radio_conso_tx_model;
+	
+	@FXML
+	public ComboBox<String> radio_conso_rx_model;
 
 	@FXML
 	public Button spreading_factor_apply_button;
@@ -490,6 +491,14 @@ public class CupCarbonController implements Initializable {
 		radio_spreading_factor.getItems().removeAll(radio_spreading_factor.getItems());
 		radio_spreading_factor.getItems().addAll("", "7", "8", "9", "10", "11", "12");
 		radio_spreading_factor.getSelectionModel().select(0);
+		
+		radio_conso_tx_model.getItems().removeAll(radio_conso_tx_model.getItems());
+		radio_conso_tx_model.getItems().addAll(RadioModule.CLASSICAL_TX, RadioModule.HEINZELMAN_TX, "(n/8.0)*etx*p", "0.00000005*n+0.0000000001*n*(r*p)");
+		radio_conso_tx_model.setValue("");
+		
+		radio_conso_rx_model.getItems().removeAll(radio_conso_rx_model.getItems());
+		radio_conso_rx_model.getItems().addAll(RadioModule.CLASSICAL_RX, RadioModule.HEINZELMAN_RX, "(n/8.0)*erx", "0.00000005*n");
+		radio_conso_rx_model.setValue("");
 
 		radioStdComboBox.getItems().removeAll(radioStdComboBox.getItems());
 		radioStdComboBox.getItems().addAll(new RadioStandardModel("802.15.4", "ZIGBEE"),
@@ -1106,16 +1115,16 @@ public class CupCarbonController implements Initializable {
 				} catch (InterruptedException e) {}
 				sn.setVisible(true);
 				vbox.setVisible(false);
-				for(int i=100; i>=0; i--) {
-					MapLayer.bg_transparency=(int)(i*2.5);
+				for(int i=250; i>=0; i--) {
+					MapLayer.bg_transparency=i;
 					MapLayer.repaint();
 					try {
-						Thread.sleep(20);
+						Thread.sleep(5);
 					} catch (InterruptedException e) {}
 				}
 				textReady.setVisible(true);
 				try {
-					Thread.sleep(2500);
+					Thread.sleep(2000);
 				} catch (InterruptedException e) {}
 				textReady.setVisible(false);
 			}
@@ -1464,6 +1473,44 @@ public class CupCarbonController implements Initializable {
 				int currentSF = ((RadioModule_Lora) rm).getSpreadingFactor();
 				int newSP = Integer.parseInt(radio_spreading_factor.getSelectionModel().getSelectedItem());
 				CupAction action = new CupActionModifRadioSF(rm, currentSF, newSP);
+				block.addAction(action);
+			}
+		}
+		CupActionStack.add(block);
+		CupActionStack.execute();
+		MapLayer.repaint();
+	}
+	
+	@FXML
+	public void radio_conso_tx_Apply() {
+		CupActionBlock block = new CupActionBlock();
+		for (SensorNode sensor : DeviceList.sensors) {
+			if (sensor.isSelected()) {
+				String s = radioListView.getItems().get(radioListView.getSelectionModel().getSelectedIndex());
+				String radioName = s.split(" ")[0];
+				RadioModule rm = sensor.getRadioModuleByName(radioName);
+				String currentCM = rm.getRadioConsoTxModel();
+				String newCM = radio_conso_tx_model.getSelectionModel().getSelectedItem();
+				CupAction action = new CupActionModifRadioConsoTxModel(rm, currentCM, newCM);
+				block.addAction(action);
+			}
+		}
+		CupActionStack.add(block);
+		CupActionStack.execute();
+		MapLayer.repaint();
+	}
+	
+	@FXML
+	public void radio_conso_rx_Apply() {
+		CupActionBlock block = new CupActionBlock();
+		for (SensorNode sensor : DeviceList.sensors) {
+			if (sensor.isSelected()) {
+				String s = radioListView.getItems().get(radioListView.getSelectionModel().getSelectedIndex());
+				String radioName = s.split(" ")[0];
+				RadioModule rm = sensor.getRadioModuleByName(radioName);
+				String currentCM = rm.getRadioConsoRxModel();
+				String newCM = radio_conso_rx_model.getSelectionModel().getSelectedItem();
+				CupAction action = new CupActionModifRadioConsoRxModel(rm, currentCM, newCM);
 				block.addAction(action);
 			}
 		}
@@ -2101,6 +2148,8 @@ public class CupCarbonController implements Initializable {
 						spreading_factor_apply_button.setDisable(false);
 						radio_spreading_factor.getSelectionModel().select("" + rm.getSpreadingFactor());
 					}
+					radio_conso_tx_model.getSelectionModel().select("" + rm.getRadioConsoTxModel());
+					radio_conso_rx_model.getSelectionModel().select("" + rm.getRadioConsoRxModel());
 				}
 			}
 		});
@@ -2436,6 +2485,9 @@ public class CupCarbonController implements Initializable {
 		radio_elisten.setText("");
 		radio_drate.setText("");
 		radio_spreading_factor.getSelectionModel().select(0);
+		radio_conso_tx_model.setValue("");
+		radio_conso_rx_model.setValue("");
+		
 
 		numberOfDevices.setText("N = " + DeviceList.getSize());
 	}

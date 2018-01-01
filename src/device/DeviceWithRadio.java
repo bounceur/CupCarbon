@@ -596,7 +596,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 * @param v
 	 */
 	public void consumeTx(int v) {
-		this.getCurrentRadioModule().consumeTx(v);
+		getCurrentRadioModule().consumeTx(v);
 	}
 	
 	/**
@@ -605,7 +605,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 * @param v
 	 */
 	public void consumeRx(int v) {
-		getBattery().consume(v * getCurrentRadioModule().getERx());
+		getCurrentRadioModule().consumeRx(v);
 	}
 	
 	

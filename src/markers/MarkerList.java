@@ -265,22 +265,24 @@ public class MarkerList {
 			ps.println(nLoop);
 			Marker marker;
 
-			int s = 0;
 			boolean first = true;
+			double lo = 0;
+			double la = 0;
+			double el = 0;
+			double ra = 0;
 			for (Iterator<Marker> iterator = markers.iterator(); iterator.hasNext();) {
 				marker = iterator.next();
 				if(first) {
 					first = false;
-					s = 0;
+					lo = marker.getLongitude() ;
+					la = marker.getLatitude() ;
+					el = marker.getElevation() ;
+					ra = marker.getRadius();
 				}
-				else {
-					if(iterator.hasNext() || !loop)
-						s = 1;
-					else {
-						s = delay;
-					}
-				}
-				ps.println(s + " " + marker.getLongitude() + " " + marker.getLatitude() + " " + marker.getElevation() + " " + marker.getRadius());				
+				ps.println(1 + " " + marker.getLongitude() + " " + marker.getLatitude() + " " + marker.getElevation() + " " + marker.getRadius());				
+			}
+			if(loop) {
+				ps.println(delay + " " + lo + " " + la + " " + el + " " + ra);
 			}
 			ps.close();
 		} catch (FileNotFoundException e) {

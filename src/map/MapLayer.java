@@ -80,7 +80,6 @@ import simulation.SimulationInputs;
 import simulation.WisenSimulation;
 import utilities.MapCalc;
 import utilities.UColor;
-import visibility.VisibilityLauncher;
 
 public class MapLayer implements Painter<Object>, MouseListener, MouseMotionListener, KeyListener {
 
@@ -733,7 +732,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			CupActionStack.execute(); 
 		}
 
-		VisibilityLauncher.calculate();
+		
 	}
 	
 	@Override
@@ -899,10 +898,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				if (key.getKeyChar() == 'c') {
 					if(!mousePressed) {
 						CupAction action;
-						if(MapLayer.magnetic)
+						//if(MapLayer.magnetic)
 							action = new CupActionAddDevice(device.duplicate());
-						else
-							action = new CupActionAddDevice(device.duplicateWithShift(0.0002,0.0002,0));
+						//else
+						//	action = new CupActionAddDevice(device.duplicateWithShift(0.0002,0.0002,0));
 						block.addAction(action);
 					}
 				}
@@ -1032,10 +1031,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				if (key.getKeyChar() == 'c') {
 					if(!mousePressed) {
 						CupAction action;
-						if(MapLayer.magnetic)
+						//if(MapLayer.magnetic)
 							action = new CupActionAddSensor(sensor.duplicate());
-						else
-							action = new CupActionAddSensor(sensor.duplicateWithShift(0.0002,0.0002,0));
+						//else
+						//	action = new CupActionAddSensor(sensor.duplicateWithShift(0.0002,0.0002,0));
 						block.addAction(action);
 					}
 				}

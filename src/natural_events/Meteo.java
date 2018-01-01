@@ -44,7 +44,6 @@ import utilities.MapCalc;
 import utilities.UColor;
 
 public class Meteo extends MobileG {
-
 	
 	//http://a.basemaps.cartocdn.com/light_all/0/0/0.png
 	protected LinkedList<Integer> valueTime;
@@ -312,6 +311,7 @@ public class Meteo extends MobileG {
 		super.initForSimulation();
 		loadValuesFromFile();
 		valueIndex = 0;
+		generateNextValue();
 	}
 	
 	@Override 

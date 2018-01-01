@@ -12,8 +12,6 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -66,7 +64,6 @@ public class NaturalEventGeneratorController implements Initializable{
 	public void save() {
 		if(!txtFileName.getText().equals("")) {
 			try {
-				System.out.println("ok");
 				String fileName = txtFileName.getText();
 				fileName = fileName.trim();
 				fileName = fileName.replaceAll(" ", "");
@@ -87,11 +84,12 @@ public class NaturalEventGeneratorController implements Initializable{
 				
 				CupCarbon.cupCarbonController.initScriptGpsEventComboBoxes();
 				
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Save Natural Event File!");
-				alert.setHeaderText(null);
-				alert.setContentText("File saved !");
-				alert.showAndWait();
+//				Alert alert = new Alert(AlertType.INFORMATION);
+//				alert.setTitle("Save Natural Event File!");
+//				alert.setHeaderText(null);
+//				alert.setContentText("File saved !");
+//				alert.showAndWait();
+				System.out.println("Natural Event File saved.");
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -121,7 +119,7 @@ public class NaturalEventGeneratorController implements Initializable{
 			public void run() {
 				Random random = new Random();
 				zone.setText("time value\n");
-				int period = Integer.parseInt(periodField.getText());
+				int period = Integer.parseInt(periodField.getText()) * 60;
 				int mean = Integer.parseInt(meanField.getText());
 				int std = Integer.parseInt(stdField.getText());
 				double v = random.nextGaussian()*std+mean;

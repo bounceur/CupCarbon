@@ -28,8 +28,7 @@ public class Channels {
 	public static double numberOfAckMessages_b = 0; // in bytes
 	public static double numberOfLostMessages_b = 0; // in bytes
 	
-	protected List<List<PacketEvent>> channelEventList = Collections.synchronizedList(new LinkedList<List<PacketEvent>>()); 
-	//protected LinkedList<List<PacketEvent>> channelEventList = new LinkedList<List<PacketEvent>>();
+	protected List<List<PacketEvent>> channelEventList = Collections.synchronizedList(new LinkedList<List<PacketEvent>>());
 	
 	public Channels(int std) {
 		super();
