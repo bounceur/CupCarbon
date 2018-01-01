@@ -3,6 +3,8 @@ package enegy_conso_model;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import cupcarbon.CupCarbon;
+
 public class EnergyConsumptionExpression {
 	
 	private EnergyConsumptionTokenStack operatorStack;
@@ -18,7 +20,10 @@ public class EnergyConsumptionExpression {
 	private void processOperator(EnergyConsumptionToken token) {
 		EnergyConsumptionToken arg1 = null, arg2 = null;
 		if (argumentStack.isEmpty()) {
-			System.err.println("Expression error 1");
+			CupCarbon.cupCarbonController.displayShortErrMessage("ERROR!");
+			System.err.println(">> ERREOR Energy consumption evaluation!");
+			System.err.println(">> Type: "+EnergyConsumptionModel.type + " - Sensor: S" + EnergyConsumptionModel.id+" - Radio: "+EnergyConsumptionModel.rn);
+			System.err.println(">> Expression error 1.");
 			error = true;
 			return;
 		} else {
@@ -26,7 +31,10 @@ public class EnergyConsumptionExpression {
 			argumentStack.pop();
 		}
 		if (argumentStack.isEmpty()) {
-			System.err.println("Expression error 2");
+			CupCarbon.cupCarbonController.displayShortErrMessage("ERROR!");
+			System.err.println(">> ERREOR Energy consumption evaluation!");
+			System.err.println(">> Type: "+EnergyConsumptionModel.type + " - Sensor: S" + EnergyConsumptionModel.id+" - Radio: "+EnergyConsumptionModel.rn);
+			System.err.println(">> Expression error 2 (problem in the model!)");
 			error = true;
 			return;
 		} else {
@@ -125,7 +133,10 @@ public class EnergyConsumptionExpression {
 				if (!operatorStack.isEmpty() && operatorStack.top().getType() == EnergyConsumptionToken.LEFT_PARENTHESIS) {
 					operatorStack.pop();
 				} else {
-					System.err.println("Error: unbalanced parenthesis.");
+					CupCarbon.cupCarbonController.displayShortErrMessage("ERROR!");
+					System.err.println(">> ERREOR Energy consumption evaluation!");
+					System.err.println(">> Type: "+EnergyConsumptionModel.type + " - Sensor: S" + EnergyConsumptionModel.id+" - Radio: "+EnergyConsumptionModel.rn);
+					System.err.println(">> Error: unbalanced parenthesis.");
 					error = true;
 				}
 			}
@@ -142,13 +153,20 @@ public class EnergyConsumptionExpression {
 			EnergyConsumptionToken result = argumentStack.top();
 			argumentStack.pop();
 			if (!operatorStack.isEmpty() || !argumentStack.isEmpty()) {
-				return "Expression error 3";
+				CupCarbon.cupCarbonController.displayShortErrMessage("ERROR!");
+				System.err.println(">> ERREOR Energy consumption evaluation!");
+				System.err.println(">> Type: "+EnergyConsumptionModel.type + " - Sensor: S" + EnergyConsumptionModel.id+" - Radio: "+EnergyConsumptionModel.rn);
+				System.err.println(">> Expression error 3");
+				return ">> Expression error 3";
 			} else {
 				script = " " + result.getValue();
 				return script;
 			}
 		}
-		
+		CupCarbon.cupCarbonController.displayShortErrMessage("ERROR!");
+		System.err.println(">> ERREOR Energy consumption evaluation!");
+		System.err.println(">> Type: "+EnergyConsumptionModel.type + " - Sensor: S" + EnergyConsumptionModel.id+" - Radio: "+EnergyConsumptionModel.rn);
+		System.err.println(">> May be a variable in the energy consumption model does not exist!");
 		return "Expression error 4";
 	}
 }

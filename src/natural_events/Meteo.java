@@ -91,17 +91,18 @@ public class Meteo extends MobileG {
 				g.drawLine(x + radius + 30, y + radius + 8, x + radius + 30, y + radius + 2);
 			}
 
-			if (selected) {
-				g.setColor(Color.GRAY);
-				g.drawRect(x - radius -25, y - radius - 5, (radius + 25) * 2, (radius + 5) * 2);
-			}
+			g.setColor(UColor.ORANGE_TRANSPARENT);
+			g.fillRoundRect(x-32, y-11, 64, 23, 15, 15);
 
 			g.setColor(UColor.ORANGE);
-			g.drawRect(x-30, y-10, 60, 20);
+			g.drawRoundRect(x-32, y-11, 64, 23, 15, 15);
 
-			g.setColor(UColor.ORANGE_TRANSPARENT);
-			g.fillRect(x-32, y-12, 64, 24);
-
+			if (selected) {
+				g.setColor(Color.GRAY);
+				//g.drawRect(x - radius -25, y - radius - 5, (radius + 25) * 2, (radius + 5) * 2);
+				g.drawRoundRect(x-32, y-11, 64, 23, 15, 15);
+			}
+			
 			drawRadius(x, y, radius, g);
 			
 			if (displayRadius) {
@@ -118,19 +119,19 @@ public class Meteo extends MobileG {
 			g.setColor(Color.ORANGE);
 			if (this.nateventFileName.equals(""))
 				g.setColor(Color.WHITE);
-			g.fillRect(x - 27, y - 6, 12, 12);
+			g.fillOval(x - 27, y - 6, 12, 12);
 			
 			g.setColor(Color.DARK_GRAY);
-			g.drawRect(x - 27, y - 6, 12, 12);
+			g.drawOval(x - 27, y - 6, 12, 12);
 
 			if (underSimulation) {
 				g.setColor(UColor.GREEN);
-				g.fillRect(x - 24, y - 3, 6, 6);
+				g.fillOval(x - 24, y - 3, 6, 6);
 			} else {
 				g.setColor(UColor.ORANGE);
 				if (gpsFileName.equals(""))
 					g.setColor(UColor.RED);
-				g.fillRect(x - 24, y - 3, 6, 6);
+				g.fillOval(x - 24, y - 3, 6, 6);
 			}
 			
 			//drawId(x, y, g);

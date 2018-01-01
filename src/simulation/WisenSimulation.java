@@ -179,12 +179,9 @@ public class WisenSimulation implements Runnable {
 			time = 0.0;
 			double previousTime = time;
 			
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					CupCarbon.cupCarbonController.simulationTimeLabel.setText("RT");
-				}
-			});
+			Platform.runLater(() ->
+					CupCarbon.cupCarbonController.simulationTimeLabel.setText("RT")
+			);
 			//--------> Loop - Simulation starts here
 			while (time <= SimulationInputs.simulationTime) {
 				
@@ -440,12 +437,9 @@ public class WisenSimulation implements Runnable {
 		
 		isSimulating = false;
 		
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				CupCarbon.cupCarbonController.simulationTimeLabel.setText(String.format("RT = %4.4f s", ((endTime - startTime) / 1000.)));				
-			}
-		});
+		Platform.runLater(() ->
+			CupCarbon.cupCarbonController.simulationTimeLabel.setText(String.format("RT = %4.4f s", ((endTime - startTime) / 1000.)))				
+		);
 
 		for (SensorNode sensorNode : DeviceList.sensors) {
 			sensorNode.toOri();
@@ -505,7 +499,6 @@ public class WisenSimulation implements Runnable {
 	public static void check() {
 		for(SensorNode sensor : DeviceList.sensors) {
 			if(sensor.getScriptFileName().equals("")) {
-				//JOptionPane.showMessageDialog(null, "Not Ready to simulate!", "Warning", JOptionPane.WARNING_MESSAGE);
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {

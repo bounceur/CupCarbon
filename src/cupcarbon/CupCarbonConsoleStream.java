@@ -15,12 +15,10 @@ public class CupCarbonConsoleStream extends OutputStream {
 	
     @Override
     public void write(int v) throws IOException {
-    	Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				textArea.appendText(String.valueOf((char) v));
-			}
-    	});
+    	Platform.runLater( () -> 
+    		textArea.appendText(String.valueOf((char) v)) 
+    			);
+		
     }
 
 }

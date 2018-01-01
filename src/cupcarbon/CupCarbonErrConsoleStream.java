@@ -15,14 +15,19 @@ public class CupCarbonErrConsoleStream extends OutputStream {
 	
     @Override
     public void write(int v) throws IOException {
-    	Platform.runLater(new Runnable() {
-			@Override
-			public void run() {				
-				CupCarbon.cupCarbonController.stopSimulation();
-				CupCarbon.cupCarbonController.displayShortErrMessage("ERROR!");
-				textArea.appendText(String.valueOf((char) v));
-			}
-    	});
+    	Platform.runLater( () -> { 
+    			CupCarbon.cupCarbonController.stopSimulation();
+    			textArea.appendText(String.valueOf((char) v));
+    		}
+    	);
+    	//Platform.runLater(new Runnable() {
+			//@Override
+			//public void run() {				
+//				CupCarbon.cupCarbonController.stopSimulation();
+			//	CupCarbon.cupCarbonController.displayShortErrMessage("ERROR!");
+//				textArea.appendText(String.valueOf((char) v));
+			//}
+    	//});
     }
 
 }

@@ -141,4 +141,8 @@ public class CupCarbon extends Application {
 	}
 	// -----
 
+	@Override
+	public void stop() {
+		System.exit(0);
+	}
 }

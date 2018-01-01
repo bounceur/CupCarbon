@@ -552,7 +552,7 @@ public class CupCarbonController implements Initializable {
 		CupCarbonErrConsoleStream consoleErr = new CupCarbonErrConsoleStream(textErr);
 		PrintStream ps2 = new PrintStream(consoleErr, true);
 		System.setErr(ps2);
-		
+				
 		try {
 			System.out.println("> CupCarbon U-One");
 			FileInputStream licenceFile = new FileInputStream("utils"+File.separator+"cupcarbon_licence.txt");
@@ -3263,64 +3263,44 @@ public class CupCarbonController implements Initializable {
 	}
 	
 	public void displayLongMessage(String s) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				textReady.setFill(new Color(0.4,0.52,0.75,0.5));
-				textReady.setText(s);
-				textReady.setVisible(true);
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {}
-				textReady.setVisible(false);
-			}
-		}).start();
+		textReady.setFill(new Color(0.4,0.52,0.75,0.5));
+		textReady.setText(s);
+		textReady.setVisible(true);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {}
+		textReady.setVisible(false);
 	}
 	
 	public void displayShortMessage(String s) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				textReady.setFill(new Color(0.4,0.52,0.75,0.5));
-				textReady.setText(s);
-				textReady.setVisible(true);
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {}
-				textReady.setVisible(false);
-			}
-		}).start();
+		textReady.setFill(new Color(0.4,0.52,0.75,0.5));
+		textReady.setText(s);
+		textReady.setVisible(true);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {}
+		textReady.setVisible(false);
 	}
 	
 	public void displayShortGoodMessage(String s) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				textReady.setFill(new Color(0.2,0.72,0.1,0.5));
-				textReady.setText(s);
-				textReady.setVisible(true);
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {}
-				textReady.setVisible(false);
-			}
-		}).start();
+		textReady.setFill(new Color(0.2,0.72,0.1,0.5));
+		textReady.setText(s);
+		textReady.setVisible(true);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {}
+		textReady.setVisible(false);
 	}
 	
 	public void displayShortErrMessage(String s) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				textReady.setFill(new Color(1,0,0,0.5));
-				textReady.setText(s);
-				textReady.setVisible(true);
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {}
-				textReady.setVisible(false);
-				consolePane.setExpanded(true);
-			}
-		}).start();
+		textReady.setFill(new Color(1,0,0,0.5));
+		textReady.setText(s);
+		textReady.setVisible(true);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {}
+		textReady.setVisible(false);
+		consolePane.setExpanded(true);
 	}
 	
 }

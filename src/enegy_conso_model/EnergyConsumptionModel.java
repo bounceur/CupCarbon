@@ -8,13 +8,19 @@ public class EnergyConsumptionModel {
 	public static int n = -1;
 	public static double e = -1;
 	public static double r = -1;
+	public static int id = -1; // id of the corresponding sensor node
+	public static String rn = ""; // the current radio name of the sensor node
+	public static String type = ""; // type of the evaluation (TX/RX)
 	
-	public static double evaluate(String arg, double p, int n, double e, double r) {
+	public static double evaluate(String type, int id, String rn, String arg, double p, int n, double e, double r) {
 		arg = arg.trim();
 		EnergyConsumptionModel.p = p;
 		EnergyConsumptionModel.n = n;
 		EnergyConsumptionModel.e = e;
 		EnergyConsumptionModel.r = r;
+		EnergyConsumptionModel.id = id;
+		EnergyConsumptionModel.rn = rn;
+		EnergyConsumptionModel.type = type;
 		
 		boolean contained = false;
 		String rarg = "";
@@ -31,7 +37,7 @@ public class EnergyConsumptionModel {
 		}
 		else 
 			rarg = "" + EnergyConsumptionModel.getVariableValue(arg);
-		System.out.println(rarg);
+
 		return Double.valueOf(rarg) ;
 	}
 

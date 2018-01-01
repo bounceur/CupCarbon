@@ -126,7 +126,7 @@ public abstract class RadioModule {
 			sensorNode.getBattery().consume(0.00000005*numberOfBits + 0.0000000001*numberOfBits * (radioRangeRadius*pl/100.));
 			return;
 		}
-		double v = EnergyConsumptionModel.evaluate(radioConsoTxModel, pl/100., numberOfBits, eTx, radioRangeRadius);
+		double v = EnergyConsumptionModel.evaluate("Consumption Model (TX)", getSensorNode().getId(), getName(), radioConsoTxModel, pl/100., numberOfBits, eTx, radioRangeRadius);
 		sensorNode.getBattery().consume(v);
 	}
 	
@@ -146,7 +146,7 @@ public abstract class RadioModule {
 			return;
 		}
 		
-		double v = EnergyConsumptionModel.evaluate(radioConsoRxModel, pl/100., numberOfBits, eRx, radioRangeRadius);
+		double v = EnergyConsumptionModel.evaluate("Consumption Model (RX)", getSensorNode().getId(), getName(), radioConsoRxModel, pl/100., numberOfBits, eRx, radioRangeRadius);
 		sensorNode.getBattery().consume(v);
 	}
 	
