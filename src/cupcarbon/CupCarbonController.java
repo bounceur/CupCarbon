@@ -3104,34 +3104,31 @@ public class CupCarbonController implements Initializable {
 
 	public void openIthRecentProject(int index) {
 		// index = 1 .. 10
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					BufferedReader br = new BufferedReader(
-							new InputStreamReader(new FileInputStream("utils"+File.separator+"recent.rec")));
-					String s = "";
-					for (int i = 0; i < index; i++)
-						s = br.readLine();
-					String path = s.split("#")[0];
-					String name = s.split("#")[1];
-					
-					displayShortMessage(name);
-					
-					br.close();
+		Platform.runLater(() -> {
+			try {
+				BufferedReader br = new BufferedReader(
+						new InputStreamReader(new FileInputStream("utils"+File.separator+"recent.rec")));
+				String s = "";
+				for (int i = 0; i < index; i++)
+					s = br.readLine();
+				String path = s.split("#")[0];
+				String name = s.split("#")[1];
+				
+				displayShortMessage(name);
+				
+				br.close();
 
-					Project.openProject(path, name);
-					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + path + "]");
-				} catch (FileNotFoundException e) {
-					System.err.println("Recent.rec doesn't exist");
-				} catch (IOException e) {
-					System.err.println("Error in recent.rec file");
-				} catch (NullPointerException e) {
-					System.err.println("No recent files");
-					displayShortMessage("No recent files.");
-				}
-				openProjectLoadParameters();
+				Project.openProject(path, name);
+				CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + path + "]");
+			} catch (FileNotFoundException e) {
+				System.err.println("Recent.rec doesn't exist");
+			} catch (IOException e) {
+				System.err.println("Error in recent.rec file");
+			} catch (NullPointerException e) {
+				System.err.println("No recent files");
+				displayShortErrMessageTh("No recent files.");
 			}
+			openProjectLoadParameters();
 		});
 	}
 	
@@ -3301,6 +3298,18 @@ public class CupCarbonController implements Initializable {
 		} catch (InterruptedException e) {}
 		textReady.setVisible(false);
 		consolePane.setExpanded(true);
+	}
+	
+	public void displayShortErrMessageTh(String s) {
+		new Thread(() -> {
+			textReady.setFill(new Color(1,0,0,0.5));
+			textReady.setText(s);
+			textReady.setVisible(true);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {}
+			textReady.setVisible(false);
+		}).start();
 	}
 	
 }
