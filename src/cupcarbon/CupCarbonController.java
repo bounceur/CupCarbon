@@ -708,8 +708,8 @@ public class CupCarbonController implements Initializable {
 	}
 	
 	@FXML
-	public void addMeteo() {
-		if(DeviceList.meteo==null) {
+	public void addWeather() {
+		if(DeviceList.weather==null) {
 			WorldMap.addNodeInMap('7');
 			mapFocus();
 		}

@@ -52,7 +52,7 @@ import markers.Marker;
 import markers.MarkerList;
 //import markers.Marker;
 import natural_events.Gas;
-import natural_events.Meteo;
+import natural_events.Weather;
 import project.Project;
 import simulation.WisenSimulation;
 import solver.SensorGraph;
@@ -65,7 +65,7 @@ import utilities.MapCalc;
  */
 public class DeviceList {
 
-	public static Meteo meteo = null;
+	public static Weather weather = null;
 	public static Vector<SensorNode> sensors = new Vector<SensorNode>();
 	public static Vector<Device> devices = new Vector<Device>();
 	public static Vector<SNEdge> markedEdges = new Vector<SNEdge>();
@@ -80,7 +80,7 @@ public class DeviceList {
 	}
 	
 	public static void reset() {
-		meteo = null;
+		weather = null;
 		sensors = new Vector<SensorNode>();
 		devices = new Vector<Device>();
 		drawLinks = true;
@@ -225,8 +225,8 @@ public class DeviceList {
 					case MapObject.MOBILE:						
 						add(loadMobile(nodeFiles[i].getAbsolutePath()));
 						break;
-					case MapObject.METEO:						
-						add(loadMeteo(nodeFiles[i].getAbsolutePath()));
+					case MapObject.WEATHER:						
+						add(loadWeather(nodeFiles[i].getAbsolutePath()));
 						break;
 					}
 					int v = Integer.valueOf(nodeFiles[i].getName().split("_")[1]);
@@ -534,8 +534,8 @@ public class DeviceList {
 		return device;
 	}
 	
-	public static Device loadMeteo(String fileName) {
-		Meteo device = null;
+	public static Device loadWeather(String fileName) {
+		Weather device = null;
 		try {
 			String[] str = null;
 			String line;
@@ -573,10 +573,10 @@ public class DeviceList {
 					break;
 				}
 			}
-			device = new Meteo(parameters[0], parameters[1], parameters[2], parameters[3], parameters[5], Integer.parseInt(parameters[4]));			
+			device = new Weather(parameters[0], parameters[1], parameters[2], parameters[3], parameters[5], Integer.parseInt(parameters[4]));			
 			device.setHide(Integer.parseInt(parameters[6]));
 			device.setNatEventFileName(parameters[7]);
-			DeviceList.meteo = device;			
+			DeviceList.weather = device;			
 			br.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -1754,7 +1754,7 @@ public class DeviceList {
 	}
 	
 	public static void delete(Device device) {
-		if(device.getClass().equals(Meteo.class)) meteo = null;
+		if(device.getClass().equals(Weather.class)) weather = null;
 		devices.remove(device);
 		if(DeviceList.propagationsCalculated)			
 			DeviceList.calculatePropagations();

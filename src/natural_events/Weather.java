@@ -43,28 +43,28 @@ import project.Project;
 import utilities.MapCalc;
 import utilities.UColor;
 
-public class Meteo extends MobileG {
+public class Weather extends MobileG {
 	
 	//http://a.basemaps.cartocdn.com/light_all/0/0/0.png
 	protected LinkedList<Integer> valueTime;
 	protected LinkedList<Double> values;
 	protected int valueIndex = 0;
 
-	private String idFL = "T"; // ID First Letter (Temperature of the meteo)
+	private String idFL = "T"; // ID First Letter (Temperature of the weather)
 
-	public Meteo(double x, double y, double z, double radius) {
+	public Weather(double x, double y, double z, double radius) {
 		super(x, y, z, radius, "", DeviceList.number++);
 	}
 
-	public Meteo(double x, double y, double z, double radius, int id) {
+	public Weather(double x, double y, double z, double radius, int id) {
 		super(x, y, z, radius, "", id);
 	}
 
-	public Meteo(double x, double y, double z, double radius, String gpsFileName, int id) {
+	public Weather(double x, double y, double z, double radius, String gpsFileName, int id) {
 		super(x, y, z, radius, gpsFileName, id);
 	}
 
-	public Meteo(String x, String y, String z, String radius, String gpsFileName, int id) {
+	public Weather(String x, String y, String z, String radius, String gpsFileName, int id) {
 		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(radius), gpsFileName, id);
 	}
 
@@ -112,7 +112,7 @@ public class Meteo extends MobileG {
 			//if (NetworkParameters.displayDetails) {
 				g.setColor(Color.BLACK);
 				String s = String.format("%2.2f", getValue());
-				g.drawString("METEO", x-15 , y-15 );
+				g.drawString("WEATHER", x-20 , y-15 );
 				g.drawString("" + s , x-8 , y+3 );
 			//}
 
@@ -160,7 +160,7 @@ public class Meteo extends MobileG {
 
 	@Override
 	public int getType() {
-		return Device.METEO;
+		return Device.WEATHER;
 	}
 
 	@Override
@@ -225,9 +225,9 @@ public class Meteo extends MobileG {
 	}
 
 	@Override
-	public Meteo duplicate() {
+	public Weather duplicate() {
 		selected = false;
-		Meteo gas = new Meteo(longitude, latitude, elevation, radius);
+		Weather gas = new Weather(longitude, latitude, elevation, radius);
 		gas.setHide(hide);
 		gas.setDrawBatteryLevel(drawBatteryLevel);
 		gas.setScriptFileName(scriptFileName);
@@ -238,8 +238,8 @@ public class Meteo extends MobileG {
 	}
 
 	@Override
-	public Meteo duplicateWithShift(double sLongitude, double sLatitude, double sElevation) {
-		Meteo gas = duplicate();
+	public Weather duplicateWithShift(double sLongitude, double sLatitude, double sElevation) {
+		Weather gas = duplicate();
 		gas.shift(sLongitude, sLatitude, sElevation);
 		return gas;
 	}
@@ -258,7 +258,7 @@ public class Meteo extends MobileG {
 	public void save(String fileName) {
 		try {
 			PrintStream fos = null;
-			fos = new PrintStream(new FileOutputStream(fileName + File.separator + "meteo_" + getId()));
+			fos = new PrintStream(new FileOutputStream(fileName + File.separator + "weather_" + getId()));
 			fos.println("List of parameters");
 			fos.println("------------------------------------------");
 			fos.println("device_type:" + getType());

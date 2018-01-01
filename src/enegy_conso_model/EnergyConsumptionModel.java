@@ -45,9 +45,9 @@ public class EnergyConsumptionModel {
 		if(arg.equals("p"))
 			return p;
 		if(arg.equals("t")) {
-			if(DeviceList.meteo == null)
-				System.err.println("[CupCarbon ERROR]: There is now Meteo module.");
-			return DeviceList.meteo.getValue();
+			if(DeviceList.weather == null)
+				System.err.println("[CupCarbon ERROR]: There is now Weather module.");
+			return DeviceList.weather.getValue();
 		}
 		if(arg.equals("n"))
 			return n;

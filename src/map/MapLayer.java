@@ -75,7 +75,7 @@ import markers.Marker;
 import markers.MarkerList;
 import markers.Routes;
 import natural_events.Gas;
-import natural_events.Meteo;
+import natural_events.Weather;
 import simulation.SimulationInputs;
 import simulation.WisenSimulation;
 import utilities.MapCalc;
@@ -197,7 +197,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			addThing = true;
 		}
 		if (lastKey == '7') {
-			if(DeviceList.meteo==null) {
+			if(DeviceList.weather==null) {
 				mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
 				addThing = true;
 			}
@@ -269,8 +269,8 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			g.drawString("Number of RECEIVED messages:"+Channels.numberOfReceivedMessages + " ["+ Channels.numberOfReceivedMessages_b +"]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+36);
 			g.drawString("Number of ACK messages:"+Channels.numberOfAckMessages + " ["+ Channels.numberOfAckMessages_b +"]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+46);
 			g.drawString("Number of LOST messages:"+Channels.numberOfLostMessages + " ["+ Channels.numberOfLostMessages_b +"]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+56);
-			if(DeviceList.meteo != null)
-				g.drawString("Temperature: "+ String.format("%2.2f", DeviceList.meteo.getValue()) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+66);
+			if(DeviceList.weather != null)
+				g.drawString("Temperature: "+ String.format("%2.2f", DeviceList.weather.getValue()) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+66);
 		}
 		
 		//int [] coord = MapCalc.geoToPixelMapA(48.391412753283895, -4.4883012771606445);
@@ -346,8 +346,8 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			repaint();
 		}
 		if (lastKey == '7') {
-			if(DeviceList.meteo==null) {
-				CupAction action = new CupActionAddDevice(new Meteo(gp.getLongitude(), gp.getLatitude(), 0, 8, -1));
+			if(DeviceList.weather==null) {
+				CupAction action = new CupActionAddDevice(new Weather(gp.getLongitude(), gp.getLatitude(), 0, 8, -1));
 				addAction(action);
 				CupActionStack.execute();
 				lastKey = 0;

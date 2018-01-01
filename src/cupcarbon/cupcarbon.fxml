@@ -203,7 +203,7 @@
                         </ImageView>
                      </graphic>
                   </MenuItem>
-                  <MenuItem mnemonicParsing="false" onAction="#addMeteo" text="Add Meteo">
+                  <MenuItem mnemonicParsing="false" onAction="#addWeather" text="Add Weather">
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -975,7 +975,7 @@
                         <Tooltip text="[2] Gas" />
                      </tooltip>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#addMeteo">
+                  <Button mnemonicParsing="false" onAction="#addWeather">
                      <font>
                         <Font size="10.0" />
                      </font>
@@ -987,7 +987,7 @@
                         </ImageView>
                      </graphic>
                      <tooltip>
-                        <Tooltip text="[2] Gas" />
+                        <Tooltip text="[7] Weather" />
                      </tooltip>
                   </Button>
                   <Button mnemonicParsing="false" onAction="#addMobile">

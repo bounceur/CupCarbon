@@ -27,7 +27,7 @@ public abstract class MapObject implements Runnable, Cloneable {
 	public static final int BASE_STATION = 4;
 	public static final int MEDIA_SENSOR = 5;
 	public static final int MOBILE = 6;
-	public static final int METEO = 7;
+	public static final int WEATHER = 7;
 	public static final int MARKER = 8;
 	public static final int VERTEX = 9;
 	public static final int BUILDING = 10;
