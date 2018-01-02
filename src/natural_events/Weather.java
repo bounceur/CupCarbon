@@ -23,7 +23,9 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Polygon;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +34,8 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.LinkedList;
+
+import javax.swing.ImageIcon;
 
 import device.Device;
 import device.DeviceList;
@@ -81,60 +85,65 @@ public class Weather extends MobileG {
 
 			if (inside || selected) {
 				g.setColor(UColor.ORANGE);
-				g.drawLine(x - radius - 30, y - radius - 8, x - radius - 25, y - radius - 8);
-				g.drawLine(x - radius - 30, y - radius - 8, x - radius - 30, y - radius - 2);
-				g.drawLine(x - radius - 30, y + radius + 8, x - radius - 25, y + radius + 8);
-				g.drawLine(x - radius - 30, y + radius + 8, x - radius - 30, y + radius + 2);
-				g.drawLine(x + radius + 30, y - radius - 8, x + radius + 25, y - radius - 8);
-				g.drawLine(x + radius + 30, y - radius - 8, x + radius + 30, y - radius - 2);
-				g.drawLine(x + radius + 30, y + radius + 8, x + radius + 25, y + radius + 8);
-				g.drawLine(x + radius + 30, y + radius + 8, x + radius + 30, y + radius + 2);
+				g.drawLine(x - radius - 30, y - radius - 30, x - radius - 25, y - radius - 30);
+				g.drawLine(x - radius - 30, y - radius - 30, x - radius - 30, y - radius - 25);
+				g.drawLine(x - radius - 30, y + radius + 30, x - radius - 25, y + radius + 30);
+				g.drawLine(x - radius - 30, y + radius + 30, x - radius - 30, y + radius + 25);
+				g.drawLine(x + radius + 30, y - radius - 30, x + radius + 25, y - radius - 30);
+				g.drawLine(x + radius + 30, y - radius - 30, x + radius + 30, y - radius - 25);
+				g.drawLine(x + radius + 30, y + radius + 30, x + radius + 25, y + radius + 30);
+				g.drawLine(x + radius + 30, y + radius + 30, x + radius + 30, y + radius + 25);
 			}
 
-			g.setColor(UColor.ORANGE_TRANSPARENT);
-			g.fillRoundRect(x-32, y-11, 64, 23, 15, 15);
+//			g.setColor(UColor.ORANGE_TRANSPARENT);
+//			g.fillRoundRect(x-32, y-11, 64, 23, 15, 15);
+//
+//			g.setColor(UColor.ORANGE);
+//			g.drawRoundRect(x-32, y-11, 64, 23, 15, 15);
 
-			g.setColor(UColor.ORANGE);
-			g.drawRoundRect(x-32, y-11, 64, 23, 15, 15);
-
+			//Image image = new ImageIcon("src/images/sun.png").getImage();
+			Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/images/sun.png")).getImage();
+			g.drawImage(image, x-50, y-50, null);
+			
 			if (selected) {
 				g.setColor(Color.GRAY);
 				//g.drawRect(x - radius -25, y - radius - 5, (radius + 25) * 2, (radius + 5) * 2);
-				g.drawRoundRect(x-32, y-11, 64, 23, 15, 15);
+				//g.drawRoundRect(x-32, y-11, 64, 23, 15, 15);
+				g.drawOval(x-25, y-25, 50, 50);
 			}
 			
 			drawRadius(x, y, radius, g);
 			
-			if (displayRadius) {
-				drawRadius(x, y, radius, g);
-			}
+			//if (displayRadius) {
+			//	drawRadius(x, y, radius, g);
+			//}
 
 			//if (NetworkParameters.displayDetails) {
 				g.setColor(Color.BLACK);
 				String s = String.format("%2.2f", getValue());
-				g.drawString("WEATHER", x-20 , y-15 );
+				g.drawString("WEATHER", x-20 , y-10 );
 				g.drawString("" + s , x-8 , y+3 );
 			//}
 
-			g.setColor(Color.ORANGE);
 			if (this.nateventFileName.equals(""))
 				g.setColor(Color.WHITE);
-			g.fillOval(x - 27, y - 6, 12, 12);
+			else
+				g.setColor(Color.ORANGE);
+			
+			g.fillOval(x - 6, y + 7, 12, 12);
 			
 			g.setColor(Color.DARK_GRAY);
-			g.drawOval(x - 27, y - 6, 12, 12);
+			g.drawOval(x - 6, y + 7, 12, 12);
 
 			if (underSimulation) {
 				g.setColor(UColor.GREEN);
-				g.fillOval(x - 24, y - 3, 6, 6);
 			} else {
-				g.setColor(UColor.ORANGE);
 				if (gpsFileName.equals(""))
 					g.setColor(UColor.RED);
-				g.fillOval(x - 24, y - 3, 6, 6);
+				else
+					g.setColor(UColor.ORANGE);
 			}
-			
-			//drawId(x, y, g);
+			g.fillOval(x - 3, y +10, 6, 6);
 		}
 	}
 

@@ -44,7 +44,6 @@ public class Command_RDATA extends Command {
 					sensor.getScript().addVariable(args[i], tab[i-j]);
 				} 
 				catch(Exception e) {
-					CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR RDATA");
 					//if(data.length()>0)
 					//	System.err.println("S"+sensor.getId()+" [ERROR RDATA: IDX OUT OF RANGE]! -> "+data);
 				}
