@@ -60,7 +60,6 @@ import utilities.MapCalc;
 
 /**
  * @author Ahcene Bounceur
- * @author Molham Darwish
  * @version 1.0
  */
 public class DeviceList {

@@ -2478,6 +2478,7 @@ public class CupCarbonController implements Initializable {
 		device_eSensing.setText("");
 		uartComboBox.getSelectionModel().select(0);
 		device_drift.setText("");
+		sensorName.setText("");
 		// radio
 		radioListView.getItems().removeAll(radioListView.getItems());
 		radioNameComboBox.getSelectionModel().select(0);
@@ -2495,7 +2496,6 @@ public class CupCarbonController implements Initializable {
 		radio_conso_tx_model.setValue("");
 		radio_conso_rx_model.setValue("");
 		
-
 		numberOfDevices.setText("N = " + DeviceList.getSize());
 	}
 

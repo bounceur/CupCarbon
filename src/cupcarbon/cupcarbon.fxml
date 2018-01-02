@@ -1953,24 +1953,27 @@
                                        <content>
                                           <VBox spacing="10.0">
                                              <children>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="22.0" prefWidth="219.0" spacing="10.0">
+                                                <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="22.0" spacing="10.0" VBox.vgrow="ALWAYS">
                                                    <children>
-                                                      <Label prefHeight="13.0" prefWidth="63.0" text="Standard">
+                                                      <Label ellipsisString="" maxWidth="1.7976931348623157E308" prefHeight="13.0" text="Standard">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>
                                                       </Label>
-                                                      <ComboBox fx:id="radioStdComboBox" prefHeight="22.0" prefWidth="210.0" style="-fx-font-size: 8pt;" />
+                                                      <ComboBox fx:id="radioStdComboBox" maxWidth="1.7976931348623157E308" prefHeight="22.0" style="-fx-font-size: 8pt;" HBox.hgrow="ALWAYS" />
                                                    </children>
+                                                   <padding>
+                                                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                   </padding>
                                                 </HBox>
                                                 <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="22.0" prefWidth="273.0" spacing="10.0">
                                                    <children>
-                                                      <Label prefHeight="13.0" prefWidth="73.0" text="Radio Name">
+                                                      <Label prefHeight="13.0" text="Radio Name">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>
                                                       </Label>
-                                                      <ComboBox fx:id="radioNameComboBox" maxWidth="1.7976931348623157E308" prefHeight="22.0" prefWidth="105.0" style="-fx-font-size: 8pt;" />
+                                                      <ComboBox fx:id="radioNameComboBox" maxWidth="1.7976931348623157E308" prefHeight="22.0" prefWidth="105.0" style="-fx-font-size: 8pt;" HBox.hgrow="ALWAYS" />
                                                       <Label fx:id="sensorName" text=" of ">
                                                          <font>
                                                             <Font size="10.0" />
@@ -2307,7 +2310,7 @@
                                           </VBox>
                                        </content>
                                        <padding>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                          <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
                                        </padding>
                                     </ScrollPane>
                                  </content>

@@ -3,6 +3,7 @@ package senscript;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import cupcarbon.CupCarbon;
 import device.SensorNode;
 
 public class SenScriptExpressionCalculate {
@@ -42,7 +43,7 @@ public class SenScriptExpressionCalculate {
 
 		expression.replaceAll("\\s+", "");
 		ArrayList<SenScriptToken> tokens = new ArrayList<SenScriptToken>();
-		StringTokenizer st = new StringTokenizer(expression, "()+-*/%", true);
+		StringTokenizer st = new StringTokenizer(expression, "()+-*/%^", true);
 
 		String script = "";
 		String currentToken = "";
@@ -58,7 +59,10 @@ public class SenScriptExpressionCalculate {
 					tokens.add(new SenScriptToken("*"));
 					operandToken = "";
 				}
-
+				if(sensor.getScript().getVariableValue(currentToken)==null) {
+					System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): SET function ("+currentToken+" does not exist)");
+					CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR");
+				}
 				operandToken = operandToken + sensor.getScript().getVariableValue(currentToken).trim();
 				operand = true;
 			} else if (currentToken.equals("(")) {

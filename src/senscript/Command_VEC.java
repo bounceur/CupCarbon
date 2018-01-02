@@ -28,6 +28,6 @@ public class Command_VEC extends Command {
 
 	@Override
 	public String toString() {
-		return "TAB";
+		return "VEC";
 	}
 }

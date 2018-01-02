@@ -30,7 +30,7 @@ public class Command_VSET extends Command {
 
 	@Override
 	public String toString() {
-		return "TSET";
+		return "VSET";
 	}
 	
 }

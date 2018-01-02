@@ -1,5 +1,6 @@
 package senscript;
 
+import cupcarbon.CupCarbon;
 import device.DeviceList;
 import device.SensorNode;
 import simulation.WisenSimulation;
@@ -17,8 +18,14 @@ public class Command_EDGE extends Command {
 
 	@Override
 	public double execute() {
-		if(arg1.equals("")) System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function ("+arg1+" is null)");
-		if(arg2.equals("")) System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function ("+arg2+" is null)");
+		if(arg1.equals("")) {
+			System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function ("+arg1+" is null)");
+			CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR");
+		}
+		if(arg2.equals("")) {
+			System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function ("+arg2+" is null)");
+			CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR");
+		}
 		
 		WisenSimulation.simLog.add("S" + sensor.getId() + " EDGE "+arg1+ " "+ arg2);
 		
@@ -35,6 +42,7 @@ public class Command_EDGE extends Command {
 		}
 		else {
 			System.err.println("[CupCarbon WARNING] (S"+sensor.getId()+"): EDGE function (id must be >0) ... id="+id);
+			CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR");
 		}
 		return 0 ;
 	}

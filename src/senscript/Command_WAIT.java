@@ -1,6 +1,7 @@
 package senscript;
 
 import arduino.Bracket;
+import cupcarbon.CupCarbon;
 import device.SensorNode;
 import simulation.WisenSimulation;
 
@@ -32,8 +33,10 @@ public class Command_WAIT extends Command {
 			if (arg.equals(""))
 				event = Double.MAX_VALUE;
 			else {
-				if(sensor.getScript().getVariableValue(arg)==null)
+				if(sensor.getScript().getVariableValue(arg)==null) {
 					System.err.println("[CupCarbon ERROR] (File: "+ sensor.getScriptFileName()+") (S"+sensor.getId()+"): WAIT function ("+arg+" is null)");
+					CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR");
+				}
 				event = (Double.parseDouble(sensor.getScript().getVariableValue(arg))/1000.);
 			}
 		}

@@ -32,7 +32,7 @@ public class Command_VGET extends Command {
 
 	@Override
 	public String toString() {
-		return "TGET";
+		return "VGET";
 	}
 	
 }

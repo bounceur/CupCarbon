@@ -51,6 +51,11 @@ public class SenScriptToken {
 			operator = contents.charAt(0);
 			precedence = 2;
 			break;
+		case "^":
+			type = OPERATOR;
+			operator = contents.charAt(0);
+			precedence = 3;
+			break;
 		case "(":
 			type = LEFT_PARENTHESIS;
 			break;
@@ -101,6 +106,9 @@ public class SenScriptToken {
 		case '%':
 			result = Double.parseDouble(sensor.getScript().getVariableValue(arg1 + ""))
 					% Double.parseDouble(sensor.getScript().getVariableValue(arg2 + ""));
+			break;
+		case '^':
+			result = Math.pow(Double.parseDouble(sensor.getScript().getVariableValue(arg1 + "")),Double.parseDouble(sensor.getScript().getVariableValue(arg2 + "")));
 			break;
 		}
 		return new SenScriptToken(result);

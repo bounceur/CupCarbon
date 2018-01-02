@@ -1,5 +1,6 @@
 package senscript;
 
+import cupcarbon.CupCarbon;
 import device.SensorNode;
 import simulation.WisenSimulation;
 
@@ -26,6 +27,7 @@ public class Command_RDATA extends Command {
 		if(data==null) {
 			String errMessage = "[CupCarbon ERROR] (S"+sensor.getId()+"): The first argument of RDATA cannot be null";
 			System.err.println(errMessage);
+			CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR");
 			throw new SenScriptException(errMessage);
 		}
 		else {
@@ -42,14 +44,13 @@ public class Command_RDATA extends Command {
 					sensor.getScript().addVariable(args[i], tab[i-j]);
 				} 
 				catch(Exception e) {
+					CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR RDATA");
 					//if(data.length()>0)
 					//	System.err.println("S"+sensor.getId()+" [ERROR RDATA: IDX OUT OF RANGE]! -> "+data);
 				}
 				i++;
 			}
 		}
-		if(data==null)
-			System.err.println(sensor.getId()+" AAAA");
 		return 0 ;
 	}
 

@@ -45,10 +45,14 @@ public class Command_SET extends Command {
 
 	@Override
 	public double execute() {
+		if(arg1.equals("")) System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): SET function ("+arg1+" is null)");
+		if(arg2.equals("")) System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): SET function -> error in ("+arg2+")");
+		if(arg1==null) System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): SET function ("+arg1+" is null)");
+		if(arg2==null) System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): SET function ("+arg2+" is null)");
 		boolean contained = false;
 		String arg = "";
 		WisenSimulation.simLog.add("S" + sensor.getId() + " SET " + arg1 + "=" + arg2);
-		String[] match={"(",")","+","-","*","/", "%"};
+		String[] match={"(", ")", "+", "-", "*", "/", "%", "^"};
 		int i = 0;
 		while (!contained && i< match.length) {
 			if (arg2.contains(match[i]))

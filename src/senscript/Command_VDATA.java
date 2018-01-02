@@ -32,7 +32,7 @@ public class Command_VDATA extends Command {
 
 	@Override
 	public String toString() {
-		return "RPACKET";
+		return "VDATA";
 	}
 	
 }

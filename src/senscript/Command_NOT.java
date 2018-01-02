@@ -17,10 +17,10 @@ public class Command_NOT extends Command {
 	@Override
 	public double execute() {
 		String v = sensor.getScript().getVariableValue(arg2);
-		System.out.println("-->"+v);
+		
 		int z = 0;
 		z = ~Integer.parseInt(v);
-		System.out.println("-->"+z);
+		
 		WisenSimulation.simLog.add("S" + sensor.getId() + " " + arg1 + " = ~" + Integer.valueOf(v) + " -> " + z);
 		sensor.getScript().addVariable(arg1, "" + z);
 		return 0 ;
