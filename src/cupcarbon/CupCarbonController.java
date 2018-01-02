@@ -3124,7 +3124,6 @@ public class CupCarbonController implements Initializable {
 				displayShortMessage(name);
 				
 				br.close();
-
 				Project.openProject(path, name);
 				CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + path + "]");
 			} catch (FileNotFoundException e) {
@@ -3278,6 +3277,18 @@ public class CupCarbonController implements Initializable {
 		textReady.setVisible(false);
 	}
 	
+	public void displayPermanentMessage_th(String s) {
+		Thread th = new Thread(new Runnable() {
+			@Override
+			public void run() {				
+				textReady.setFill(new Color(0.4,0.52,0.75,0.5));
+				textReady.setText(s);
+				textReady.setVisible(true);
+			}
+		});
+		th.start();
+	}
+	
 	public void displayShortMessage(String s) {
 		textReady.setFill(new Color(0.4,0.52,0.75,0.5));
 		textReady.setText(s);
@@ -3296,6 +3307,22 @@ public class CupCarbonController implements Initializable {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {}
 		textReady.setVisible(false);
+	}
+
+	public void displayShortGoodMessage_th(String s) {
+		Thread th = new Thread(new Runnable() {
+			@Override
+			public void run() {				
+				textReady.setFill(new Color(0.2,0.72,0.1,0.5));
+				textReady.setText(s);
+				textReady.setVisible(true);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {}
+				textReady.setVisible(false);
+			}
+		});
+		th.start();
 	}
 	
 	public void displayShortErrMessage(String s) {

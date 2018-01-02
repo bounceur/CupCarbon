@@ -154,21 +154,29 @@ public final class Project {
 	}
 	
 	public static void openProject(String path, String name) {
-		DeviceList.propagationsCalculated = false;
-		System.out.println(path);
-		System.out.println(name);
-		CupActionStack.init();
-		reset();
-		setProjectName(path, name);
-		saveRecentPath();				
-		BuildingList.open(getProjectBuildingPathName());
-		MarkerList.open(getProjectMarkerPath());		
-		DeviceList.open();
-		loadParameters();		
-		CupCarbon.cupCarbonController.loadSimulationParams();
-		CupCarbon.cupCarbonController.applyParameters();
-		CupCarbon.cupCarbonController.saveButton.setDisable(false);
-		if(DeviceList.propagationsCalculated) DeviceList.calculatePropagations();
+		Thread th = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				CupCarbon.cupCarbonController.displayPermanentMessage_th("Loading ...");
+				DeviceList.propagationsCalculated = false;
+				System.out.println(path);
+				System.out.println(name);
+				CupActionStack.init();
+				reset();
+				setProjectName(path, name);
+				saveRecentPath();				
+				BuildingList.open(getProjectBuildingPathName());
+				MarkerList.open(getProjectMarkerPath());		
+				DeviceList.open();
+				loadParameters();		
+				CupCarbon.cupCarbonController.loadSimulationParams();
+				CupCarbon.cupCarbonController.applyParameters();
+				CupCarbon.cupCarbonController.saveButton.setDisable(false);
+				if(DeviceList.propagationsCalculated) DeviceList.calculatePropagations();
+				CupCarbon.cupCarbonController.displayShortGoodMessage_th("Project loaded");
+			}
+		});
+		th.start();
 	}
 
 	public static void newProject(String path, String name, boolean reset) {

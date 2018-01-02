@@ -12,7 +12,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="830.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.CupCarbonController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="891.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.CupCarbonController">
    <top>
       <MenuBar fx:id="menuBar" style="-fx-border-width: 2; -fx-font-size: 11;" BorderPane.alignment="CENTER">
         <menus>
@@ -1578,7 +1578,7 @@
                                                                         <Font size="10.0" />
                                                                      </font>
                                                                   </Button>
-                                                                  <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect All Sensors" GridPane.columnIndex="1">
+                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect All Sensors" GridPane.columnIndex="1">
                                                                      <font>
                                                                         <Font size="10.0" />
                                                                      </font>
@@ -1588,12 +1588,12 @@
                                                                         <Font size="10.0" />
                                                                      </font>
                                                                   </Button>
-                                                                  <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllMediaSensors" prefHeight="25.0" prefWidth="290.0" text="Select Media Sensors" GridPane.rowIndex="3">
+                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllMediaSensors" prefHeight="25.0" prefWidth="290.0" text="Select Media Sensors" GridPane.rowIndex="3">
                                                                      <font>
                                                                         <Font size="10.0" />
                                                                      </font>
                                                                   </Button>
-                                                                  <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllMobiles" prefHeight="25.0" prefWidth="290.0" text="Deselect All Mobiles" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllMobiles" prefHeight="25.0" prefWidth="290.0" text="Deselect All Mobiles" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                                      <font>
                                                                         <Font size="10.0" />
                                                                      </font>
@@ -1608,17 +1608,17 @@
                                                                         <Font size="10.0" />
                                                                      </font>
                                                                   </Button>
-                                                                  <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllMediaSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect Media Sensors" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllMediaSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect Media Sensors" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                                                      <font>
                                                                         <Font size="10.0" />
                                                                      </font>
                                                                   </Button>
-                                                                  <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllBaseStations" prefHeight="25.0" prefWidth="290.0" text="Select Base Stations" GridPane.rowIndex="4">
+                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllBaseStations" prefHeight="25.0" prefWidth="290.0" text="Select Base Stations" GridPane.rowIndex="4">
                                                                      <font>
                                                                         <Font size="10.0" />
                                                                      </font>
                                                                   </Button>
-                                                                  <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllBaseStations" prefHeight="25.0" prefWidth="290.0" text="Deselect Base Stations" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllBaseStations" prefHeight="25.0" prefWidth="290.0" text="Deselect Base Stations" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                                                      <font>
                                                                         <Font size="10.0" />
                                                                      </font>
@@ -1628,7 +1628,7 @@
                                                                         <Font size="10.0" />
                                                                      </font>
                                                                   </Button>
-                                                                  <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllMarkers" prefHeight="25.0" prefWidth="290.0" text="Deselect All Markers" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllMarkers" prefHeight="25.0" prefWidth="290.0" text="Deselect All Markers" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                                                      <font>
                                                                         <Font size="10.0" />
                                                                      </font>
@@ -1638,17 +1638,17 @@
                                                                         <Font size="10.0" />
                                                                      </font>
                                                                   </Button>
-                                                                  <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllBuildings" prefHeight="25.0" prefWidth="290.0" text="Deselect All Buildings" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllBuildings" prefHeight="25.0" prefWidth="290.0" text="Deselect All Buildings" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                                                      <font>
                                                                         <Font size="10.0" />
                                                                      </font>
                                                                   </Button>
-                                                                  <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllMobileSensors" prefHeight="25.0" prefWidth="290.0" text="Select Mobile Sensors" GridPane.rowIndex="7">
+                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllMobileSensors" prefHeight="25.0" prefWidth="290.0" text="Select Mobile Sensors" GridPane.rowIndex="7">
                                                                      <font>
                                                                         <Font size="10.0" />
                                                                      </font>
                                                                   </Button>
-                                                                  <Button alignment="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllMobileSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect Mobile Sensors" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllMobileSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect Mobile Sensors" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                                                      <font>
                                                                         <Font size="10.0" />
                                                                      </font>
@@ -2880,12 +2880,16 @@
          <children>
             <HBox alignment="CENTER_RIGHT" layoutX="869.0" layoutY="3.0" prefHeight="26.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label fx:id="stlabel" prefHeight="18.0" text="Progression">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Label>
-                  <ProgressBar fx:id="progress" prefWidth="150.0" progress="0.0" scaleY="0.3" style="-fx-border-radius: 10;" />
+                  <AnchorPane prefHeight="16.0" prefWidth="150.0">
+                     <children>
+                        <Label fx:id="stlabel" alignment="CENTER" prefHeight="18.0" text="Progression" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-1.0">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
+                        <ProgressBar fx:id="progress" prefWidth="150.0" progress="0.0" scaleY="0.3" style="-fx-border-radius: 10;" AnchorPane.bottomAnchor="-4.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
                   <Separator orientation="VERTICAL" />
                   <Label fx:id="numberOfDevices" ellipsisString="" prefHeight="14.0" prefWidth="53.0" style="-fx-background-color: white; -fx-background-radius: 20;" text="N = ">
                      <font>
@@ -3032,7 +3036,16 @@
                      </font>
                   </Button>
                   <Separator orientation="VERTICAL" prefHeight="200.0" />
-                  <Slider fx:id="bg_slider" blockIncrement="1.0" onMouseClicked="#sliderValueChanged" onMouseDragged="#sliderValueChanged" prefHeight="16.0" prefWidth="80.0" style="-fx-font-size: 8;" />
+                  <AnchorPane prefHeight="16.0" prefWidth="80.0">
+                     <children>
+                        <Slider fx:id="bg_slider" blockIncrement="1.0" onMouseClicked="#sliderValueChanged" onMouseDragged="#sliderValueChanged" prefHeight="16.0" prefWidth="80.0" style="-fx-font-size: 8;" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                        <Label alignment="CENTER" text="Map Contrast" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
                   <Separator orientation="VERTICAL" />
                </children>
             </HBox>

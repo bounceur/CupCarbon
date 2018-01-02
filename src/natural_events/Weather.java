@@ -114,16 +114,10 @@ public class Weather extends MobileG {
 			
 			drawRadius(x, y, radius, g);
 			
-			//if (displayRadius) {
-			//	drawRadius(x, y, radius, g);
-			//}
-
-			//if (NetworkParameters.displayDetails) {
-				g.setColor(Color.BLACK);
-				String s = String.format("%2.2f", getValue());
-				g.drawString("WEATHER", x-20 , y-10 );
-				g.drawString("" + s , x-8 , y+3 );
-			//}
+			g.setColor(Color.BLACK);
+			String s = String.format("%2.2f", getValue());
+			g.drawString("WEATHER", x-20 , y-10 );
+			g.drawString("" + s , x-8 , y+3 );
 
 			if (this.nateventFileName.equals(""))
 				g.setColor(Color.WHITE);
@@ -134,16 +128,7 @@ public class Weather extends MobileG {
 			
 			g.setColor(Color.DARK_GRAY);
 			g.drawOval(x - 6, y + 7, 12, 12);
-
-			if (underSimulation) {
-				g.setColor(UColor.GREEN);
-			} else {
-				if (gpsFileName.equals(""))
-					g.setColor(UColor.RED);
-				else
-					g.setColor(UColor.ORANGE);
-			}
-			g.fillOval(x - 3, y +10, 6, 6);
+			
 		}
 	}
 

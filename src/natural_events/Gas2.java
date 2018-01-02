@@ -34,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.LinkedList;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 
@@ -47,35 +48,82 @@ import project.Project;
 import utilities.MapCalc;
 import utilities.UColor;
 
-public class Gas extends MobileG {
+public class Gas2 extends MobileG {
 
 	protected LinkedList<Integer> valueTime;
 	protected LinkedList<Double> values;
 	protected int valueIndex = 0;
 
+	protected int[] polyX = new int[62];
+	protected int[] polyY = new int[62];
+	protected double[] factor = new double[62];
+
+	private int xc;
+	private int yc;
+
 	private String idFL = "A"; // ID First Letter
 
-	public Gas(double x, double y, double z, double radius) {
+	public Gas2(double x, double y, double z, double radius) {
 		super(x, y, z, radius, "", DeviceList.number++);
+		setContours();
 	}
 
-	public Gas(double x, double y, double z, double radius, int id) {
+	public Gas2(double x, double y, double z, double radius, int id) {
 		super(x, y, z, radius, "", id);
+		setContours();
 	}
 
-	public Gas(double x, double y, double z, double radius, String gpsFileName, int id) {
+	public Gas2(double x, double y, double z, double radius, String gpsFileName, int id) {
 		super(x, y, z, radius, gpsFileName, id);
+		setContours();
 	}
 
-	public Gas(String x, String y, String z, String radius, String gpsFileName, int id) {
+	public Gas2(String x, String y, String z, String radius, String gpsFileName, int id) {
 		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(radius), gpsFileName, id);
+		setContours();
+	}
+
+	public void setContours() {
+		int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
+		xc = coord[0];
+		yc = coord[1];
+
+		double radius2 = 0;
+		double radius3 = 0;
+
+		Random rnd = new Random();
+		int k = 0;
+		for (double i = 0.1; i < 6.28; i += .1) {
+			factor[k] = MapCalc.radiusInPixels(radius) * (rnd.nextInt(8)) / 100.;
+			radius2 = MapCalc.radiusInPixels((radius + factor[k]) * Math.cos(i) / 1.);
+			radius3 = MapCalc.radiusInPixels((radius + factor[k]) * Math.sin(i) / 1.);
+			polyX[k] = (int) (xc + radius2);
+			polyY[k] = (int) (yc + radius3);
+			k++;
+		}
+	}
+
+	public void updateContours() {
+		int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
+		xc = coord[0];
+		yc = coord[1];
+		double radius2 = 0;
+		double radius3 = 0;
+		int k = 0;
+		for (double i = 0.1; i < 6.28; i += .1) {
+			radius2 = MapCalc.radiusInPixels((radius + factor[k]) * Math.cos(i) / 1.);
+			radius3 = MapCalc.radiusInPixels((radius + factor[k]) * Math.sin(i) / 1.);
+			polyX[k] = (int) (xc + radius2);
+			polyY[k] = (int) (yc + radius3);
+			k++;
+		}
 	}
 
 	public void draw(Graphics g2) {
 		if (visible) {
 			Graphics2D g = (Graphics2D) g2;
 			g.setStroke(new BasicStroke(0.6f));
-
+			updateContours();
 			initDraw(g);
 			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int x = coord[0];
@@ -94,9 +142,21 @@ public class Gas extends MobileG {
 				g.drawLine(x + radius + 3, y + radius + 3, x + radius + 3, y + radius - 2);
 			}
 
+			Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/images/fire.png")).getImage();
+			g.drawImage(image, x-50, y-50, null);
+			
 			if (selected) {
 				g.setColor(Color.GRAY);
 				g.drawOval(x - radius - 4, y - radius - 4, (radius + 4) * 2, (radius + 4) * 2);
+			}
+
+			if (hide != 2) {
+				g.setColor(UColor.ORANGE);
+				g.drawPolygon(polyX, polyY, 62);
+			}
+			if (hide == 0) {
+				g.setColor(UColor.ORANGE_TRANSPARENT);
+				g.fillPolygon(polyX, polyY, 62);
 			}
 
 			drawRadius(x, y, radius, g);
@@ -124,17 +184,12 @@ public class Gas extends MobileG {
 					g.setColor(UColor.RED);
 				g.fillOval(x - 3, y - 3, 6, 6);
 			}
-
+			//drawId(x, y, g);
 			if (NetworkParameters.displayDetails) {
 				g.setColor(Color.BLACK);
 				if (MapLayer.dark)
 					g.setColor(new Color(179, 221, 67));
 				g.drawString(getName(), (int) (x + 12), (int) (y-6));
-			}
-			
-			if (hide == 0) {			
-				Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/images/fire.png")).getImage();
-				g.drawImage(image, x-15, y-25, null);
 			}
 		}
 	}
@@ -226,9 +281,9 @@ public class Gas extends MobileG {
 	}
 
 	@Override
-	public Gas duplicate() {
+	public Gas2 duplicate() {
 		selected = false;
-		Gas gas = new Gas(longitude, latitude, elevation, radius);
+		Gas2 gas = new Gas2(longitude, latitude, elevation, radius);
 		gas.setHide(hide);
 		gas.setDrawBatteryLevel(drawBatteryLevel);
 		gas.setScriptFileName(scriptFileName);
@@ -239,8 +294,8 @@ public class Gas extends MobileG {
 	}
 
 	@Override
-	public Gas duplicateWithShift(double sLongitude, double sLatitude, double sElevation) {
-		Gas gas = duplicate();
+	public Gas2 duplicateWithShift(double sLongitude, double sLatitude, double sElevation) {
+		Gas2 gas = duplicate();
 		gas.shift(sLongitude, sLatitude, sElevation);
 		return gas;
 	}
