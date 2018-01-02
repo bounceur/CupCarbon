@@ -432,8 +432,9 @@ public class WisenSimulation implements Runnable {
 		long endTime = System.currentTimeMillis();
 		System.out.println();
 		System.out.println("End of Simulation.");
-		CupCarbon.cupCarbonController.displayShortGoodMessage("End of Simulation");
 		System.out.println(((endTime - startTime) / 1000.) + " sec");
+		
+		
 		
 		isSimulating = false;
 		
@@ -459,6 +460,8 @@ public class WisenSimulation implements Runnable {
 		System.out.println("Number of ACK messages: "+Channels.numberOfAckMessages + " ["+ Channels.numberOfAckMessages_b +"]");
 		System.out.println("Number of LOST messages: "+Channels.numberOfLostMessages + " ["+ Channels.numberOfLostMessages_b +"]");
 		System.out.println("Number of Marked Sensors: "+DeviceList.getNumberOfMarkedSensors());
+		
+		CupCarbon.cupCarbonController.displayShortGoodMessage("End of Simulation");
 	}
 
 	// ------------------------------------------------------------

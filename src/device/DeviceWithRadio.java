@@ -179,7 +179,9 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			return neighbors;
 		else {
 			List<SensorNode> neighnodes = new LinkedList<SensorNode>();
-			for(SensorNode sensorNode : DeviceList.sensors) {
+			//for(SensorNode sensorNode : DeviceList.sensors) {
+			for(int i=0; i<DeviceList.sensors.size(); i++) {
+				SensorNode sensorNode = DeviceList.sensors.get(i);
 				if(radioDetect(sensorNode) && this!=sensorNode && !isDead() && !sensorNode.isDead()) {
 					neighnodes.add(sensorNode);
 				}
@@ -193,7 +195,9 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			return neighbors;
 		else {
 			List<SensorNode> neighnodes = new LinkedList<SensorNode>();
-			for(SensorNode sensorNode : DeviceList.sensors) {
+			//for(SensorNode sensorNode : DeviceList.sensors) {
+			for(int i=0; i<DeviceList.sensors.size(); i++) {
+				SensorNode sensorNode = DeviceList.sensors.get(i);
 				if(radioDetect(sensorNode) && this!=sensorNode && !isDead() && !sensorNode.isDead() && !sensorNode.isMarked()) {
 					neighnodes.add(sensorNode);
 				}
@@ -207,7 +211,9 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			return neighbors;
 		else {
 			List<SensorNode> neighnodes = new LinkedList<SensorNode>();
-			for(SensorNode sensorNode : DeviceList.sensors) {
+			//for(SensorNode sensorNode : DeviceList.sensors) {
+			for(int i=0; i<DeviceList.sensors.size(); i++) {
+				SensorNode sensorNode = DeviceList.sensors.get(i);
 				if(radioDetect(sensorNode) && this!=sensorNode && !isDead() && !sensorNode.isDead() && sensorNode.isMarked()) {
 					neighnodes.add(sensorNode);
 				}
@@ -218,7 +224,9 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 	public List<SensorNode> getActiveNodes() {
 		List<SensorNode> neighActiveNodes = new LinkedList<SensorNode>(); 
-		for(SensorNode sensorNode : getNeighbors()) {
+		//for(SensorNode sensorNode : getNeighbors()) {
+		for(int i=0; i<getNeighbors().size(); i++) {
+			SensorNode sensorNode = getNeighbors().get(i);
 			if(sensorNode.isSending())
 				neighActiveNodes.add(sensorNode);
 		}
@@ -228,7 +236,9 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	public int getPerActiveNodes() {
 		int n = getNeighbors().size();
 		int p = 0;
-		for(SensorNode sensorNode : getNeighbors()) {
+		//for(SensorNode sensorNode : getNeighbors()) {
+		for(int i=0; i<getNeighbors().size(); i++) {
+			SensorNode sensorNode = getNeighbors().get(i);
 			if(sensorNode.isSending())
 				p++;
 		}
@@ -250,13 +260,13 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		numberOfNeighbors = 0;
 		//for(SensorNode sensor : DeviceList.sensors) {
 		for(int i=0; i<DeviceList.sensors.size(); i++) {
-			SensorNode sensor = DeviceList.sensors.get(i);
-			if(this!=sensor) {
-				if(radioDetect(sensor) && !isDead() && !sensor.isDead()) {
-					drawRadioLink(sensor, g, 1);
+			SensorNode sensorNode = DeviceList.sensors.get(i);
+			if(this!=sensorNode) {
+				if(radioDetect(sensorNode) && !isDead() && !sensorNode.isDead()) {
+					drawRadioLink(sensorNode, g, 1);
 					numberOfNeighbors++;
 					if (NetworkParameters.displayRLDistance) {
-						MapLayer.drawDistance(longitude, latitude, elevation, sensor.getLongitude(), sensor.getLatitude(), sensor.getElevation(), g);
+						MapLayer.drawDistance(longitude, latitude, elevation, sensorNode.getLongitude(), sensorNode.getLatitude(), sensorNode.getElevation(), g);
 					}
 				}
 			}
@@ -448,9 +458,11 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	public void calculatePropagations() {
 		SimulationInputs.radioDetectionType = RadioDetection.POWER_RECEPTION_DETECTION;
 		neighbors = new Vector<SensorNode> () ;
-		for(SensorNode device : DeviceList.sensors) {
-			if(radioDetect(device) && !isDead() && !device.isDead()) {
-				neighbors.add(device);
+		//for(SensorNode sensorNode : DeviceList.sensors) {
+		for(int i=0; i<DeviceList.sensors.size(); i++) {
+			SensorNode sensorNode = DeviceList.sensors.get(i);
+			if(radioDetect(sensorNode) && !isDead() && !sensorNode.isDead()) {
+				neighbors.add(sensorNode);
 			}					
 		}
 	}

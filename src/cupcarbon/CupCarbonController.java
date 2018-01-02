@@ -3220,8 +3220,10 @@ public class CupCarbonController implements Initializable {
 				}
 				if(device.isSelected()) n_s_o++;
 			}
-			
-			for(SensorNode sensor : DeviceList.sensors) {
+
+			//for(SensorNode sensor : DeviceList.sensors) {
+			for(int i=0; i<DeviceList.sensors.size(); i++) {
+				SensorNode sensor = DeviceList.sensors.get(i);			
 				if(sensor.getNeighbors().size()==0) n_i_s++;
 				if(sensor.getScriptFileName().equals("")) n_wo_s++; else n_wi_s++;
 				
