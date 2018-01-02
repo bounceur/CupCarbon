@@ -575,14 +575,6 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Solver">
                <items>
-               	<MenuItem mnemonicParsing="false" onAction="#sensorCycle" text="Cycle">
-                     <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/edu_mathematics-1.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></MenuItem>
                   <MenuItem mnemonicParsing="false" onAction="#sensorCoverage" text="Sensor Coverage">
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
@@ -634,7 +626,7 @@
                                  </image>
                               </ImageView>
                            </graphic></MenuItem>
-                        <MenuItem mnemonicParsing="false" onAction="#runLPCNAlgorithm" text="Run LPCN Algorithm">
+                        <MenuItem mnemonicParsing="false" onAction="#runLPCNAlgorithm_wc" text="Run LPCN Algorithm 1">
                            <graphic>
                               <ImageView pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -642,6 +634,15 @@
                                  </image>
                               </ImageView>
                            </graphic></MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#runLPCNAlgorithm" text="Run LPCN Algorithm 2">
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/edu_mathematics-1.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#runGrahamAlgo" text="Run Graham Algo">
                            <graphic>

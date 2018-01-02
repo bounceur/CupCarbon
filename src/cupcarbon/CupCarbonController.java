@@ -117,6 +117,7 @@ import simulation.WisenSimulation;
 import solver.CycleFromNode;
 import solver.EnvelopeJarvis;
 import solver.EnvelopeLPCN;
+import solver.EnvelopeLPCN_wc;
 import solver.NetworkCenter;
 import solver.NetworkEnvelopeC;
 import solver.NetworkEnvelopeP;
@@ -2258,6 +2259,12 @@ public class CupCarbonController implements Initializable {
 	}
 
 	@FXML
+	public void runLPCNAlgorithm_wc() {
+		EnvelopeLPCN_wc lpcn = new EnvelopeLPCN_wc();
+		lpcn.start();
+	}
+	
+	@FXML
 	public void runLPCNAlgorithm() {
 		EnvelopeLPCN lpcn = new EnvelopeLPCN();
 		lpcn.start();
@@ -3126,7 +3133,7 @@ public class CupCarbonController implements Initializable {
 				System.err.println("Error in recent.rec file");
 			} catch (NullPointerException e) {
 				System.err.println("No recent files");
-				displayShortErrMessageTh("No recent files.");
+				displayShortErrMessageTh("No recent files");
 			}
 			openProjectLoadParameters();
 		});

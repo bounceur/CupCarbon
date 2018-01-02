@@ -30,6 +30,7 @@ import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
@@ -53,10 +54,10 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	protected double porteeErr = .4 ;
 	protected Random random = new Random() ;
 	
-	protected LinkedList<RadioModule> radioModuleList = new LinkedList<RadioModule>();	
+	protected Vector<RadioModule> radioModuleList = new Vector<RadioModule>();	
 	protected RadioModule currentRadioModule = null;
 	
-	protected LinkedList<SensorNode> neighbors = new LinkedList<SensorNode> () ;
+	protected Vector<SensorNode> neighbors = new Vector<SensorNode> () ;
 	
 	protected int nPoint = 30;	
 	protected double deg = 2.*Math.PI/nPoint;
@@ -247,7 +248,9 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 	public void drawRadioLinks2(Graphics g) {
 		numberOfNeighbors = 0;
-		for(SensorNode sensor : DeviceList.sensors) {
+		//for(SensorNode sensor : DeviceList.sensors) {
+		for(int i=0; i<DeviceList.sensors.size(); i++) {
+			SensorNode sensor = DeviceList.sensors.get(i);
 			if(this!=sensor) {
 				if(radioDetect(sensor) && !isDead() && !sensor.isDead()) {
 					drawRadioLink(sensor, g, 1);
@@ -262,25 +265,25 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 	public void drawRadioLinks(int k1, Graphics g) {
 		numberOfNeighbors = 0;
-		//int k2 = 0;
-		for(SensorNode sensor : DeviceList.sensors) {
-			//if(k2>k1) {
-				if(this!=sensor) {
-					if(radioDetect(sensor) && !isDead() && !sensor.isDead()) {
-						drawRadioLink(sensor, g, 1);
-						numberOfNeighbors++;
-						if (NetworkParameters.displayRLDistance) {
-							MapLayer.drawDistance(longitude, latitude, elevation, sensor.getLongitude(), sensor.getLatitude(), sensor.getElevation(), g);
-						}
+		//for(SensorNode sensor : DeviceList.sensors) {
+		for(int i=0; i<DeviceList.sensors.size(); i++) {
+			SensorNode sensor = DeviceList.sensors.get(i);
+			if(this!=sensor) {
+				if(radioDetect(sensor) && !isDead() && !sensor.isDead()) {
+					drawRadioLink(sensor, g, 1);
+					numberOfNeighbors++;
+					if (NetworkParameters.displayRLDistance) {
+						MapLayer.drawDistance(longitude, latitude, elevation, sensor.getLongitude(), sensor.getLatitude(), sensor.getElevation(), g);
 					}
 				}
-			//}
-			//k2++;
+			}
 		}
 	}
 	
 	public void drawRadioLinkArrows(Graphics g) {
-		for(SensorNode sensor : DeviceList.sensors) {
+		//for(SensorNode sensor : DeviceList.sensors) {
+		for(int i=0; i<DeviceList.sensors.size(); i++) {
+			SensorNode sensor = DeviceList.sensors.get(i);
 			if(this!=sensor) {
 				if(radioDetect(sensor) && !isDead() && !sensor.isDead()) {
 					drawRadioLinkArrows(sensor, g, 1);
@@ -290,12 +293,12 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	}
 	
 	public void drawRadioPropagations(Graphics g) {
-		Device device;
+		SensorNode sensor;
 		for(int i=0; i<neighbors.size(); i++) {
-			device = neighbors.get(i);
-			drawRadioLink(device, g, 0);
+			sensor = neighbors.get(i);
+			drawRadioLink(sensor, g, 0);
 			if (NetworkParameters.displayRLDistance) {
-				MapLayer.drawDistance(longitude, latitude, elevation, device.getLongitude(), device.getLatitude(), device.getElevation(), g);
+				MapLayer.drawDistance(longitude, latitude, elevation, sensor.getLongitude(), sensor.getLatitude(), sensor.getElevation(), g);
 			}
 		}
 	}
@@ -322,9 +325,8 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			Graphics2D g2 = (Graphics2D) g;
 			
 			Stroke dashed = new BasicStroke(0.4f);
-			//Stroke dashed = new BasicStroke(1f);
 			if(type==1)
-				dashed = new BasicStroke(0.2f);
+				dashed = new BasicStroke(0.3f);
 			//dashed = new BasicStroke(0.6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{3,3}, 0);
 				
 	        g2.setStroke(dashed);
@@ -376,12 +378,12 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 	public void setColor(Graphics g, int intColor) {
 		switch(intColor) {
-		case 0 : g.setColor(Color.DARK_GRAY); if(MapLayer.dark) g.setColor(Color.LIGHT_GRAY); break;
-		case 1 : g.setColor(Color.BLACK); if(MapLayer.dark) g.setColor(Color.DARK_GRAY); break;
-		case 2 : g.setColor(Color.GRAY); if(MapLayer.dark) g.setColor(UColor.DWHITE); break;		
-		case 3 : g.setColor(UColor.RED); break;
-		case 4 : g.setColor(UColor.BLUE); break;
-		case 5 : g.setColor(UColor.ORANGE); if(MapLayer.dark) g.setColor(Color.ORANGE); break;
+		case 0 : g.setColor(UColor.DARK_GRAY_T); if(MapLayer.dark) g.setColor(UColor.LIGHT_GRAY_T); break;
+		case 1 : g.setColor(UColor.BLACK_T); if(MapLayer.dark) g.setColor(UColor.DARK_GRAY_T); break;
+		case 2 : g.setColor(UColor.GRAY_T); if(MapLayer.dark) g.setColor(UColor.DWHITE_T); break;		
+		case 3 : g.setColor(UColor.REDD_TRANSPARENT); break;
+		case 4 : g.setColor(UColor.BLUEMT); if(MapLayer.dark) g.setColor(UColor.BLUEM); break;
+		case 5 : g.setColor(UColor.ORANGE_TRANSPARENT2); if(MapLayer.dark) g.setColor(UColor.ORANGE_TRANSPARENT); break;
 		}
 	}	
 	
@@ -445,7 +447,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 	public void calculatePropagations() {
 		SimulationInputs.radioDetectionType = RadioDetection.POWER_RECEPTION_DETECTION;
-		neighbors = new LinkedList<SensorNode> () ;
+		neighbors = new Vector<SensorNode> () ;
 		for(SensorNode device : DeviceList.sensors) {
 			if(radioDetect(device) && !isDead() && !device.isDead()) {
 				neighbors.add(device);
@@ -455,7 +457,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 	public void resetPropagations() {
 		SimulationInputs.radioDetectionType = RadioDetection.SIMPLE_DETECTION;
-		neighbors = new LinkedList<SensorNode> () ;
+		neighbors = new Vector<SensorNode> () ;
 	}
 	
 	public double getRequiredQuality() {
@@ -634,7 +636,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	}	
 	
 	public void initRadioModule(){
-		radioModuleList = new LinkedList<RadioModule>();
+		radioModuleList = new Vector<RadioModule>();
 	}
 	
 	public double getCurrentRadioRangeRadius() {

@@ -45,6 +45,7 @@ public final class UColor {
 	public static final Color CYANT = new Color(0, 204, 204,200);
 	public static final Color BLUE = new Color(81, 127, 190);
 	public static final Color BLUEM = new Color(0, 178, 255, 180);
+	public static final Color BLUEMT = new Color(0, 90, 255, 180);
 	public static final Color BLUE1 = new Color(89, 154, 178);
 	public static final Color BLUE2 = new Color(89, 154, 178, 150);
 	public static final Color BLUE3 = new Color(89, 154, 178, 100);
@@ -65,6 +66,12 @@ public final class UColor {
 	public static final Color BLACK_TTRANSPARENT = new Color(0, 0, 0, 100);
 	public static final Color BLACK_TTTRANSPARENT = new Color(0, 0, 0, 70);
 	public static final Color BLACK_TTTTRANSPARENT = new Color(0, 0, 0, 10);
+	
+	public static final Color DARK_GRAY_T = new Color(100, 100, 100, 240);
+	public static final Color GRAY_T = new Color(128, 128, 128, 200);
+	public static final Color LIGHT_GRAY_T = new Color(192, 192, 192, 200);
+	public static final Color BLACK_T = new Color(0, 0, 0, 200);
+	public static final Color DWHITE_T = new Color(220, 220, 220, 200);
 
 	public static final Color [] colorTab = {
 		UColor.GREEND_TRANSPARENT,

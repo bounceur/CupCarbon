@@ -35,6 +35,7 @@ import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
@@ -785,7 +786,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 		return messageLost;
 	}
 	
-	public LinkedList<RadioModule> getRadioModuleList() {
+	public Vector<RadioModule> getRadioModuleList() {
 		return radioModuleList;
 	}
 	
