@@ -133,7 +133,7 @@ public class Gas extends MobileG {
 			}
 			
 			if (hide == 0) {			
-				Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/images/fire.png")).getImage();
+				Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/fire.png")).getImage();
 				g.drawImage(image, x-15, y-25, null);
 			}
 		}

@@ -102,7 +102,7 @@ public class Weather extends MobileG {
 //			g.drawRoundRect(x-32, y-11, 64, 23, 15, 15);
 
 			//Image image = new ImageIcon("src/images/sun.png").getImage();
-			Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("src/images/sun.png")).getImage();
+			Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/sun.png")).getImage();
 			g.drawImage(image, x-50, y-50, null);
 			
 			if (selected) {
