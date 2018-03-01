@@ -19,7 +19,6 @@ public class Command_GETPOS2 extends Command {
 		String v1 = "" ;
 		String v2 = "" ;
 		WisenSimulation.simLog.add("S" + sensor.getId() + " GET POSITION2.");
-<<<<<<< HEAD
 		
 		v1 = sensor.getLongitude()+"";
 		v2 = sensor.getLatitude()+"";
@@ -29,12 +28,7 @@ public class Command_GETPOS2 extends Command {
 		sensor.getScript().addVariable(arg2, v2);
 		//sensor.getScript().addVariable(arg1, p.getX()+"");
 		//sensor.getScript().addVariable(arg2, p.getY()+"");
-=======
-		v1 = sensor.getLongitude()+"";
-		v2 = sensor.getLatitude()+"";
-		sensor.getScript().addVariable(arg1, v1);
-		sensor.getScript().addVariable(arg2, v2);
->>>>>>> branch 'master' of https://github.com/bounceur/CupCarbon.git
+
 		return 0 ;
 	}
 

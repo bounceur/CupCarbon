@@ -563,11 +563,6 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			cadreX2 = mx2;
 			cadreY2 = my2;
 			
-<<<<<<< HEAD
-=======
-			System.out.println();
-			
->>>>>>> branch 'master' of https://github.com/bounceur/CupCarbon.git
 			drawSelectionRectangle = true;
 			repaint();
 		}

@@ -80,11 +80,7 @@ public class CupCarbon extends Application {
 	}
 	
 	public static void main(String[] args) {		
-<<<<<<< HEAD
 		String r = "03111441122123263122253111131132311317312221232617123";	//Signature
-=======
-		String r = "3111441122123263122253111131132311317312221232617123";	//Signature
->>>>>>> branch 'master' of https://github.com/bounceur/CupCarbon.git
 		System.out.println(r);
 		if(args.length>0) {
 			SolverProxyParams.proxyset = args[0];

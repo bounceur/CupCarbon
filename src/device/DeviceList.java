@@ -1265,7 +1265,6 @@ public class DeviceList {
 		}
 	}
 	
-<<<<<<< HEAD
 	public static void markEdge(SensorNode sn1, SensorNode sn2) {
 		markedEdges.add(new SNEdge(sn1, sn2));
 		MapLayer.repaint();
@@ -1281,8 +1280,6 @@ public class DeviceList {
 		}
 	}
 	
-=======
->>>>>>> branch 'master' of https://github.com/bounceur/CupCarbon.git
 	public static void noEdge(SensorNode sn1, SensorNode sn2) {
 		removeEdge(sn1, sn2);
 		MapLayer.repaint();

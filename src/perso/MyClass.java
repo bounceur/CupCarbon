@@ -1,11 +1,9 @@
 package perso;
 
-<<<<<<< HEAD
 import java.util.List;
 
 import device.DeviceList;
 import device.SensorNode;
-import map.MapLayer;
 
 public class MyClass extends Thread {
 
@@ -59,9 +57,7 @@ public class MyClass extends Thread {
 				double distance = sensor.distance(sensor2);
 				System.out.println(sensor.getName() + " -- " + distance + " --> " + sensor2.getName());
 				// Mark the edge (sensor,sensor2)
-				DeviceList.addEdge(sensor, sensor2);
-				// Refresh the graphic
-				MapLayer.repaint();
+				DeviceList.markEdge(sensor, sensor2);
 				// Wait 200 millisecond
 				try {
 					Thread.sleep(200);
@@ -69,9 +65,7 @@ public class MyClass extends Thread {
 					e.printStackTrace();
 				}
 				// Unmark the edge (sensor,sensor2)
-				DeviceList.removeEdge(sensor, sensor2);
-				// Refresh the graphic
-				MapLayer.repaint();
+				DeviceList.unmarkEdge(sensor, sensor2);
 				// Wait 200 millisecond
 				try {
 					Thread.sleep(200);
@@ -145,20 +139,5 @@ public class MyClass extends Thread {
 				}
 			}
 		}
-=======
-
-public class MyClass extends Thread {
-
-	private String s = null;
-
-	public MyClass() {
-		s = "Hello CupCarbon !";
 	}
-
-	@Override
-	public void run() {
-		System.out.println("--> " + s);
->>>>>>> branch 'master' of https://github.com/bounceur/CupCarbon.git
-	}
-
 }
