@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="270.0" prefWidth="543.0" spacing="5.0" style="-fx-background-color: #FFFFFF66; -fx-background-radius: 20; -fx-border-color: #00000022; -fx-border-radius: 20;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.SplashController">
+   <children>
+      <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/cupcarbon_logo.png" />
+         </image>
+         <effect>
+            <DropShadow color="#00000084" />
+         </effect>
+      </ImageView>
+      <Label text="CupCarbon">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font></Label>
+      <Label text="www.cupcarbon.com" textFill="#2d4c94" />
+      <ProgressBar fx:id="progress" prefWidth="200.0" progress="0.0" />
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>
