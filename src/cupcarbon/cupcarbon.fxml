@@ -12,11 +12,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<<<<<<< HEAD
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="770.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.CupCarbonController">
-=======
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="891.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.CupCarbonController">
->>>>>>> branch 'master' of https://github.com/bounceur/CupCarbon.git
    <top>
       <MenuBar fx:id="menuBar" style="-fx-border-width: 2; -fx-font-size: 11;" BorderPane.alignment="CENTER">
         <menus>
