@@ -1,5 +1,6 @@
 package perso;
 
+<<<<<<< HEAD
 import java.util.List;
 
 import device.DeviceList;
@@ -144,6 +145,20 @@ public class MyClass extends Thread {
 				}
 			}
 		}
+=======
+
+public class MyClass extends Thread {
+
+	private String s = null;
+
+	public MyClass() {
+		s = "Hello CupCarbon !";
+	}
+
+	@Override
+	public void run() {
+		System.out.println("--> " + s);
+>>>>>>> branch 'master' of https://github.com/bounceur/CupCarbon.git
 	}
 
 }

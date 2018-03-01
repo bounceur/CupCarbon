@@ -8,6 +8,7 @@ import javafx.scene.control.TextArea;
 public class CupCarbonErrConsoleStream extends OutputStream {
     
 	private TextArea textArea ;
+<<<<<<< HEAD
 	private int x = 0;
 	
 	public CupCarbonErrConsoleStream(TextArea textArea) {
@@ -28,6 +29,20 @@ public class CupCarbonErrConsoleStream extends OutputStream {
 		}
 	);
     	
+=======
+	
+	public CupCarbonErrConsoleStream(TextArea textArea) {
+		this.textArea = textArea;
+	}
+	
+    @Override
+    public void write(int v) throws IOException {
+    	Platform.runLater( () -> { 
+    			CupCarbon.cupCarbonController.stopSimulation();
+    			textArea.appendText(String.valueOf((char) v));
+    		}
+    	);
+>>>>>>> branch 'master' of https://github.com/bounceur/CupCarbon.git
     	//Platform.runLater(new Runnable() {
 			//@Override
 			//public void run() {				
