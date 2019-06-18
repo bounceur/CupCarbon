@@ -1,5 +1,6 @@
 package senscript;
 
+import device.DeviceList;
 import device.SensorNode;
 import simulation.WisenSimulation;
 
@@ -16,8 +17,10 @@ public class Command_KILL extends Command {
 	public double execute() {
 		double v = Double.valueOf(sensor.getScript().getVariableValue(arg));
 		WisenSimulation.simLog.add("S" + sensor.getId() + " KILL -> " + v);
-		if(Math.random()<v)
+		if(Math.random()<v) {
 			sensor.getBattery().setLevel(0);
+			DeviceList.calculatePropagations();
+		}
 		return 0 ;
 	}
 	

@@ -9,9 +9,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import device.SensorNode;
 import geometry.DPoint;
 import map.MapLayer;
 import project.Project;
+import utilities.Geometry;
 import utilities.MapCalc;
 import utilities.UColor;
 
@@ -39,7 +41,7 @@ public class Routes {
 				int[] coord;
 				
 				ArrayList<DPoint> route = routes.get(i).getRoute();
-
+				String routeName = routes.get(i).getName();
 				for (int j = 0; j < route.size(); j++) {
 					
 					if (first) {
@@ -50,6 +52,7 @@ public class Routes {
 						lx1 = coord[0];
 						ly1 = coord[1];
 						g.fillOval(lx1-2, ly1-2, 4, 4);
+						g.drawString(routeName, lx1-5, ly1-5);
 					} else {
 						x2 = route.get(j).getX();
 						y2 = route.get(j).getY();
@@ -135,20 +138,89 @@ public class Routes {
 		return null;
 	}
 	
-	public static int closestIndex(int routeIndex, NamedRoute nr1, NamedRoute nr2) {
-		double x = nr1.getRoute().get(routeIndex).getX();
-		double y = nr1.getRoute().get(routeIndex).getY();
-		int idx = 0;
-		double distance = 0;
-		double distMin = Double.MAX_VALUE;
- 		for(int i=0; i<nr2.size(); i++) {
-			distance = MapLayer.distance(x, y, nr2.getRoute().get(i).getX(), nr2.getRoute().get(i).getY());
-			if(distance < distMin) {
-				distMin = distance;
-				idx = i;
+	public static int [] closestIndex(int routeIndex, NamedRoute nr1, NamedRoute nr2) {
+		int [] ridx = {0, 0};
+		
+		//double x = nr1.getRoute().get(routeIndex).getX();
+		//double y = nr1.getRoute().get(routeIndex).getY();
+		//int idx1 = 0;
+		//int idx2 = 0;
+		//double distance = 0;
+		//double distMin = Double.MAX_VALUE;
+ 		
+		//public static boolean intersect(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3) {
+		
+		for(int i=routeIndex; i<nr1.size()-1; i++) {
+			for(int j=0; j<nr2.size()-1; j++) {
+				//distance = MapLayer.distance(x, y, nr2.getRoute().get(j).getX(), nr2.getRoute().get(j).getY());
+				//if(distance < distMin) {
+				//	distMin = distance;
+				//	idx2 = j;
+				//}
+				if(Geometry.intersect(
+						nr1.getRoute().get(i).getX(), 
+						nr1.getRoute().get(i).getY(),
+						nr1.getRoute().get(i+1).getX(), 
+						nr1.getRoute().get(i+1).getY(), 
+						nr2.getRoute().get(j).getX(), 
+						nr2.getRoute().get(j).getY(),
+						nr2.getRoute().get(j+1).getX(), 
+						nr2.getRoute().get(j+1).getY())) 
+				{
+					ridx[0] = i;
+					ridx[1] = j+1;
+					return ridx;
+				}
 			}
 		}
-		return idx;
+		//return idx+1;
+		return ridx;
+	}
+	
+	public static int [] closestIndex2(SensorNode sensor, NamedRoute nr2) {
+		int [] ridx = {0, 0};
+		for(int i=0; i<sensor.getRouteSize()-1; i++) {
+			for(int j=0; j<nr2.size()-1; j++) {
+				ridx[0] = i;
+				ridx[1] = j+1;
+				if(Geometry.intersect(
+						sensor.getIthX(i), 
+						sensor.getIthY(i),
+						sensor.getIthX(i+1), 
+						sensor.getIthY(i+1), 
+						nr2.getRoute().get(j).getX(), 
+						nr2.getRoute().get(j).getY(),
+						nr2.getRoute().get(j+1).getX(), 
+						nr2.getRoute().get(j+1).getY())) 
+				{
+					return ridx;
+				}
+			}
+		}
+		return ridx;
+	}
+	
+	public static int [] getIntersectionIdxs(int routeIndex, NamedRoute nr1, NamedRoute nr2) {
+		int [] idxs = {0, 0} ;
+		
+		for(int i=0; i<nr1.size()-1; i++) {
+			DPoint p0 = nr1.getRoute().get(i);
+ 			DPoint p1 = nr1.getRoute().get(i+1);
+	 		for(int j=0; j<nr2.size()-1; j++) {
+	 			DPoint p2 = nr2.getRoute().get(j);
+	 			DPoint p3 = nr2.getRoute().get(j+1);
+	 			if(Geometry.intersect(p0, p1, p2, p3)) {
+	 				//System.out.println(i+" "+j+" "+Geometry.intersect(p0, p1, p2, p3));
+	 				idxs[0] = i;
+	 				idxs[1] = j;
+	 				break;
+	 			}
+			}
+		}
+		//System.out.println("-------------------------------");
+		//System.out.println("-------------------------------");
+		//System.out.println();
+		return idxs;
 	}
 	
 	public static int numberOfClosestNodes(int routeIndex1, NamedRoute nr1, int routeIndex2, NamedRoute nr2) {

@@ -99,7 +99,7 @@ public class MarkerList {
 	}
 
 	public static void open(String fileName) {
-		Routes.reset();
+		//Routes.reset();
 		reset();		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));

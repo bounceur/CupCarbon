@@ -13,4 +13,5 @@ public class NetworkParameters {
 	public static int radioLinksColor = 0;
 	public static boolean displayPrintMessage = true;
 	public static boolean displayAllRoutes = false;
+	public static float linkWidth = 0.3f;
 }

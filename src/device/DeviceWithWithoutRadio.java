@@ -2,7 +2,7 @@
  * CupCarbon: OSM based Wireless Sensor Network design and simulation tool
  * www.cupcarbon.com
  * ----------------------------------------------------------------------------------------------------------------
- * Copyright (C) 2013 Ahcene Bounceur
+ * Copyright (C) 2018 Ahcene Bounceur
  * ----------------------------------------------------------------------------------------------------------------
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,12 +33,11 @@ import visibility.VisibilityZones;
 
 /**
  * @author Ahcene Bounceur
- * @author Lounis Massinissa
  * @version 1.0
  */
 public abstract class DeviceWithWithoutRadio extends Device {
 
-	protected LinkedList<Long> routeTime;
+	protected LinkedList<Integer> routeTime;
 	protected LinkedList<Double> routeX;
 	protected LinkedList<Double> routeY;
 	protected LinkedList<Double> routeZ;
@@ -72,13 +71,26 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	// Mobility methods
 	// --------------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	// Load Route from file to Lists
+	// Load Route from the gpsFileName to Lists
 	// ------------------------------------------------------------------------
 	public void loadRouteFromFile() {		
+		loadRouteFromFile(gpsFileName);
+	}
+
+	public int getRouteSize() {return routeTime.size(); }
+	public int getIthWTime(int i) {return routeTime.get(i); }
+	public double getIthX(int i) {return routeX.get(i); }
+	public double getIthY(int i) {return routeY.get(i); }
+	public double getIthZ(int i) {return routeZ.get(i); }
+	
+	// ------------------------------------------------------------------------
+	// Load Route from file to Lists
+	// ------------------------------------------------------------------------
+	public void loadRouteFromFile(String fileName) {		
 		try {
-			if (!gpsFileName.equals("")) {
+			if (!fileName.equals("")) {
 				//routeIndex = 0;
-				routeTime = new LinkedList<Long>();
+				routeTime = new LinkedList<Integer>();
 				routeX = new LinkedList<Double>();
 				routeY = new LinkedList<Double>();
 				routeZ = new LinkedList<Double>();
@@ -86,9 +98,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 				BufferedReader b = null;
 				String s;
 				String[] ts;
-				
-				//readyForMobility = true;
-				fis = new FileInputStream(Project.getProjectGpsPath() + File.separator + gpsFileName);				
+				fis = new FileInputStream(Project.getProjectGpsPath() + File.separator + fileName);				
 				b = new BufferedReader(new InputStreamReader(fis));
 				underSimulation = true;
 				b.readLine();
@@ -98,26 +108,94 @@ public abstract class DeviceWithWithoutRadio extends Device {
 				nLoop = Integer.parseInt(b.readLine());
 				while ((s = b.readLine()) != null) {
 					ts = s.split(" ");
-					routeTime.add(Long.parseLong(ts[0]));
+					routeTime.add(Integer.parseInt(ts[0]));
 					routeX.add(Double.parseDouble(ts[1]));
 					routeY.add(Double.parseDouble(ts[2]));
 					routeZ.add(Double.parseDouble(ts[3]));
 				}
 				b.close();
 				fis.close();
-
 			} 
-			//else
-			//	readyForMobility = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-//		if(routeX.size()>0)
-//			System.out.println(id + " " + routeX.get(routeIndex));
-//		else
-//			System.out.println(id);
 	}
+	
+	// ------------------------------------------------------------------------
+	// Load Route from 2 files to Lists
+	// idx1_s : the index of route1 from which the new route will start
+	// idx1_f : the index of route1 where the new route will stop to continue 
+	//          from the index idx2 of route2
+	// idx2 : the index of route2 from which the new route will continue
+	// ------------------------------------------------------------------------
+	public void loadRouteFrom2Files(String fileName1, int idx1_f, String fileName2, int idx2) {
+		
+		int [] t = new int[routeTime.size()];
+		double [] tx = new double[routeTime.size()];
+		double [] ty = new double[routeTime.size()];
+		double [] tz = new double[routeTime.size()];
+		
+		for(int i=0; i<routeTime.size(); i++) {
+			t[i] = routeTime.get(i);
+			tx[i] = routeX.get(i);
+			ty[i] = routeY.get(i);
+			tz[i] = routeZ.get(i);
+		}
+		
+		try {
+			if (!fileName1.equals("") && !fileName2.equals("")) {
+				routeTime = new LinkedList<Integer>();
+				routeX = new LinkedList<Double>();
+				routeY = new LinkedList<Double>();
+				routeZ = new LinkedList<Double>();
+				FileInputStream fis;
+				BufferedReader b = null;
+				String s;
+				String[] ts;
+				
+				underSimulation = true;
+				
+				loop = false;
+				nLoop = 1;
 
+				for(int i=routeIndex; i<idx1_f; i++) {
+					routeTime.add(t[i]);
+					routeX.add(tx[i]);
+					routeY.add(ty[i]);
+					routeZ.add(tz[i]);
+				}
+			
+				fis = new FileInputStream(Project.getProjectGpsPath() + File.separator + fileName2);				
+				b = new BufferedReader(new InputStreamReader(fis));
+				b.readLine();
+				b.readLine();
+				b.readLine();
+				b.readLine();
+				b.readLine();
+				int i = 0;
+				while ((s = b.readLine()) != null) {
+					if(i>=(idx2)) {
+						ts = s.split(" ");
+						routeTime.add(Integer.parseInt(ts[0]));
+						routeX.add(Double.parseDouble(ts[1]));
+						routeY.add(Double.parseDouble(ts[2]));
+						routeZ.add(Double.parseDouble(ts[3]));
+					}
+					i++;
+				}
+				b.close();
+				fis.close();
+				
+				/*for(int k=0; k<routeTime.size(); k++) {
+					System.out.println(routeTime.get(k)+ " " + routeX.get(k)+ " "+ routeY.get(k) + " 0.0 4.0");
+				}
+				System.out.println("-------");*/
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	// ------------------------------------------------------------------------
 	// Do some actions before the simulation
 	// ------------------------------------------------------------------------
@@ -146,7 +224,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 			long tmpTime = 0;
 			long cTime = 0;
 			long toWait = 0;			
-			do {		
+			do {
 				cTime = routeTime.get(routeIndex);
 				toWait = cTime - tmpTime;
 				tmpTime = cTime;
@@ -265,11 +343,11 @@ public abstract class DeviceWithWithoutRadio extends Device {
 		return false;
 	}
 
-	public LinkedList<Long> getRouteTime() {
+	public LinkedList<Integer> getRouteTime() {
 		return routeTime;
 	}
 
-	public void setRouteTime(LinkedList<Long> routeTime) {
+	public void setRouteTime(LinkedList<Integer> routeTime) {
 		this.routeTime = routeTime;
 	}
 

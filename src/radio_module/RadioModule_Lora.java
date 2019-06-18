@@ -8,6 +8,7 @@ import utilities.UColor;
 public class RadioModule_Lora extends RadioModule {
 
 	protected int spreadingFactor = 7;
+	protected int codeRate = 0;
 	
 	public RadioModule_Lora(SensorNode sensorNode, String name) {
 		super(sensorNode, name);
@@ -56,6 +57,7 @@ public class RadioModule_Lora extends RadioModule {
 		nRadioModule.setEListen(getEListen());
 		nRadioModule.setRadioDataRate(getRadioDataRate());
 		nRadioModule.setSpreadingFactor(getSpreadingFactor());
+		nRadioModule.setCodeRate(getCodeRate());
 		nRadioModule.setRadioConsoTxModel(getRadioConsoTxModel());
 		nRadioModule.setRadioConsoRxModel(getRadioConsoRxModel());
 		return nRadioModule;
@@ -82,6 +84,7 @@ public class RadioModule_Lora extends RadioModule {
 		fos.println("radio_elisten:" + getEListen());
 		fos.println("radio_data_rate:" + getRadioDataRate());
 		fos.println("spreading_factor:" + getSpreadingFactor());
+		fos.println("code_rate:" + getCodeRate());
 		fos.println("conso_tx_model:" + getRadioConsoTxModel());
 		fos.println("conso_rx_model:" + getRadioConsoRxModel());
 	}
@@ -92,6 +95,14 @@ public class RadioModule_Lora extends RadioModule {
 	
 	public void setSpreadingFactor(int spreadingFactor) {
 		this.spreadingFactor = spreadingFactor ;
+	}
+	
+	public int getCodeRate() {
+		return codeRate;
+	}
+	
+	public void setCodeRate(int codeRate) {
+		this.codeRate = codeRate ;
 	}
 	
 }

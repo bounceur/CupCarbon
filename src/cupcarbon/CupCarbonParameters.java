@@ -23,7 +23,6 @@ import java.io.File;
 
 /**
  * @author Ahcene Bounceur
- * @author Lounis Massinissa
  * @version 1.0
  */
 public class CupCarbonParameters {

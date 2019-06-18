@@ -2,6 +2,7 @@ package action;
 
 import buildings.Building;
 import buildings.BuildingList;
+import visibility.VisibilityLauncher;
 
 public class CupActionAddBuilding extends CupAction {	
 	
@@ -15,11 +16,13 @@ public class CupActionAddBuilding extends CupAction {
 	@Override
 	public void execute() {
 		BuildingList.add(building);
+		VisibilityLauncher.calculate();
 	}
 
 	@Override
 	public void antiExecute() {
 		BuildingList.delete(building);
+		VisibilityLauncher.calculate();
 	}
 
 }

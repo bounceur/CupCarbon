@@ -32,7 +32,6 @@ import utilities.UColor;
 
 /**
  * @author Ahcene Bounceur
- * @author Lounis Massinissa
  * @version 1.0
  */
 public class MediaSensorUnit extends SensorUnit implements Cloneable {
@@ -123,7 +122,7 @@ public class MediaSensorUnit extends SensorUnit implements Cloneable {
 	public void draw(Graphics g, int mode, boolean detection, boolean buildingDetection) {
 		 calculateSensingArea();
 		if (!detection)
-			g.setColor(UColor.BLUE_TRANSPARENT);
+			g.setColor(UColor.WHITE_LLTRANSPARENT);
 		else
 			g.setColor(UColor.GREEND_TTRANSPARENT);
 	

@@ -2,12 +2,12 @@ package radio_module;
 
 public class RadioPacketGenerator {
 
-	public static int packetLengthInBits(int type, int standard) {
+	public static int packetLengthInBits(String message, int type, int standard) {
 		if (standard == RadioStandard.ZIGBEE_802_15_4) 
 			if(type==1) //ack packet
 				return 40; //5*8;
 			else
-				return 1016; //127*8;
+				return 512+message.length()*64; // ((48+message.length()*8+16) / 4) * 32;
 		
 		if (standard == RadioStandard.LORA)
 			if(type==1) //no ack packet

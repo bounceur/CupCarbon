@@ -2,7 +2,7 @@
  * CupCarbon: A Smart City & IoT Wireless Sensor Network Simulator
  * www.cupcarbon.com
  * ----------------------------------------------------------------------------------------------------------------
- * Copyright (C) 2013-2017 CupCarbon
+ * Copyright (C) 2013-2019 CupCarbon
  * ----------------------------------------------------------------------------------------------------------------
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
  *----------------------------------------------------------------------------------------------------------------
  * CupCarbon U-One is part of the research project PERSEPTEUR supported by the 
  * French Agence Nationale de la Recherche ANR 
- * under the reference ANR-14-CE24-0017-01. 
+ * under the reference ANR-14-CE24-0017.
  * ----------------------------------------------------------------------------------------------------------------
  **/
 
@@ -45,7 +45,6 @@ import solver.SolverProxyParams;
 
 /**
  * @author Ahcene Bounceur
- * @author Lounis Massinissa
  */
 
 public class CupCarbon extends Application {
@@ -58,6 +57,7 @@ public class CupCarbon extends Application {
 	public void start(Stage mainStage) throws Exception {
 		CupCarbon.stage = mainStage;
 		String os = System.getProperty ("os.name", "UNKNOWN");
+		
 		if(os != null && os.startsWith("Mac")) {
 			macos = true;
 		}
@@ -80,8 +80,7 @@ public class CupCarbon extends Application {
 	}
 	
 	public static void main(String[] args) {		
-		String r = "03111441122123263122253111131132311317312221232617123";	//Signature
-		System.out.println(r);
+		System.out.println("03111441122123263122253111131132311317312221232617123");	//Signature
 		if(args.length>0) {
 			SolverProxyParams.proxyset = args[0];
 			SolverProxyParams.host = args[1];

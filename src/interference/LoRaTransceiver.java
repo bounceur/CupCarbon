@@ -4,13 +4,13 @@ import java.util.Random;
 
 public class LoRaTransceiver {
 
-	public static double getNumberOfReceivedErrorBits(String inputMsg, int spreadingFactor) {
+	public static double getNumberOfReceivedErrorBits(String inputMsg, int spreadingFactor, int CR) {
 		System.out.println(spreadingFactor);
 		// The number of received error bits to return
 		double errBits = 0;
 		// ------------------------------------------------------
 		// LoRa Modem Settings
-		int CR = 0; // [0 1 2 3 4] Coding Rate
+		//int CR = 0; // [0 1 2 3 4] Code Rate
 		double BW = 125e3; // [7.8khz - 500khz] % BandWidth
 		double CodingRate = 4 / (CR + 4); // Coding Rate
 		// ------------------------------------------------------

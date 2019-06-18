@@ -29,7 +29,7 @@ public class ErrorBits {
 			}
 			
 			if (SimulationInputs.ackType == AWGN && transmitter.getStandard() == receiver.getStandard() && transmitter.getStandard() == RadioStandard.LORA) {
-				double errorBits = LoRaTransceiver.getNumberOfReceivedErrorBits(message, transmitter.getCurrentRadioModule().getSpreadingFactor());
+				double errorBits = LoRaTransceiver.getNumberOfReceivedErrorBits(message, transmitter.getCurrentRadioModule().getSpreadingFactor(), transmitter.getCurrentRadioModule().getCodeRate());
 				return (errorBits == 0);
 			}
 			System.err.println("[ErrorBits] -> This kind of interference is not considered!");

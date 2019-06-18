@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author BOYER Yoann
+ * @author BOUNCEUR Ahcène
  * @version 1.0
  */
 @XmlRootElement

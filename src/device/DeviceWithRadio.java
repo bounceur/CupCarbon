@@ -46,7 +46,6 @@ import utilities.UColor;
 
 /**
  * @author Ahcene Bounceur
- * @author Lounis Massinissa
  * @version 1.0
  */
 public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
@@ -334,12 +333,13 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			
 			Graphics2D g2 = (Graphics2D) g;
 			
-			Stroke dashed = new BasicStroke(0.4f);
-			if(type==1)
-				dashed = new BasicStroke(0.3f);
+			Stroke line = new BasicStroke(NetworkParameters.linkWidth);	//0.3
+			//if(type==1)
+			//	dashed = new BasicStroke(1.5f);
+				//dashed = new BasicStroke(0.3f);
 			//dashed = new BasicStroke(0.6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{3,3}, 0);
 				
-	        g2.setStroke(dashed);
+	        g2.setStroke(line);
 			g2.drawLine(lx1, ly1, lx2, ly2);
 		}
 	}

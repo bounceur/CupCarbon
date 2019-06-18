@@ -264,7 +264,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			g.drawRect((int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+5, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+5, mapViewer.getWidth()-10, mapViewer.getHeight()-10);
 		}
 		if(showInfos) {
-			g.drawString(String.format("Simulation Time: %4.4f s", WisenSimulation.sTime) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+16);
+			g.drawString(String.format("Time: %4.4f s", WisenSimulation.sTime) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+16);
 			g.drawString("Number of SENT messages:"+Channels.numberOfSentMessages + " ["+ Channels.numberOfSentMessages_b +"]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+26);
 			g.drawString("Number of RECEIVED messages:"+Channels.numberOfReceivedMessages + " ["+ Channels.numberOfReceivedMessages_b +"]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+36);
 			g.drawString("Number of ACK messages:"+Channels.numberOfAckMessages + " ["+ Channels.numberOfAckMessages_b +"]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+46);
@@ -1186,17 +1186,18 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			CupActionBlock block = new CupActionBlock();
 			block.addAction(action);
 			CupActionStack.add(block);			
-			CupActionStack.execute();
+			CupActionStack.execute();			
 			MarkerList.selectAll();
 		}
 		
 		keyTypedForSensors(key);
 		keyTypedForDevices(key);
 		keyTypedForMarkers(key);
-			
+		
 		if(DeviceList.propagationsCalculated)
 			DeviceList.calculatePropagations();
 		repaint();
+		
 	}
 	
 	public static void selectNodesMarkers() {

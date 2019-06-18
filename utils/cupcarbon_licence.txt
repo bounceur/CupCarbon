@@ -1,10 +1,9 @@
 -------------------------------------------------------------------------------------
-Copyright (C) 2013-2018 CupCarbon
+Copyright (C) 2013-2019 CupCarbon
 -------------------------------------------------------------------------------------
 Laboratory Lab-STICC CNRS UMR 6285
-University of Bretagne Occidentale - UBO
 -------------------------------------------------------------------------------------
-CupCarbon V 3.8.2 (U-ONE): A Smart City & IoT Wireless Sensor Network Simulator
+CupCarbon V 4.0 (U-ONE): A Smart City & IoT Wireless Sensor Network Simulator
 SenScript V 3.4
 -------------------------------------------------------------------------------------
 www.cupcarbon.com
@@ -26,5 +25,12 @@ under certain conditions; see <http://www.gnu.org/licenses/>.
 -------------------------------------------------------------------------------------
 This project is funded by the French Agence Nationale de la Recherche ANR
 REF : ANR-14-CE24-0017
-Partners : IEMN, Xlim, Virtualys
+Partners : MMU, IEMN, Xlim, Virtualys
+-------------------------------------------------------------------------------------
+References:
+Lab-STICC: Ahcene Bounceur
+MMU: Mohammad Hammoudeh
+IEMN: Laurent Clavier
+Xlim: Pierre Combeau
+Virtualys: Olivier Marc
 -------------------------------------------------------------------------------------

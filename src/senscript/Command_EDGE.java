@@ -41,8 +41,7 @@ public class Command_EDGE extends Command {
 			}
 		}
 		else {
-			System.err.println("[CupCarbon WARNING] (S"+sensor.getId()+"): EDGE function (id must be >0) ... id="+id);
-			CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR");
+			System.out.println("[CupCarbon WARNING] (S"+sensor.getId()+"): EDGE function (id must be >0) ... id="+id);
 		}
 		return 0 ;
 	}

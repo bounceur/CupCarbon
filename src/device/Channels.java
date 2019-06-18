@@ -60,7 +60,7 @@ public class Channels {
 			double ratio1 = 1.0/tSensor.getCurrentRadioModule().getRadioDataRate();
 			double ratio2 = 1.0/rSensor.getUartDataRate();
 			
-			double durationOfSending = ratio1*(RadioPacketGenerator.packetLengthInBits(type, tSensor.getStandard())) ;
+			double durationOfSending = ratio1*(RadioPacketGenerator.packetLengthInBits(message, type, tSensor.getStandard())) ;
 			double durationOfUARTReceiving = 0;
 			if(type==1)
 				durationOfUARTReceiving = 0 ;
@@ -92,7 +92,7 @@ public class Channels {
 				numberOfReceivedMessages += tSensor.getPl()/100.;
 				numberOfReceivedMessages_b += message.length() * (tSensor.getPl()/100.);
 				
-				rSensor.consumeRx(RadioPacketGenerator.packetLengthInBits(type, tSensor.getStandard()));
+				rSensor.consumeRx(RadioPacketGenerator.packetLengthInBits(message, type, tSensor.getStandard()));
 				
 				boolean errorBitsOk = ErrorBits.errorBitsOk(message, tSensor, rSensor);
 				

@@ -40,7 +40,6 @@ import visibility.VisibilityZones;
 
 /**
  * @author Ahcene Bounceur
- * @author Lounis Massinissa
  * @version 1.0
  */
 public abstract class Device extends MapObject implements Cloneable {

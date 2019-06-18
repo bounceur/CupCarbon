@@ -24,7 +24,6 @@ import radio_module.RadioDetection;
 
 /**
  * @author Ahcene Bounceur
- * @author Massinissa Lounis
  * @version 1.0
  * 
  * The necessary parameters for the simulation

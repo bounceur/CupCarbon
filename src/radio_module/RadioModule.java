@@ -122,8 +122,8 @@ public abstract class RadioModule {
 			sensorNode.getBattery().consume((numberOfBits/8.0) * eTx * pl/100.);
 			return;
 		}	
-		if(radioConsoTxModel.equals(HEINZELMAN_TX)) { 
-			sensorNode.getBattery().consume(0.00000005*numberOfBits + 0.0000000001*numberOfBits * (radioRangeRadius*pl/100.));
+		if(radioConsoTxModel.equals(HEINZELMAN_TX)) {
+			sensorNode.getBattery().consume(0.00000005 * numberOfBits + 0.0000000001*numberOfBits * (radioRangeRadius*pl/100.));
 			return;
 		}
 		double v = EnergyConsumptionModel.evaluate("Consumption Model (TX)", getSensorNode().getId(), getName(), radioConsoTxModel, pl/100., numberOfBits, eTx, radioRangeRadius);
@@ -344,7 +344,12 @@ public abstract class RadioModule {
 		return -1;
 	}
 	
+	public int getCodeRate() {
+		return -1;
+	}
+	
 	public void setSpreadingFactor(int v) {}
+	public void setCodeRate(int v) {}
 	
 	public void setRadioConsoTxModel(String model) {
 		radioConsoTxModel = model;

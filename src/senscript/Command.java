@@ -23,7 +23,6 @@ import device.SensorNode;
 
 /**
  * @author Ahcene Bounceur
- * @author Lounis Massinissa
  * @author Abdelhamid Zemirline
  * @version 2.0
  */
@@ -36,7 +35,7 @@ public abstract class Command {
 	protected Command_WHILE currentWhile = null;
 	protected Command_FOR currentFor = null;
 	
-	protected boolean writtenInUART = false ;
+	//protected boolean writtenInUART = false ;
 	protected boolean executing = false ;
 	
 	public Command() {

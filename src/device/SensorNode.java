@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +41,7 @@ import java.util.Vector;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
 import battery.Battery;
-//import cupcarbon.RadioModuleWindow;
+import cupcarbon.CupCarbon;
 import map.MapLayer;
 import natural_events.Weather;
 import project.Project;
@@ -55,7 +56,6 @@ import utilities.UColor;
 
 /**
  * @author Ahcene Bounceur
- * @author Lounis Massinissa
  * @version 1.0
  */
 
@@ -411,9 +411,12 @@ public abstract class SensorNode extends DeviceWithRadio {
 				addCommand(s);
 			}
 			br.close();
-		} catch (Exception e) {
-			System.err.println("[CupCarbon ERROR] (S"+id+"): the load SenScript file "+scriptFileName+ " does not exist.");
-			//e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			System.err.println("[CupCarbon ERROR] (S"+id+"): the SenScript file "+scriptFileName+ " does not exist.");
+			CupCarbon.cupCarbonController.stopSimulation();
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

@@ -54,6 +54,10 @@ import utilities.UColor;
 
 public class Command_SEND extends Command {
 	
+	protected boolean writtenInUART = false ;
+	
+	protected boolean channelFree = false ;
+	
 	protected String arg1 = "";
 	protected String arg2 = "";
 	protected String arg3 = "";
@@ -74,6 +78,7 @@ public class Command_SEND extends Command {
 		if(arg2.split(":").length>1)
 			rRadioName = arg2.split(":")[1] ;
 		writtenInUART = false ;
+		channelFree = false ;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -85,6 +90,7 @@ public class Command_SEND extends Command {
 		this.arg2 = arg2 ;
 		this.arg3 = arg3 ;
 		writtenInUART = false ;
+		channelFree = false ;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -97,6 +103,7 @@ public class Command_SEND extends Command {
 		this.arg3 = arg3 ;
 		this.arg4 = arg4 ;
 		writtenInUART  = false ;
+		channelFree = false ;
 	}	
 	
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -125,8 +132,8 @@ public class Command_SEND extends Command {
 		int messageLength = message.length();
 		
 		// In ACK mode (SimulationInputs.ack = true)
-		// After sending a message (ackBlock = true), we verify if the ASK message is received (sensor.ackOk)
-		// Otherwise, we recend the message
+		// After sending a message (ackBlock = true), we verify if the ACK message is received (sensor.ackOk)
+		// Otherwise, we re-send the message
 		if(SimulationInputs.ack && checkForAckMessage) {
 			//System.out.println("ACK BLOCK");
 			if(sensor.isAckReceived()) {
@@ -159,6 +166,25 @@ public class Command_SEND extends Command {
 			return (ratio * (messageLength*8)) ;
 		}
 		
+		
+		// MAC Layer: listening to the channel and test if it is free
+		if(writtenInUART && !channelFree) {
+			WisenSimulation.simLog.add("S" + sensor.getId() + " is listening to the channel");
+			double isChannelFree = Math.random();
+			if(isChannelFree <= 1.0) {		// a chance of 90% to have a free channel
+				WisenSimulation.simLog.add("S" + sensor.getId() + " the channel is free.");
+				System.out.println("---------------------------");
+				System.out.println("Channel free");
+				channelFree = true;	
+			}
+			else {
+				double randomWaitTime = Math.random();  // 0 to 1000 milliseconds
+				WisenSimulation.simLog.add("S" + sensor.getId() + " the channel is not free, wait for "+randomWaitTime+"ms.");
+				System.out.println("Channel not free: wait for "+randomWaitTime);
+				return randomWaitTime;
+			}
+		}
+		
 		//System.out.println(writtenInUART+ " "+sensor.ackOk() +" " + sensor.getAttempts() + " " + sensor.getNumberOfSends() );
 		
 		// ---------------------------------------------------------------------------------------------------------------------
@@ -166,13 +192,14 @@ public class Command_SEND extends Command {
 		// Non ACK mode (!SimulationInputs.ack)
 		// or in a broadcast mode (send x *)
 		// ---------------------------------------------------------------------------------------------------------------------		
-		if (writtenInUART && (!SimulationInputs.ack || (arg2.equals("*") && arg3.equals("")))) {
+		if (channelFree && writtenInUART && (!SimulationInputs.ack || (arg2.equals("*") && arg3.equals("")))) {
 			WisenSimulation.simLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");
 			//System.out.println(WisenSimulation.time + " SEND " + message);
 			//System.out.println("SEND");	
 			sensor.setAckReceived(false);
 			sensor.setAckWaiting(false);
 			writtenInUART = false;
+			channelFree = false;
 			executing = false;
 			sensor.setAttempts(0);			
 			sendOperation(message);
@@ -182,7 +209,7 @@ public class Command_SEND extends Command {
 		// ---------------------------------------------------------------------------------------------------------------------
 		// Once the message is written in the UART, here we send it with ack mode
 		// ---------------------------------------------------------------------------------------------------------------------
-		if (writtenInUART && SimulationInputs.ack && !sensor.isAckWaiting()) {
+		if (channelFree && writtenInUART && SimulationInputs.ack && !sensor.isAckWaiting()) {
 		//if (writtenInUART && SimulationInputs.ack) {
 			if(sensor.getAttempts() < sensor.getNumberOfSends()) {
 				WisenSimulation.simLog.add("S" + sensor.getId() + " starts sending the message : \"" + message + "\".");
@@ -191,6 +218,9 @@ public class Command_SEND extends Command {
 				 //System.out.println();				 
 				 sendOperation(message);
 				 checkForAckMessage = true;
+				 
+				 writtenInUART = false; /////
+				 
 				 return sensor.getTimeToResend();
 			}
 			else {
@@ -201,6 +231,7 @@ public class Command_SEND extends Command {
 				checkForAckMessage = false;
 				sensor.setAckReceived(false);
 				writtenInUART = false;
+				channelFree = false;
 				executing = false;
 				sensor.setAttempts(0);
 				sensor.setMessageLost(true);
@@ -306,7 +337,7 @@ public class Command_SEND extends Command {
 			Channels.numberOfSentMessages += sensor.getPl()/100.;
 			Channels.numberOfSentMessages_b += message.length() * (sensor.getPl()/100.);
 			
-			sensor.consumeTx(RadioPacketGenerator.packetLengthInBits(0, sensor.getStandard()));
+			sensor.consumeTx(RadioPacketGenerator.packetLengthInBits(message, 0, sensor.getStandard()));
 			
 			if (arg2.equals("*")) {
 				WisenSimulation.simLog.add("S" + sensor.getId() + " has finished sending in a broadcast the message : \"" + message + "\" to the nodes: ");

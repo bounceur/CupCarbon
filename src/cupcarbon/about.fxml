@@ -19,7 +19,7 @@
             <Font name="System Bold" size="18.0" />
          </font></Label>
       <Label fx:id="label1" text="www.cupcarbon.com" textFill="#2d4c94" />
-      <Label text="Lab-STICC  - UBO - IEMN - Xlim - Virtualys" />
+      <Label text="Lab-STICC  - MMU - IEMN - Xlim - Virtualys" />
       <Label text="ANR PERSEPTEUR" />
       <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
          <image>

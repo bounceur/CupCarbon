@@ -17,15 +17,14 @@ public class CupCarbonConsoleStream extends OutputStream {
     @Override
     public void write(int v) throws IOException {
     	Platform.runLater( () -> {
-    			if(v=='\n') {
-    				if(x++ > 100) {
-        				x=0;
-        				textArea.clear();
-        			}
+			if(v=='\n') {
+				if(x++ > 100) {
+    				x=0;
+    				textArea.clear();
     			}
-    			
-    			textArea.appendText(String.valueOf((char) v));
-    		}
+			}
+			textArea.appendText(String.valueOf((char) v));
+			}
     	);
     }
 

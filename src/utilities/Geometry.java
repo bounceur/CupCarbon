@@ -1,6 +1,7 @@
 package utilities;
 
 import device.Device;
+import geometry.DPoint;
 
 public class Geometry {
 
@@ -37,6 +38,56 @@ public class Geometry {
 		double y2 = d2.getLongitude();
 		double x3 = d3.getLatitude();
 		double y3 = d3.getLongitude();
+		if(x0==x2 && y0==y2) return false;
+		if(x0==x3 && y0==y3) return false;
+		if(x1==x2 && y1==y2) return false;
+		if(x1==x3 && y1==y3) return false;
+		double dx1, dy1, dx2, dy2;
+		dx1 = x1 - x0;
+		dy1 = y1 - y0;
+		dx2 = x3 - x2;
+		dy2 = y3 - y2;
+
+		double s, t;
+		s = (-dy1 * (x0 - x2) + dx1 * (y0 - y2)) / (-dx2 * dy1 + dx1 * dy2);
+		t = (dx2 * (y0 - y2) - dy2 * (x0 - x2)) / (-dx2 * dy1 + dx1 * dy2);
+		
+		if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean intersect(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3) {
+		if(x0==x2 && y0==y2) return false;
+		if(x0==x3 && y0==y3) return false;
+		if(x1==x2 && y1==y2) return false;
+		if(x1==x3 && y1==y3) return false;
+		double dx1, dy1, dx2, dy2;
+		dx1 = x1 - x0;
+		dy1 = y1 - y0;
+		dx2 = x3 - x2;
+		dy2 = y3 - y2;
+
+		double s, t;
+		s = (-dy1 * (x0 - x2) + dx1 * (y0 - y2)) / (-dx2 * dy1 + dx1 * dy2);
+		t = (dx2 * (y0 - y2) - dy2 * (x0 - x2)) / (-dx2 * dy1 + dx1 * dy2);
+		
+		if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean intersect(DPoint p0, DPoint p1, DPoint p2, DPoint p3) {
+		double x0 = p0.getX();
+		double y0 = p0.getY();
+		double x1 = p1.getX();
+		double y1 = p1.getY();
+		double x2 = p2.getX();
+		double y2 = p2.getY();
+		double x3 = p3.getX();
+		double y3 = p3.getY();
 		if(x0==x2 && y0==y2) return false;
 		if(x0==x3 && y0==y3) return false;
 		if(x1==x2 && y1==y2) return false;

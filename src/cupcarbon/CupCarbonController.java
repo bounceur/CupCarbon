@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -28,6 +27,7 @@ import action.CupActionModifDeviceLongitude;
 import action.CupActionModifDeviceNatEventFile;
 import action.CupActionModifDeviceRadius;
 import action.CupActionModifDeviceScriptFile;
+import action.CupActionModifRadioCR;
 import action.CupActionModifRadioCh;
 import action.CupActionModifRadioConsoRxModel;
 import action.CupActionModifRadioConsoTxModel;
@@ -87,7 +87,6 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
@@ -127,13 +126,15 @@ import utilities.MapCalc;
 import visibility.VisibilityLauncher;
 
 public class CupCarbonController implements Initializable {
-
+	
 	private WorldMap map = null;
 
 	protected FaultInjector faultInjector = null;
 
-	@FXML
-	public TitledPane consolePane ;
+	ConsoleWindow console ;
+	
+	//@FXML
+	//public TitledPane consolePane ;
 	
 	@FXML
 	private Label labelInfo1 ;
@@ -197,12 +198,12 @@ public class CupCarbonController implements Initializable {
 	
 	@FXML
 	private VBox vbox ;
-			
-	@FXML
-	public TextArea textOut;
+				
+	//@FXML
+	//public TextArea textOut;
 	
-	@FXML
-	public TextArea textErr;
+	//@FXML
+	//public TextArea textErr;
 		
 	@FXML
 	public Slider bg_slider;
@@ -247,6 +248,9 @@ public class CupCarbonController implements Initializable {
 	public ComboBox<String> radio_spreading_factor;
 	
 	@FXML
+	public ComboBox<String> radio_code_rate;
+	
+	@FXML
 	public ComboBox<String> radio_conso_tx_model;
 	
 	@FXML
@@ -254,6 +258,9 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public Button spreading_factor_apply_button;
+	
+	@FXML
+	public Button code_rate_apply_button;
 
 	@FXML
 	public Label simulationTimeLabel;
@@ -493,6 +500,10 @@ public class CupCarbonController implements Initializable {
 		radio_spreading_factor.getItems().addAll("", "7", "8", "9", "10", "11", "12");
 		radio_spreading_factor.getSelectionModel().select(0);
 		
+		radio_code_rate.getItems().removeAll(radio_code_rate.getItems());
+		radio_code_rate.getItems().addAll("0", "1", "2", "3", "4");
+		radio_code_rate.getSelectionModel().select(0);
+		
 		radio_conso_tx_model.getItems().removeAll(radio_conso_tx_model.getItems());
 		radio_conso_tx_model.getItems().addAll(RadioModule.CLASSICAL_TX, RadioModule.HEINZELMAN_TX, "(n/8.0)*etx*p", "0.00000005*n+0.0000000001*n*(r*p)");
 		radio_conso_tx_model.setValue("");
@@ -546,13 +557,13 @@ public class CupCarbonController implements Initializable {
 
 		initMap();
 
-		CupCarbonConsoleStream consoleOut = new CupCarbonConsoleStream(textOut);
-		PrintStream ps1 = new PrintStream(consoleOut, true);
-		System.setOut(ps1);
-		
-		CupCarbonErrConsoleStream consoleErr = new CupCarbonErrConsoleStream(textErr);
-		PrintStream ps2 = new PrintStream(consoleErr, true);
-		System.setErr(ps2);
+//		CupCarbonConsoleStream consoleOut = new CupCarbonConsoleStream(textOut);
+//		PrintStream ps1 = new PrintStream(consoleOut, true);
+//		System.setOut(ps1);
+//		
+//		CupCarbonErrConsoleStream consoleErr = new CupCarbonErrConsoleStream(textErr);
+//		PrintStream ps2 = new PrintStream(consoleErr, true);
+//		System.setErr(ps2);
 				
 		try {
 			System.out.println("> CupCarbon U-One");
@@ -573,6 +584,12 @@ public class CupCarbonController implements Initializable {
 		}
 		else
 			System.out.println("Connection: NO");
+		
+		try {
+			console = new ConsoleWindow();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@FXML
@@ -629,14 +646,22 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				CupCarbonController.this.textOut.clear();
-				CupCarbonController.this.textErr.clear();
+				//console.textOut.clear();
+				//console.textErr.clear();
+				//CupCarbonController.this.textOut.clear();
+				//CupCarbonController.this.textErr.clear();
+				ConsoleController.controller.clear();
 				DeviceList.initAll();
 				MapLayer.repaint();
 				mapFocus();
 			}
 		});
 
+	}
+	
+	@FXML
+	public void openConsole() {
+		console.toFront();
 	}
 
 	@FXML
@@ -799,8 +824,9 @@ public class CupCarbonController implements Initializable {
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
-					textOut.clear();
-					textErr.clear();
+					//textOut.clear();
+					//textErr.clear();
+					ConsoleController.controller.clear();
 					saveButton.setDisable(false);
 					qRunSimulationButton.setDefaultButton(false);
 					qStopSimulationButton.setDefaultButton(true);
@@ -1041,6 +1067,8 @@ public class CupCarbonController implements Initializable {
 		if (file != null) {
 			Project.newProject(file.getParentFile().toString() + File.separator + file.getName().toString(), file.getName().toString(), false);
 			CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getAbsolutePath().toString() + "]");
+			Project.saveProject();
+			saveButton.setDisable(true);
 		}
 	}
 
@@ -1474,6 +1502,25 @@ public class CupCarbonController implements Initializable {
 				int currentSF = ((RadioModule_Lora) rm).getSpreadingFactor();
 				int newSP = Integer.parseInt(radio_spreading_factor.getSelectionModel().getSelectedItem());
 				CupAction action = new CupActionModifRadioSF(rm, currentSF, newSP);
+				block.addAction(action);
+			}
+		}
+		CupActionStack.add(block);
+		CupActionStack.execute();
+		MapLayer.repaint();
+	}
+	
+	@FXML
+	public void code_rate_Apply() {
+		CupActionBlock block = new CupActionBlock();
+		for (SensorNode sensor : DeviceList.sensors) {
+			if (sensor.isSelected()) {
+				String s = radioListView.getItems().get(radioListView.getSelectionModel().getSelectedIndex());
+				String radioName = s.split(" ")[0];
+				RadioModule rm = sensor.getRadioModuleByName(radioName);
+				int currentCR = ((RadioModule_Lora) rm).getCodeRate();
+				int newCR = Integer.parseInt(radio_code_rate.getSelectionModel().getSelectedItem());
+				CupAction action = new CupActionModifRadioCR(rm, currentCR, newCR);
 				block.addAction(action);
 			}
 		}
@@ -2149,6 +2196,17 @@ public class CupCarbonController implements Initializable {
 						spreading_factor_apply_button.setDisable(false);
 						radio_spreading_factor.getSelectionModel().select("" + rm.getSpreadingFactor());
 					}
+					
+					if (rm.getCodeRate() == -1) {
+						radio_code_rate.setDisable(true);
+						code_rate_apply_button.setDisable(true);
+						radio_code_rate.getSelectionModel().select(0);
+					} else {
+						radio_code_rate.setDisable(false);
+						code_rate_apply_button.setDisable(false);
+						radio_code_rate.getSelectionModel().select("" + rm.getCodeRate());
+					}
+					
 					radio_conso_tx_model.getSelectionModel().select("" + rm.getRadioConsoTxModel());
 					radio_conso_rx_model.getSelectionModel().select("" + rm.getRadioConsoRxModel());
 				}
@@ -2197,7 +2255,7 @@ public class CupCarbonController implements Initializable {
 		stage.setScene(scene);
 		stage.initOwner(CupCarbon.stage);
 		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.show();
+		stage.showAndWait();		
 	}
 
 	@FXML
@@ -2460,7 +2518,6 @@ public class CupCarbonController implements Initializable {
 				mapFocus();
 			}
 		});
-
 	}
 
 	public void initAllFields() {
@@ -2493,6 +2550,7 @@ public class CupCarbonController implements Initializable {
 		radio_elisten.setText("");
 		radio_drate.setText("");
 		radio_spreading_factor.getSelectionModel().select(0);
+		radio_code_rate.getSelectionModel().select(0);
 		radio_conso_tx_model.setValue("");
 		radio_conso_rx_model.setValue("");
 		
@@ -3333,7 +3391,7 @@ public class CupCarbonController implements Initializable {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {}
 		textReady.setVisible(false);
-		consolePane.setExpanded(true);
+		//consolePane.setExpanded(true);
 	}
 	
 	public void displayShortErrMessageTh(String s) {

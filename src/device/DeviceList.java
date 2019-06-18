@@ -290,9 +290,6 @@ public class DeviceList {
 				case "device_draw_battery":
 					parameters[10] = str[1];
 					break;				
-//				case "spreading_factor":
-//					parameters[11] = str[1];
-//					break;								
 				}
 			}
 			sensor = new StdSensorNode(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6]);
@@ -1720,6 +1717,9 @@ public class DeviceList {
 					break;
 				case "spreading_factor":
 					sensor.getRadioModuleByName(name).setSpreadingFactor(Integer.parseInt(line.split(":")[1]));
+					break;
+				case "code_rate":
+					sensor.getRadioModuleByName(name).setCodeRate(Integer.parseInt(line.split(":")[1]));
 					break;
 				case "conso_tx_model":
 					sensor.getRadioModuleByName(name).setRadioConsoTxModel(line.split(":")[1]);

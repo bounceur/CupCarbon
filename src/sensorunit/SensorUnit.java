@@ -26,7 +26,6 @@ import device.Device;
 
 /**
  * @author Ahcene Bounceur
- * @author Lounis Massinissa
  * @version 1.0
  */
 public abstract class SensorUnit {
