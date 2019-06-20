@@ -29,7 +29,7 @@ import java.io.PrintStream;
 import battery.Battery;
 import buildings.BuildingList;
 import project.Project;
-import sensorunit.MediaSensorUnit;
+import sensorunit.DirectionalSensorUnit;
 import sensorunit.SensorUnit;
 import utilities.MapCalc;
 
@@ -38,15 +38,15 @@ import utilities.MapCalc;
  * @version 1.0
  */
 
-public class MediaSensorNode extends SensorNode {
+public class DirectionalSensorNode extends SensorNode {
 	
 	/**
 	 * Constructor 1 Instanciate the sensor unit 
 	 * Instanciate the battery
 	 */
-	public MediaSensorNode() {
+	public DirectionalSensorNode() {
 		super();
-		sensorUnit = new MediaSensorUnit(this.longitude, this.latitude, this.elevation, this);		
+		sensorUnit = new DirectionalSensorUnit(this.longitude, this.latitude, this.elevation, this);		
 	}
 
 	/**
@@ -61,9 +61,9 @@ public class MediaSensorNode extends SensorNode {
 	 * @param radioRadius
 	 *            Radius (range) of the radio (in meter)
 	 */
-	public MediaSensorNode(double x, double y, double z, double radius, double radioRadius, int id) {
+	public DirectionalSensorNode(double x, double y, double z, double radius, double radioRadius, int id) {
 		super(x, y, z, radius, radioRadius, id);
-		sensorUnit = new MediaSensorUnit(this.longitude, this.latitude, this.elevation, this);		
+		sensorUnit = new DirectionalSensorUnit(this.longitude, this.latitude, this.elevation, this);		
 	}
 
 	/**
@@ -80,10 +80,10 @@ public class MediaSensorNode extends SensorNode {
 	 * @param suRadius
 	 *            Radius of the sensor unit (default value = 10 meters)
 	 */
-	public MediaSensorNode(double x, double y, double z, double radius, double radioRadius,
+	public DirectionalSensorNode(double x, double y, double z, double radius, double radioRadius,
 			double suRadius, int id, double deg, double dec, int n) {
 		super(x, y, z, radius, radioRadius, id);
-		sensorUnit = new MediaSensorUnit(this.longitude, this.latitude, this.elevation, suRadius, deg, dec, n, this);
+		sensorUnit = new DirectionalSensorUnit(this.longitude, this.latitude, this.elevation, suRadius, deg, dec, n, this);
 	}
 	
 	/**
@@ -105,7 +105,7 @@ public class MediaSensorNode extends SensorNode {
 	 *            contains the name of the parameter The second column contains
 	 *            the value of the corresponding parameter
 	 */
-	public MediaSensorNode(double x, double y, double z, double radius, double radioRadius, double suRadius, String[][] sb, int id, double deg, double dec, int n) {
+	public DirectionalSensorNode(double x, double y, double z, double radius, double radioRadius, double suRadius, String[][] sb, int id, double deg, double dec, int n) {
 		this(x, y, z, radius, radioRadius, suRadius, id, deg, dec, n);
 		this.setInfos(sb);
 		initBuffer();
@@ -129,7 +129,7 @@ public class MediaSensorNode extends SensorNode {
 	 * @param scriptFileName
 	 *            The path of the script file
 	 */
-	public MediaSensorNode(String id, String x, String y, String z, String radius, String radioRadius,
+	public DirectionalSensorNode(String id, String x, String y, String z, String radius, String radioRadius,
 			String suRadius, String gpsFileName, String scriptFileName, String degS, String decS, String nS) {
 		this(x, y, z, radius, radioRadius, suRadius, Integer.valueOf(id), Double.valueOf(degS), Double.valueOf(decS), Integer.valueOf(nS));
 //		String [] srd = rdInfos.split("#");
@@ -159,9 +159,9 @@ public class MediaSensorNode extends SensorNode {
 	 * @param suRadius
 	 *            Radius of the sensor unit (default value = 10 meters)
 	 */
-	public MediaSensorNode(String x, String y, String z, String radius, String radioRadius, String suRadius, int id, double deg, double dec, int n) {
+	public DirectionalSensorNode(String x, String y, String z, String radius, String radioRadius, String suRadius, int id, double deg, double dec, int n) {
 		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(radius), Double.valueOf(radioRadius), id);
-		sensorUnit = new MediaSensorUnit(this.longitude, this.latitude, this.elevation, Double.valueOf(suRadius), deg, dec, n, this);
+		sensorUnit = new DirectionalSensorUnit(this.longitude, this.latitude, this.elevation, Double.valueOf(suRadius), deg, dec, n, this);
 	}
 	
 //	@Override
@@ -174,12 +174,13 @@ public class MediaSensorNode extends SensorNode {
 		int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 		int x = coord[0];
 		int y = coord[1];
-		if(hide == 0 || hide == 1) {
+		//if(hide == 0 || hide == 1) {
+		if(hide == 0 || hide == 4) {
 			sensorUnit.setPosition(x, y);
 			sensorUnit.draw(g, 0, isSensorDetecting(), detectBuildings());
 		}
 
-		if(hide == 2) {
+		if(hide == 3) {
 			sensorUnit.setPosition(x, y);
 			sensorUnit.draw(g, 1, isSensorDetecting(), detectBuildings());
 		}
@@ -190,7 +191,7 @@ public class MediaSensorNode extends SensorNode {
 		SensorNode newSensor = (SensorNode) super.clone();
 		SensorUnit newCaptureUnit = (SensorUnit) sensorUnit.clone();
 		Battery newBattery = (Battery) battery.clone();
-		((MediaSensorNode)newSensor).setSensorUnit(newCaptureUnit);
+		((DirectionalSensorNode)newSensor).setSensorUnit(newCaptureUnit);
 		newCaptureUnit.setNode(newSensor);
 		newSensor.setBattery(newBattery);
 		return newSensor;
@@ -219,27 +220,27 @@ public class MediaSensorNode extends SensorNode {
 //	}
 
 	public double getSensorUnitDeg() {
-		return ((MediaSensorUnit) sensorUnit).getDeg();
+		return ((DirectionalSensorUnit) sensorUnit).getDeg();
 	}
 	
 	public double getSensorUnitDec() {
-		return ((MediaSensorUnit) sensorUnit).getDec();
+		return ((DirectionalSensorUnit) sensorUnit).getDec();
 	}
 	
 	public int getSensorUnitN() {
-		return ((MediaSensorUnit) sensorUnit).getN();
+		return ((DirectionalSensorUnit) sensorUnit).getN();
 	}
 
 	public void setSensorUnitDeg(double deg) {
-		((MediaSensorUnit) sensorUnit).setDeg(deg);
+		((DirectionalSensorUnit) sensorUnit).setDeg(deg);
 	}
 	
 	public void setSensorUnitDec(double dec) {
-		((MediaSensorUnit) sensorUnit).setDec(dec);
+		((DirectionalSensorUnit) sensorUnit).setDec(dec);
 	}
 
 	public void setSensorUnitRadius(double radius) {
-		((MediaSensorUnit) sensorUnit).setRadius(radius);
+		((DirectionalSensorUnit) sensorUnit).setRadius(radius);
 	}
 
 	@Override
@@ -249,7 +250,7 @@ public class MediaSensorNode extends SensorNode {
 	
 	@Override
 	public int getType() {
-		return Device.MEDIA_SENSOR;
+		return Device.DIRECTIONAL_SENSOR;
 	}
 
 	@Override
@@ -273,9 +274,9 @@ public class MediaSensorNode extends SensorNode {
 	
 	@Override	
 	public SensorNode createNewWithTheSameType() {
-		MediaSensorNode n_msn = new MediaSensorNode(longitude, latitude, elevation, radius, 0.0, DeviceList.number++);
-		MediaSensorUnit c_msu = (MediaSensorUnit) this.getSensorUnit(); 
-		MediaSensorUnit n_msu = (MediaSensorUnit) n_msn.getSensorUnit();
+		DirectionalSensorNode n_msn = new DirectionalSensorNode(longitude, latitude, elevation, radius, 0.0, DeviceList.number++);
+		DirectionalSensorUnit c_msu = (DirectionalSensorUnit) this.getSensorUnit(); 
+		DirectionalSensorUnit n_msu = (DirectionalSensorUnit) n_msn.getSensorUnit();
 		
 		n_msu.setDec(c_msu.getDec());
 		n_msu.setDeg(c_msu.getDeg());
@@ -288,7 +289,7 @@ public class MediaSensorNode extends SensorNode {
 		String fileName = Project.getProjectNodePath();
 		try {
 			PrintStream fos = null;	
-			fos = new PrintStream(new FileOutputStream(fileName + File.separator + "mediasensor_" + ref));
+			fos = new PrintStream(new FileOutputStream(fileName + File.separator + "directionalsensor_" + ref));
 			fos.println("List of parameters");
 			fos.println("------------------------------------------");
 			fos.println("device_type:" + getType());
@@ -304,13 +305,13 @@ public class MediaSensorNode extends SensorNode {
 				fos.println("device_gps_file_name:" + getGPSFileName());
 			if (!getScriptFileName().equals(""))
 				fos.println("device_script_file_name:" + getScriptFileName());
-			if (getType() == Device.MEDIA_SENSOR)
-				fos.println("media_parameters:" + ((MediaSensorNode) this).getParamsStr());
+			if (getType() == Device.DIRECTIONAL_SENSOR)
+				fos.println("directional_parameters:" + ((DirectionalSensorNode) this).getParamsStr());
 			fos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		saveRadioModule(Project.getProjectRadioPath() + File.separator + "mediasensor_"+ref);
+		saveRadioModule(Project.getProjectRadioPath() + File.separator + "directionalsensor_"+ref);
 	}
 
 	public double getNextValueTime() {return Double.MAX_VALUE;}

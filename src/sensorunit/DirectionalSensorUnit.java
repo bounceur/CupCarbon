@@ -34,7 +34,7 @@ import utilities.UColor;
  * @author Ahcene Bounceur
  * @version 1.0
  */
-public class MediaSensorUnit extends SensorUnit implements Cloneable {
+public class DirectionalSensorUnit extends SensorUnit implements Cloneable {
 	
 	protected double deg = 0.1;
 	protected double dec = 0;
@@ -44,7 +44,7 @@ public class MediaSensorUnit extends SensorUnit implements Cloneable {
 	 * @param y Position of the sensor unit on the map
 	 * @param node which is associated to this sensor unit
 	 */
-	public MediaSensorUnit(double longitude, double latitude, double elevation, Device node) {
+	public DirectionalSensorUnit(double longitude, double latitude, double elevation, Device node) {
 		super(longitude, latitude, elevation, node);
 		radius = 100;
 		n = 12;
@@ -61,7 +61,7 @@ public class MediaSensorUnit extends SensorUnit implements Cloneable {
 	 * @param cuRadius the value of the radius 
 	 * @param node which is associated to this sensor unit
 	 */
-	public MediaSensorUnit(double longitude, double latitude, double elevation, double radius, double deg, double dec, int n, Device node) {
+	public DirectionalSensorUnit(double longitude, double latitude, double elevation, double radius, double deg, double dec, int n, Device node) {
 		super(longitude, latitude, elevation, node);
 		this.radius = radius;
 		this.deg = deg;
@@ -163,8 +163,8 @@ public class MediaSensorUnit extends SensorUnit implements Cloneable {
 	 * Clone the sensor unit
 	 */
 	@Override
-	public MediaSensorUnit clone() throws CloneNotSupportedException {
-		MediaSensorUnit newCU = (MediaSensorUnit) super.clone();
+	public DirectionalSensorUnit clone() throws CloneNotSupportedException {
+		DirectionalSensorUnit newCU = (DirectionalSensorUnit) super.clone();
 		return newCU;
 	}
 	

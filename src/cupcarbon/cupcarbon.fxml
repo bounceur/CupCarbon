@@ -158,7 +158,7 @@
                         </ImageView>
                      </graphic>
                   </MenuItem>
-                  <MenuItem mnemonicParsing="false" onAction="#addMediaSensor" text="Add Media Sensor Node">
+                  <MenuItem mnemonicParsing="false" onAction="#addDirectionalSensor" text="Add Directional Sensor Node">
                      <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -475,7 +475,7 @@
                                  </image>
                               </ImageView>
                            </graphic></MenuItem>
-                        <MenuItem mnemonicParsing="false" onAction="#selectAllMediaSensors" text="Select All Media Sensors">
+                        <MenuItem mnemonicParsing="false" onAction="#selectAllDirectionalSensors" text="Select All Directional Sensors">
                            <graphic>
                               <ImageView pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -536,7 +536,7 @@
                                  </image>
                               </ImageView>
                            </graphic></MenuItem>
-                        <MenuItem mnemonicParsing="false" onAction="#deselectAllMediaSensors" text="Deselect All Media Sensors">
+                        <MenuItem mnemonicParsing="false" onAction="#deselectAllDirectionalSensors" text="Deselect All Directional Sensors">
                            <graphic>
                               <ImageView pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -931,7 +931,7 @@
                         <Font size="10.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#addMediaSensor">
+                  <Button mnemonicParsing="false" onAction="#addDirectionalSensor">
                      <graphic>
                         <ImageView pickOnBounds="true" smooth="false">
                            <image>
@@ -943,7 +943,7 @@
                         <Font size="10.0" />
                      </font>
                      <tooltip>
-                        <Tooltip text="[4] Media Sensor" />
+                        <Tooltip text="[4] Directional Sensor" />
                      </tooltip>
                   </Button>
                   <Button mnemonicParsing="false" onAction="#addBaseStation">
@@ -1325,7 +1325,7 @@
                                                             <Font size="10.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label fx:id="labelInfo2" text="Number of Media sensors: ">
+                                                      <Label fx:id="labelInfo2" text="Number of Directional sensors: ">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>
@@ -1378,7 +1378,7 @@
                                                             <Font size="10.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label fx:id="labelInfo12" text="Number of Selected Media sensors:">
+                                                      <Label fx:id="labelInfo12" text="Number of Selected Directional sensors:">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>
@@ -1596,7 +1596,7 @@
                                                                         <Font size="10.0" />
                                                                      </font>
                                                                   </Button>
-                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllMediaSensors" prefHeight="25.0" prefWidth="290.0" text="Select Media Sensors" GridPane.rowIndex="3">
+                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#selectAllDirectionalSensors" prefHeight="25.0" prefWidth="290.0" text="Select Directional Sensors" GridPane.rowIndex="3">
                                                                      <font>
                                                                         <Font size="10.0" />
                                                                      </font>
@@ -1616,7 +1616,7 @@
                                                                         <Font size="10.0" />
                                                                      </font>
                                                                   </Button>
-                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllMediaSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect Media Sensors" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                                                  <Button alignment="CENTER" ellipsisString="" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deselectAllDirectionalSensors" prefHeight="25.0" prefWidth="290.0" text="Deselect Directional Sensors" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                                                      <font>
                                                                         <Font size="10.0" />
                                                                      </font>
@@ -2789,6 +2789,23 @@
                                                    </children>
                                                 </HBox>
                                                 <Separator prefWidth="200.0" />
+                                                <HBox alignment="CENTER" prefHeight="22.0" prefWidth="219.0" spacing="20.0">
+                                                   <children>
+                                                      <CheckBox fx:id="macCheckBox" mnemonicParsing="false" onAction="#macChecked" onMouseReleased="#mapFocus" prefWidth="120.0" text="MAC Layer">
+                                                         <font>
+                                                            <Font size="10.0" />
+                                                         </font>
+                                                      </CheckBox>
+                                                      <TextField fx:id="macProbaTextField" cacheShape="false" centerShape="false" disable="true" focusTraversable="false" scaleShape="false" text="1.0">
+                                                         <font>
+                                                            <Font size="9.0" />
+                                                         </font>
+                                                         <opaqueInsets>
+                                                            <Insets />
+                                                         </opaqueInsets>
+                                                      </TextField>
+                                                   </children>
+                                                </HBox>
                                              </children>
                                              <padding>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />

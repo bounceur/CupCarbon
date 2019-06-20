@@ -593,7 +593,7 @@ public abstract class Device extends MapObject implements Cloneable {
 		elevation_ori = elevation;
 		gpsFileName_ori = gpsFileName;
 		if (SimulationInputs.visibility) {
-			if(getType()==Device.SENSOR || getType()==Device.MEDIA_SENSOR) {
+			if(getType()==Device.SENSOR || getType()==Device.DIRECTIONAL_SENSOR) {
 				VisibilityZones vz = new VisibilityZones((SensorNode) this);
 				vz.run();
 			}
@@ -606,7 +606,7 @@ public abstract class Device extends MapObject implements Cloneable {
 		elevation = elevation_ori;
 		gpsFileName = gpsFileName_ori;
 		if (SimulationInputs.visibility) {
-			if(getType()==Device.SENSOR || getType()==Device.MEDIA_SENSOR) {
+			if(getType()==Device.SENSOR || getType()==Device.DIRECTIONAL_SENSOR) {
 				VisibilityZones vz = new VisibilityZones((SensorNode) this);
 				vz.run();
 			}

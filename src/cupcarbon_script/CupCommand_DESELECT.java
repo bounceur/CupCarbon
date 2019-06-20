@@ -29,7 +29,7 @@
  * deselect all
  * -> It deselects all objects (sensors, devices and markers) on the map layer
  * deselect all sensors
- * -> It deselects all sensors (sensors, bas stations and media sensors) on the map layer
+ * -> It deselects all sensors (sensors, bas stations and directional sensors) on the map layer
  * deselect all events
  * -> It deselects all events (gases) on the map layer
  * deselect all mobiles
@@ -115,7 +115,7 @@ public class CupCommand_DESELECT extends CupCommand {
 						switch (sObjects.get(i)) {
 						case ("sensors") :
 							WorldMap.setSelectionOfAllNodes(false, Device.SENSOR, true);
-							WorldMap.setSelectionOfAllNodes(false, Device.MEDIA_SENSOR, true);
+							WorldMap.setSelectionOfAllNodes(false, Device.DIRECTIONAL_SENSOR, true);
 							WorldMap.setSelectionOfAllNodes(false, Device.BASE_STATION, true);
 							rep = rep + " 000 All Sensors are Deselected";
 							currentExecution = true;

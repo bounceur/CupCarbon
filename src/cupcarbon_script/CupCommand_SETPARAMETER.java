@@ -49,10 +49,10 @@
  * -> It assigns the defined value to the UART Data Rate parameter of sensor S1
  * setparameter object S1 drift value
  * -> It assigns the defined value to the drift time parameter of sensor S1
- * setparameter object MS2 deg value //for media sensors
- * -> It assigns the defined value to the deg parameter of media sensor MS2
- * setparameter object MS2 dec value //for media sensors
- * -> It assigns the defined value to the dec parameter of media sensor MS2
+ * setparameter object MS2 deg value //for directional sensors
+ * -> It assigns the defined value to the deg parameter of directional sensor MS2
+ * setparameter object MS2 dec value //for directional sensors
+ * -> It assigns the defined value to the dec parameter of directional sensor MS2
  * setparameter radio S1 radio1 my value
  * -> It assigns the defined value to the my parameter of the radio1 of the sensor S1
  * setparameter radio S1 radio1 ch value
@@ -88,7 +88,7 @@ import cupcarbon.CupCarbon;
 
 import device.Device;
 import device.DeviceList;
-import device.MediaSensorNode;
+import device.DirectionalSensorNode;
 import device.SensorNode;
 import map.WorldMap;
 
@@ -238,15 +238,15 @@ public class CupCommand_SETPARAMETER extends CupCommand {
 						currentExecution = true;
 						break;
 					case("deg") :
-						if (node.getType() == Device.MEDIA_SENSOR) {
-							((MediaSensorNode) node).setSensorUnitDeg(Double.parseDouble(sValue));
+						if (node.getType() == Device.DIRECTIONAL_SENSOR) {
+							((DirectionalSensorNode) node).setSensorUnitDeg(Double.parseDouble(sValue));
 							rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new drift time value = " + sValue;
 							currentExecution = true;
 						}
 						break;
 					case("dec") :
-						if (node.getType() == Device.MEDIA_SENSOR) {
-							((MediaSensorNode) node).setSensorUnitDec(Double.parseDouble(sValue));
+						if (node.getType() == Device.DIRECTIONAL_SENSOR) {
+							((DirectionalSensorNode) node).setSensorUnitDec(Double.parseDouble(sValue));
 							rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new drift time value = " + sValue;
 							currentExecution = true;
 						}

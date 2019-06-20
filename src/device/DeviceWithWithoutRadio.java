@@ -2,7 +2,8 @@
  * CupCarbon: OSM based Wireless Sensor Network design and simulation tool
  * www.cupcarbon.com
  * ----------------------------------------------------------------------------------------------------------------
- * Copyright (C) 2018 Ahcene Bounceur
+ * Copyright (C) 2019 CupCarbon
+ * Ahcene Bounceur
  * ----------------------------------------------------------------------------------------------------------------
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +36,7 @@ import visibility.VisibilityZones;
  * @author Ahcene Bounceur
  * @version 1.0
  */
+
 public abstract class DeviceWithWithoutRadio extends Device {
 
 	protected LinkedList<Integer> routeTime;
@@ -128,7 +130,9 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	//          from the index idx2 of route2
 	// idx2 : the index of route2 from which the new route will continue
 	// ------------------------------------------------------------------------
-	public void loadRouteFrom2Files(String fileName1, int idx1_f, String fileName2, int idx2) {
+	public void loadRouteFrom2Files(int idx1_f, String fileName2, int idx2) {
+		String fileName1 = this.getGPSFileName();
+		
 		
 		int [] t = new int[routeTime.size()];
 		double [] tx = new double[routeTime.size()];

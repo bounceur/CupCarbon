@@ -49,10 +49,10 @@
  * -> It obtains the value of the UART Data Rate parameter of sensor S1
  * getparameter object S1 drift x
  * -> It obtains the value of the drift time parameter of sensor S1
- * getparameter object MS2 deg x //for media sensors
- * -> It obtains the value of the deg parameter of media sensor MS2
- * getparameter object MS2 dec x //for media sensors
- * -> It obtains the value of the dec parameter of media sensor MS2
+ * getparameter object MS2 deg x //for directional sensors
+ * -> It obtains the value of the deg parameter of directional sensor MS2
+ * getparameter object MS2 dec x //for directional sensors
+ * -> It obtains the value of the dec parameter of directional sensor MS2
  * getparameter radio S1 radio1 my x
  * -> It obtains the value of the my parameter of the radio1 of the sensor S1
  * getparameter radio S1 radio1 ch x
@@ -84,7 +84,7 @@ package cupcarbon_script;
 
 import device.Device;
 import device.DeviceList;
-import device.MediaSensorNode;
+import device.DirectionalSensorNode;
 import device.SensorNode;
 
 
@@ -195,16 +195,16 @@ public class CupCommand_GETPARAMETER extends CupCommand {
 					currentExecution = true;
 					break;
 				case("deg") :
-					if (node.getType() == Device.MEDIA_SENSOR) {
-						script.addVariable(sValue, "" + ((MediaSensorNode) sensorNode).getSensorUnitDeg());
+					if (node.getType() == Device.DIRECTIONAL_SENSOR) {
+						script.addVariable(sValue, "" + ((DirectionalSensorNode) sensorNode).getSensorUnitDeg());
 						rep = "000 Device: "+ sDevice + " has a drift time value = " + script.getVariableValue(sValue) + " = " + node.getLongitude();
 						currentExecution = true;
 					}
 					break;
 				case("dec") :
-					if (node.getType() == Device.MEDIA_SENSOR) {
-						script.addVariable(sValue, "" + ((MediaSensorNode) sensorNode).getSensorUnitDec());
-						rep = "000 Device: "+ sDevice + " has a drift time value = " + script.getVariableValue(sValue) + " = " + ((MediaSensorNode) sensorNode).getSensorUnitDeg();
+					if (node.getType() == Device.DIRECTIONAL_SENSOR) {
+						script.addVariable(sValue, "" + ((DirectionalSensorNode) sensorNode).getSensorUnitDec());
+						rep = "000 Device: "+ sDevice + " has a drift time value = " + script.getVariableValue(sValue) + " = " + ((DirectionalSensorNode) sensorNode).getSensorUnitDeg();
 						currentExecution = true;
 					}
 					break;

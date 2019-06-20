@@ -320,6 +320,12 @@ public class CupCarbonController implements Initializable {
 	public CheckBox visibilityCheckBox;
 
 	@FXML
+	public CheckBox macCheckBox;
+	
+	@FXML
+	public TextField macProbaTextField;
+	
+	@FXML
 	public CheckBox ackCheckBox;
 
 	@FXML
@@ -742,7 +748,7 @@ public class CupCarbonController implements Initializable {
 	}
 
 	@FXML
-	public void addMediaSensor() {
+	public void addDirectionalSensor() {
 		WorldMap.addNodeInMap('4');
 		mapFocus();
 	}
@@ -879,6 +885,9 @@ public class CupCarbonController implements Initializable {
 				SimulationInputs.symmetricalLinks = symmetricalLinkCheckBox.isSelected();
 				SimulationInputs.clockDrift = clockDriftCheckBox.isSelected();
 				SimulationInputs.visibility = visibilityCheckBox.isSelected();
+				SimulationInputs.macLayer = macCheckBox.isSelected();
+				proba = Double.parseDouble(macProbaTextField.getText());
+				SimulationInputs.macProba = (proba > 1) ? 1 : proba;
 				MapLayer.repaint();
 				mapFocus();
 			}
@@ -992,6 +1001,16 @@ public class CupCarbonController implements Initializable {
 			probaComboBox.setDisable(true);
 			probaTextField.setDisable(true);
 			ackShowCheckBox.setDisable(true);
+		}
+		mapFocus();
+	}
+	
+	@FXML
+	public void macChecked() {
+		if (macCheckBox.isSelected()) {
+			macProbaTextField.setDisable(false);
+		} else {
+			macProbaTextField.setDisable(true);
 		}
 		mapFocus();
 	}
@@ -1182,8 +1201,11 @@ public class CupCarbonController implements Initializable {
 					symmetricalLinkCheckBox.setSelected(Boolean.parseBoolean(br.readLine().split(":")[1]));
 					clockDriftCheckBox.setSelected(Boolean.parseBoolean(br.readLine().split(":")[1]));
 					visibilityCheckBox.setSelected(Boolean.parseBoolean(br.readLine().split(":")[1]));
-					resultsWPeriod.setText(br.readLine().split(":")[1]);
+					resultsWPeriod.setText(br.readLine().split(":")[1]);					
+					macCheckBox.setSelected(Boolean.parseBoolean(br.readLine().split(":")[1]));
+					macProbaTextField.setText(br.readLine().split(":")[1]);
 					ackChecked();
+					macChecked();
 					br.close();
 					in.close();
 				} catch (FileNotFoundException e) {
@@ -2436,8 +2458,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	@FXML
-	public void selectAllMediaSensors() {
-		WorldMap.setSelectionOfAllNodes(true, Device.MEDIA_SENSOR, addSelectionMenuItem.isSelected());
+	public void selectAllDirectionalSensors() {
+		WorldMap.setSelectionOfAllNodes(true, Device.DIRECTIONAL_SENSOR, addSelectionMenuItem.isSelected());
 		updateSelectionInListView();
 	}
 
@@ -2484,8 +2506,8 @@ public class CupCarbonController implements Initializable {
 	}
 
 	@FXML
-	public void deselectAllMediaSensors() {
-		WorldMap.setSelectionOfAllNodes(false, Device.MEDIA_SENSOR, true);
+	public void deselectAllDirectionalSensors() {
+		WorldMap.setSelectionOfAllNodes(false, Device.DIRECTIONAL_SENSOR, true);
 		updateSelectionInListView();
 	}
 
@@ -3288,7 +3310,7 @@ public class CupCarbonController implements Initializable {
 					n_s++;
 					if(sensor.isSelected()) n_s_s++;
 				}
-				if(sensor.getType() == Device.MEDIA_SENSOR) {
+				if(sensor.getType() == Device.DIRECTIONAL_SENSOR) {
 					n_ms++;
 					if(sensor.isSelected()) n_s_ms++;
 				}
@@ -3305,7 +3327,7 @@ public class CupCarbonController implements Initializable {
 				n_r = new File(Project.getProjectGpsPath()).list().length;
 			
 			labelInfo1.setText("Number of Sensors: " + n_s);		
-			labelInfo2.setText("Number of Media Sensors: " + n_ms);
+			labelInfo2.setText("Number of Directional Sensors: " + n_ms);
 			labelInfo3.setText("Number of Base Stations: " + n_bs);
 			labelInfo4.setText("Number of Mobiles: " + n_m);
 			labelInfo5.setText("Number of Gas: " + n_g);
@@ -3315,7 +3337,7 @@ public class CupCarbonController implements Initializable {
 			labelInfo9.setText("Number of Unmarked Sensors: " + n_unmark);
 			labelInfo10.setText("Number of Selected Objects:  " + n_s_o);
 			labelInfo11.setText("Number of Selected Sensors: " + n_s_s);
-			labelInfo12.setText("Number of Selected Media Sensors:  " + n_s_ms);
+			labelInfo12.setText("Number of Selected Directional Sensors:  " + n_s_ms);
 			labelInfo13.setText("Number of Selected Base Stations: " + n_s_bs);
 			labelInfo14.setText("Number of Selected Mobiles: " + n_s_m);
 			labelInfo15.setText("Number of Selected Gas: " + n_s_g);
@@ -3401,6 +3423,18 @@ public class CupCarbonController implements Initializable {
 			textReady.setVisible(true);
 			try {
 				Thread.sleep(1000);
+			} catch (InterruptedException e) {}
+			textReady.setVisible(false);
+		}).start();
+	}
+	
+	public void displayLongErrMessageTh(String s) {
+		new Thread(() -> {
+			textReady.setFill(new Color(1,0,0,0.5));
+			textReady.setText(s);
+			textReady.setVisible(true);
+			try {
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {}
 			textReady.setVisible(false);
 		}).start();

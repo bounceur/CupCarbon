@@ -1,6 +1,6 @@
 package senscript;
 
-import device.MediaSensorNode;
+import device.DirectionalSensorNode;
 import device.SensorNode;
 import simulation.WisenSimulation;
 
@@ -22,7 +22,7 @@ public class Command_ROTATE extends Command {
 		String vArg2 = sensor.getScript().getVariableValue(arg2);
 		double n = Double.valueOf(vArg1);
 		double t = Integer.valueOf(vArg2);
-		((MediaSensorNode) sensor).setSensorUnitDec(n);
+		((DirectionalSensorNode) sensor).setSensorUnitDec(n);
 		return t/1000. ;
 	}
 

@@ -134,6 +134,8 @@ public final class Project {
 			ps.println("clockdrift:" + SimulationInputs.clockDrift);
 			ps.println("visibility:" + SimulationInputs.visibility);
 			ps.println("results_writing_period:" + SimulationInputs.resultsWritingPeriod);
+			ps.println("mac_layer:" + SimulationInputs.macLayer);
+			ps.println("macproba:" + SimulationInputs.macProba);
 			ps.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -157,23 +159,29 @@ public final class Project {
 		Thread th = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				CupCarbon.cupCarbonController.displayPermanentMessage_th("Loading ...");
-				DeviceList.propagationsCalculated = false;
-				System.out.println(path);
-				System.out.println(name);
-				CupActionStack.init();
-				reset();
-				setProjectName(path, name);
-				saveRecentPath();				
-				BuildingList.open(getProjectBuildingPathName());
-				MarkerList.open(getProjectMarkerPath());		
-				DeviceList.open();
-				loadParameters();		
-				CupCarbon.cupCarbonController.loadSimulationParams();
-				CupCarbon.cupCarbonController.applyParameters();
-				CupCarbon.cupCarbonController.saveButton.setDisable(false);
-				if(DeviceList.propagationsCalculated) DeviceList.calculatePropagations();
-				CupCarbon.cupCarbonController.displayShortGoodMessage_th("Project loaded");
+				File file = new File(path+File.separator+name);
+				if(file.exists()) {
+					CupCarbon.cupCarbonController.displayPermanentMessage_th("Loading ...");
+					DeviceList.propagationsCalculated = false;
+					System.out.println(path);
+					System.out.println(name);
+					CupActionStack.init();
+					reset();
+					setProjectName(path, name);
+					saveRecentPath();				
+					BuildingList.open(getProjectBuildingPathName());
+					MarkerList.open(getProjectMarkerPath());		
+					DeviceList.open();
+					loadParameters();		
+					CupCarbon.cupCarbonController.loadSimulationParams();
+					CupCarbon.cupCarbonController.applyParameters();
+					CupCarbon.cupCarbonController.saveButton.setDisable(false);
+					if(DeviceList.propagationsCalculated) DeviceList.calculatePropagations();
+					CupCarbon.cupCarbonController.displayShortGoodMessage_th("Project loaded");					
+				}
+				else {
+					CupCarbon.cupCarbonController.displayLongErrMessageTh("Project does not exist!");
+				}
 			}
 		});
 		th.start();

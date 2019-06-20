@@ -169,18 +169,18 @@ public class Command_SEND extends Command {
 		
 		// MAC Layer: listening to the channel and test if it is free
 		if(writtenInUART && !channelFree) {
+			double macProba = 1.0;
+			if(SimulationInputs.macLayer) macProba = SimulationInputs.macProba;
 			WisenSimulation.simLog.add("S" + sensor.getId() + " is listening to the channel");
 			double isChannelFree = Math.random();
-			if(isChannelFree <= 1.0) {		// a chance of 90% to have a free channel
+			if(isChannelFree <= macProba) {		// a chance of 90% to have a free channel
 				WisenSimulation.simLog.add("S" + sensor.getId() + " the channel is free.");
-				System.out.println("---------------------------");
-				System.out.println("Channel free");
 				channelFree = true;	
 			}
 			else {
 				double randomWaitTime = Math.random();  // 0 to 1000 milliseconds
 				WisenSimulation.simLog.add("S" + sensor.getId() + " the channel is not free, wait for "+randomWaitTime+"ms.");
-				System.out.println("Channel not free: wait for "+randomWaitTime);
+				//System.out.println("Channel not free: wait for "+randomWaitTime);
 				return randomWaitTime;
 			}
 		}

@@ -124,11 +124,12 @@ public class GeoZone {
 		float[] dist = {0.0f, 0.2f, 0.7f};
 		Color [] colors = new Color[3];
 		colors[0] = new Color(255, 0, 0, 80);
-		colors[1] = new Color(221, 148, 32, 50);
+		//colors[1] = new Color(221, 148, 32, 50);
+		colors[1] = new Color(250, 5, 0, 30);
 		colors[2] = new Color(255, 255, 255, 0);
 		if(MapLayer.dark) {			
 			colors[0] = new Color(255, 0, 0, 80);
-			colors[1] = new Color(221, 148,32, 50);
+			colors[1] = new Color(221, 148,32, 80);
 			colors[2] = new Color(221, 0,32, 0);
 		}
 		if(selected) {			

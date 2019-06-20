@@ -50,6 +50,9 @@ public class SimulationInputs {
 	public static double ackType = ErrorBits.PROBABILITY;	// Type of the interference calculation
 	public static double ackProba = 1.0 ;
 	
+	public static boolean macLayer = false ;
+	public static double macProba = 1.0 ;
+	
 	public static boolean symmetricalLinks = false;
 	public static int radioDetectionType = RadioDetection.SIMPLE_DETECTION;
 	public static boolean visibility = false; 

@@ -32,9 +32,9 @@
  * add base_station 0.3 0.2 0.0
  * -> It adds a base station to the map layer with the defined coordinates (Longitude, Latitude, elevation)
  * -> It returns the name of the created base station (ex. SINK_2)
- * add media_sensor 0.3 0.2 0.0
- * -> It adds a media sensor to the map layer with the defined coordinates (Longitude, Latitude, elevation)
- * -> It returns the name of the created media sensor (ex. MS3)
+ * add directional_sensor 0.3 0.2 0.0
+ * -> It adds a directional sensor to the map layer with the defined coordinates (Longitude, Latitude, elevation)
+ * -> It returns the name of the created directional sensor (ex. MS3)
  * add mobile 0.3 0.2 0.0
  * -> It adds a mobile to the map layer with the defined coordinates (Longitude, Latitude, elevation)
  * -> It returns the name of the created mobile (ex. M4)
@@ -57,7 +57,7 @@ package cupcarbon_script;
 import device.BaseStation;
 import device.Device;
 import device.DeviceList;
-import device.MediaSensorNode;
+import device.DirectionalSensorNode;
 import device.Mobile;
 import device.SensorNode;
 import device.StdSensorNode;
@@ -119,10 +119,10 @@ public class CupCommand_ADD extends CupCommand {
 				rep = "000 Adding Base Station: Id="+sensor.getId()+", name="+sensor.getName();
 				currentExecution = true;
 				break;
-			case ("media_sensor") :
-				sensor = new MediaSensorNode(Double.parseDouble(sLongitude), Double.parseDouble(sLatitude), Double.parseDouble(sElevation), 0, 100, 20,-1, 0, 0, 0);
+			case ("directional_sensor") :
+				sensor = new DirectionalSensorNode(Double.parseDouble(sLongitude), Double.parseDouble(sLatitude), Double.parseDouble(sElevation), 0, 100, 20,-1, 0, 0, 0);
 				DeviceList.add(sensor);
-				rep = "000 Adding Media Sensor: Id="+sensor.getId()+", name="+sensor.getName();
+				rep = "000 Adding Directional Sensor: Id="+sensor.getId()+", name="+sensor.getName();
 				currentExecution = true;
 				break;
 			case ("mobile") :

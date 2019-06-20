@@ -51,8 +51,8 @@ import action.CupActionDeleteMarker;
 import action.CupActionDeleteSensor;
 import action.CupActionMapObjectMove;
 import action.CupActionModifDeviceRadius;
-import action.CupActionModifMediaSensorUnitDec;
-import action.CupActionModifMediaSensorUnitDeg;
+import action.CupActionModifDirectionalSensorUnitDec;
+import action.CupActionModifDirectionalSensorUnitDeg;
 import action.CupActionModifRadioRadius;
 import action.CupActionModifSensorRadius;
 import action.CupActionModifSensorUnitRadius;
@@ -65,7 +65,7 @@ import device.Channels;
 import device.Device;
 import device.DeviceList;
 import device.MapObject;
-import device.MediaSensorNode;
+import device.DirectionalSensorNode;
 import device.Mobile;
 import device.NetworkLoader;
 import device.SensorNode;
@@ -328,7 +328,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			repaint();
 		}
 		if (lastKey == '4') {
-			CupAction action = new CupActionAddSensor(new MediaSensorNode(gp.getLongitude(), gp.getLatitude(), 0, 0, 100, 60, -1, 0.1, 5, 12));
+			CupAction action = new CupActionAddSensor(new DirectionalSensorNode(gp.getLongitude(), gp.getLatitude(), 0, 0, 100, 60, -1, 0.1, 5, 12));
 			addAction(action);
 			CupActionStack.execute();
 			repaint();
@@ -954,10 +954,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				}
 				
 				if ((key.getKeyChar() == 960) || (key.getKeyChar() == 'p')) {
-					if(sensor.getType()==Device.MEDIA_SENSOR) {
+					if(sensor.getType()==Device.DIRECTIONAL_SENSOR) {
 						double d = 0.1;
 						if(key.getKeyChar() == 960) d=0.01;
-						CupAction action = new CupActionModifMediaSensorUnitDec(sensor, ((MediaSensorNode)sensor).getSensorUnitDec(), ((MediaSensorNode)sensor).getSensorUnitDec()+d);
+						CupAction action = new CupActionModifDirectionalSensorUnitDec(sensor, ((DirectionalSensorNode)sensor).getSensorUnitDec(), ((DirectionalSensorNode)sensor).getSensorUnitDec()+d);
 						block.addAction(action);
 						if(CupCarbon.cupCarbonController!=null) {
 							CupCarbon.cupCarbonController.getSensorInformations();
@@ -966,10 +966,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				}
 				
 				if ((key.getKeyChar() == 339) || (key.getKeyChar() == 'o')) {
-					if(sensor.getType()==Device.MEDIA_SENSOR) {
+					if(sensor.getType()==Device.DIRECTIONAL_SENSOR) {
 						double d = 0.1;
 						if(key.getKeyChar() == 339) d=0.01;
-						CupAction action = new CupActionModifMediaSensorUnitDec(sensor, ((MediaSensorNode)sensor).getSensorUnitDec(), ((MediaSensorNode)sensor).getSensorUnitDec()-d);
+						CupAction action = new CupActionModifDirectionalSensorUnitDec(sensor, ((DirectionalSensorNode)sensor).getSensorUnitDec(), ((DirectionalSensorNode)sensor).getSensorUnitDec()-d);
 						block.addAction(action);
 						if(CupCarbon.cupCarbonController!=null) {
 							CupCarbon.cupCarbonController.getSensorInformations();
@@ -978,10 +978,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				}
 				
 				if ((key.getKeyChar() == 8719) || (key.getKeyChar() == 'P')) {
-					if(sensor.getType()==Device.MEDIA_SENSOR) {
+					if(sensor.getType()==Device.DIRECTIONAL_SENSOR) {
 						double d = 0.01;
 						if(key.getKeyChar() == 8719) d=0.001;
-						CupAction action = new CupActionModifMediaSensorUnitDeg(sensor, ((MediaSensorNode)sensor).getSensorUnitDeg(), ((MediaSensorNode)sensor).getSensorUnitDeg()+d);
+						CupAction action = new CupActionModifDirectionalSensorUnitDeg(sensor, ((DirectionalSensorNode)sensor).getSensorUnitDeg(), ((DirectionalSensorNode)sensor).getSensorUnitDeg()+d);
 						block.addAction(action);
 						if(CupCarbon.cupCarbonController!=null) {
 							CupCarbon.cupCarbonController.getSensorInformations();
@@ -990,10 +990,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				}
 				
 				if ((key.getKeyChar() == 338) || (key.getKeyChar() == 'O')) {
-					if(sensor.getType()==Device.MEDIA_SENSOR) {
+					if(sensor.getType()==Device.DIRECTIONAL_SENSOR) {
 						double d = 0.01;
 						if(key.getKeyChar() == 338) d=0.001;
-						CupAction action = new CupActionModifMediaSensorUnitDeg(sensor, ((MediaSensorNode)sensor).getSensorUnitDeg(), ((MediaSensorNode)sensor).getSensorUnitDeg()-d);
+						CupAction action = new CupActionModifDirectionalSensorUnitDeg(sensor, ((DirectionalSensorNode)sensor).getSensorUnitDeg(), ((DirectionalSensorNode)sensor).getSensorUnitDeg()-d);
 						block.addAction(action);
 						if(CupCarbon.cupCarbonController!=null) {
 							CupCarbon.cupCarbonController.getSensorInformations();

@@ -140,7 +140,7 @@ public class DeviceList {
 	public static List<Device> getSensorAndMobileNodes() {
 		List<Device> nodes = new ArrayList<Device>();
 		for(Device node : nodes) {
-			if((node.getType() == Device.SENSOR) || node.getType() == Device.MEDIA_SENSOR || (node.getType() == Device.MOBILE))
+			if((node.getType() == Device.SENSOR) || node.getType() == Device.DIRECTIONAL_SENSOR || (node.getType() == Device.MOBILE))
 				nodes.add((SensorNode) node);
 		}
 		return nodes;
@@ -217,8 +217,8 @@ public class DeviceList {
 						sensor = loadBaseStation(nodeFiles[i].getAbsolutePath());												
 						add(sensor);
 						break;
-					case MapObject.MEDIA_SENSOR:
-						sensor = loadMediaSensor(nodeFiles[i].getAbsolutePath());
+					case MapObject.DIRECTIONAL_SENSOR:
+						sensor = loadDirectionalSensor(nodeFiles[i].getAbsolutePath());
 						add(sensor);
 						break;
 					case MapObject.MOBILE:						
@@ -305,7 +305,7 @@ public class DeviceList {
 		return sensor;
 	}
 	
-	public static SensorNode loadMediaSensor(String fileName) {
+	public static SensorNode loadDirectionalSensor(String fileName) {
 		SensorNode sensor = null;
 		try {
 			String[] str = null;
@@ -352,14 +352,14 @@ public class DeviceList {
 				case "device_draw_battery":
 					parameters[10] = str[1];
 					break;
-				case "media_parameters":
-					String [] media = str[1].split(" ");
-					for (int j = 0; j< media.length; j++)
-						mparameters[j] = media[j];
+				case "directional_parameters":
+					String [] directional = str[1].split(" ");
+					for (int j = 0; j< directional.length; j++)
+						mparameters[j] = directional[j];
 					break;
 				}
 			}
-			sensor = new MediaSensorNode(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6], mparameters[0], mparameters[1], mparameters[2]);
+			sensor = new DirectionalSensorNode(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6], mparameters[0], mparameters[1], mparameters[2]);
 			sensor.setHide(Integer.parseInt(parameters[9]));
 			sensor.setDrawBatteryLevel(Boolean.parseBoolean(parameters[10]));
 			br.close();
@@ -368,7 +368,7 @@ public class DeviceList {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		openRadioModule(Project.getProjectRadioPath()+File.separator+"mediasensor_"+sensor.getId(), sensor);
+		openRadioModule(Project.getProjectRadioPath()+File.separator+"directionalsensor_"+sensor.getId(), sensor);
 		return sensor;
 	}
 	
@@ -660,12 +660,12 @@ public class DeviceList {
 	}
 	
 	/**
-	 * @return the number of media sensors
+	 * @return the number of directional sensors
 	 */
-	public static int getNumberOfMediaSensors() {
+	public static int getNumberOfDirectionalSensors() {
 		int n = 0;
 		for(SensorNode sensor : sensors) {
-			if(sensor.getType() == Device.MEDIA_SENSOR)
+			if(sensor.getType() == Device.DIRECTIONAL_SENSOR)
 				n++;
 		}
 		return n;
@@ -742,8 +742,8 @@ public class DeviceList {
 		case Device.BASE_STATION:
 			add(new BaseStation(type[1], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10]));
 			break;
-		case Device.MEDIA_SENSOR:
-			add(new MediaSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10], type[11], type[12]));
+		case Device.DIRECTIONAL_SENSOR:
+			add(new DirectionalSensorNode(type[1], type[2], type[3], type[4], type[5], type[6], type[7], type[8], type[9], type[10], type[11], type[12]));
 			break;
 		case Device.MOBILE:
 			add(new Mobile(type[3], type[4], type[5], type[6], type[7], id));

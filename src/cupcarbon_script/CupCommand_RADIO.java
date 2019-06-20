@@ -23,7 +23,7 @@
  **/
  
 /** Definition:
- * This class allows dealing with the radio module of a sensor (sensor node, media sensor or base station)
+ * This class allows dealing with the radio module of a sensor (sensor node, directional sensor or base station)
  * by adding a radio module to a sensor, selecting a radio to be the current radio for the sensor, or deleting a radio module from a sensor
  * 
  * Command examples:

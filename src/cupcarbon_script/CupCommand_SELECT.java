@@ -29,7 +29,7 @@
  * select all
  * -> It selects all objects (sensors, devices and markers) on the map layer
  * select all sensors
- * -> It selects all sensors (sensors, bas stations and media sensors) on the map layer
+ * -> It selects all sensors (sensors, bas stations and directional sensors) on the map layer
  * select all events
  * -> It selects all events (gases) on the map layer
  * select all mobiles
@@ -122,7 +122,7 @@ public class CupCommand_SELECT extends CupCommand {
 						case ("sensors") :
 							DeviceList.deselectAllObjects();
 							WorldMap.setSelectionOfAllNodes(true, Device.SENSOR, true);
-							WorldMap.setSelectionOfAllNodes(true, Device.MEDIA_SENSOR, true);
+							WorldMap.setSelectionOfAllNodes(true, Device.DIRECTIONAL_SENSOR, true);
 							WorldMap.setSelectionOfAllNodes(true, Device.BASE_STATION, true);
 							rep = rep + " 000 All Sensors are Selected";
 							currentExecution = true;

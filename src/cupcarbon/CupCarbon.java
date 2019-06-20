@@ -16,9 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *----------------------------------------------------------------------------------------------------------------
- * CupCarbon U-One is part of the research project PERSEPTEUR supported by the 
+ * CupCarbon U-One was part of the research project PERSEPTEUR supported by the 
  * French Agence Nationale de la Recherche ANR 
  * under the reference ANR-14-CE24-0017.
+ * ----------------------------------------------------------------------------------------------------------------
+ * References:
+ * Lab-STICC: Ahcene Bounceur
+ * MMU: Mohammad Hammoudeh
+ * IEMN: Laurent Clavier
+ * Xlim: Pierre Combeau
+ * Virtualys: Olivier Marc
  * ----------------------------------------------------------------------------------------------------------------
  **/
 
