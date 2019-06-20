@@ -1,6 +1,6 @@
 package device;
 
-public class PacketEvent implements Comparable<PacketEvent> {
+public class MessageEvent implements Comparable<MessageEvent> {
 
 	protected int type = 0;
 	protected SensorNode sSensor = null;
@@ -8,7 +8,7 @@ public class PacketEvent implements Comparable<PacketEvent> {
 	protected String message = "";
 	protected double time = 0;
 	
-	public PacketEvent(int type, SensorNode sSensor, SensorNode rSensor, String message, double time) {
+	public MessageEvent(int type, SensorNode sSensor, SensorNode rSensor, String message, double time) {
 		super();
 		this.type = type ;
 		this.sSensor = sSensor ;
@@ -50,8 +50,8 @@ public class PacketEvent implements Comparable<PacketEvent> {
 	}
 
 	@Override
-	public int compareTo(PacketEvent packet) {
-		return (time>packet.getTime())?1:(time<packet.getTime())?-1:0;
+	public int compareTo(MessageEvent message) {
+		return (time>message.getTime())?1:(time<message.getTime())?-1:0;
 	}
 	
 	@Override

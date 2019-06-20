@@ -6,24 +6,24 @@ import radio_module.RadioStandard;
 
 public class MultiChannels {
 	
-	public static LinkedList<Channels> channelList = new LinkedList<Channels>();
+	public static LinkedList<MessageEventList> channelList = new LinkedList<MessageEventList>();
 	
 	public MultiChannels() {		
 		init();
 	}
 	
 	public static void init() {		
-		channelList = new LinkedList<Channels>();		
+		channelList = new LinkedList<MessageEventList>();		
 		// Index 0 : 802.15.4
 		// Index 1 : WiFi
 		// Index 2 : Lora
-		channelList.add(new Channels(RadioStandard.ZIGBEE_802_15_4));
-		channelList.add(new Channels(RadioStandard.WIFI_802_11));
-		channelList.add(new Channels(RadioStandard.LORA));
+		channelList.add(new MessageEventList(RadioStandard.ZIGBEE_802_15_4));
+		channelList.add(new MessageEventList(RadioStandard.WIFI_802_11));
+		channelList.add(new MessageEventList(RadioStandard.LORA));
 	}
 	
 	public static void addChannel(int std){		
-		Channels channel = new Channels(std);
+		MessageEventList channel = new MessageEventList(std);
 		channelList.add(channel);
 	}
 	
@@ -31,25 +31,25 @@ public class MultiChannels {
 		int stdS = sSensor.getStandard();
 		int stdR = rSensor.getStandard();
 		if(stdS==stdR) {
-			channelList.get(stdS-1).addPacketEvent(type, message, sSensor, rSensor);
+			channelList.get(stdS-1).addMessageEvent(type, message, sSensor, rSensor);
 		}
 	}
 		
 	public static void receivedMessages() {
-		for (Channels channel : channelList) {
+		for (MessageEventList channel : channelList) {
 			channel.receivedMessages();
 		}
 	}
 	
 	public static void goToTheNextTime(double min) {
-		for (Channels channel : channelList) {
+		for (MessageEventList channel : channelList) {
 			channel.goToTheNextTime(min);
 		}
 	}
 	
 	public static double getMin() {
 		double min = Double.MAX_VALUE;
-		for (Channels channel : channelList) {		
+		for (MessageEventList channel : channelList) {		
 			if(channel != null) {
 				if (channel.getMin() < min)
 					min = channel.getMin();
@@ -59,7 +59,7 @@ public class MultiChannels {
 	}
 	
 	public static void drawChannelLinks(Graphics g) {			
-		for (Channels channel : channelList) {
+		for (MessageEventList channel : channelList) {
 			channel.drawChannelLinks(g);
 		}
 	}

@@ -35,7 +35,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 import cupcarbon.CupCarbon;
-import device.Channels;
+import device.MessageEventList;
 import device.Device;
 import device.DeviceList;
 import device.MultiChannels;
@@ -108,14 +108,14 @@ public class WisenSimulation implements Runnable {
 		simLog.add("Initialization");
 		
 		MultiChannels.init();
-		Channels.numberOfSentMessages = 0;
-		Channels.numberOfReceivedMessages = 0;
-		Channels.numberOfAckMessages = 0;		
-		Channels.numberOfLostMessages = 0;
-		Channels.numberOfSentMessages_b = 0;
-		Channels.numberOfReceivedMessages_b = 0;
-		Channels.numberOfAckMessages_b = 0;		
-		Channels.numberOfLostMessages_b = 0;
+		MessageEventList.numberOfSentMessages = 0;
+		MessageEventList.numberOfReceivedMessages = 0;
+		MessageEventList.numberOfAckMessages = 0;		
+		MessageEventList.numberOfLostMessages = 0;
+		MessageEventList.numberOfSentMessages_b = 0;
+		MessageEventList.numberOfReceivedMessages_b = 0;
+		MessageEventList.numberOfAckMessages_b = 0;		
+		MessageEventList.numberOfLostMessages_b = 0;
 		
 		for (Device device : DeviceList.devices) {
 			device.initForSimulation();
@@ -454,11 +454,11 @@ public class WisenSimulation implements Runnable {
 			DeviceList.calculatePropagations();		
 		
 		System.out.println(String.format("Time: %4.4f s", WisenSimulation.sTime));
-		System.out.println("Number of SENT messages: "+Channels.numberOfSentMessages + " ["+ Channels.numberOfSentMessages_b +"]" );
-		System.out.println("Number of RECEIVED messages: "+Channels.numberOfReceivedMessages + " ["+ Channels.numberOfReceivedMessages_b +"]");
-		System.out.println("Number of SENT & RECEIVED messages: "+(Channels.numberOfReceivedMessages+Channels.numberOfSentMessages) + " ["+ (Channels.numberOfReceivedMessages_b+Channels.numberOfSentMessages_b) +"]");
-		System.out.println("Number of ACK messages: "+Channels.numberOfAckMessages + " ["+ Channels.numberOfAckMessages_b +"]");
-		System.out.println("Number of LOST messages: "+Channels.numberOfLostMessages + " ["+ Channels.numberOfLostMessages_b +"]");
+		System.out.println("Number of SENT messages: "+MessageEventList.numberOfSentMessages + " ["+ MessageEventList.numberOfSentMessages_b +"]" );
+		System.out.println("Number of RECEIVED messages: "+MessageEventList.numberOfReceivedMessages + " ["+ MessageEventList.numberOfReceivedMessages_b +"]");
+		System.out.println("Number of SENT & RECEIVED messages: "+(MessageEventList.numberOfReceivedMessages+MessageEventList.numberOfSentMessages) + " ["+ (MessageEventList.numberOfReceivedMessages_b+MessageEventList.numberOfSentMessages_b) +"]");
+		System.out.println("Number of ACK messages: "+MessageEventList.numberOfAckMessages + " ["+ MessageEventList.numberOfAckMessages_b +"]");
+		System.out.println("Number of LOST messages: "+MessageEventList.numberOfLostMessages + " ["+ MessageEventList.numberOfLostMessages_b +"]");
 		System.out.println("Number of Marked Sensors: "+DeviceList.getNumberOfMarkedSensors());
 		
 		CupCarbon.cupCarbonController.displayShortGoodMessage("End of Simulation");

@@ -17,7 +17,7 @@ import simulation.SimulationInputs;
 import simulation.WisenSimulation;
 import utilities.MapCalc;
 
-public class Channels {
+public class MessageEventList {
 	
 	public static double numberOfSentMessages = 0; // in number
 	public static double numberOfReceivedMessages = 0; // in number
@@ -28,25 +28,25 @@ public class Channels {
 	public static double numberOfAckMessages_b = 0; // in bytes
 	public static double numberOfLostMessages_b = 0; // in bytes
 	
-	protected List<List<PacketEvent>> channelEventList = Collections.synchronizedList(new LinkedList<List<PacketEvent>>());
+	protected List<List<MessageEvent>> messageEventLists = Collections.synchronizedList(new LinkedList<List<MessageEvent>>());
 	
-	public Channels(int std) {
+	public MessageEventList(int std) {
 		super();
 		init(std);
 	}
 	
 	public void init(int std) {	
-		channelEventList = new LinkedList<List<PacketEvent>>();
+		messageEventLists = new LinkedList<List<MessageEvent>>();
 		int channelNumber = 0;
 		if(std == RadioStandard.ZIGBEE_802_15_4) channelNumber = 16;
 		if(std == RadioStandard.LORA) channelNumber = 1;
 		if(std == RadioStandard.WIFI_802_11) channelNumber = 14;
 		for(int i=0; i < channelNumber; i++) {
-			channelEventList.add(new LinkedList<PacketEvent>());
+			messageEventLists.add(new LinkedList<MessageEvent>());
 		}
 	}
 	
-	public void addPacketEvent(int type, String message, SensorNode tSensor, SensorNode rSensor) {
+	public void addMessageEvent(int type, String message, SensorNode tSensor, SensorNode rSensor) {
 		// type=0 : Direct sending
 		// type=1 : ACK sending
 		// type=2 : Broadcast sending 		
@@ -72,20 +72,20 @@ public class Channels {
 			tSensor.setSending(true);
 			rSensor.setReceiving(true);
 			
-			PacketEvent packetEvent = new PacketEvent(type, tSensor, rSensor, message, lastTime+duration);		
-			channelEventList.get(tSensor.getCurrentRadioModule().getCh()).add(packetEvent);
-			//Collections.sort(channelEventList.get(sSensor.getCurrentRadioModule().getCh()));
-			//System.out.println(WisenSimulation.time+ " " + channelEventList);
+			MessageEvent messageEvent = new MessageEvent(type, tSensor, rSensor, message, lastTime+duration);		
+			messageEventLists.get(tSensor.getCurrentRadioModule().getCh()).add(messageEvent);
+			//Collections.sort(messageEventList.get(sSensor.getCurrentRadioModule().getCh()));
+			//System.out.println(WisenSimulation.time+ " " + messageEventList);
 		}
 	}
 
 	public void receivedMessages() {
-		for (List<PacketEvent> packetEventList : channelEventList) {			
-			while(packetEventList.size()>0 && packetEventList.get(0).getTime()==0) {
-				int type = packetEventList.get(0).getType();
-				String message = packetEventList.get(0).getMessage();
-				SensorNode tSensor = packetEventList.get(0).getSSensor();	
-				SensorNode rSensor = packetEventList.get(0).getRSensor();
+		for (List<MessageEvent> messageEventList : messageEventLists) {			
+			while(messageEventList.size()>0 && messageEventList.get(0).getTime()==0) {
+				int type = messageEventList.get(0).getType();
+				String message = messageEventList.get(0).getMessage();
+				SensorNode tSensor = messageEventList.get(0).getSSensor();	
+				SensorNode rSensor = messageEventList.get(0).getRSensor();
 
 				rSensor.setDrssi(tSensor.distance(rSensor));
 				
@@ -105,14 +105,14 @@ public class Channels {
 				if ((type == 0) || (type == 2)) {	
 					if (errorBitsOk || (type == 2)) {
 						
-						rSensor.addMessageToBuffer(packetEventList.get(0).getMessage());
+						rSensor.addMessageToBuffer(messageEventList.get(0).getMessage());
 						
 						if(rSensor.getScript().getCurrent().isWait()) {
 							rSensor.setEvent(0);
 						}
 						
 						if((type == 0) && (SimulationInputs.ack)) {
-							addPacketEvent(1, "", rSensor, tSensor);
+							addMessageEvent(1, "", rSensor, tSensor);
 						}
 					}
 				}
@@ -123,33 +123,33 @@ public class Channels {
 					rSensor.setAckWaiting(false);
 					rSensor.setEvent(0);
 				}				
-				packetEventList.remove(0);
+				messageEventList.remove(0);
 			}
 		}
 	}
 	
 	public void goToTheNextTime(double min) {
-		for (List<PacketEvent> packetEvent : channelEventList) {
-			for (PacketEvent packet : packetEvent) {
-				packet.setTime(packet.getTime()-min);
+		for (List<MessageEvent> massageEventList : messageEventLists) {
+			for (MessageEvent messageEvent : massageEventList) {
+				messageEvent.setTime(messageEvent.getTime()-min);
 			}
 		}
 	}
 	
 	public double getMin() {
 		double min = Double.MAX_VALUE;
-		for (List<PacketEvent> PacketEventList : channelEventList) {		
-			if(PacketEventList.size()>0) {
-				if (PacketEventList.get(0).getTime() < min)
-					min = PacketEventList.get(0).getTime();
+		for (List<MessageEvent> messageEventList : messageEventLists) {		
+			if(messageEventList.size()>0) {
+				if (messageEventList.get(0).getTime() < min)
+					min = messageEventList.get(0).getTime();
 			}
 		}
 		return min;
 	}
 	
 	public void drawChannelLinks(Graphics g) {			
-		for(List<PacketEvent> packetEventList : channelEventList) {
-			if(packetEventList.size()>0) {
+		for(List<MessageEvent> messageEventList : messageEventLists) {
+			if(messageEventList.size()>0) {
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setStroke(new BasicStroke(2f));
 				if(MapLayer.mapViewer.getZoom() > 3) {
@@ -167,24 +167,24 @@ public class Channels {
 				double dx = 0;
 				double dy = 0;
 				double alpha = 0;
-				for(int idx=0; idx<packetEventList.size(); idx++) {
-				//for(PacketEvent packetEvent : packetEventList) {
+				for(int idx=0; idx<messageEventList.size(); idx++) {
+				//for(messageEvent messageEvent : messageEventList) {
 					try {
-						PacketEvent packetEvent = packetEventList.get(idx);
-						if(packetEvent.getSSensor().isSending() && packetEvent.getRSensor().isReceiving()) {
-							if(packetEvent.getType()==0 || packetEvent.getType()==2 || ((packetEvent.getType()==1) && SimulationInputs.showAckLinks)) {
+						MessageEvent messageEvent = messageEventList.get(idx);
+						if(messageEvent.getSSensor().isSending() && messageEvent.getRSensor().isReceiving()) {
+							if(messageEvent.getType()==0 || messageEvent.getType()==2 || ((messageEvent.getType()==1) && SimulationInputs.showAckLinks)) {
 								
-								g.setColor(packetEvent.getSSensor().getRadioLinkColor());
-								if((packetEvent.getType()==1) && SimulationInputs.showAckLinks) {
+								g.setColor(messageEvent.getSSensor().getRadioLinkColor());
+								if((messageEvent.getType()==1) && SimulationInputs.showAckLinks) {
 									g.setColor(Color.BLACK);
 									if(MapLayer.dark)
 										g.setColor(Color.ORANGE);
 								}
 								
-								coord = MapCalc.geoToPixelMapA(packetEvent.getSSensor().getLatitude(), packetEvent.getSSensor().getLongitude());
+								coord = MapCalc.geoToPixelMapA(messageEvent.getSSensor().getLatitude(), messageEvent.getSSensor().getLongitude());
 								lx1 = coord[0];
 								ly1 = coord[1];		
-								coord = MapCalc.geoToPixelMapA(packetEvent.getRSensor().getLatitude(), packetEvent.getRSensor().getLongitude());
+								coord = MapCalc.geoToPixelMapA(messageEvent.getRSensor().getLatitude(), messageEvent.getRSensor().getLongitude());
 								lx2 = coord[0];
 								ly2 = coord[1];
 								dx = lx2 - lx1;
@@ -206,9 +206,9 @@ public class Channels {
 								else
 									g.fillArc((int) lx2 - as, (int) ly2 - as, as*2, as*2, -(int) alpha - as, as*2);
 								if(NetworkParameters.displayRadioMessages) {
-									if(packetEvent.getType()!=1) {
-										MapLayer.drawMessage(lx1, lx2, ly1, ly2, packetEvent.getMessage(), g2);
-										MapLayer.drawMessageAttempts(lx1, lx2, ly1, ly2, ""+(packetEvent.getSSensor().getAttempts()+1), g2);
+									if(messageEvent.getType()!=1) {
+										MapLayer.drawMessage(lx1, lx2, ly1, ly2, messageEvent.getMessage(), g2);
+										MapLayer.drawMessageAttempts(lx1, lx2, ly1, ly2, ""+(messageEvent.getSSensor().getAttempts()+1), g2);
 									}
 								}
 							}
@@ -222,10 +222,10 @@ public class Channels {
 	
 	public void display() {
 		String s="";
-		for (List<PacketEvent> PacketEventList : channelEventList) {			
+		for (List<MessageEvent> messageEventList : messageEventLists) {			
 			s += "[" ;
-			for (PacketEvent p : PacketEventList) {
-				s += p.toString() + " | ";
+			for (MessageEvent messageEvent : messageEventList) {
+				s += messageEvent.toString() + " | ";
 			}
 			s += "]\n";
 		}
