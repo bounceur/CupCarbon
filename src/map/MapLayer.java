@@ -974,7 +974,6 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 						if(key.getKeyChar() == 339) d=0.01;
 						double v =  ((DirectionalSensorNode)sensor).getSensorUnitDirection()-d;
 						if(v<0.0) v=6.28;
-						//----
 						CupAction action = new CupActionModifDirectionalSensorUnitDirection(sensor, ((DirectionalSensorNode)sensor).getSensorUnitDirection(), v);
 						block.addAction(action);
 						if(CupCarbon.cupCarbonController!=null) {
