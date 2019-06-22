@@ -38,6 +38,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.swing.ImageIcon;
+
 import action.CupActionStack;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -66,7 +68,11 @@ public class CupCarbon extends Application {
 		String os = System.getProperty ("os.name", "UNKNOWN");
 		
 		if(os != null && os.startsWith("Mac")) {
-			macos = true;
+			macos = true;			
+			URL iconURL = CupCarbon.class.getResource("cupcarbon_logo.png");
+			java.awt.Image image = new ImageIcon(iconURL).getImage();
+			com.apple.eawt.Application.getApplication().setDockIconImage(image);
+			
 		}
 		
 		CupActionStack.init();
@@ -75,7 +81,12 @@ public class CupCarbon extends Application {
 		setUserAgentStylesheet(STYLESHEET_MODENA);		
 	    
 		mainStage.setTitle("CupCarbon "+CupCarbonVersion.VERSION);
-		mainStage.getIcons().add(new Image(getClass().getResourceAsStream("cupcarbon_logo_small.png")));		
+		mainStage.getIcons().add(new Image(getClass().getResourceAsStream("cupcarbon_logo_small.png")));
+
+		
+		
+        
+        
 		//stage.setMaximized(true);
 		FXMLLoader loader = new FXMLLoader();
 		
@@ -86,7 +97,7 @@ public class CupCarbon extends Application {
 		mainStage.show();
 	}
 	
-	public static void main(String[] args) {		
+	public static void main(String[] args) {
 		System.out.println("03111441122123263122253111131132311317312221232617123");	//Signature
 		if(args.length>0) {
 			SolverProxyParams.proxyset = args[0];

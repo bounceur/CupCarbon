@@ -32,11 +32,10 @@ import action.CupActionBlock;
 import action.CupActionStack;
 import buildings.Building;
 import buildings.BuildingList;
+import cupcarbon.CupCarbon;
 import map.MapLayer;
 
 /**
- * @author Yann Allain
- * @author Julien Benkhellate
  * @author Bounceur Ahcène
  * @version 1.0
  */
@@ -59,6 +58,7 @@ public class OsmOverpass {
 			@Override
 			public void run() {
 				BuildingList.isLoading = true;
+				CupCarbon.cupCarbonController.displayPermanentErrMessage_th("Loading ...");
 				try {
 				    URL url = new URL("http://overpass-api.de/api/map?bbox="+bottomLeftLat+","+bottomLeftLng+","+topRightLat+","+topRightLng);
 				    System.out.println(url);		
@@ -66,6 +66,7 @@ public class OsmOverpass {
 				    Osm data = (Osm) JAXBContext.newInstance(Osm.class).createUnmarshaller().unmarshal( url );
 				    System.out.println("[Buildings] File downloaded.");
 				    System.out.println("[Buildings] Processing...");
+				    CupCarbon.cupCarbonController.displayPermanentErrMessage_th("Processing ...");
 					List<OsmWay> ways= data.getWay();
 					List<OsmNode> nodes= data.getNode();
 					List<OsmNd> nds;
@@ -99,7 +100,8 @@ public class OsmOverpass {
 			        }
 			        BuildingList.isLoading = false;
 			        MapLayer.repaint();
-			        System.out.println("[Buildings] Building loaded: SECCESS!");	        
+			        System.out.println("[Buildings] Building loaded: SECCESS!");
+			        CupCarbon.cupCarbonController.displayShortGoodMessage_th("Success ...");
 				} catch (JAXBException e) {
 					e.printStackTrace();
 					

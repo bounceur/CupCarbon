@@ -2,7 +2,8 @@ package device;
 
 import java.awt.Graphics;
 import java.util.LinkedList;
-import radio_module.RadioStandard;
+
+import radio_module.RadioModule;
 
 public class MultiChannels {
 	
@@ -17,9 +18,9 @@ public class MultiChannels {
 		// Index 0 : 802.15.4
 		// Index 1 : WiFi
 		// Index 2 : Lora
-		channelList.add(new MessageEventList(RadioStandard.ZIGBEE_802_15_4));
-		channelList.add(new MessageEventList(RadioStandard.WIFI_802_11));
-		channelList.add(new MessageEventList(RadioStandard.LORA));
+		channelList.add(new MessageEventList(RadioModule.ZIGBEE_802_15_4));
+		channelList.add(new MessageEventList(RadioModule.WIFI_802_11));
+		channelList.add(new MessageEventList(RadioModule.LORA));
 	}
 	
 	public static void addChannel(int std){		

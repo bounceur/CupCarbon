@@ -36,8 +36,6 @@ import utilities.UColor;
  */
 public class DirectionalSensorUnit extends SensorUnit implements Cloneable {
 	
-	protected double deg = 0.1;
-	protected double dec = 0;
 	/**
 	 * Constructor 1 : radius is equal to 10 meter
 	 * @param x Position of the sensor unit on the map
@@ -48,8 +46,8 @@ public class DirectionalSensorUnit extends SensorUnit implements Cloneable {
 		super(longitude, latitude, elevation, node);
 		radius = 100;
 		n = 12;
-		deg = 0.1;
-		dec = 0;
+		coverage = 0.1;
+		direction = 0;
 		eSensing = 1 ;
 		calculateSensingArea();
 	}
@@ -61,11 +59,11 @@ public class DirectionalSensorUnit extends SensorUnit implements Cloneable {
 	 * @param cuRadius the value of the radius 
 	 * @param node which is associated to this sensor unit
 	 */
-	public DirectionalSensorUnit(double longitude, double latitude, double elevation, double radius, double deg, double dec, int n, Device node) {
+	public DirectionalSensorUnit(double longitude, double latitude, double elevation, double radius, double angle, double dec, int n, Device node) {
 		super(longitude, latitude, elevation, node);
 		this.radius = radius;
-		this.deg = deg;
-		this.dec = dec;
+		this.coverage = angle;
+		this.direction = dec;
 		this.n = n;
 		this.radius = radius;
 		calculateSensingArea();
@@ -79,13 +77,13 @@ public class DirectionalSensorUnit extends SensorUnit implements Cloneable {
 		
 		polyX[0] = (int)longitude;
 		polyY[0] = (int)latitude;
-		double i=dec;
+		double i=direction;
 		for(int k=1; k<n; k++) {
 			r2 = rayon*Math.cos(i);
 			r3 = rayon*Math.sin(i);
 			polyX[k]=(int)(longitude+r2);
 			polyY[k]=(int)(latitude+r3);
-			i+=deg;
+			i+=coverage;
 		}
 	}
 	
@@ -138,25 +136,9 @@ public class DirectionalSensorUnit extends SensorUnit implements Cloneable {
 	public void setNode(Device node) {
 		this.node = node;
 	}
-
-	public double getDeg() {
-		return deg;
-	}
-	
-	public double getDec() {
-		return dec;
-	}
 	
 	public int getN() {
 		return n;
-	}
-	
-	public void setDeg(double deg) {
-		this.deg = deg ;
-	}
-	
-	public void setDec(double dec) {
-		this.dec = dec ;
 	}
 	
 	/**
@@ -170,6 +152,26 @@ public class DirectionalSensorUnit extends SensorUnit implements Cloneable {
 	
 	public void incRadius(int u) {
 		radius += u;
+	}
+
+	@Override
+	public double getCoverage() {
+		return coverage;
+	}
+
+	@Override
+	public double getDirection() {
+		return direction;
+	}
+
+	@Override
+	public void setCoverage(double angle) {
+		this.coverage = angle ;
+	}
+
+	@Override
+	public void setDirection(double direction) {
+		this.direction = direction ;
 	}	
 
 }

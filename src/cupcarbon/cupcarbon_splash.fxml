@@ -12,7 +12,7 @@
    <children>
       <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/cupcarbon_logo.png" />
+            <Image url="@../../res/images/cupcarbon_logo.png" />
          </image>
          <effect>
             <DropShadow color="#00000084" />

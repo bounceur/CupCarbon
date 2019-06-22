@@ -38,6 +38,8 @@ public abstract class SensorUnit {
 	protected boolean displayRadius = false;
 	protected double eSensing = 1; // sensing energy
 	
+	protected double coverage = 0.0;
+	protected double direction = 0;
 	
 	protected int n = 30;
 	protected double deg = 0.209333;
@@ -128,6 +130,22 @@ public abstract class SensorUnit {
 	
 	public void setRadius(double radius) {
 		this.radius = radius;
+	}
+	
+	public double getCoverage() {
+		return coverage;
+	}
+	
+	public double getDirection() {
+		return direction;
+	}
+	
+	public void setCoverage(double coverage) {
+		this.coverage = coverage ;
+	}
+	
+	public void setDirection(double direction) {
+		this.direction = direction ;
 	}
 	
 	public abstract void incRadius(int u);

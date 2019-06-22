@@ -27,6 +27,8 @@ import action.CupActionModifDeviceLongitude;
 import action.CupActionModifDeviceNatEventFile;
 import action.CupActionModifDeviceRadius;
 import action.CupActionModifDeviceScriptFile;
+import action.CupActionModifDirectionalSensorUnitCoverage;
+import action.CupActionModifDirectionalSensorUnitDirection;
 import action.CupActionModifRadioCR;
 import action.CupActionModifRadioCh;
 import action.CupActionModifRadioConsoRxModel;
@@ -133,8 +135,11 @@ public class CupCarbonController implements Initializable {
 
 	ConsoleWindow console ;
 	
-	//@FXML
-	//public TitledPane consolePane ;
+	@FXML
+	private TextField suCoverage ;
+	
+	@FXML
+	private TextField suDirection ;
 	
 	@FXML
 	private Label labelInfo1 ;
@@ -550,12 +555,13 @@ public class CupCarbonController implements Initializable {
 			saveProjectItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.META_DOWN));
 			resetItem.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.META_DOWN, KeyCombination.SHIFT_DOWN));
 			
-			menuBar.useSystemMenuBarProperty().set(true);
-
+			menuBar.setUseSystemMenuBar(true);
+			//menuBar.useSystemMenuBarProperty().set(true);
 		}
 		
 		initComboBoxes();
-			
+		
+		gpsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		deviceListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		eventListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -1425,6 +1431,46 @@ public class CupCarbonController implements Initializable {
 		CupActionStack.execute();
 		MapLayer.repaint();
 	}
+	
+	@FXML
+	public void suCoverageApply() {
+		CupActionBlock block = new CupActionBlock();
+		for (SensorNode sensor : DeviceList.sensors) {
+			if (sensor.isSelected()) {
+				double currentCoverage = sensor.getSensorUnit().getCoverage();
+				double sCoverage = Double.parseDouble(suCoverage.getText());
+				if(sCoverage>0.628) sCoverage = 0.628;
+				if(sCoverage<0.0) sCoverage = 0.0;
+				suCoverage.setText(""+sCoverage);
+				CupActionModifDirectionalSensorUnitCoverage action = new CupActionModifDirectionalSensorUnitCoverage(sensor, currentCoverage,
+						sCoverage);
+				block.addAction(action);
+			}
+		}
+		CupActionStack.add(block);
+		CupActionStack.execute();
+		MapLayer.repaint();
+	}
+	
+	@FXML
+	public void suDirectionApply() {
+		CupActionBlock block = new CupActionBlock();
+		for (SensorNode sensor : DeviceList.sensors) {
+			if (sensor.isSelected()) {
+				double currentDirection = sensor.getSensorUnit().getDirection();
+				double sDirection = Double.parseDouble(suDirection.getText());
+				if(sDirection>6.28) sDirection = 6.28;
+				if(sDirection<0.0) sDirection = 0.0;
+				suDirection.setText(""+sDirection);
+				CupActionModifDirectionalSensorUnitDirection action = new CupActionModifDirectionalSensorUnitDirection(sensor, currentDirection,
+						sDirection);
+				block.addAction(action);
+			}
+		}
+		CupActionStack.add(block);
+		CupActionStack.execute();
+		MapLayer.repaint();
+	}
 
 	@FXML
 	public void energyMaxApply() {
@@ -2081,6 +2127,7 @@ public class CupCarbonController implements Initializable {
 				device_latitude.setText("" + currentDevice.getLatitude());
 				device_elevation.setText("" + currentDevice.getElevation());
 				device_radius.setText("" + currentDevice.getRadius());
+				
 				uartComboBox.setValue("" + currentDevice.getUartDataRate());
 				device_drift.setText("" + currentDevice.getSigmaOfDriftTime());
 				updateLabeLInfos();
@@ -2124,6 +2171,10 @@ public class CupCarbonController implements Initializable {
 					device_elevation.setText("" + currentDevice.getElevation());
 					device_radius.setText("" + currentDevice.getRadius());
 					sensor_radius.setText("" + currentDevice.getSensorUnitRadius());
+					
+					suCoverage.setText("" + currentDevice.getSUCoverage());
+					suDirection.setText("" + currentDevice.getSUDirection());
+					
 					device_emax.setText("" + currentDevice.getBatteryLevel());
 					device_eSensing.setText("" + currentDevice.getESensing());
 					uartComboBox.setValue("" + currentDevice.getUartDataRate());
@@ -2246,6 +2297,7 @@ public class CupCarbonController implements Initializable {
 				CupAction action = new CupActionModifSensorCurrentRadio(sensor, currentRadioModule, newRadioModule);
 				block.addAction(action);
 				currentDevice = sensor;
+				VisibilityLauncher.calculate(sensor);
 			}
 		}
 		CupActionStack.add(block);
@@ -3225,9 +3277,15 @@ public class CupCarbonController implements Initializable {
 	
 	@FXML
 	public void drawAllRoutes() {
-		NetworkParameters.displayAllRoutes = true;
 		MarkerList.reset();
 		Routes.loadRoutes();
+	}
+	
+	@FXML
+	public void drawSelectedRoutes() {
+		NetworkParameters.displayAllRoutes = true;
+		MarkerList.reset();
+		Routes.loadListOfRoutes(gpsListView.getSelectionModel().getSelectedItems());
 	}
 	
 	@FXML
@@ -3388,7 +3446,30 @@ public class CupCarbonController implements Initializable {
 		} catch (InterruptedException e) {}
 		textReady.setVisible(false);
 	}
-
+	
+	public void displayPermanentErrMessage_th(String s) {
+		Thread th = new Thread(new Runnable() {
+			@Override
+			public void run() {				
+				textReady.setFill(new Color(1,0.5,0.0,0.5));
+				textReady.setText(s);
+				textReady.setVisible(true);
+				sn.requestFocus();
+			}
+		});
+		th.start();
+	}
+	
+	public void hidePermanentErrMessage_th(String s) {
+		Thread th = new Thread(new Runnable() {
+			@Override
+			public void run() {				
+				textReady.setVisible(false);
+			}
+		});
+		th.start();
+	}
+	
 	public void displayShortGoodMessage_th(String s) {
 		Thread th = new Thread(new Runnable() {
 			@Override

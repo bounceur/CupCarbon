@@ -18,17 +18,17 @@ public class ErrorBits {
 				return (Math.random() <= SimulationInputs.ackProba?true:false);
 			}
 			
-			if (SimulationInputs.ackType == ALPHA_D && transmitter.getStandard() == receiver.getStandard() && transmitter.getStandard() == RadioStandard.ZIGBEE_802_15_4) {
+			if (SimulationInputs.ackType == ALPHA_D && transmitter.getStandard() == receiver.getStandard() && transmitter.getStandard() == RadioModule.ZIGBEE_802_15_4) {
 				double errorBits = ZigBeeTransceiver.getNumberOfReceivedErrorBits(message, transmitter.getNeighbors().size(), (int) transmitter.getCurrentRadioModule().getRadioRangeRadius(), transmitter.getPerActiveNodes());
 				return (errorBits == 0);
 			}
 			
-			if (SimulationInputs.ackType == ALPHA_D && transmitter.getStandard() == receiver.getStandard() && transmitter.getStandard() == RadioStandard.WIFI_802_11) {
+			if (SimulationInputs.ackType == ALPHA_D && transmitter.getStandard() == receiver.getStandard() && transmitter.getStandard() == RadioModule.WIFI_802_11) {
 				double errorBits = WiFiTransceiver.getNumberOfReceivedErrorBits(message, transmitter.getNeighbors().size(), (int) transmitter.getCurrentRadioModule().getRadioRangeRadius(), transmitter.getPerActiveNodes());
 				return (errorBits == 0);
 			}
 			
-			if (SimulationInputs.ackType == AWGN && transmitter.getStandard() == receiver.getStandard() && transmitter.getStandard() == RadioStandard.LORA) {
+			if (SimulationInputs.ackType == AWGN && transmitter.getStandard() == receiver.getStandard() && transmitter.getStandard() == RadioModule.LORA) {
 				double errorBits = LoRaTransceiver.getNumberOfReceivedErrorBits(message, transmitter.getCurrentRadioModule().getSpreadingFactor(), transmitter.getCurrentRadioModule().getCodeRate());
 				return (errorBits == 0);
 			}

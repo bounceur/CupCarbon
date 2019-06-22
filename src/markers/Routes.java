@@ -11,7 +11,9 @@ import java.util.ArrayList;
 
 import device.SensorNode;
 import geometry.DPoint;
+import javafx.collections.ObservableList;
 import map.MapLayer;
+import map.NetworkParameters;
 import project.Project;
 import utilities.Geometry;
 import utilities.MapCalc;
@@ -84,14 +86,34 @@ public class Routes {
 		}
 	}
 
-	public static void loadRoutes() {		
-		reset();
+	public static void loadRoutes() {
 		String path = Project.getProjectGpsPath();
 		File root = new File(path);
-		for (File file : root.listFiles()) {
-			routes.add(getRoute(file, file.getName().substring(0, file.getName().indexOf('.'))));
+		if(root.listFiles()!=null) {
+			reset();
+			NetworkParameters.displayAllRoutes = true;
+			for (File file : root.listFiles()) {
+				routes.add(getRoute(file, file.getName().substring(0, file.getName().indexOf('.'))));
+			}
+			MapLayer.repaint();
 		}
-		MapLayer.repaint();
+	}
+	
+	public static void loadListOfRoutes(ObservableList<String> list) {
+		String path = Project.getProjectGpsPath();
+		File root = new File(path);
+		
+		if(root.listFiles()!=null) {
+			reset();
+			NetworkParameters.displayAllRoutes = true;
+			for (File file : root.listFiles()) {
+				String s = file.getName();
+				if(list.contains(s)) {
+					routes.add(getRoute(file, s.substring(0, file.getName().indexOf('.'))));
+				}
+			}
+			MapLayer.repaint();
+		}
 	}
 
 	public static NamedRoute getRoute(File file, String name) {
@@ -121,7 +143,11 @@ public class Routes {
 	}
 
 	public static void reset() {
+		if(routes != null)
+			if(routes.size()>0)
+				routes.removeAll(routes);
 		routes = new ArrayList<NamedRoute>();
+		NetworkParameters.displayAllRoutes = false;
 	}
 
 	public static void hideAll() {

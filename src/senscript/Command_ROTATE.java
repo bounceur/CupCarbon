@@ -22,7 +22,7 @@ public class Command_ROTATE extends Command {
 		String vArg2 = sensor.getScript().getVariableValue(arg2);
 		double n = Double.valueOf(vArg1);
 		double t = Integer.valueOf(vArg2);
-		((DirectionalSensorNode) sensor).setSensorUnitDec(n);
+		((DirectionalSensorNode) sensor).setSensorUnitDirection(n);
 		return t/1000. ;
 	}
 

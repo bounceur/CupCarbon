@@ -118,14 +118,17 @@ public class GeoZone {
 		
 		Point2D center = new Point2D.Float(cx, cy);
 		
-		double paintRadius = 300 * (4.00/Math.pow(2, MapLayer.mapViewer.getZoom()));
-		
+		double paintRadius = 300 * (4.00/Math.pow(2, MapLayer.mapViewer.getZoom()));		
 		
 		float[] dist = {0.0f, 0.2f, 0.7f};
 		Color [] colors = new Color[3];
+		
 		colors[0] = new Color(255, 0, 0, 80);
-		//colors[1] = new Color(221, 148, 32, 50);
 		colors[1] = new Color(250, 5, 0, 30);
+		
+		//colors[0] = new Color(0, 102, 204, 90);
+		//colors[1] = new Color(0, 102, 204, 20);
+		
 		colors[2] = new Color(255, 255, 255, 0);
 		if(MapLayer.dark) {			
 			colors[0] = new Color(255, 0, 0, 80);
@@ -133,8 +136,8 @@ public class GeoZone {
 			colors[2] = new Color(221, 0,32, 0);
 		}
 		if(selected) {			
-			colors[0] = new Color(250, 5, 0, 80);
-			colors[1] = new Color(250, 5, 0, 30);
+			colors[0] = new Color(250, 5, 0, 90);
+			colors[1] = new Color(250, 5, 0, 40);
 			colors[2] = new Color(250, 5, 0, 0);			
 		}
 		RadialGradientPaint p = new RadialGradientPaint(center, (float) paintRadius, dist, colors);

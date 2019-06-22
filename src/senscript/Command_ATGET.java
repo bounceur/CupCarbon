@@ -1,7 +1,7 @@
 package senscript;
 
 import device.SensorNode;
-import radio_module.RadioStandard;
+import radio_module.RadioModule;
 import radio_module.XBeeFrameGenerator;
 import simulation.WisenSimulation;
 
@@ -46,7 +46,7 @@ public class Command_ATGET extends Command {
 		//String answer = "XXXX"; //v; We assume that the answer contains 4 bytes
 		
 		String frame = message;
-		if(sensor.getStandard() == RadioStandard.ZIGBEE_802_15_4)
+		if(sensor.getStandard() == RadioModule.ZIGBEE_802_15_4)
 			frame = XBeeFrameGenerator.at(message);
 		String answer = frame;
 		

@@ -58,5 +58,13 @@ public class VisibilityLauncher {
 			
 		}
 	}
+	
+	public static void calculate(SensorNode sensor) {
+		//-----------------------------------------------------------------------------------------
+		// Calculate the visiblity zone for a given sensor node
+		//-----------------------------------------------------------------------------------------
+		VisibilityZones vz = new VisibilityZones(sensor);
+		vz.start();
+	}
 
 }

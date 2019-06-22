@@ -51,8 +51,8 @@ import action.CupActionDeleteMarker;
 import action.CupActionDeleteSensor;
 import action.CupActionMapObjectMove;
 import action.CupActionModifDeviceRadius;
-import action.CupActionModifDirectionalSensorUnitDec;
-import action.CupActionModifDirectionalSensorUnitDeg;
+import action.CupActionModifDirectionalSensorUnitDirection;
+import action.CupActionModifDirectionalSensorUnitCoverage;
 import action.CupActionModifRadioRadius;
 import action.CupActionModifSensorRadius;
 import action.CupActionModifSensorUnitRadius;
@@ -106,6 +106,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	public static String projectPath = "";
 	public static String projectName = "";
 	public static boolean dark = false;
+	public static boolean blockBuildings = false;
 	
 	private boolean startSelection = false;
 	
@@ -957,7 +958,9 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 					if(sensor.getType()==Device.DIRECTIONAL_SENSOR) {
 						double d = 0.1;
 						if(key.getKeyChar() == 960) d=0.01;
-						CupAction action = new CupActionModifDirectionalSensorUnitDec(sensor, ((DirectionalSensorNode)sensor).getSensorUnitDec(), ((DirectionalSensorNode)sensor).getSensorUnitDec()+d);
+						double v =  ((DirectionalSensorNode)sensor).getSensorUnitDirection()+d;
+						if(v>6.28) v=0.0;
+						CupAction action = new CupActionModifDirectionalSensorUnitDirection(sensor, ((DirectionalSensorNode)sensor).getSensorUnitDirection(), v);
 						block.addAction(action);
 						if(CupCarbon.cupCarbonController!=null) {
 							CupCarbon.cupCarbonController.getSensorInformations();
@@ -969,7 +972,9 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 					if(sensor.getType()==Device.DIRECTIONAL_SENSOR) {
 						double d = 0.1;
 						if(key.getKeyChar() == 339) d=0.01;
-						CupAction action = new CupActionModifDirectionalSensorUnitDec(sensor, ((DirectionalSensorNode)sensor).getSensorUnitDec(), ((DirectionalSensorNode)sensor).getSensorUnitDec()-d);
+						double v =  ((DirectionalSensorNode)sensor).getSensorUnitDirection()-d;
+						if(v<0.0) v=6.28;
+						CupAction action = new CupActionModifDirectionalSensorUnitDirection(sensor, ((DirectionalSensorNode)sensor).getSensorUnitDirection(), v);
 						block.addAction(action);
 						if(CupCarbon.cupCarbonController!=null) {
 							CupCarbon.cupCarbonController.getSensorInformations();
@@ -981,7 +986,9 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 					if(sensor.getType()==Device.DIRECTIONAL_SENSOR) {
 						double d = 0.01;
 						if(key.getKeyChar() == 8719) d=0.001;
-						CupAction action = new CupActionModifDirectionalSensorUnitDeg(sensor, ((DirectionalSensorNode)sensor).getSensorUnitDeg(), ((DirectionalSensorNode)sensor).getSensorUnitDeg()+d);
+						double v =  ((DirectionalSensorNode)sensor).getSensorUnitCoverage()+d;
+						if(v>0.628) v = 0.628;
+						CupAction action = new CupActionModifDirectionalSensorUnitCoverage(sensor, ((DirectionalSensorNode)sensor).getSensorUnitCoverage(), v);
 						block.addAction(action);
 						if(CupCarbon.cupCarbonController!=null) {
 							CupCarbon.cupCarbonController.getSensorInformations();
@@ -993,7 +1000,9 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 					if(sensor.getType()==Device.DIRECTIONAL_SENSOR) {
 						double d = 0.01;
 						if(key.getKeyChar() == 338) d=0.001;
-						CupAction action = new CupActionModifDirectionalSensorUnitDeg(sensor, ((DirectionalSensorNode)sensor).getSensorUnitDeg(), ((DirectionalSensorNode)sensor).getSensorUnitDeg()-d);
+						double v =  ((DirectionalSensorNode)sensor).getSensorUnitCoverage()-d;
+						if(v<0) v = 0.0;
+						CupAction action = new CupActionModifDirectionalSensorUnitCoverage(sensor, ((DirectionalSensorNode)sensor).getSensorUnitCoverage(), v);
 						block.addAction(action);
 						if(CupCarbon.cupCarbonController!=null) {
 							CupCarbon.cupCarbonController.getSensorInformations();
@@ -1039,6 +1048,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 
 				if (key.getKeyChar() == 'b') {
 					sensor.invertDrawBatteryLevel();
+				}
+				
+				if (key.getKeyChar() == 'B') {
+					blockBuildings = !blockBuildings ;
 				}
 				
 				if (key.getKeyChar() == 'k') {

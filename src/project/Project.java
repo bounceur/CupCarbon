@@ -45,6 +45,7 @@ import map.MapLayer;
 import map.NetworkParameters;
 import map.WorldMap;
 import markers.MarkerList;
+import markers.Routes;
 import simulation.SimulationInputs;
 
 public final class Project {
@@ -153,6 +154,7 @@ public final class Project {
 		MultiChannels.init();
 		MapLayer.repaint();
 		CupCarbon.cupCarbonController.saveButton.setDisable(false);
+		Routes.reset();
 	}
 	
 	public static void openProject(String path, String name) {
@@ -177,7 +179,15 @@ public final class Project {
 					CupCarbon.cupCarbonController.applyParameters();
 					CupCarbon.cupCarbonController.saveButton.setDisable(false);
 					if(DeviceList.propagationsCalculated) DeviceList.calculatePropagations();
-					CupCarbon.cupCarbonController.displayShortGoodMessage_th("Project loaded");					
+					
+					if(NetworkParameters.displayAllRoutes) {
+						MarkerList.reset();
+						Routes.loadRoutes();
+					}
+					else 
+						Routes.hideAll();
+					
+					CupCarbon.cupCarbonController.displayShortGoodMessage_th("Project loaded");
 				}
 				else {
 					CupCarbon.cupCarbonController.displayLongErrMessageTh("Project does not exist!");
@@ -374,6 +384,7 @@ public final class Project {
 				case "display_radio_messages": NetworkParameters.displayRadioMessages = Boolean.parseBoolean(keyVal[1]); break;
 				case "draw_script_file_name":  NetworkParameters.drawScriptFileName = Boolean.parseBoolean(keyVal[1]); break;
 				case "display_print_messages":  NetworkParameters.displayPrintMessage = Boolean.parseBoolean(keyVal[1]); break;
+				case "display_all_routes":  NetworkParameters.displayAllRoutes = Boolean.parseBoolean(keyVal[1]); break;
 				}
 			}
 			br.close();
@@ -420,6 +431,7 @@ public final class Project {
 			fos.println("display_radio_messages:" + NetworkParameters.displayRadioMessages);
 			fos.println("draw_script_file_name:" + NetworkParameters.drawScriptFileName);
 			fos.println("display_print_messages:" + NetworkParameters.displayPrintMessage);
+			fos.println("display_all_routes:" + NetworkParameters.displayAllRoutes);
 			fos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

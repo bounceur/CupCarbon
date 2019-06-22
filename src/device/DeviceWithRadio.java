@@ -151,7 +151,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 				int x = coord[0];
 				int y = coord[1];
-				g.setColor(Color.ORANGE);
+				//g.setColor(Color.ORANGE);
 				int r2 = 8;
 				g.setColor(UColor.GREEND_TRANSPARENT);
 				g.fillOval(x-(r2+1), y-(r2+1), (r2+1)*2, (r2+1)*2);
@@ -163,7 +163,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 				int x = coord[0];
 				int y = coord[1];
-				g.setColor(Color.ORANGE);			
+				//g.setColor(Color.ORANGE);			
 				int r2 = 8;
 				g.setColor(UColor.colorTab[ledColor-1]);
 				g.fillOval(x-(r2+1), y-(r2+1), (r2+1)*2, (r2+1)*2);

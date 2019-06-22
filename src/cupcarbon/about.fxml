@@ -11,7 +11,7 @@
    <children>
       <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/cupcarbon_logo.png" />
+            <Image url="@../../res/images/cupcarbon_logo.png" />
          </image>
       </ImageView>
       <Label fx:id="label" text="CupCarbon">
@@ -19,13 +19,8 @@
             <Font name="System Bold" size="18.0" />
          </font></Label>
       <Label fx:id="label1" text="www.cupcarbon.com" textFill="#2d4c94" />
-      <Label text="Lab-STICC  - MMU - IEMN - Xlim - Virtualys" />
-      <Label text="ANR PERSEPTEUR" />
-      <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/anr_logo.png" />
-         </image>
-      </ImageView>
+      <Label text="Lab-STICC  - MMU" />
+      <Label text="IEMN - Xlim - Virtualys" />
       <Label prefHeight="49.0" prefWidth="275.0" text="This project is supported by the French Agence Nationale de la Recherche ANR" textAlignment="CENTER" textFill="#3866c2" wrapText="true" />
    </children>
    <padding>

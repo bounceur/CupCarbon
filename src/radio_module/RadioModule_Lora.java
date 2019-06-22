@@ -28,7 +28,7 @@ public class RadioModule_Lora extends RadioModule {
 	}	
 	
 	public int getStandard() {
-		return RadioStandard.LORA;
+		return RadioModule.LORA;
 	}
 	
 	@Override

@@ -1,7 +1,7 @@
 package senscript;
 
 import device.SensorNode;
-import radio_module.RadioStandard;
+import radio_module.RadioModule;
 import radio_module.XBeeFrameGenerator;
 import radio_module.XBeeToArduinoFrameGenerator;
 import simulation.WisenSimulation;
@@ -24,7 +24,7 @@ public class Command_ATNID extends Command {
 		String message = "ID" + Integer.toHexString(Integer.parseInt(args)).toUpperCase();
 		
 		String frame = message;
-		if(sensor.getStandard() == RadioStandard.ZIGBEE_802_15_4)
+		if(sensor.getStandard() == RadioModule.ZIGBEE_802_15_4)
 			frame = XBeeFrameGenerator.at(message);
 
 		double ratio = 1.0/sensor.getUartDataRate();

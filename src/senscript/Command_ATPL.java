@@ -3,7 +3,7 @@ package senscript;
 import device.DeviceList;
 import device.SensorNode;
 import map.MapLayer;
-import radio_module.RadioStandard;
+import radio_module.RadioModule;
 import radio_module.XBeeFrameGenerator;
 import radio_module.XBeeToArduinoFrameGenerator;
 import simulation.WisenSimulation;
@@ -33,7 +33,7 @@ public class Command_ATPL extends Command {
 		String message = "PL" + Integer.toHexString(Double.valueOf(v).intValue()).toUpperCase();
 		
 		String frame = message;
-		if(sensor.getStandard() == RadioStandard.ZIGBEE_802_15_4)
+		if(sensor.getStandard() == RadioModule.ZIGBEE_802_15_4)
 			frame = XBeeFrameGenerator.at(message);
 
 		double ratio = 1.0/sensor.getUartDataRate();

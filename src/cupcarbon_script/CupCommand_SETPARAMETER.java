@@ -239,14 +239,14 @@ public class CupCommand_SETPARAMETER extends CupCommand {
 						break;
 					case("deg") :
 						if (node.getType() == Device.DIRECTIONAL_SENSOR) {
-							((DirectionalSensorNode) node).setSensorUnitDeg(Double.parseDouble(sValue));
+							((DirectionalSensorNode) node).setSensorUnitAngle(Double.parseDouble(sValue));
 							rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new drift time value = " + sValue;
 							currentExecution = true;
 						}
 						break;
 					case("dec") :
 						if (node.getType() == Device.DIRECTIONAL_SENSOR) {
-							((DirectionalSensorNode) node).setSensorUnitDec(Double.parseDouble(sValue));
+							((DirectionalSensorNode) node).setSensorUnitDirection(Double.parseDouble(sValue));
 							rep = rep + System.lineSeparator() + "000 Device: "+ sObjects.get(i) + " has a new drift time value = " + sValue;
 							currentExecution = true;
 						}

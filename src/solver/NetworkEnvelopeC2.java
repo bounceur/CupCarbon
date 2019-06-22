@@ -27,9 +27,6 @@ import device.DeviceList;
 
 /**
  * @author Ahcene Bounceur
- * @author Ali Benzerbadj
- * @author Farid Lalem
- * @author Massinissa Saoudi
  * @version 1.0
  */
 public class NetworkEnvelopeC2 extends Thread {

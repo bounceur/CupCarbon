@@ -293,7 +293,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 			latitude = routeY.get(routeIndex);
 			elevation = routeZ.get(routeIndex);		
 			if (SimulationInputs.visibility) {
-				if(this.getType()==Device.SENSOR) {
+				if(getType()==Device.SENSOR || getType()==Device.DIRECTIONAL_SENSOR || getType()==Device.BASE_STATION) {
 					VisibilityZones vz = new VisibilityZones((SensorNode) this);
 					vz.run();
 				}

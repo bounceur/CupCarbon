@@ -185,5 +185,15 @@ public class StdSensorUnit extends SensorUnit {
 	public void setESensing(double eSensing) {
 		this.eSensing = eSensing;
 	}
+
+	@Override
+	public double getCoverage() {
+		return 0;
+	}
+
+	@Override
+	public double getDirection() {
+		return 0;
+	}
 	
 }

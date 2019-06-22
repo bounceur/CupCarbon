@@ -25,7 +25,7 @@ public class RadioModule_ZigBee extends RadioModule {
 	}	
 	
 	public int getStandard() {
-		return RadioStandard.ZIGBEE_802_15_4;
+		return RadioModule.ZIGBEE_802_15_4;
 	}	
 	
 	@Override

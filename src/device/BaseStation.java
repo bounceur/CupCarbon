@@ -19,19 +19,21 @@
 
 package device;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 import project.Project;
+import utilities.MapCalc;
 import utilities.UColor;
 
 /**
  * @author Ahcene Bounceur
- * @author Lounis Massinissa
  * @version 1.0
  */
 
@@ -167,6 +169,44 @@ public class BaseStation extends StdSensorNode {
 			e.printStackTrace();
 		}
 		saveRadioModule(Project.getProjectRadioPath() + File.separator + "basestation_"+ref);
+	}
+	
+	@Override
+	public void drawMarked(Graphics g2) {
+		if (!isDead()) {
+			Graphics2D g = (Graphics2D) g2;
+			g.setStroke(new BasicStroke(0.4f));
+			
+			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
+			int [] triangleX = new int [3];
+			int [] triangleY = new int [3];
+			int sz = 20;
+			int x = coord[0];
+			int y = coord[1];
+			double f1 = 1.7;
+			double f2 = 0.7;
+			double f3 = 0.8;
+			triangleX[0] = x-(int)(f2*sz) ;
+			triangleX[1] = x ;
+			triangleX[2] = x+(int)(f2*sz) ;
+			triangleY[0] = y+(int)(sz/f1) ;
+			triangleY[1] = y-(int)(f3*sz) ;
+			triangleY[2] = y+(int)(sz/f1) ;
+
+			if (ledColor==1) {	
+				g.setColor(UColor.GREEND_TRANSPARENT);
+				g.fillPolygon(triangleX, triangleY, 3);
+				g.setColor(Color.GRAY);
+				g.drawPolygon(triangleX, triangleY, 3);
+			}
+
+			if(ledColor>1) {				
+				g.setColor(UColor.colorTab[ledColor-1]);
+				g.fillPolygon(triangleX, triangleY, 3);
+				g.setColor(Color.GRAY);
+				g.drawPolygon(triangleX, triangleY, 3);
+			}
+		}
 	}
 
 }

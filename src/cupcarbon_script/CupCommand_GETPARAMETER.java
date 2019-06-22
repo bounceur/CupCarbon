@@ -196,15 +196,15 @@ public class CupCommand_GETPARAMETER extends CupCommand {
 					break;
 				case("deg") :
 					if (node.getType() == Device.DIRECTIONAL_SENSOR) {
-						script.addVariable(sValue, "" + ((DirectionalSensorNode) sensorNode).getSensorUnitDeg());
+						script.addVariable(sValue, "" + ((DirectionalSensorNode) sensorNode).getSensorUnitCoverage());
 						rep = "000 Device: "+ sDevice + " has a drift time value = " + script.getVariableValue(sValue) + " = " + node.getLongitude();
 						currentExecution = true;
 					}
 					break;
 				case("dec") :
 					if (node.getType() == Device.DIRECTIONAL_SENSOR) {
-						script.addVariable(sValue, "" + ((DirectionalSensorNode) sensorNode).getSensorUnitDec());
-						rep = "000 Device: "+ sDevice + " has a drift time value = " + script.getVariableValue(sValue) + " = " + ((DirectionalSensorNode) sensorNode).getSensorUnitDeg();
+						script.addVariable(sValue, "" + ((DirectionalSensorNode) sensorNode).getSensorUnitDirection());
+						rep = "000 Device: "+ sDevice + " has a drift time value = " + script.getVariableValue(sValue) + " = " + ((DirectionalSensorNode) sensorNode).getSensorUnitCoverage();
 						currentExecution = true;
 					}
 					break;

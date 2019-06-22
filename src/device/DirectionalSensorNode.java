@@ -219,24 +219,24 @@ public class DirectionalSensorNode extends SensorNode {
 //		return s ;
 //	}
 
-	public double getSensorUnitDeg() {
-		return ((DirectionalSensorUnit) sensorUnit).getDeg();
+	public double getSensorUnitCoverage() {
+		return ((DirectionalSensorUnit) sensorUnit).getCoverage();
 	}
 	
-	public double getSensorUnitDec() {
-		return ((DirectionalSensorUnit) sensorUnit).getDec();
+	public double getSensorUnitDirection() {
+		return ((DirectionalSensorUnit) sensorUnit).getDirection();
 	}
 	
 	public int getSensorUnitN() {
 		return ((DirectionalSensorUnit) sensorUnit).getN();
 	}
 
-	public void setSensorUnitDeg(double deg) {
-		((DirectionalSensorUnit) sensorUnit).setDeg(deg);
+	public void setSensorUnitAngle(double angle) {
+		((DirectionalSensorUnit) sensorUnit).setCoverage(angle);
 	}
 	
-	public void setSensorUnitDec(double dec) {
-		((DirectionalSensorUnit) sensorUnit).setDec(dec);
+	public void setSensorUnitDirection(double direction) {
+		((DirectionalSensorUnit) sensorUnit).setDirection(direction);
 	}
 
 	public void setSensorUnitRadius(double radius) {
@@ -260,7 +260,7 @@ public class DirectionalSensorNode extends SensorNode {
 	
 	@Override
 	public String getParamsStr() {
-		return getSensorUnitDeg()+ " " + getSensorUnitDec()+ " " + getSensorUnitN();
+		return getSensorUnitCoverage()+ " " + getSensorUnitDirection()+ " " + getSensorUnitN();
 	}
 	
 	public boolean detectBuildings() {		
@@ -278,8 +278,8 @@ public class DirectionalSensorNode extends SensorNode {
 		DirectionalSensorUnit c_msu = (DirectionalSensorUnit) this.getSensorUnit(); 
 		DirectionalSensorUnit n_msu = (DirectionalSensorUnit) n_msn.getSensorUnit();
 		
-		n_msu.setDec(c_msu.getDec());
-		n_msu.setDeg(c_msu.getDeg());
+		n_msu.setDirection(c_msu.getDirection());
+		n_msu.setCoverage(c_msu.getCoverage());
 		n_msu.setRadius(c_msu.getRadius());
 		return n_msn;
 	}

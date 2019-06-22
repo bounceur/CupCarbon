@@ -25,12 +25,6 @@ import device.DeviceList;
 
 /**
  * @author Ahcene Bounceur
- * @author Reinhardt Euler
- * @author Marc Sevaux
- * @author Bernard Pottier 
- * @author Ali Benzerbadj
- * @author Farid Lalem
- * @author Massinissa Saoudi
  * @version 1.0
  */
 public class NetworkEnvelopeC3 extends Thread {

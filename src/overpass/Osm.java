@@ -24,7 +24,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * @author BOYER Yoann
  * @author BOUNCEUR Ahcène
  * @version 1.0
  */
@@ -38,7 +37,7 @@ public class Osm {
     @XmlElement
     public List<OsmWay> getWay() {
         return ways;  
-    }  
+    }
     public void setWay(List<OsmWay> ways) {
         this.ways = ways;
     }

@@ -58,7 +58,6 @@ public abstract class Device extends MapObject implements Cloneable {
 	protected Battery battery ;
 	
 	protected long uartDataRate = 9600;//1000000000; //38400;	
-	
 		
 	protected boolean underSimulation = false;
 	
@@ -593,7 +592,7 @@ public abstract class Device extends MapObject implements Cloneable {
 		elevation_ori = elevation;
 		gpsFileName_ori = gpsFileName;
 		if (SimulationInputs.visibility) {
-			if(getType()==Device.SENSOR || getType()==Device.DIRECTIONAL_SENSOR) {
+			if(getType()==Device.SENSOR || getType()==Device.DIRECTIONAL_SENSOR || getType()==Device.BASE_STATION) {
 				VisibilityZones vz = new VisibilityZones((SensorNode) this);
 				vz.run();
 			}
@@ -606,7 +605,7 @@ public abstract class Device extends MapObject implements Cloneable {
 		elevation = elevation_ori;
 		gpsFileName = gpsFileName_ori;
 		if (SimulationInputs.visibility) {
-			if(getType()==Device.SENSOR || getType()==Device.DIRECTIONAL_SENSOR) {
+			if(getType()==Device.SENSOR || getType()==Device.DIRECTIONAL_SENSOR || getType()==Device.BASE_STATION) {
 				VisibilityZones vz = new VisibilityZones((SensorNode) this);
 				vz.run();
 			}
@@ -902,5 +901,13 @@ public abstract class Device extends MapObject implements Cloneable {
 	public abstract Device duplicate() ;
 	public abstract Device duplicateWithShift(double sh1, double sh2, double sh3) ;
 	public abstract void save(String fileName) ;	
+	
+	public double getSUCoverage() {
+		return 0;
+	}
+	
+	public double getSUDirection() {
+		return 0;
+	}
 	
 }

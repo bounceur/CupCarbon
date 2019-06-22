@@ -46,7 +46,6 @@ import map.MapLayer;
 import natural_events.Weather;
 import project.Project;
 import radio_module.RadioModule;
-import radio_module.RadioStandard;
 import senscript.SenScript;
 import senscript.SenScriptAddCommand;
 import sensorunit.SensorUnit;
@@ -83,7 +82,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	public SensorNode() {
 		super();
 		
-		addRadioModule("radio1", RadioStandard.ZIGBEE_802_15_4);
+		addRadioModule("radio1", RadioModule.ZIGBEE_802_15_4);
 		currentRadioModule = radioModuleList.get(0);
 		
 		//sensorUnit = new SensorUnit(this.longitude, this.latitude, this);
@@ -108,7 +107,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	 */
 	public SensorNode(double x, double y, double z, double radius, double radioRadius, int id) {		
 		super(x, y, z, radius, radioRadius, id);		
-		addRadioModule("radio1", RadioStandard.ZIGBEE_802_15_4);
+		addRadioModule("radio1", RadioModule.ZIGBEE_802_15_4);
 		currentRadioModule = radioModuleList.get(0);	
 		battery = new Battery(this);
 		withRadio = true;
@@ -133,7 +132,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	 */
 	public SensorNode(double x, double y, double z, double radius, double radioRadius, double suRadius, int id) {
 		super(x, y, z, radius, radioRadius, id);
-		addRadioModule("radio1", RadioStandard.ZIGBEE_802_15_4);
+		addRadioModule("radio1", RadioModule.ZIGBEE_802_15_4);
 		currentRadioModule = radioModuleList.get(0);	
 		//sensorUnit = new SensorUnit(this.longitude, this.latitude, suRadius, this);
 		battery = new Battery(this);
@@ -160,7 +159,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	 */
 	public SensorNode(String x, String y, String z, String radius, String radioRadius, String suRadius, int id) {
 		super(Double.valueOf(x), Double.valueOf(y), Double.valueOf(z), Double.valueOf(radius), Double.valueOf(radioRadius), id);
-		addRadioModule("radio1", RadioStandard.ZIGBEE_802_15_4);
+		addRadioModule("radio1", RadioModule.ZIGBEE_802_15_4);
 		currentRadioModule = radioModuleList.get(0);	
 		//sensorUnit = new SensorUnit(this.longitude, this.latitude, Double.valueOf(suRadius), this);
 		battery = new Battery(this);
@@ -204,7 +203,8 @@ public abstract class SensorNode extends DeviceWithRadio {
 			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int x = coord[0];
 			int y = coord[1];
-			int rayon = MapCalc.radiusInPixels(getCurrentRadioRangeRadius() * this.getCurrentRadioModule().getPl() / 100); 
+			
+			int rayon = MapCalc.radiusInPixels(getCurrentRadioRangeRadius() * getCurrentRadioModule().getPl() / 100); 
 			
 			double r2=0;
 			double r3=0;
@@ -826,6 +826,14 @@ public abstract class SensorNode extends DeviceWithRadio {
 	
 	public GeoPosition getGeoCenter() {
 		return new GeoPosition(latitude, longitude);
+	}
+	
+	public double getSUCoverage() {
+		return getSensorUnit().getCoverage();
+	}
+	
+	public double getSUDirection() {
+		return getSensorUnit().getDirection();
 	}
 	
 }

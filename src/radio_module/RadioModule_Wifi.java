@@ -21,7 +21,7 @@ public class RadioModule_Wifi extends RadioModule {
 	}	
 	
 	public int getStandard() {
-		return RadioStandard.WIFI_802_11;
+		return RadioModule.WIFI_802_11;
 	}
 	
 	@Override

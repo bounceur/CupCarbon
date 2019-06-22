@@ -11,8 +11,8 @@ import java.util.List;
 import map.MapLayer;
 import map.NetworkParameters;
 import radio_module.ErrorBits;
+import radio_module.RadioModule;
 import radio_module.RadioPacketGenerator;
-import radio_module.RadioStandard;
 import simulation.SimulationInputs;
 import simulation.WisenSimulation;
 import utilities.MapCalc;
@@ -38,9 +38,9 @@ public class MessageEventList {
 	public void init(int std) {	
 		messageEventLists = new LinkedList<List<MessageEvent>>();
 		int channelNumber = 0;
-		if(std == RadioStandard.ZIGBEE_802_15_4) channelNumber = 16;
-		if(std == RadioStandard.LORA) channelNumber = 1;
-		if(std == RadioStandard.WIFI_802_11) channelNumber = 14;
+		if(std == RadioModule.ZIGBEE_802_15_4) channelNumber = 16;
+		if(std == RadioModule.LORA) channelNumber = 1;
+		if(std == RadioModule.WIFI_802_11) channelNumber = 14;
 		for(int i=0; i < channelNumber; i++) {
 			messageEventLists.add(new LinkedList<MessageEvent>());
 		}
