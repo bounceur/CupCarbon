@@ -1594,7 +1594,7 @@ public class DeviceList {
 					for(SensorNode device : sensors) {
 						device.calculatePropagations();
 						MapLayer.repaint();
-					}					
+					}
 				}
 				catch(Exception e) {}
 			}

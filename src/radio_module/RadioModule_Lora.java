@@ -23,8 +23,8 @@ public class RadioModule_Lora extends RadioModule {
 		
 		radioRangeColor1 = UColor.BLUE_TTRANSPARENT;
 		radioRangeColor2 = UColor.BLUE_TRANSPARENT;
-		setRadioRangeRadius(1000);
-		setRadioRangeRadiusOri(1000);
+		setRadioRangeRadius(5000);
+		setRadioRangeRadiusOri(5000);
 	}	
 	
 	public int getStandard() {

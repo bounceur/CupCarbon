@@ -75,12 +75,12 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </Label>
-                  <TextField fx:id="periodField" prefHeight="21.0" prefWidth="53.0" text="1">
+                  <TextField fx:id="periodField" prefHeight="21.0" prefWidth="53.0" text="60">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </TextField>
-                  <Label text="mn">
+                  <Label text="s">
                      <font>
                         <Font size="10.0" />
                      </font>

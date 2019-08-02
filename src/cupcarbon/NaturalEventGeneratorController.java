@@ -119,9 +119,9 @@ public class NaturalEventGeneratorController implements Initializable{
 			public void run() {
 				Random random = new Random();
 				zone.setText("time value\n");
-				int period = Integer.parseInt(periodField.getText()) * 60;
-				int mean = Integer.parseInt(meanField.getText());
-				int std = Integer.parseInt(stdField.getText());
+				double period = Double.parseDouble(periodField.getText());
+				double mean = Double.parseDouble(meanField.getText());
+				double std = Double.parseDouble(stdField.getText());
 				double v = random.nextGaussian()*std+mean;
 				zone.setText(0+" "+ v +"\n");	
 				for(int i=1; i< Integer.parseInt(sizeField.getText()); i++) {

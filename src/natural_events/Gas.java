@@ -49,7 +49,7 @@ import utilities.UColor;
 
 public class Gas extends MobileG {
 
-	protected LinkedList<Integer> valueTime;
+	protected LinkedList<Double> valueTime;
 	protected LinkedList<Double> values;
 	protected int valueIndex = 0;
 
@@ -281,7 +281,7 @@ public class Gas extends MobileG {
 
 	public void loadValuesFromFile() {
 		valueIndex = 0;
-		valueTime = new LinkedList<Integer>();
+		valueTime = new LinkedList<Double>();
 		values = new LinkedList<Double>();
 		FileInputStream fis;
 		BufferedReader b = null;
@@ -294,7 +294,7 @@ public class Gas extends MobileG {
 				b.readLine();
 				while ((s = b.readLine()) != null) {
 					ts = s.split(" ");
-					valueTime.add(Integer.parseInt(ts[0]));
+					valueTime.add(Double.parseDouble(ts[0]));
 					values.add(Double.parseDouble(ts[1]));
 				}
 				b.close();

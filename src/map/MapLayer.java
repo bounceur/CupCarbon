@@ -272,6 +272,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			g.drawString("Number of LOST messages:"+MessageEventList.numberOfLostMessages + " ["+ MessageEventList.numberOfLostMessages_b +"]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+56);
 			if(DeviceList.weather != null)
 				g.drawString("Temperature: "+ String.format("%2.2f", DeviceList.weather.getValue()) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+66);
+			g.drawString(BuildingList.locked?"[L]":"", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+76);
 		}
 		
 		//int [] coord = MapCalc.geoToPixelMapA(48.391412753283895, -4.4883012771606445);
@@ -1136,6 +1137,10 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		
 		if(lastKey == 'l') {
 			NetworkParameters.drawRadioLinks = !NetworkParameters.drawRadioLinks;
+		}
+		
+		if(lastKey == 'L') {
+			BuildingList.locked = !BuildingList.locked ;
 		}
 		
 		if (lastKey == 'v' || lastKey=='V') {

@@ -2,7 +2,9 @@ package senscript;
 
 import device.DeviceList;
 import device.SensorNode;
+import simulation.SimulationInputs;
 import simulation.WisenSimulation;
+import visibility.VisibilityLauncher;
 
 public class Command_RADIO extends Command {
 
@@ -20,6 +22,9 @@ public class Command_RADIO extends Command {
 		WisenSimulation.simLog.add("S" + sensor.getId() + " RADIO module "+sRadioName+" selected");
 		
 		sensor.selectCurrentRadioModule(sRadioName);
+		
+		if(SimulationInputs.visibility)
+			VisibilityLauncher.calculate(sensor);
 		
 		if(DeviceList.propagationsCalculated)
 			DeviceList.calculatePropagations();

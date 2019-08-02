@@ -34,6 +34,7 @@ public class BuildingList {
 
 	public static LinkedList<Building> buildings = null;
 	public static boolean isLoading = false;
+	public static boolean locked = false ;
 	
 	public BuildingList() {
 		buildings = new LinkedList<Building>();
@@ -140,23 +141,27 @@ public class BuildingList {
 	}
 	
 	public void deleteIfSelected() {
-		CupActionBlock block = new CupActionBlock();
-		Building building;
-		for (Iterator<Building> iterator = buildings.iterator(); iterator.hasNext();) {
-			building = iterator.next();
-			if (building.isSelected() && !building.isHide()) {
-				CupActionDeleteBuilding action = new CupActionDeleteBuilding(building);
-				block.addAction(action);
+		if(!locked) {
+			CupActionBlock block = new CupActionBlock();
+			Building building;
+			for (Iterator<Building> iterator = buildings.iterator(); iterator.hasNext();) {
+				building = iterator.next();
+				if (building.isSelected() && !building.isHide()) {
+					CupActionDeleteBuilding action = new CupActionDeleteBuilding(building);
+					block.addAction(action);
+				}
 			}
-		}
-		if(block.size()>0) {
-			CupActionStack.add(block);
-			CupActionStack.execute();
+			if(block.size()>0) {
+				CupActionStack.add(block);
+				CupActionStack.execute();
+			}
 		}
 	}
 	
 	public static void delete(Building building) {
-		buildings.remove(building);
+		if(!locked) {
+			buildings.remove(building);
+		}
 	}
 	
 	public static boolean intersect(Polygon p) {

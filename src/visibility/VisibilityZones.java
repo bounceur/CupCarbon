@@ -83,11 +83,11 @@ public class VisibilityZones extends Thread {
 			if(sensorNode.getCurrentRadioModule().getStandard() == RadioModule.ZIGBEE_802_15_4)
 				zoneOfInterest.set(sensorNode.getLatitude() + 0.001 * Math.cos(deg),sensorNode.getLongitude() + 0.0015 * Math.sin(deg), 0, i);
 			
-			if(sensorNode.getCurrentRadioModule().getStandard() == RadioModule.LORA)
-				zoneOfInterest.set(sensorNode.getLatitude() + 0.01 * Math.cos(deg),sensorNode.getLongitude() + 0.015 * Math.sin(deg), 0, i);
+			//if(sensorNode.getCurrentRadioModule().getStandard() == RadioModule.LORA)
+			//	zoneOfInterest.set(sensorNode.getLatitude() + 0.01 * Math.cos(deg),sensorNode.getLongitude() + 0.015 * Math.sin(deg), 0, i);
 			
-			if(sensorNode.getCurrentRadioModule().getStandard() == RadioModule.WIFI_802_11)
-				zoneOfInterest.set(sensorNode.getLatitude() + 0.002 * Math.cos(deg),sensorNode.getLongitude() + 0.003 * Math.sin(deg), 0, i);
+			//if(sensorNode.getCurrentRadioModule().getStandard() == RadioModule.WIFI_802_11)
+			//	zoneOfInterest.set(sensorNode.getLatitude() + 0.002 * Math.cos(deg),sensorNode.getLongitude() + 0.003 * Math.sin(deg), 0, i);
 			
 			deg += step;
 		}
