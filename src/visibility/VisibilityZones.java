@@ -81,10 +81,10 @@ public class VisibilityZones extends Thread {
 		double deg = 0.0;
 		for (int i = 0; i < nPoint; i++) {
 			if(sensorNode.getCurrentRadioModule().getStandard() == RadioModule.ZIGBEE_802_15_4)
-				zoneOfInterest.set(sensorNode.getLatitude() + 0.001 * Math.cos(deg),sensorNode.getLongitude() + 0.0015 * Math.sin(deg), 0, i);
+				zoneOfInterest.set(sensorNode.getLatitude() + 0.001 * Math.cos(deg), sensorNode.getLongitude() + 0.0015 * Math.sin(deg), 0, i);
 			
-			//if(sensorNode.getCurrentRadioModule().getStandard() == RadioModule.LORA)
-			//	zoneOfInterest.set(sensorNode.getLatitude() + 0.01 * Math.cos(deg),sensorNode.getLongitude() + 0.015 * Math.sin(deg), 0, i);
+			if(sensorNode.getCurrentRadioModule().getStandard() == RadioModule.LORA)
+				zoneOfInterest.set(sensorNode.getLatitude() + 0.05 * Math.cos(deg), sensorNode.getLongitude() + 0.075 * Math.sin(deg), 0, i);
 			
 			//if(sensorNode.getCurrentRadioModule().getStandard() == RadioModule.WIFI_802_11)
 			//	zoneOfInterest.set(sensorNode.getLatitude() + 0.002 * Math.cos(deg),sensorNode.getLongitude() + 0.003 * Math.sin(deg), 0, i);
@@ -189,7 +189,6 @@ public class VisibilityZones extends Thread {
 		int k = 0;
 		for (double[] v : visibilityPointList) {
 			zone.set(v[0], v[1], 0, k++);
-
 		}
 
 		// -----------------------------------------------------------------------------------------

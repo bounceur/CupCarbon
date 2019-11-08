@@ -162,7 +162,8 @@ public class Command_SEND extends Command {
 			WisenSimulation.simLog.add("S" + sensor.getId() + " is writing the message : \"" + message + "\" in its buffer.");
 			writtenInUART = true ;
 			executing = true;
-			double ratio = 1.0/(sensor.getUartDataRate());			
+			//double ratio = 1.0/(sensor.getUartDataRate());
+			double ratio = 0.1E-20;
 			return (ratio * (messageLength*8)) ;
 		}
 		

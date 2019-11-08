@@ -3,7 +3,7 @@ package geometry;
 public class DPoint {
 
 	private double x;	
-	private  double y;
+	private double y;
 
 	public DPoint() {
 		super();

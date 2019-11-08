@@ -76,16 +76,11 @@ public class CupCarbon extends Application {
 		}
 		
 		CupActionStack.init();
-		setProxy();
 		
 		setUserAgentStylesheet(STYLESHEET_MODENA);		
 	    
 		mainStage.setTitle("CupCarbon "+CupCarbonVersion.VERSION);
 		mainStage.getIcons().add(new Image(getClass().getResourceAsStream("cupcarbon_logo_small.png")));
-
-		
-		
-        
         
 		//stage.setMaximized(true);
 		FXMLLoader loader = new FXMLLoader();
@@ -95,6 +90,7 @@ public class CupCarbon extends Application {
 		Scene scene = new Scene(panneau);
 		mainStage.setScene(scene);
 		mainStage.show();
+			
 	}
 	
 	public static void main(String[] args) {
@@ -104,6 +100,10 @@ public class CupCarbon extends Application {
 			SolverProxyParams.host = args[1];
 			SolverProxyParams.port = args[2];
 		}		
+		
+		setProxy();
+		//CupCarbonServer server = new CupCarbonServer();
+		//server.start();		
 		
 		launch(args);
 	}
@@ -155,6 +155,8 @@ public class CupCarbon extends Application {
 	    } catch (IOException e) {
 	        return false;
 	    }
+	    
+	    
 	}
 	// -----
 

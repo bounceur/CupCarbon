@@ -2297,7 +2297,7 @@ public class CupCarbonController implements Initializable {
 				CupAction action = new CupActionModifSensorCurrentRadio(sensor, currentRadioModule, newRadioModule);
 				block.addAction(action);
 				currentDevice = sensor;
-				VisibilityLauncher.calculate(sensor);
+				//VisibilityLauncher.calculate(sensor);
 			}
 		}
 		CupActionStack.add(block);

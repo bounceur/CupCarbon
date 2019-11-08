@@ -147,7 +147,7 @@ public class MessageEventList {
 		return min;
 	}
 	
-	public void drawChannelLinks(Graphics g) {			
+	public void drawChannelLinks(Graphics g) {	
 		for(List<MessageEvent> messageEventList : messageEventLists) {
 			if(messageEventList.size()>0) {
 				Graphics2D g2 = (Graphics2D) g;
