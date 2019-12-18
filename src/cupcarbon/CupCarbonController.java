@@ -806,7 +806,7 @@ public class CupCarbonController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				VisibilityLauncher.calculateForSelected();
+				VisibilityLauncher.calculate();
 			}
 		});
 	}

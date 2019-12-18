@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import buildings.Building;
 import buildings.BuildingList;
+import device.DeviceList;
 import device.SensorNode;
 import geo_objects.GeoZone;
 import geo_objects.GeoZoneList;
@@ -205,6 +206,7 @@ public class VisibilityZones extends Thread {
 		// -----------------------------------------------------------------------------------------
 		// Refresh the graphic
 		// -----------------------------------------------------------------------------------------		
+		DeviceList.calculatePropagations();
 		MapLayer.repaint();
 
 	}

@@ -13,7 +13,7 @@ public class RadioModule_ZigBee extends RadioModule {
 	}
 
 	public void init() {
-		frequency = 2.4e9; 
+		frequency = 2.4e9;
 		radioRangeColor1 = UColor.PURPLE_TTRANSPARENT;
 		radioRangeColor2 = UColor.PURPLE_TRANSPARENT;
 //		if(MapLayer.dark) {

@@ -11,6 +11,7 @@ import buildings.BuildingList;
 import project.Project;
 import sensorunit.StdSensorUnit;
 import utilities.MapCalc;
+import visibility.VisibilityLauncher;
 
 public class StdSensorNode extends SensorNode {
 	
@@ -57,6 +58,10 @@ public class StdSensorNode extends SensorNode {
 	public StdSensorNode(double x, double y, double z, double radius, double radioRadius, double suRadius, int id) {
 		super(x, y, z, radius, radioRadius, id);
 		sensorUnit = new StdSensorUnit(this.longitude, this.latitude, this.elevation, suRadius, this);
+		if(DeviceList.propagationsCalculated) {
+			VisibilityLauncher.calculate(this);
+			DeviceList.calculatePropagations();
+		}
 	}
 	
 	/**

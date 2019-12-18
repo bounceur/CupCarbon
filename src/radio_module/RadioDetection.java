@@ -33,16 +33,20 @@ public class RadioDetection {
 	}	
 	
 	public static boolean threeDDetection(DeviceWithRadio device1, DeviceWithRadio device2) {
-		if (device1.canCommunicateWith(device2)) {
+		return 
+				device1.canCommunicateWith(device2) 
+				&&
+				getPowerReception(((DeviceWithRadio)device1), ((DeviceWithRadio)device2)) > ((DeviceWithRadio)device2).getRequiredQuality();
+		
+		/*if (device1.canCommunicateWith(device2)) {
 			if ( getPowerReception(((DeviceWithRadio)device1), ((DeviceWithRadio)device2)) > ((DeviceWithRadio)device2).getRequiredQuality())
 				return true;
 		}
-		return false;
+		return false;*/
 	}
 	
 	public static double getPowerReception(DeviceWithRadio device1, DeviceWithRadio device2) {
-		double pr = device1.getTransmitPower() - getAttenuation(device1, device1.distance(device2));
-		return pr ;
+		return device1.getTransmitPower() - getAttenuation(device1, device1.distance(device2));
 	}
 	
 	public static double getAttenuation(DeviceWithRadio device, double distance) {

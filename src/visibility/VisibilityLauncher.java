@@ -40,6 +40,7 @@ public class VisibilityLauncher {
 		//-----------------------------------------------------------------------------------------
 		// Calculate the visiblity zone for each sensor node
 		//-----------------------------------------------------------------------------------------
+		DeviceList.propagationsCalculated = true;
 		for (SensorNode sensor : DeviceList.sensors) {
 			VisibilityZones vz = new VisibilityZones(sensor);
 			vz.start();
@@ -50,6 +51,7 @@ public class VisibilityLauncher {
 		//-----------------------------------------------------------------------------------------
 		// Calculate the visiblity zone for each selected sensor node
 		//-----------------------------------------------------------------------------------------
+		DeviceList.propagationsCalculated = true;
 		for (SensorNode sensor : DeviceList.sensors) {
 			if (sensor.isSelected()) {
 				VisibilityZones vz = new VisibilityZones(sensor);

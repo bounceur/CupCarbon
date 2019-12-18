@@ -422,7 +422,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 * @param device
 	 * @return if a neighbor device is in the radio area of the current device
 	 */
-	public boolean radioDetect(DeviceWithRadio device) {		
+	public boolean radioDetect(DeviceWithRadio device) {	
 		if (!DeviceList.propagationsCalculated)
 			return RadioDetection.simpleDetection(this, device);
 		else {
@@ -431,7 +431,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			if (SimulationInputs.radioDetectionType == RadioDetection.THREED_DETECTION)
 				return RadioDetection.threeDDetection(this, device);
 		}
-		return true;
+		return false;
 	}
 	
 	public boolean radioDetect_vt(DeviceWithRadio device) {		

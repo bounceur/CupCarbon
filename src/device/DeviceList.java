@@ -1071,6 +1071,7 @@ public class DeviceList {
 	}
 	
 	public static void initAll() {
+		propagationsCalculated = false;
 		hulls = new LinkedList<LinkedList<Integer>>();
 		markedEdges = new Vector<SNEdge>();		
 		WisenSimulation.sTime = 0;

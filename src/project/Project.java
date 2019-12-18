@@ -47,6 +47,7 @@ import map.WorldMap;
 import markers.MarkerList;
 import markers.Routes;
 import simulation.SimulationInputs;
+import visibility.VisibilityLauncher;
 
 public final class Project {
 	
@@ -170,15 +171,18 @@ public final class Project {
 					CupActionStack.init();
 					reset();
 					setProjectName(path, name);
-					saveRecentPath();				
+					saveRecentPath();
 					BuildingList.open(getProjectBuildingPathName());
-					MarkerList.open(getProjectMarkerPath());		
+					MarkerList.open(getProjectMarkerPath());
 					DeviceList.open();
-					loadParameters();		
+					loadParameters();
 					CupCarbon.cupCarbonController.loadSimulationParams();
 					CupCarbon.cupCarbonController.applyParameters();
 					CupCarbon.cupCarbonController.saveButton.setDisable(false);
-					if(DeviceList.propagationsCalculated) DeviceList.calculatePropagations();
+					if(DeviceList.propagationsCalculated) {
+						DeviceList.calculatePropagations();
+						VisibilityLauncher.calculate();
+					}
 					
 					if(NetworkParameters.displayAllRoutes) {
 						MarkerList.reset();
