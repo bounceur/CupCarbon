@@ -18,7 +18,6 @@ public class MqttWindow {
 		BorderPane panneau = (BorderPane) loader.load();
 		Scene scene = new Scene(panneau);
 		stage.setScene(scene);		
-		//stage.initOwner(CupCarbon.stage);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
 	}
