@@ -1,5 +1,5 @@
 # CupCarbon
-WSN and IoT Design and Simulation Platform
+IoT and WSN Simulation Platform
 
 # Installation 
 
