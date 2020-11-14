@@ -37,6 +37,7 @@ import buildings.BuildingList;
 import cupcarbon.CupCarbon;
 import cupcarbon.CupCarbonVersion;
 import device.DeviceList;
+import device.IoTMqttModule;
 import device.MultiChannels;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -111,12 +112,43 @@ public final class Project {
 	public static void saveProject() {
 		cleanProjectDirectories();
 		saveParameters();
+		saveMqtt();
 		if(DeviceList.getSize()>0) {
 			DeviceList.saveDevicesAndSensors(getProjectNodePath());
 		}
 		if(MarkerList.size()>0) MarkerList.save(getProjectMarkerPath());
 		if(BuildingList.size()>0) BuildingList.save(getProjectBuildingPathName());
 		saveSimulationParams();		
+	}
+	
+	public static void saveMqtt() {
+		try {
+			PrintStream ps = new PrintStream("mqtt.par");
+			ps.println(IoTMqttModule.broker);
+			ps.println(IoTMqttModule.port);
+			ps.println(IoTMqttModule.user.isEmpty()?"-":IoTMqttModule.user);
+			ps.println(IoTMqttModule.password.isEmpty()?"-":IoTMqttModule.password);
+			ps.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void loadMqtt() {
+		File file = new File("mqtt.par");
+		if(file.exists())
+			try {
+				BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+				IoTMqttModule.broker = br.readLine();
+				IoTMqttModule.port = br.readLine();
+				IoTMqttModule.user = br.readLine();
+				IoTMqttModule.password = br.readLine();
+				br.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	}
 	
 	public static void saveSimulationParams() {
@@ -165,17 +197,25 @@ public final class Project {
 				File file = new File(path+File.separator+name);
 				if(file.exists()) {
 					CupCarbon.cupCarbonController.displayPermanentMessage_th("Loading ...");
+										
+					loadMqtt();
+					
 					DeviceList.propagationsCalculated = false;
+					
 					System.out.println(path);
 					System.out.println(name);
+					
 					CupActionStack.init();
 					reset();
 					setProjectName(path, name);
 					saveRecentPath();
+					
+					loadParameters();
+					
 					BuildingList.open(getProjectBuildingPathName());
 					MarkerList.open(getProjectMarkerPath());
 					DeviceList.open();
-					loadParameters();
+					
 					CupCarbon.cupCarbonController.loadSimulationParams();
 					CupCarbon.cupCarbonController.applyParameters();
 					CupCarbon.cupCarbonController.saveButton.setDisable(false);
@@ -200,7 +240,7 @@ public final class Project {
 		});
 		th.start();
 	}
-
+	
 	public static void newProject(String path, String name, boolean reset) {
 		CupActionStack.init();
 		String path1 = "";
@@ -242,6 +282,12 @@ public final class Project {
 				String path2 = Project.projectPath;
 				copyResProjectFiles(path1, path2);
 			}
+			
+			/*IoTMqttModule.broker = "mqtt.eclipse.org";
+			IoTMqttModule.port = "1883";
+			IoTMqttModule.user = "";
+			IoTMqttModule.password = "";*/
+			
 			CupCarbon.cupCarbonController.saveButton.setDisable(false);
 		}
 		else {
@@ -375,20 +421,26 @@ public final class Project {
 			String s ;
 			while((s=br.readLine()) != null) {
 				keyVal = s.split(":");
+				String val = "";
+				if(keyVal.length==2) val=keyVal[1];
 				switch(keyVal[0]) {
-				case "display_details": NetworkParameters.displayDetails = Boolean.parseBoolean(keyVal[1]); break;
-				case "draw_radio_links": NetworkParameters.drawRadioLinks = Boolean.parseBoolean(keyVal[1]); break;
-				case "draw_arrows": NetworkParameters.drawSensorArrows = Boolean.parseBoolean(keyVal[1]); break;
-				case "draw_sensor_arrows": NetworkParameters.drawSensorArrows = Boolean.parseBoolean(keyVal[1]); break;
-				case "radio_links_color": NetworkParameters.radioLinksColor = Integer.parseInt(keyVal[1]); break;
-				case "draw_marker_arrows": NetworkParameters.drawMarkerArrows = Boolean.parseBoolean(keyVal[1]); break;
-				case "display_rl_distance": NetworkParameters.displayRLDistance = Boolean.parseBoolean(keyVal[1]); break;
-				case "propagation": DeviceList.propagationsCalculated = Boolean.parseBoolean(keyVal[1]); break;
-				case "display_marker_distance": NetworkParameters.displayMarkerDistance = Boolean.parseBoolean(keyVal[1]); break;
-				case "display_radio_messages": NetworkParameters.displayRadioMessages = Boolean.parseBoolean(keyVal[1]); break;
-				case "draw_script_file_name":  NetworkParameters.drawScriptFileName = Boolean.parseBoolean(keyVal[1]); break;
-				case "display_print_messages":  NetworkParameters.displayPrintMessage = Boolean.parseBoolean(keyVal[1]); break;
-				case "display_all_routes":  NetworkParameters.displayAllRoutes = Boolean.parseBoolean(keyVal[1]); break;
+					case "display_details": NetworkParameters.displayDetails = Boolean.parseBoolean(val); break;
+					case "draw_radio_links": NetworkParameters.drawRadioLinks = Boolean.parseBoolean(val); break;
+					case "draw_arrows": NetworkParameters.drawSensorArrows = Boolean.parseBoolean(val); break;
+					case "draw_sensor_arrows": NetworkParameters.drawSensorArrows = Boolean.parseBoolean(val); break;
+					case "radio_links_color": NetworkParameters.radioLinksColor = Integer.parseInt(val); break;
+					case "draw_marker_arrows": NetworkParameters.drawMarkerArrows = Boolean.parseBoolean(val); break;
+					case "display_rl_distance": NetworkParameters.displayRLDistance = Boolean.parseBoolean(val); break;
+					case "propagation": DeviceList.propagationsCalculated = Boolean.parseBoolean(val); break;
+					case "display_marker_distance": NetworkParameters.displayMarkerDistance = Boolean.parseBoolean(val); break;
+					case "display_radio_messages": NetworkParameters.displayRadioMessages = Boolean.parseBoolean(val); break;
+					case "draw_script_file_name":  NetworkParameters.drawScriptFileName = Boolean.parseBoolean(val); break;
+					case "display_print_messages":  NetworkParameters.displayPrintMessage = Boolean.parseBoolean(val); break;
+					case "display_all_routes":  NetworkParameters.displayAllRoutes = Boolean.parseBoolean(val); break;
+					//case "mqtt_broker" : IoTMqttModule.broker = val; break;
+					//case "mqtt_port" : IoTMqttModule.port = val; break;
+					//case "mqtt_user" : IoTMqttModule.user = val; break;
+					//case "mqtt_password" : IoTMqttModule.password = val; break;
 				}
 			}
 			br.close();
@@ -436,6 +488,10 @@ public final class Project {
 			fos.println("draw_script_file_name:" + NetworkParameters.drawScriptFileName);
 			fos.println("display_print_messages:" + NetworkParameters.displayPrintMessage);
 			fos.println("display_all_routes:" + NetworkParameters.displayAllRoutes);
+			//fos.println("mqtt_broker:" + IoTMqttModule.broker);
+			//fos.println("mqtt_port:" + IoTMqttModule.port);
+			//fos.println("mqtt_user:" + IoTMqttModule.user);
+			//fos.println("mqtt_password:" + IoTMqttModule.password);
 			fos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -476,12 +532,26 @@ public final class Project {
 		else
 			return getProjectScriptPath() + File.separator + name + ".csc";
 	}
+	
+	public static String getPythonFileFromName(String name) {
+		if (name.endsWith(".py"))
+			return getProjectScriptPath() + File.separator + name;
+		else
+			return getProjectScriptPath() + File.separator + name + ".py";
+	}
 
 	public static String getScriptFileExtension(String name) {
 		if (name.endsWith(".csc"))
 			return name;
 		else
 			return name + ".csc";
+	}
+	
+	public static String getPythonFileExtension(String name) {
+		if (name.endsWith(".py"))
+			return name;
+		else
+			return name + ".py";
 	}
 
 	public static String getLogFileFromName(String name) {

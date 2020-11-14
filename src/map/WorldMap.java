@@ -80,7 +80,8 @@ public class WorldMap extends JXMapKit {
 				
 				setDataProviderCreditShown(true);
 				setName("CupCarbon Map");				
-				setCenterPosition(new GeoPosition(48.39052932411496, -4.486016035079956));// Brest		
+				//setCenterPosition(new GeoPosition(48.39052932411496, -4.486016035079956));// Brest (V.1 to 4)
+				setCenterPosition(new GeoPosition(53.47813071596213, -2.2447192668914795));// Manchester (V.5)
 				
 				setZoom(2);
 	}

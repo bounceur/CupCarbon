@@ -12,7 +12,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="770.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.CupCarbonController">
+<BorderPane prefHeight="770.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cupcarbon.CupCarbonController">
    <top>
       <MenuBar fx:id="menuBar" style="-fx-border-width: 2; -fx-font-size: 11;" BorderPane.alignment="CENTER">
         <menus>
@@ -916,6 +916,97 @@
                      </font>
                   </Button>
                   <Separator prefWidth="10.0" />
+                  <Button ellipsisString="" layoutX="174.0" layoutY="10.0" mnemonicParsing="false" onAction="#addIoTNode">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <graphic>
+                        <ImageView pickOnBounds="true" smooth="false">
+                           <image>
+                              <Image url="@../../res/images/iot.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="IoT Node" />
+                     </tooltip>
+                  </Button>
+                  <Button ellipsisString="" layoutX="174.0" layoutY="10.0" mnemonicParsing="false" onAction="#addIoTRNode">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <graphic>
+                        <ImageView pickOnBounds="true" smooth="false">
+                           <image>
+                              <Image url="@../../res/images/iot_rn.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="IoT Real Node" />
+                     </tooltip>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#openMqttWindow">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <graphic>
+                        <ImageView pickOnBounds="true" smooth="false">
+                           <image>
+                              <Image url="@../../res/images/mqtt.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="SenScript Window" />
+                     </tooltip>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#openPythonWindow">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <graphic>
+                        <ImageView pickOnBounds="true" smooth="false">
+                           <image>
+                              <Image url="@../../res/images/python.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="SenScript Window" />
+                     </tooltip>
+                  </Button>
+                  <Button fx:id="qRunIoTSimulationButton" layoutX="174.0" layoutY="10.0" mnemonicParsing="false" onAction="#runIoTSimulation">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <graphic>
+                        <ImageView pickOnBounds="true" smooth="false">
+                           <image>
+                              <Image url="@../../res/images/run_iot.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Run IoT Simulation" />
+                     </tooltip>
+                  </Button>
+                  <Button fx:id="qStopIoTSimulationButton" layoutX="174.0" layoutY="10.0" mnemonicParsing="false" onAction="#stopIoTSimulation">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <graphic>
+                        <ImageView pickOnBounds="true" smooth="false">
+                           <image>
+                              <Image url="@../../res/images/stop_iot.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Stop IoT Simulation" />
+                     </tooltip>
+                  </Button>
+                  <Separator layoutX="460.0" layoutY="10.0" prefWidth="10.0" />
                 <Button ellipsisString="" mnemonicParsing="false" onAction="#addSensor">
                      <graphic>
                         <ImageView pickOnBounds="true" smooth="false">
@@ -1168,7 +1259,7 @@
                      </tooltip>
                   </Button>
                   <Separator prefWidth="10.0" />
-                  <ToggleButton mnemonicParsing="false" onAction="#magnetic">
+                  <ToggleButton mnemonicParsing="false" selected="true" onAction="#magnetic">
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -1291,7 +1382,7 @@
                      </tooltip>
                   </Button>
                   <Separator prefWidth="10.0" />
-                  <Button mnemonicParsing="false" onAction="#openConsole" text="Console">
+                  <Button mnemonicParsing="false" onAction="#openConsole" text="Show Console">
                      <font>
                         <Font size="10.0" />
                      </font>
@@ -2716,7 +2807,7 @@
                                                             <Font size="9.0" />
                                                          </font>
                                                       </Label>
-                                                      <TextField fx:id="simulationSpeedTextField" cacheShape="false" centerShape="false" promptText="10" scaleShape="false" text="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                      <TextField fx:id="simulationSpeedTextField" cacheShape="false" centerShape="false" promptText="1000" scaleShape="false" text="1000" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                          <font>
                                                             <Font size="9.0" />
                                                          </font>
@@ -2729,7 +2820,7 @@
                                                             <Font size="9.0" />
                                                          </font>
                                                       </Label>
-                                                      <TextField fx:id="arrowSpeedTextField" cacheShape="false" centerShape="false" promptText="50" scaleShape="false" text="50" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                      <TextField fx:id="arrowSpeedTextField" cacheShape="false" centerShape="false" promptText="500" scaleShape="false" text="500" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                          <font>
                                                             <Font size="9.0" />
                                                          </font>
@@ -2938,14 +3029,6 @@
                                     </ImageView>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <ImageView fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../../res/images/anr_logo.png" />
-                                             </image>
-                                             <viewport>
-                                                <Rectangle2D />
-                                             </viewport>
-                                          </ImageView>
                                           <ImageView fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../../res/images/lab_sticc.jpg" />
@@ -2962,9 +3045,9 @@
                                                 <Rectangle2D />
                                              </viewport>
                                           </ImageView>
-                                          <ImageView fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../../res/images/virtualys.png" />
+                                                <Image url="@../../res/images/anr_logo.png" />
                                              </image>
                                              <viewport>
                                                 <Rectangle2D />

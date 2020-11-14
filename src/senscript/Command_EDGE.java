@@ -19,11 +19,11 @@ public class Command_EDGE extends Command {
 	@Override
 	public double execute() {
 		if(arg1.equals("")) {
-			System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function ("+arg1+" is null)");
+			System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function ("+arg1+" is empty)");
 			CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR");
 		}
 		if(arg2.equals("")) {
-			System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function ("+arg2+" is null)");
+			System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function ("+arg2+" is empty)");
 			CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR");
 		}
 		
@@ -34,6 +34,11 @@ public class Command_EDGE extends Command {
 		if(id>0) {
 			if(sensor.getId()!=id) {
 				SensorNode sensor2 = DeviceList.getSensorNodeById(id);
+				if(sensor2==null) {
+					System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): EDGE function (id "+id+" does not exist)");
+					CupCarbon.cupCarbonController.displayVeryShortErrMessage("ERROR!");
+					return 0;
+				}
 				if(v==1)
 					DeviceList.addEdge(sensor, sensor2);
 				else

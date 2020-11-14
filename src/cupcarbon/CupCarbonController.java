@@ -113,6 +113,8 @@ import perso.MyClass;
 import project.Project;
 import radio_module.RadioModule;
 import radio_module.RadioModule_Lora;
+import simulation.IoTSimulation;
+import simulation.Simulation;
 import simulation.SimulationInputs;
 import simulation.WisenSimulation;
 import solver.CycleFromNode;
@@ -133,7 +135,10 @@ public class CupCarbonController implements Initializable {
 
 	protected FaultInjector faultInjector = null;
 
-	ConsoleWindow console ;
+	public ConsoleWindow console ;
+	
+	public WisenSimulation wisenSimulation;
+	public IoTSimulation iotSimulation;
 	
 	@FXML
 	private TextField suCoverage ;
@@ -492,7 +497,7 @@ public class CupCarbonController implements Initializable {
 //				try {
 //					Thread.sleep(10);
 //				} catch (InterruptedException e) {}
-//				MapLayer.repaint();
+				MapLayer.repaint();
 			}
 		});
 	}
@@ -714,6 +719,38 @@ public class CupCarbonController implements Initializable {
 			alert.showAndWait();
 		}
 	}
+	
+	@FXML
+	public void openPythonWindow() {
+		if (!Project.projectName.equals(""))
+			try {
+				new PythonWindow();
+			}
+			catch(IOException e) {}
+		else {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning!");
+			alert.setHeaderText(null);
+			alert.setContentText("Project must be created first.");
+			alert.showAndWait();
+		}
+	}
+	
+	@FXML
+	public void openMqttWindow() {
+		if (!Project.projectName.equals(""))
+			try {
+				new MqttWindow();
+			}
+			catch(IOException e) {}
+		else {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning!");
+			alert.setHeaderText(null);
+			alert.setContentText("Project must be created first.");
+			alert.showAndWait();
+		}
+	}
 
 	@FXML
 	public void openNaturalEventGenerator() throws IOException {
@@ -737,6 +774,71 @@ public class CupCarbonController implements Initializable {
 				mapFocus();
 			}
 		});
+	}
+	
+	@FXML
+	public void addIoTNode() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				WorldMap.addNodeInMap('9');
+				mapFocus();
+			}
+		});
+	}
+	
+	@FXML
+	public void addIoTRNode() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				WorldMap.addNodeInMap('&');
+				mapFocus();
+			}
+		});
+	}
+	
+	@FXML
+	public void runIoTSimulation() {
+		if (!Project.projectName.equals(""))
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					ConsoleController.controller.clear();
+					//saveButton.setDisable(false);
+					//runSimulationButton.setDisable(true);
+					//public void runIoTScript() {
+					if(iotSimulation==null) iotSimulation = new IoTSimulation();
+					iotSimulation.init();
+					if (iotSimulation.ready()) {
+						qRunIoTSimulationButton.setDisable(true);
+						new Thread(iotSimulation).start();
+					} else {
+						WisenSimulation.updateButtons();
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setTitle("IoT Program");
+						alert.setHeaderText(null);
+						alert.setContentText("IoT Nodes without Program!");
+						alert.showAndWait();
+						selectSensorsWithoutScript();
+					}
+				}
+			});
+		else {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning!");
+			alert.setHeaderText(null);
+			alert.setContentText("Project must be created first.");
+			alert.showAndWait();
+		}
+		mapFocus();
+	}
+	
+	@FXML
+	public void stopIoTSimulation() {
+		Simulation.setSimulating(false);
+		//qRunIoTSimulationButton.setDisable(false);
+		mapFocus();
 	}
 
 	@FXML
@@ -811,7 +913,6 @@ public class CupCarbonController implements Initializable {
 		});
 	}
 
-	public WisenSimulation wisenSimulation;
 
 	@FXML
 	public void stopSimulation() {
@@ -1113,6 +1214,7 @@ public class CupCarbonController implements Initializable {
 					CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + file.getAbsolutePath().toString() + "]");
 					openProjectLoadParameters();
 					displayShortMessage(file.getName());
+					qRunIoTSimulationButton.setDisable(false);
 				}
 			}
 		});
@@ -1228,16 +1330,14 @@ public class CupCarbonController implements Initializable {
 		for (SensorNode sensor : DeviceList.sensors) {
 			if (sensor.isSelected()) {
 				String currentScriptFileName = sensor.getScriptFileName();
-				CupAction action = new CupActionModifSensorScriptFile((SensorNode) sensor, currentScriptFileName,
-						newScriptFileName);
+				CupAction action = new CupActionModifSensorScriptFile((SensorNode) sensor, currentScriptFileName,newScriptFileName);
 				block.addAction(action);
 			}
 		}
 		for (Device device : DeviceList.devices) {
 			if (device.isSelected()) {
 				String currentScriptFileName = device.getScriptFileName();
-				CupActionModifDeviceScriptFile action = new CupActionModifDeviceScriptFile(device,
-						currentScriptFileName, newScriptFileName);
+				CupActionModifDeviceScriptFile action = new CupActionModifDeviceScriptFile(device, currentScriptFileName, newScriptFileName);
 				block.addAction(action);
 			}
 		}
@@ -3018,6 +3118,12 @@ public class CupCarbonController implements Initializable {
 
 	@FXML
 	public Button qStopSimulationButton;
+	
+	@FXML
+	public Button qRunIoTSimulationButton;
+	
+	@FXML
+	public Button qStopIoTSimulationButton;
 
 	@FXML
 	public void undo() {
@@ -3256,6 +3362,9 @@ public class CupCarbonController implements Initializable {
 				displayShortMessage(name);
 				
 				br.close();
+				
+				qRunIoTSimulationButton.setDisable(false);
+				
 				Project.openProject(path, name);
 				CupCarbon.stage.setTitle("CupCarbon " + CupCarbonVersion.VERSION + " [" + path + "]");
 			} catch (FileNotFoundException e) {
@@ -3438,7 +3547,10 @@ public class CupCarbonController implements Initializable {
 	}
 	
 	public void displayShortGoodMessage(String s) {
-		textReady.setFill(new Color(0.2,0.72,0.1,0.5));
+		if(MapLayer.dark) 
+			textReady.setFill(new Color(0.8, 0.94,0.1,0.9));
+		else
+			textReady.setFill(new Color(0.2,0.72,0.1,0.5));
 		textReady.setText(s);
 		textReady.setVisible(true);
 		try {
@@ -3473,8 +3585,11 @@ public class CupCarbonController implements Initializable {
 	public void displayShortGoodMessage_th(String s) {
 		Thread th = new Thread(new Runnable() {
 			@Override
-			public void run() {				
-				textReady.setFill(new Color(0.2,0.72,0.1,0.5));
+			public void run() {
+				if(MapLayer.dark) 
+					textReady.setFill(new Color(0.2,0.72,0.1,0.9));
+				else
+					textReady.setFill(new Color(0.2,0.72,0.1,0.5));
 				textReady.setText(s);
 				textReady.setVisible(true);
 				try {
@@ -3487,7 +3602,10 @@ public class CupCarbonController implements Initializable {
 	}
 	
 	public void displayShortErrMessage(String s) {
-		textReady.setFill(new Color(1,0,0,0.5));
+		if(MapLayer.dark) 
+			textReady.setFill(new Color(1,0,0,0.9));
+		else
+			textReady.setFill(new Color(1,0,0,0.5));	
 		textReady.setText(s);
 		textReady.setVisible(true);
 		try {
@@ -3497,9 +3615,25 @@ public class CupCarbonController implements Initializable {
 		//consolePane.setExpanded(true);
 	}
 	
+	public void displayVeryShortErrMessage(String s) {
+		if(MapLayer.dark) 
+			textReady.setFill(new Color(1,0,0,0.9));
+		else
+			textReady.setFill(new Color(1,0,0,0.5));
+		textReady.setText(s);
+		textReady.setVisible(true);
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {}
+		textReady.setVisible(false);
+	}
+	
 	public void displayShortErrMessageTh(String s) {
 		new Thread(() -> {
-			textReady.setFill(new Color(1,0,0,0.5));
+			if(MapLayer.dark) 
+				textReady.setFill(new Color(1,0,0,0.9));
+			else
+				textReady.setFill(new Color(1,0,0,0.5));
 			textReady.setText(s);
 			textReady.setVisible(true);
 			try {
@@ -3511,7 +3645,10 @@ public class CupCarbonController implements Initializable {
 	
 	public void displayLongErrMessageTh(String s) {
 		new Thread(() -> {
-			textReady.setFill(new Color(1,0,0,0.5));
+			if(MapLayer.dark) 
+				textReady.setFill(new Color(1,0,0,0.9));
+			else
+				textReady.setFill(new Color(1,0,0,0.5));
 			textReady.setText(s);
 			textReady.setVisible(true);
 			try {

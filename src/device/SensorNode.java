@@ -1,9 +1,7 @@
 /*----------------------------------------------------------------------------------------------------------------
-
- * CupCarbon: OSM based Wireless Sensor Network design and simulation tool
  * www.cupcarbon.com
  * ----------------------------------------------------------------------------------------------------------------
- * Copyright (C) 2013 Ahcene Bounceur
+ * Copyright (C) 2020 Ahcene Bounceur
  * ----------------------------------------------------------------------------------------------------------------
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -249,7 +247,6 @@ public abstract class SensorNode extends DeviceWithRadio {
 		g.drawLine(lx1, ly1, lx2, ly2);
 	}
 	
-	@Override
 	public void drawRadioRange(Graphics g) {
 		if (visible) {
 			Graphics2D g2 = (Graphics2D) g;
@@ -264,21 +261,12 @@ public abstract class SensorNode extends DeviceWithRadio {
 			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int x = coord[0];
 			int y = coord[1];
-			int rayon = 10; 
+			int rayon = 20; 
 	
-			if (inside || selected) {
-				g.setColor(Color.LIGHT_GRAY);
-				if(selected) g.setColor(Color.GRAY);
-				if(MapLayer.dark) g.setColor(Color.ORANGE);
-				g.drawLine(x-rayon-3, y-rayon-3, x-rayon+2, y-rayon-3);
-				g.drawLine(x-rayon-3, y-rayon-3, x-rayon-3, y-rayon+2);
-				g.drawLine(x-rayon-3, y+rayon+3, x-rayon+2, y+rayon+3);
-				g.drawLine(x-rayon-3, y+rayon+3, x-rayon-3, y+rayon-2);			
-				g.drawLine(x+rayon+3, y-rayon-3, x+rayon-2, y-rayon-3);
-				g.drawLine(x+rayon+3, y-rayon-3, x+rayon+3, y-rayon+2);			
-				g.drawLine(x+rayon+3, y+rayon+3, x+rayon-2, y+rayon+3);
-				g.drawLine(x+rayon+3, y+rayon+3, x+rayon+3, y+rayon-2);
-			}
+			drawSelection(x, y, rayon, g2);
+			
+			drawRectSelection(x, y, rayon, g2);
+			
 			if(!isDead()) {
 				calculateRadioSpace();
 				if(hide == 0 || hide == 2 || hide == 3) {
@@ -304,6 +292,36 @@ public abstract class SensorNode extends DeviceWithRadio {
 		}
 	}
 	
+	public void drawSelection(int x, int y, int rayon, Graphics2D g) {
+		if (inside || selected) {
+			g.setColor(Color.LIGHT_GRAY);
+			if(selected) g.setColor(Color.GRAY);
+			if(MapLayer.dark) g.setColor(Color.WHITE);
+			g.drawLine(x-rayon-3, y-rayon-3, x-rayon+2, y-rayon-3);
+			g.drawLine(x-rayon-3, y-rayon-3, x-rayon-3, y-rayon+2);
+			g.drawLine(x-rayon-3, y+rayon+3, x-rayon+2, y+rayon+3);
+			g.drawLine(x-rayon-3, y+rayon+3, x-rayon-3, y+rayon-2);			
+			g.drawLine(x+rayon+3, y-rayon-3, x+rayon-2, y-rayon-3);
+			g.drawLine(x+rayon+3, y-rayon-3, x+rayon+3, y-rayon+2);			
+			g.drawLine(x+rayon+3, y+rayon+3, x+rayon-2, y+rayon+3);
+			g.drawLine(x+rayon+3, y+rayon+3, x+rayon+3, y+rayon-2);
+		}
+	}
+	
+	public void drawRectSelection(int x, int y, int rayon, Graphics2D g) {
+		
+	}
+	
+	public void drawOvalSelection(int x, int y, int rayon, Graphics2D g) {
+		if (selected) {
+			g.setColor(Color.GRAY);
+			if(nPoint == 0)
+				g.drawOval(x - 2, y - 2, 4, 4);
+			else
+				g.drawOval(x - rayon - 6, y - rayon - 6, (rayon + 6) * 2, (rayon + 6) * 2);
+		}
+	}
+	
 	@Override
 	public void draw(Graphics g2) {
 		if (visible) {
@@ -317,14 +335,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 			int rayon = MapCalc.radiusInPixels(currentRadioModule.getRadioRangeRadius()) ; 
 			int rayon2 = MapCalc.radiusInPixels(this.radius);
 
-			if (selected) {
-				g.setColor(Color.GRAY);
-				if(nPoint == 0)
-					g.drawOval(x - 2, y - 2, 4, 4);
-				else
-					g.drawOval(x - rayon - 6, y - rayon - 6, (rayon + 6) * 2, (rayon + 6) * 2);
-				
-			}
+			drawOvalSelection(x, y, rayon, g);
 
 			drawRadius(x, y, rayon2, g);
 			
@@ -403,21 +414,24 @@ public abstract class SensorNode extends DeviceWithRadio {
 	public void loadScript() {
 		script = new SenScript(this);	
 		String projectScriptPath = Project.getProjectScriptPath() + File.separator + scriptFileName;
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(projectScriptPath));
+		String ext = scriptFileName.substring(scriptFileName.lastIndexOf('.')+1);
 		
-			String s = "";
-			while ((s = br.readLine()) != null) {										
-				addCommand(s);
+		if(ext.equals("csc"))
+			try {
+				BufferedReader br = new BufferedReader(new FileReader(projectScriptPath));
+			
+				String s = "";
+				while ((s = br.readLine()) != null) {										
+					addCommand(s);
+				}
+				br.close();
+			} catch (FileNotFoundException e) {
+				System.err.println("[CupCarbon ERROR] (S"+id+"): the SenScript file "+scriptFileName+ " does not exist.");
+				CupCarbon.cupCarbonController.stopSimulation();
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			br.close();
-		} catch (FileNotFoundException e) {
-			System.err.println("[CupCarbon ERROR] (S"+id+"): the SenScript file "+scriptFileName+ " does not exist.");
-			CupCarbon.cupCarbonController.stopSimulation();
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void loadScript(String fileName) {
@@ -634,10 +648,17 @@ public abstract class SensorNode extends DeviceWithRadio {
 	}
 
 	@Override
-	public void execute() {
-		if (event == 0) {																	
+	public int execute() {
+		if (event == 0) {													
 			boolean cont = true;
+			int firstIndex = -1;
 			while (cont) {
+				if((script.getIndex() == firstIndex) && (!script.getCurrent().toString().equals("WAIT"))) {
+					System.out.println(""+script.getCurrent().toString());
+					System.err.println("(S"+ getId() + ") -> No next event -> infinite loop: add delays in your script");
+					return 1;
+				}
+				if(firstIndex==-1) firstIndex = script.getIndex();
 				script.executeCommand();
 				if (script.getEvent() == 0) {
 					script.next();
@@ -647,8 +668,9 @@ public abstract class SensorNode extends DeviceWithRadio {
 			}
 			WisenSimulation.consolPrint(event+" : ");
 			event = script.getEvent();
-			WisenSimulation.consolPrint(event+" | ");			
-		}		
+			WisenSimulation.consolPrint(event+" | ");
+		}
+		return 0;
 	}
 	
 	public String getSensorValues() {
@@ -835,5 +857,11 @@ public abstract class SensorNode extends DeviceWithRadio {
 	public double getSUDirection() {
 		return getSensorUnit().getDirection();
 	}
+	
+	public void runIoTScript() {
+		
+	}
+	
+	public abstract void drawSensorUnit(Graphics g) ;
 	
 }

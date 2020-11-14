@@ -44,10 +44,26 @@ import visibility.VisibilityZones;
  */
 public abstract class Device extends MapObject implements Cloneable {
 	
+	public static final int NONE = 0;
+	public static final int SENSOR = 1;
+	public static final int GAS = 2;
+	public static final int FLYING_OBJECT = 3;
+	public static final int BASE_STATION = 4;
+	public static final int DIRECTIONAL_SENSOR = 5;
+	public static final int MOBILE = 6;
+	public static final int WEATHER = 7;
+	public static final int MARKER = 8;
+	public static final int VERTEX = 9;
+	public static final int BUILDING = 10;
+	public static final int GEOZONE = 11;
+	public static final int RSENSOR = 12;
+	public static final int IOT = 13;
+	public static final int RIOT = 14;
+	
 	public static final boolean DEAD = false;
 	public static final boolean ALIVE = true;
 	public static final boolean SLEEP = false;
-
+	
 	protected double sigmaOfDriftTime = 0.00003;
 	protected double driftTime = 1.0; 
 	
@@ -165,16 +181,15 @@ public abstract class Device extends MapObject implements Cloneable {
 	 * @param g
 	 *            Graphics
 	 */
-	public void drawMarked(Graphics g) {
-	}
+	public abstract void drawMarked(Graphics g);
 
-	public void drawSensorUnit(Graphics g) {
+	/*public void drawSensorUnit(Graphics g) {
 		
-	}
+	}*/
 	
-	public void drawRadioRange(Graphics g) {
+	/*public void drawRadioRange(Graphics g) {
 		
-	}
+	}*/
 
 	/**
 	 * @return the user ID
@@ -240,7 +255,27 @@ public abstract class Device extends MapObject implements Cloneable {
 			ledColor = 1;
 		else
 			ledColor = 0;
-		this.marked = b;
+		marked = b;
+	}
+	
+	public void setMarked(int color) {
+		ledColor = color;
+		if(color==0) 
+			marked = false;
+		else
+			marked = true;
+	}
+	
+	public void mark(String scolor) {
+		ledColor = Integer.parseInt(scolor);
+		setMarked(ledColor);
+		MapLayer.repaint();
+	}
+	
+	public void mark(int color) {
+		ledColor = color;
+		marked = true;
+		MapLayer.repaint();
 	}
 	
 	/**
@@ -616,6 +651,8 @@ public abstract class Device extends MapObject implements Cloneable {
 		return hide;
 	}
 
+	public abstract String startingName();
+	
 	public abstract double getNextTime();
 	public abstract void loadRouteFromFile();
 	public abstract void moveToNext(boolean visual, int visualDelay);
@@ -826,8 +863,8 @@ public abstract class Device extends MapObject implements Cloneable {
 	
 	public abstract Polygon getRadioPolygon();
 	
-	public abstract void execute();
-	public abstract void drawRadioLinks(int k, Graphics g) ;
+	public abstract int execute();
+	public abstract void drawRadioLinks(Graphics g, int type) ;
 	public abstract void calculatePropagations();
 	public abstract void resetPropagations();
 	public abstract void drawRadioPropagations(Graphics g) ;
@@ -909,5 +946,5 @@ public abstract class Device extends MapObject implements Cloneable {
 	public double getSUDirection() {
 		return 0;
 	}
-	
+		
 }

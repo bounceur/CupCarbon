@@ -317,4 +317,10 @@ public class DirectionalSensorNode extends SensorNode {
 	public double getNextValueTime() {return Double.MAX_VALUE;}
 	public void generateNextValue() {}
 
+	@Override
+	public String startingName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

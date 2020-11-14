@@ -9,8 +9,8 @@ public class Command_FOR extends Command {
 	protected String arg1 ;
 	protected String arg2 ;
 	
-	protected String sStep ;
-	protected double step ;
+	protected String sStep = "0";
+	protected double step = 0;
 	
 	protected String left = "";
 	protected String right ;
@@ -51,7 +51,7 @@ public class Command_FOR extends Command {
 				
 		this.arg1 = arg1 ;
 		this.arg2 = arg2 ;
-		left = "$"+arg1;	
+		left = arg1;	
 		right = arg3;
 		sStep = arg4;
 		
@@ -99,6 +99,7 @@ public class Command_FOR extends Command {
 			z = Double.valueOf(v1);
 		}
 		else {
+			System.out.println("-------> "+v1+" "+v2);
 			z = Double.valueOf(v1) + Double.valueOf(v2);
 		}
 		
@@ -166,9 +167,12 @@ public class Command_FOR extends Command {
 		
 	@Override
 	public String getArduinoForm() {
-		String sarg2 = arg2.startsWith("$")?arg2.substring(1)+".toInt()":arg2;
-		String sright = right.startsWith("$")?right.substring(1)+".toInt()":right;
-		String ssStep = sStep.startsWith("$")?sStep.substring(1)+".toInt()":sStep;
+		//String sarg2 = arg2.startsWith("$")?arg2.substring(1)+".toInt()":arg2;
+		//String sright = right.startsWith("$")?right.substring(1)+".toInt()":right;
+		//String ssStep = sStep.startsWith("$")?sStep.substring(1)+".toInt()":sStep;
+		String sarg2 = arg2+".toInt()";
+		String sright = right+".toInt()";
+		String ssStep = sStep+".toInt()";
 		String s = "for(int "+arg1+"="+sarg2+";"+arg1+"<"+sright+";"+arg1+"+="+ssStep+") {";
 		
 		return s;

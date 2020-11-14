@@ -70,7 +70,7 @@ protected boolean loop = true ;
 				//if(Math.abs(x)>=0.001 || Math.abs(y)>=0.001) {
 //				if(d>s) {
 //					n1.setMarked(true);
-//					Layer.getMapViewer().repaint();
+//					Layer.getMapViewer().rrrr();
 //				}				
 			}
 			double max=0;

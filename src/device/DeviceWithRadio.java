@@ -27,6 +27,7 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -255,7 +256,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		System.out.println();
 	}
 	
-	public void drawRadioLinks2(Graphics g) {
+	public void drawRadioLinks2(Graphics g, int type) {
 		numberOfNeighbors = 0;
 		//for(SensorNode sensor : DeviceList.sensors) {
 		for(int i=0; i<DeviceList.sensors.size(); i++) {
@@ -272,14 +273,23 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		}
 	}
 	
-	public void drawRadioLinks(int k1, Graphics g) {
+	protected HashSet<DeviceWithRadio> senders = new HashSet<DeviceWithRadio>();
+	
+	@Override
+	public void drawRadioLinks(Graphics g, int type) {
 		numberOfNeighbors = 0;
 		//for(SensorNode sensor : DeviceList.sensors) {
 		for(int i=0; i<DeviceList.sensors.size(); i++) {
 			SensorNode sensor = DeviceList.sensors.get(i);
 			if(this!=sensor) {
 				if(radioDetect(sensor) && !isDead() && !sensor.isDead()) {
-					drawRadioLink(sensor, g, 1);
+					if(senders.contains(sensor)) {
+						drawRadioLink(sensor, g, 3);
+						sensor.drawRadioLinkArrows(this, g, 1); 
+					}
+					else
+						drawRadioLink(sensor, g, type);
+					
 					numberOfNeighbors++;
 					if (NetworkParameters.displayRLDistance) {
 						MapLayer.drawDistance(longitude, latitude, elevation, sensor.getLongitude(), sensor.getLatitude(), sensor.getElevation(), g);
@@ -289,18 +299,20 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		}
 	}
 	
-	public void drawRadioLinkArrows(Graphics g) {
+	
+	public void drawRadioLinkArrows(Graphics g, int aType) {//arrowType:petit grand ...
 		//for(SensorNode sensor : DeviceList.sensors) {
 		for(int i=0; i<DeviceList.sensors.size(); i++) {
 			SensorNode sensor = DeviceList.sensors.get(i);
 			if(this!=sensor) {
 				if(radioDetect(sensor) && !isDead() && !sensor.isDead()) {
-					drawRadioLinkArrows(sensor, g, 1);
+					drawRadioLinkArrows(sensor, g, aType);
 				}
 			}
 		}
 	}
 	
+	@Override
 	public void drawRadioPropagations(Graphics g) {
 		SensorNode sensor;
 		for(int i=0; i<neighbors.size(); i++) {
@@ -321,7 +333,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 *            Graphics
 	 */
 	public void drawRadioLink(Device device, Graphics g, int type) {				
-		if(NetworkParameters.drawRadioLinks) {
+		if(NetworkParameters.drawRadioLinks || type>0) {
 			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int lx1 = coord[0];
 			int ly1 = coord[1];
@@ -333,11 +345,19 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			
 			Graphics2D g2 = (Graphics2D) g;
 			
-			Stroke line = new BasicStroke(NetworkParameters.linkWidth);	//0.3
-			//if(type==1)
-			//	dashed = new BasicStroke(1.5f);
-				//dashed = new BasicStroke(0.3f);
-			//dashed = new BasicStroke(0.6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{3,3}, 0);
+			Stroke line = null ; 
+			if(type==0)
+				line = new BasicStroke(NetworkParameters.linkWidth);
+			if(type==1)
+				line = new BasicStroke(0.5f);
+			if(type==2)
+				line = new BasicStroke(2f);
+			if(type==3) {
+				g.setColor(Color.red);
+				line = new BasicStroke(3f);
+			}
+			if(type==4)
+				line = new BasicStroke(0.6f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{3,3}, 0);
 				
 	        g2.setStroke(line);
 			g2.drawLine(lx1, ly1, lx2, ly2);
@@ -353,7 +373,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	 *            Graphics
 	 */
 	public void drawRadioLinkArrows(Device device, Graphics g, int type) {
-		if(NetworkParameters.drawRadioLinks) {	
+		if(NetworkParameters.drawRadioLinks || type>0) {	
 			int[] coord = MapCalc.geoToPixelMapA(latitude, longitude);
 			int lx1 = coord[0];
 			int ly1 = coord[1];
@@ -377,7 +397,11 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 				dy = ly2 - ly1;
 				alpha = Math.atan(dy / dx);
 				alpha = 180 * alpha / Math.PI;
+				
 				int as = 11;
+				if(type==1) {as = 16; g.setColor(Color.red);}
+				if(type==2) {as = 20; g.setColor(Color.red);}
+				
 				if (dx >= 0)	
 					g.fillArc((int) lx2 - as, (int) ly2 - as, as*2, as*2,180 - (int) alpha - as, as*2);
 				else
@@ -484,6 +508,14 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		return this.getCurrentRadioModule().getTransmitPower();
 	}
 
+	public int getTextXPosition() {
+		return 10;
+	}
+	
+	public int getTextYPosition() {
+		return 0;
+	}
+	
 	public void setTransmitPower(double transmitPower) {
 		this.getCurrentRadioModule().setTransmitPower(transmitPower);
 	}
@@ -503,13 +535,14 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		if (NetworkParameters.displayDetails) {
 			g.setColor(UColor.PURPLE);
 			if(MapLayer.dark) g.setColor(new Color(198,232,106));
-			g.drawString(getName()+" ["+currentRadioModule.getMy()+"]", (int) (x + 10), (int) (y + 5));			
+			
+			g.drawString(getName()+" ["+currentRadioModule.getMy()+"]", (int) (x + getTextXPosition()), (int) (y + getTextYPosition()+5));			
 		}
 		
 		if(!scriptFileName.equals("") && NetworkParameters.drawScriptFileName) {
 			g.setColor(Color.DARK_GRAY);
 			if(MapLayer.dark) g.setColor(Color.LIGHT_GRAY);
-			g.drawString(scriptFileName.substring(0, scriptFileName.indexOf('.')), (int) (x + 10), (int) (y - 6));
+			g.drawString(scriptFileName.substring(0, scriptFileName.lastIndexOf('.')), (int) (x + getTextXPosition()), (int) (y - getTextYPosition()-6));
 			
 //			g.drawString("S : "+this.isSending(), (int) (x + 10), (int) (y + 26));
 //			g.drawString("R : "+this.isReceiving(), (int) (x + 10), (int) (y + 36));
@@ -521,10 +554,10 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			g.setColor(new Color(28,64,123));
 			if(MapLayer.dark) g.setColor(new Color(116,186,209));
 			if(!message.equals("")) {				
-				g.drawString(message, (int) (x + 10), (int) (y + 15));
+				g.drawString(message, (int) (x + getTextXPosition()), (int) (y + getTextXPosition() + 15));
 			}
 			else
-				g.drawString(">", (int) (x + 10), (int) (y + 15));
+				g.drawString(">", (int) (x + getTextYPosition()), (int) (y + getTextYPosition() + 15));
 		}
 	}
 	

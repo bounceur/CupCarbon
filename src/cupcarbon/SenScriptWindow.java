@@ -12,7 +12,7 @@ public class SenScriptWindow {
 
 	public SenScriptWindow() throws IOException {
 		Stage stage = new Stage();
-		stage.setTitle("SenScript");
+		stage.setTitle("SenScript Editor");
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(SenScriptWindow.class.getResource("senscript.fxml"));
 		BorderPane panneau = (BorderPane) loader.load();

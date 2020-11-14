@@ -54,7 +54,7 @@ public class Command_SET extends Command {
 		WisenSimulation.simLog.add("S" + sensor.getId() + " SET " + arg1 + "=" + arg2);
 		String[] match={"(", ")", "+", "-", "*", "/", "%", "^"};
 		int i = 0;
-		while (!contained && i< match.length) {
+		while (!contained && i<match.length) {
 			if (arg2.contains(match[i]))
 					contained = true;
 			i=i+1;

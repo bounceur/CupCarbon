@@ -130,9 +130,8 @@ public abstract class MobileWithRadio extends MobileGWR {
 	public void loadScript() {}
 
 	@Override
-	public void execute() {
-		// TODO Auto-generated method stub
-		
+	public int execute() {
+		return 0;
 	}
 
 	@Override

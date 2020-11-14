@@ -18,7 +18,7 @@ public class CupCarbonConsoleStream extends OutputStream {
     public void write(int v) throws IOException {
     	Platform.runLater( () -> {
 			if(v=='\n') {
-				if(x++ > 100) {
+				if(x++ > 1000) {
     				x=0;
     				textArea.clear();
     			}

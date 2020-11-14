@@ -105,7 +105,7 @@ public abstract class MobileGWR extends DeviceWithRadio {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				Layer.getMapViewer().repaint();
+				Layer.getMapViewer().rrrr();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -151,7 +151,7 @@ public abstract class MobileGWR extends DeviceWithRadio {
 					System.out.println((int) MapCalc.distance(x, y, x2, y2));
 					totalDistance += MapCalc.distance(x, y, x2, y2);
 				}
-				Layer.getMapViewer().repaint();
+				Layer.getMapViewer().rrrrr();
 				try {
 					Thread.sleep(400);
 				} catch (InterruptedException e) {
@@ -161,7 +161,7 @@ public abstract class MobileGWR extends DeviceWithRadio {
 			System.out.println("-----------------");
 			System.out.println(totalDistance);
 			JOptionPane.showMessageDialog(new JFrame(), "" + totalDistance);
-			Layer.getMapViewer().repaint();
+			Layer.getMapViewer().rrrrr();
 			underSimulation = false;
 			thread = null;
 			b.close();

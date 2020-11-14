@@ -1,6 +1,7 @@
 package senscript;
 
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 import device.SensorNode;
@@ -8,16 +9,46 @@ import device.SensorNode;
 public final class SenScriptAddCommand {
 
 	public static Stack<String> endof = new Stack<String>();
-	
+		
 	public static String detectKeyWord(String s) {
 		if(!s.startsWith("set "))
 			return s.replaceFirst("\\(", " (");
 		return s;
 	}
 	
+	public static String [] argSplit(String v) {
+		//System.out.println(v);
+		ArrayList<String> t = new ArrayList<String>();
+		while(!v.isEmpty()) {
+			//System.out.println("----> "+v);
+			String s = "";
+			v = v.trim();
+			if(v.charAt(0)=='\"') {
+				s = v.substring(0, v.substring(1).indexOf('\"')+2);
+				v = v.substring(s.length());
+			}
+			else {
+				s = v.split(" ")[0];
+				if(v.split(" ").length>1)
+					v = v.substring(s.length()+1);
+				else
+					v = "";
+			}
+			t.add(s);
+		}
+		String [] r = new String [t.size()];
+		int i = 0;
+		for(String e : t) {
+			r[i++] = e;
+		}
+		//System.out.println("------");
+		return r;
+	}
+	
 	public static void addCommand(String instStr, SensorNode sensorNode, SenScript script) {
 		instStr = detectKeyWord(instStr);
-		String[] inst = instStr.split(" ");
+		//String[] inst = instStr.split(" ");
+		String[] inst = argSplit(instStr);
 		
 		if(inst[0].split(":").length>1) {
 			sensorNode.getScript().addLabel(inst[0].split(":")[0], sensorNode.getScript().size()+1);			
@@ -222,6 +253,12 @@ public final class SenScriptAddCommand {
 		if (inst[0].toLowerCase().equals("getpos2")) {
 			command = new Command_GETPOS2(sensorNode, inst[1], inst[2]);
 		}
+		if (inst[0].toLowerCase().equals("getx")) {
+			command = new Command_GETX(sensorNode, inst[1]);
+		}
+		if (inst[0].toLowerCase().equals("gety")) {
+			command = new Command_GETY(sensorNode, inst[1]);
+		}
 		if (inst[0].toLowerCase().equals("buffer")) {
 			command = new Command_BUFFER(sensorNode, inst[1]);
 		}
@@ -421,8 +458,6 @@ public final class SenScriptAddCommand {
 			command.setCurrentWhile(script.getCurrentWhile());
 			command.setCurrentFor(script.getCurrentFor());
 		}
-		
-		
 	}
 	
 }

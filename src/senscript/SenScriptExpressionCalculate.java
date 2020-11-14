@@ -20,7 +20,7 @@ public class SenScriptExpressionCalculate {
 	private void processOperator(SensorNode sensor, SenScriptToken token) {
 		SenScriptToken arg1 = null, arg2 = null;
 		if (argumentStack.isEmpty()) {
-			System.out.println("Expression error");
+			System.out.println("Expression error 1");
 			error = true;
 			return;
 		} else {
@@ -28,13 +28,14 @@ public class SenScriptExpressionCalculate {
 			argumentStack.pop();
 		}
 		if (argumentStack.isEmpty()) {
-			System.out.println("Expression error");
+			System.out.println("Expression error 2");
 			error = true;
 			return;
 		} else {
 			arg1 = argumentStack.top();
 			argumentStack.pop();
 		}
+		
 		SenScriptToken result = token.operation(sensor, arg1.getValue(), arg2.getValue());
 		argumentStack.push(result);
 	}
@@ -52,7 +53,8 @@ public class SenScriptExpressionCalculate {
 
 		while (st.hasMoreTokens()) {
 			currentToken = st.nextToken();
-			if (currentToken.contains("$")) {
+			//if (currentToken.contains("$")) {
+			if (currentToken.startsWith("$") || currentToken.matches("\\p{Alnum}")) {
 				if (!operandToken.isEmpty() && !operandToken.matches(".*\\d.*")) {
 					operandToken = operandToken + "1";
 					tokens.add(new SenScriptToken(operandToken));
@@ -65,34 +67,41 @@ public class SenScriptExpressionCalculate {
 				}
 				operandToken = operandToken + sensor.getScript().getVariableValue(currentToken).trim();
 				operand = true;
-			} else if (currentToken.equals("(")) {
-				if (!operandToken.isEmpty() && !operandToken.matches(".*\\d.*")) {
-					operandToken = operandToken + "1";
-					tokens.add(new SenScriptToken(operandToken));
-					tokens.add(new SenScriptToken("*"));
-				}
-				tokens.add(new SenScriptToken(currentToken));
-				operandToken = "";
-			} else if (operand) {
-				if (Character.isDigit(currentToken.charAt(0)))
-					operandToken += currentToken;
-				else if (currentToken.equals(")")) {
-					if (!operandToken.isEmpty())
+			} 
+			else 
+				if (currentToken.equals("(")) {
+					if (!operandToken.isEmpty() && !operandToken.matches(".*\\d.*")) {
+						operandToken = operandToken + "1";
 						tokens.add(new SenScriptToken(operandToken));
+						tokens.add(new SenScriptToken("*"));
+					}
 					tokens.add(new SenScriptToken(currentToken));
 					operandToken = "";
-				} else {
-					if (!operandToken.isEmpty())
-						tokens.add(new SenScriptToken(operandToken));
-					tokens.add(new SenScriptToken(currentToken));
-					operandToken = "";
-					operand = false;
-				}
-			} else {
-				if (Character.isDigit(currentToken.charAt(0)))
-					operand = true;
-				operandToken += currentToken;
-			}
+				} 
+				else 
+					if (operand) {
+						if (Character.isDigit(currentToken.charAt(0)))
+							operandToken += currentToken;
+						else 
+							if (currentToken.equals(")")) {
+								if (!operandToken.isEmpty())
+									tokens.add(new SenScriptToken(operandToken));
+								tokens.add(new SenScriptToken(currentToken));
+								operandToken = "";
+							} 
+							else {
+								if (!operandToken.isEmpty())
+									tokens.add(new SenScriptToken(operandToken));
+								tokens.add(new SenScriptToken(currentToken));
+								operandToken = "";
+								operand = false;
+							}
+					} 
+					else {
+						if (Character.isDigit(currentToken.charAt(0)))
+							operand = true;
+						operandToken += currentToken;
+					}
 		}
 		if (!operandToken.isEmpty())
 			tokens.add(new SenScriptToken(operandToken));
@@ -142,12 +151,12 @@ public class SenScriptExpressionCalculate {
 			SenScriptToken result = argumentStack.top();
 			argumentStack.pop();
 			if (!operatorStack.isEmpty() || !argumentStack.isEmpty()) {
-				return "Expression error";
+				return "Expression error 3";
 			} else {
 				script = " " + result.getValue();
 				return script;
 			}
 		}
-		return "Expression error";
+		return "Expression error 4";
 	}
 }

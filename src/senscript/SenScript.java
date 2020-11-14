@@ -164,7 +164,7 @@ public class SenScript {
 		variables.put(var, s);
 	}
 	
-	public String getVariableValue(String arg) {
+	public String getVariableValue2(String arg) {
 		if (arg.equals("\\"))
 			return "";
 		if (arg.equals(""))
@@ -172,6 +172,37 @@ public class SenScript {
 		if(arg.charAt(0)=='$')
 			return variables.get(arg.substring(1));
 		return arg;
+	}
+	
+	public String getVariableValue(String arg) {
+		if(arg.charAt(0)=='\"') {
+			return arg.substring(1, arg.lastIndexOf('\"'));
+		}
+		
+		if (arg.equals("\\"))
+			return "";
+		
+		if (arg.equals(""))
+			return "";
+		
+		if(arg.charAt(0)=='$') {
+			return variables.get(arg.substring(1));
+		}
+		
+		if(isNumeric(arg))
+			return arg;
+		
+		return variables.get(arg);
+	}
+	
+	public boolean isNumeric(String arg) {
+		try {
+			double d = Double.parseDouble(arg);
+			return true;
+		}
+		catch(Exception e) {
+			return false;
+		}
 	}
 	
 	public void variablesToValues(String [] args) {

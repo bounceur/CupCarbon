@@ -49,31 +49,31 @@ public class SenScriptController implements Initializable{
 	@FXML
 	private void example1_2Com() {
 		zone.clear();
-		zone.replaceSelection("//Transmitter\natget id id\nloop\ndata p $id A\nsend $p\ndelay 1000\ndata p $id B\nsend $p\ndelay 1000");
+		zone.replaceSelection("//Transmitter\natget id id\nloop\ndata p id A\nsend p\ndelay 1000\ndata p id B\nsend p\ndelay 1000");
 	}
 	
 	@FXML
 	private void example2_1Com() {
 		zone.clear();
-		zone.replaceSelection("//Router\nloop\nwait\nread v\nsend $v 2");
+		zone.replaceSelection("//Router\nloop\nwait\nread v\nsend v 2");
 	}
 	
 	@FXML
 	private void example2_2Com() {
 		zone.clear();
-		zone.replaceSelection("//Router\natget id id\nloop\nwait\nread rp\nrdata $rp rid v\ndata p $id $v\nsend $p * $rid");
+		zone.replaceSelection("//Router\natget id id\nloop\nwait\nread rp\nrdata rp rid v\ndata p id v\nsend p * rid");
 	}
 	
 	@FXML
 	private void example3_1Com() {
 		zone.clear();
-		zone.replaceSelection("//Receiver\nloop\nwait\nread v\nmark $v");
+		zone.replaceSelection("//Receiver\nloop\nwait\nread v\nmark v");
 	}
 	
 	@FXML
 	private void example3_2Com() {
 		zone.clear();
-		zone.replaceSelection("//Receiver\nloop\nwait\nread rp\nrdata $rp rid v\nif($v==A)\n  mark 1\nelse\n  mark 0\nend");
+		zone.replaceSelection("//Receiver\nloop\nwait\nread rp\nrdata rp rid v\nif(v==A)\n  mark 1\nelse\n  mark 0\nend");
 	}
 	
 	@FXML

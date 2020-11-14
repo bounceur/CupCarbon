@@ -152,7 +152,7 @@ public class NetworkEnvelopeP extends Thread {
 //		DeviceList.getNodes().get(imin).setAlgoSelect(true);
 //		DeviceList.getNodes().get(imin).setVisited(true);
 //		DeviceList.envelope.add(imin);		
-//		Layer.getMapViewer().repaint();
+//		Layer.getMapViewer().rrrrr();
 //		
 //		
 //		for(int i=0; i<DeviceList.getNodes().size()-2; i++) {
@@ -172,7 +172,7 @@ public class NetworkEnvelopeP extends Thread {
 //			}
 //			DeviceList.getNodes().get(imin).setAlgoSelect(true);
 //			DeviceList.getNodes().get(imin).setVisited(true);			
-//			Layer.getMapViewer().repaint();
+//			Layer.getMapViewer().rrrrr();
 //			envelope.add(imin);
 //		}
 		

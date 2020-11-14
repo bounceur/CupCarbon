@@ -116,8 +116,10 @@ public class NetworkLoader extends Thread {
 				}
 				DeviceList.add(new StdSensorNode(x, y, z, 0, 30, 10, info, -1));
 				//MarkerList.add(new Marker(x,y,10));
-				//Layer.getMapViewer().repaint();
+				//Layer.getMapViewer().rrrrr();
+				
 				mapViewer.repaint();
+				
 				//sleep(500);
 			}
 			br.close();

@@ -175,11 +175,12 @@ public class Weather extends MobileG {
 	}
 
 	@Override
-	public void execute() {
+	public int execute() {
+		return 0;
 	}
 
 	@Override
-	public void drawRadioLinks(int k, Graphics g) {
+	public void drawRadioLinks(Graphics g, int type) {
 	}
 
 	@Override
@@ -342,6 +343,14 @@ public class Weather extends MobileG {
 				valueIndex = 1;
 			}
 		}
+	}
+	
+	public void drawMarked(Graphics g) {}
+
+	@Override
+	public String startingName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

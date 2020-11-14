@@ -20,20 +20,6 @@ import visibility.VisibilityZones;
 
 public abstract class MapObject implements Runnable, Cloneable {
 
-	public static final int NONE = 0;
-	public static final int SENSOR = 1;
-	public static final int GAS = 2;
-	public static final int FLYING_OBJECT = 3;
-	public static final int BASE_STATION = 4;
-	public static final int DIRECTIONAL_SENSOR = 5;
-	public static final int MOBILE = 6;
-	public static final int WEATHER = 7;
-	public static final int MARKER = 8;
-	public static final int VERTEX = 9;
-	public static final int BUILDING = 10;
-	public static final int GEOZONE = 11;
-	public static final int RSENSOR = 12;
-	
 	protected int id = 0;
 	protected String userId = "";
 	protected double longitude, latitude, elevation;
@@ -404,7 +390,7 @@ public abstract class MapObject implements Runnable, Cloneable {
 					break;
 				case "device_draw_battery":
 					System.out.println("Device draw battery is: " + str[1]);
-					break;								
+					break;
 				}
 			}
 			br.close();
@@ -585,19 +571,19 @@ public abstract class MapObject implements Runnable, Cloneable {
 					line = br.readLine();
 					deviceType = Integer.parseInt(line.split(":")[1]);					
 					switch (deviceType) {
-					case MapObject.SENSOR:
+					case Device.SENSOR:
 						listSensorParameters(nodeFiles[i].getAbsolutePath());						
 						break;
-					case MapObject.GAS:						
+					case Device.GAS:						
 						listGasParameters(nodeFiles[i].getAbsolutePath());						
 						break;
-					case MapObject.BASE_STATION:
+					case Device.BASE_STATION:
 						listSensorParameters(nodeFiles[i].getAbsolutePath());						
 						break;
-					case MapObject.DIRECTIONAL_SENSOR:
+					case Device.DIRECTIONAL_SENSOR:
 						listSensorParameters(nodeFiles[i].getAbsolutePath());						
 						break;
-					case MapObject.MOBILE:						
+					case Device.MOBILE:						
 						listMobileparameters(nodeFiles[i].getAbsolutePath());
 						break;
 					}

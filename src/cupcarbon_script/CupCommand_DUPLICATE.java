@@ -47,7 +47,6 @@ import java.util.List;
 
 import device.Device;
 import device.DeviceList;
-import device.MapObject;
 import device.SensorNode;
 
 
@@ -119,7 +118,7 @@ public class CupCommand_DUPLICATE extends CupCommand {
 				break;
 			case ("devices") : 
 				for(int i=0; i<sObjects.size();i++) {
-					if ((DeviceList.getNodeByName(sObjects.get(i)).getType() == MapObject.GAS) || (DeviceList.getNodeByName(sObjects.get(i)).getType() == MapObject.MOBILE))
+					if ((DeviceList.getNodeByName(sObjects.get(i)).getType() == Device.GAS) || (DeviceList.getNodeByName(sObjects.get(i)).getType() == Device.MOBILE))
 						DeviceList.add(DeviceList.getNodeByName(sObjects.get(i)).duplicateWithShift(0.0002,0.0002,0));
 					else
 						DeviceList.add((SensorNode) DeviceList.getNodeByName(sObjects.get(i)).duplicateWithShift(0.0002,0.0002,0));

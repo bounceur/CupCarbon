@@ -7,7 +7,6 @@ import simulation.WisenSimulation;
 
 public class Command_CPRINT extends Command {
 
-	private String message = "";
 	protected String [] arg ;
 	
 	public Command_CPRINT(SensorNode sensor, String [] arg) {
@@ -19,7 +18,7 @@ public class Command_CPRINT extends Command {
 	public double execute() {
 		WisenSimulation.simLog.add("S" + sensor.getId() + " CPRINT "+Arrays.toString(arg));		
 		String part = "";
-		message = "";
+		String message = "";
 		for (int i=1; i<arg.length; i++) {
 			part = sensor.getScript().getVariableValue(arg[i]);
 			message += part + " ";

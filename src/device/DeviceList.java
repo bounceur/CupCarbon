@@ -35,6 +35,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
+
 import action.CupAction;
 import action.CupActionAddSensor;
 import action.CupActionBlock;
@@ -84,6 +86,7 @@ public class DeviceList {
 		devices = new Vector<Device>();
 		drawLinks = true;
 		hulls = new LinkedList<LinkedList<Integer>>();
+		markedEdges.removeAll(markedEdges);
 		markedEdges = new Vector<SNEdge>();
 		DeviceList.propagationsCalculated = false;
 	}
@@ -125,6 +128,18 @@ public class DeviceList {
 	}
 	
 	/**
+	 * @return a iotNode by its id
+	 */
+	public static IoTNode getIoTNodeById(int id) {		
+		for (SensorNode iotNode : sensors) {
+			if(iotNode.getType()==Device.IOT) {
+				if(iotNode.getId() == id) return (IoTNode) iotNode;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * @return a sensor node by its my
 	 */
 	public static SensorNode getSensorNodeByMy(int my) {		
@@ -134,17 +149,7 @@ public class DeviceList {
 		return null;
 	}
 	
-	/**
-	 * @return the sensor and mobile nodes
-	 */
-	public static List<Device> getSensorAndMobileNodes() {
-		List<Device> nodes = new ArrayList<Device>();
-		for(Device node : nodes) {
-			if((node.getType() == Device.SENSOR) || node.getType() == Device.DIRECTIONAL_SENSOR || (node.getType() == Device.MOBILE))
-				nodes.add((SensorNode) node);
-		}
-		return nodes;
-	}
+
 	
 	/**
 	 * @return the mobile nodes
@@ -168,6 +173,18 @@ public class DeviceList {
 				snodes.add(sensor);
 		}
 		return snodes;
+	}
+	
+	/**
+	 * @return the IoT nodes
+	 */
+	public static List<IoTNode> getIoTNodes() {
+		List<IoTNode> nodes = new ArrayList<IoTNode>();
+		for(SensorNode sensor : sensors) {
+			if(sensor.getType() == Device.IOT)
+				nodes.add((IoTNode) sensor);
+		}
+		return nodes;
 	}
 
 	/**
@@ -206,26 +223,32 @@ public class DeviceList {
 					line = br.readLine();
 					deviceType = Integer.parseInt(line.split(":")[1]);					
 					switch (deviceType) {
-					case MapObject.SENSOR:
+					case Device.SENSOR:
 						sensor = loadSensor(nodeFiles[i].getAbsolutePath());
 						add(sensor);
 						break;
-					case MapObject.GAS:						
+					case Device.GAS:						
 						add(loadGas(nodeFiles[i].getAbsolutePath()));
 						break;
-					case MapObject.BASE_STATION:
+					case Device.BASE_STATION:
 						sensor = loadBaseStation(nodeFiles[i].getAbsolutePath());												
 						add(sensor);
 						break;
-					case MapObject.DIRECTIONAL_SENSOR:
+					case Device.DIRECTIONAL_SENSOR:
 						sensor = loadDirectionalSensor(nodeFiles[i].getAbsolutePath());
 						add(sensor);
 						break;
-					case MapObject.MOBILE:						
+					case Device.MOBILE:						
 						add(loadMobile(nodeFiles[i].getAbsolutePath()));
 						break;
-					case MapObject.WEATHER:						
+					case Device.WEATHER:						
 						add(loadWeather(nodeFiles[i].getAbsolutePath()));
+						break;
+					case Device.IOT:						
+						add(loadIoTNode(nodeFiles[i].getAbsolutePath()));
+						break;
+					case Device.RIOT:						
+						add(loadIoTRNode(nodeFiles[i].getAbsolutePath()));
 						break;
 					}
 					int v = Integer.valueOf(nodeFiles[i].getName().split("_")[1]);
@@ -370,6 +393,128 @@ public class DeviceList {
 		}
 		openRadioModule(Project.getProjectRadioPath()+File.separator+"directionalsensor_"+sensor.getId(), sensor);
 		return sensor;
+	}
+	
+	public static IoTNode loadIoTNode(String fileName) {
+		IoTNode iotNode = null;
+		try {
+			String[] str = null;
+			String line;
+			String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			line = br.readLine();
+			line = br.readLine();
+			line = br.readLine();			
+			while ((line = br.readLine()) != null) {
+				str = line.split(":");
+				switch (str[0]) {
+				case "device_longitude":
+					parameters[0] = str[1];
+					break;
+				case "device_latitude":
+					parameters[1] = str[1];
+					break;
+				case "device_elevation":
+					parameters[2] = str[1];
+					break;
+				case "device_radius":
+					parameters[3] = str[1];
+					break;
+				case "device_sensor_unit_radius":
+					parameters[4] = str[1];
+					break;
+				case "device_gps_file_name":
+					parameters[5] = str[1];
+					break;
+				case "device_script_file_name":
+					parameters[6] = str[1];
+					break;
+				case "device_type":
+					parameters[7] = str[1];
+					break;
+				case "device_id":
+					parameters[8] = str[1];
+					break;
+				case "device_hide":
+					parameters[9] = str[1];
+					break;
+				case "device_draw_battery":
+					parameters[10] = str[1];
+					break;				
+				}
+			}
+			iotNode = new IoTNode(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6]);
+			iotNode.setHide(Integer.parseInt(parameters[9]));
+			iotNode.setDrawBatteryLevel(Boolean.parseBoolean(parameters[10]));
+			br.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		openRadioModule(Project.getProjectRadioPath()+File.separator+"iot_"+iotNode.getId(), iotNode);
+		return iotNode;
+	}
+	
+	public static IoTRNode loadIoTRNode(String fileName) {
+		IoTRNode iotRNode = null;
+		try {
+			String[] str = null;
+			String line;
+			String [] parameters = {"","","","","","","","","","","","","","","","","","","",""};
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			line = br.readLine();
+			line = br.readLine();
+			line = br.readLine();			
+			while ((line = br.readLine()) != null) {
+				str = line.split(":");
+				switch (str[0]) {
+				case "device_longitude":
+					parameters[0] = str[1];
+					break;
+				case "device_latitude":
+					parameters[1] = str[1];
+					break;
+				case "device_elevation":
+					parameters[2] = str[1];
+					break;
+				case "device_radius":
+					parameters[3] = str[1];
+					break;
+				case "device_sensor_unit_radius":
+					parameters[4] = str[1];
+					break;
+				case "device_gps_file_name":
+					parameters[5] = str[1];
+					break;
+				case "device_script_file_name":
+					parameters[6] = str[1];
+					break;
+				case "device_type":
+					parameters[7] = str[1];
+					break;
+				case "device_id":
+					parameters[8] = str[1];
+					break;
+				case "device_hide":
+					parameters[9] = str[1];
+					break;
+				case "device_draw_battery":
+					parameters[10] = str[1];
+					break;				
+				}
+			}
+			iotRNode = new IoTRNode(parameters[8], parameters[0], parameters[1], parameters[2], parameters[3], "0", parameters[4], parameters[5], parameters[6]);
+			iotRNode.setHide(Integer.parseInt(parameters[9]));
+			iotRNode.setDrawBatteryLevel(Boolean.parseBoolean(parameters[10]));
+			br.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		openRadioModule(Project.getProjectRadioPath()+File.separator+iotRNode.startingName()+"_"+iotRNode.getId(), iotRNode);
+		return iotRNode;
 	}
 	
 	public static SensorNode loadBaseStation(String fileName) {
@@ -720,6 +865,17 @@ public class DeviceList {
 	public static int getSize() {
 		return sensors.size()+devices.size();
 	}
+	
+	/**
+	 * @return the number of the nodes
+	 */
+	public static int getIoTNodeSize() {
+		int n = 0;
+		for(SensorNode sensor : sensors) {
+			if(sensor.getType()==Device.IOT) n++;
+		}
+		return n;
+	}
 
 	/**
 	 * Create a node from a set of values (table type)
@@ -776,7 +932,7 @@ public class DeviceList {
 	 * @param g
 	 *            Graphics
 	 */
-	public void draw(Graphics g) {
+	public void draw(Graphics g, int type, int aType) {
 		SensorNode sensor = null;
 		for (int i=0; i<sensors.size(); i++) {
 			sensor = sensors.get(i);
@@ -791,16 +947,7 @@ public class DeviceList {
 		for (int i=0; i<sensors.size(); i++) {
 			sensors.get(i).drawSensorUnit(g);
 		}
-
-		int k1=0;
-		for (int i=0; i<sensors.size(); i++) {
-			if(propagationsCalculated)
-				sensors.get(i).drawRadioPropagations(g);
-			else
-				sensors.get(i).drawRadioLinks(k1, g);
-			k1++;
-		}
-
+		
 		for (int i=0; i<sensors.size(); i++) {
 			sensor = sensors.get(i);		
 			sensor.drawMarked(g);
@@ -830,7 +977,14 @@ public class DeviceList {
 		}
 		
 		for (int i=0; i<sensors.size(); i++) {
-			sensors.get(i).drawRadioLinkArrows(g);
+			if(propagationsCalculated)
+				sensors.get(i).drawRadioPropagations(g);
+			else
+				sensors.get(i).drawRadioLinks(g, type);
+		}
+		
+		for (int i=0; i<sensors.size(); i++) {
+			sensors.get(i).drawRadioLinkArrows(g, aType);
 		}
 		
 		MultiChannels.drawChannelLinks(g);
@@ -932,7 +1086,7 @@ public class DeviceList {
 		Device node;
 		for (Iterator<Device> iterator = devices.iterator(); iterator.hasNext();) {
 			node = iterator.next();
-			if (node.getType() == MapObject.MOBILE) {
+			if (node.getType() == Device.MOBILE) {
 				//MapLayer.mapViewer.removeMouseListener(node);
 				//MapLayer.mapViewer.removeMouseMotionListener(node);
 				//MapLayer.mapViewer.removeKeyListener(node);
@@ -1869,6 +2023,13 @@ public class DeviceList {
 			MapLayer.repaint();
 		}
 		
+	}
+	
+	public static void initBrokers() throws MqttException {
+		for(SensorNode sensor : sensors) {
+			if(sensor instanceof IoTNode)
+				((IoTNode) sensor).initBroker();
+		}
 	}
 		
 }

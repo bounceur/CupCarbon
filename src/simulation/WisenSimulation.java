@@ -35,23 +35,21 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 import cupcarbon.CupCarbon;
-import device.MessageEventList;
 import device.Device;
 import device.DeviceList;
+import device.MessageEventList;
 import device.MultiChannels;
 import device.SensorNode;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import map.MapLayer;
-import markers.Routes;
 import project.Project;
 
 public class WisenSimulation implements Runnable {
 	
 	public static double time = 0.0;
 	public static double sTime = 0.0;
-	public static boolean isSimulating = false;
 			
 	public static double resultsWritingTime = 0.0;  // The time in seconds, of writing the battery level in the results csv file 
 	
@@ -90,8 +88,10 @@ public class WisenSimulation implements Runnable {
 	}
 
 	public void start_simulation() {
+		MapLayer.showInfos = false;
+		MapLayer.repaint();
 		DeviceList.initAll();
-		Routes.loadRoutes();
+		//Routes.loadRoutes();
 		resultsWritingTime = 0.0;
 		
 		simLog = new SimLog();
@@ -185,7 +185,7 @@ public class WisenSimulation implements Runnable {
 			//--------> Loop - Simulation starts here
 			while (time <= SimulationInputs.simulationTime) {
 				
-				isSimulating = true;
+				Simulation.setSimulating(true);
 				
 				if (min == Double.MAX_VALUE) {
 					System.out.println("Infinite WAITs!");
@@ -193,7 +193,7 @@ public class WisenSimulation implements Runnable {
 						@Override
 						public void run() {
 							updateButtons();
-							isSimulating = false;
+							Simulation.setSimulating(false) ;
 							Alert alert = new Alert(AlertType.INFORMATION);
 							alert.setTitle("Simulation");
 							alert.setHeaderText(null);
@@ -215,7 +215,7 @@ public class WisenSimulation implements Runnable {
 						@Override
 						public void run() {
 							updateButtons();
-							isSimulating = false;
+							Simulation.setSimulating(false) ;
 							Alert alert = new Alert(AlertType.INFORMATION);
 							alert.setTitle("Simulation");
 							alert.setHeaderText(null);
@@ -250,7 +250,11 @@ public class WisenSimulation implements Runnable {
 				for (SensorNode sensor : DeviceList.sensors) {
 					if(!sensor.isDead()) {
 						consolPrint(sensor + " [" +sensor.getScript().getCurrent().toString()+"] - ");
-						sensor.execute();
+						int state = sensor.execute();
+						if(state==1) {
+							CupCarbon.cupCarbonController.displayShortErrMessage("Infinite loop on S"+sensor.getId());
+							break;
+						}
 						if ((min > sensor.getEvent()))
 							min = sensor.getEvent();	
 						if ((min > sensor.getLocEventTime()))
@@ -315,11 +319,18 @@ public class WisenSimulation implements Runnable {
 						moving = true;
 					}
 				}				
-				// min ready 
+				// min ready
+				//if(min==0) min = 1;
+				//System.out.println("----> " + min);
 				
+				/*System.out.println("min = " + min);
+				if (min == 0 ) {
+					isSimulating = false;
+					System.out.println("Next event is 0!");
+					break;
+				}*/
 				consolPrintln("");
 				if((min > 0) || (moving)) {
-					
 					if (generateResults && resultsWritingTime<=time) {
 						ps.print(time + ";");
 						for (SensorNode sensor : DeviceList.sensors) {
@@ -331,10 +342,8 @@ public class WisenSimulation implements Runnable {
 							resultsWritingTime += SimulationInputs.resultsWritingPeriod;
 						}
 					}
-										
 					consolPrintln("");
-					
-				}			
+				}		
 								
 				if(SimulationInputs.clockDrift) {
 					if ((timeEvt <= time)) {
@@ -393,7 +402,7 @@ public class WisenSimulation implements Runnable {
 					//CupCarbon.cupCarbonController.stlabel.textProperty().bind(new SimpleDoubleProperty(time *1.0/ SimulationInputs.simulationTime).asString());
 					//CupCarbon.cupCarbonController.stlabel.setText(""+(time *1.0/ SimulationInputs.simulationTime));
 				} catch(Exception e) {
-					isSimulating = false;
+					Simulation.setSimulating(false) ;
 					System.err.println("[CUPCARBO:Simulation] Simulation Progress: "+(time *1.0/ SimulationInputs.simulationTime));
 				}
 				
@@ -407,7 +416,7 @@ public class WisenSimulation implements Runnable {
 						Thread.sleep(d);
 					}
 					else {
-						isSimulating = false;
+						Simulation.setSimulating(false) ;
 						System.out.println("Infinite Times!");
 					}
 				}
@@ -417,13 +426,13 @@ public class WisenSimulation implements Runnable {
 			try {
 				CupCarbon.cupCarbonController.progress.setProgress(0.0);
 			} catch(Exception e) {
-				isSimulating = false;
+				Simulation.setSimulating(false) ;
 				System.err.println("[CUPCARBO:Simulation] Simulation Progress: 0");
 			}
 			simLog.close();
 			ps.close();		
 			MultiChannels.init();
-			isSimulating = false;
+			Simulation.setSimulating(false) ;
 			updateButtons();			
 		} 
 		catch (FileNotFoundException e) {e.printStackTrace();} 
@@ -434,9 +443,7 @@ public class WisenSimulation implements Runnable {
 		System.out.println("End of Simulation.");
 		System.out.println(((endTime - startTime) / 1000.) + " sec");
 		
-		
-		
-		isSimulating = false;
+		Simulation.setSimulating(false) ;
 		
 		Platform.runLater(() ->
 			CupCarbon.cupCarbonController.simulationTimeLabel.setText(String.format("RT = %4.4f s", ((endTime - startTime) / 1000.)))				
@@ -487,7 +494,7 @@ public class WisenSimulation implements Runnable {
 	public void stopSimulation() {
 		updateButtons();
 		MultiChannels.init();
-		isSimulating = false;
+		Simulation.setSimulating(false) ;
 		stopCondition = true;
 		MapLayer.repaint();
 	}

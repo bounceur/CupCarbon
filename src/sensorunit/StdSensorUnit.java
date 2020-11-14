@@ -32,7 +32,6 @@ import utilities.UColor;
 
 /**
  * @author Ahcene Bounceur
- * @author Lounis Massinissa
  * @version 1.0
  */
 public class StdSensorUnit extends SensorUnit {

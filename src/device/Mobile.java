@@ -150,11 +150,12 @@ public class Mobile extends MobileG {
 	}
 
 	@Override
-	public void execute() {
+	public int execute() {
+		return 0;
 	}
 
 	@Override
-	public void drawRadioLinks(int k, Graphics g) {
+	public void drawRadioLinks(Graphics g, int type) {
 	}
 	
 	@Override
@@ -243,4 +244,13 @@ public class Mobile extends MobileG {
 	
 	public double getNextValueTime() {return Double.MAX_VALUE;}
 	public void generateNextValue() {}
+	
+	@Override
+	public void drawMarked(Graphics g) {}
+
+	@Override
+	public String startingName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

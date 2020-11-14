@@ -1,10 +1,8 @@
 -------------------------------------------------------------------------------------
-Copyright (C) 2016-2020 CupCarbon
+Copyright (C) 2016-2021 CupCarbon
 -------------------------------------------------------------------------------------
-Laboratory Lab-STICC CNRS UMR 6285
--------------------------------------------------------------------------------------
-CupCarbon V 4.2 (U-ONE): A Smart City & IoT Wireless Sensor Network Simulator
-SenScript V 3.4
+CupCarbon V 5.0 (IoT): IoT Simulator
+SenScript V 5.0
 -------------------------------------------------------------------------------------
 www.cupcarbon.com
 -------------------------------------------------------------------------------------
@@ -22,13 +20,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -------------------------------------------------------------------------------------
 This is free software, and you are welcome to redistribute it
 under certain conditions; see <http://www.gnu.org/licenses/>.
--------------------------------------------------------------------------------------
-This project was funded by the French Agence Nationale de la Recherche ANR
-Years: 2014-2018
-REF: ANR-14-CE24-0017
--------------------------------------------------------------------------------------
-References:
-Lab-STICC: Ahcene Bounceur
-MMU: Mohammad Hammoudeh
-LIUPPA: Congduc Pham
 -------------------------------------------------------------------------------------

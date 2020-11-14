@@ -18,7 +18,9 @@ public class Command_MARK extends Command {
 		if(sensor.getScript().getVariableValue(arg)==null)
 			System.err.println("[CupCarbon ERROR] (File: "+ sensor.getScriptFileName()+") (S"+sensor.getId()+"): MARK function ("+arg+" is null)");
 		String args = sensor.getScript().getVariableValue(arg);
-		int n = 1-Integer.valueOf('1'-args.charAt(0));
+				
+		double n = Double.valueOf(args);
+
 		if(n==0) {
 			sensor.setMarked(false);
 			WisenSimulation.simLog.add("S" + sensor.getId() + " UNMARK");

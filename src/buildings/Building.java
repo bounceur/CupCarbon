@@ -160,7 +160,7 @@ public class Building implements MouseListener, KeyListener {
 	public void mouseClicked(MouseEvent arg) {
 		if(inside(arg.getX(),arg.getY())) {
 			selected = !selected;
-			MapLayer.repaint();
+			// ahcene MapLayer.repaint();
 		}
 	}
 

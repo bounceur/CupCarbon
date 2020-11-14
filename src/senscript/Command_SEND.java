@@ -115,7 +115,7 @@ public class Command_SEND extends Command {
 	// ---------------------------------------------------------------------------------------------------------------------
 	@Override
 	public double execute() {
-		if(sensor.getScript().getVariableValue(arg1)==null || sensor.getScript().getVariableValue(arg2)==null) {
+		if(sensor.getScript().getVariableValue(arg1)==null || (sensor.getScript().getVariableValue(arg2)==null && !arg2.equals("*"))) {
 			return 0;
 		}
 		//System.out.println("===================================");
@@ -129,6 +129,7 @@ public class Command_SEND extends Command {
 		}
 		String message = arg1;
 		message = sensor.getScript().getVariableValue(message);
+		//System.out.println(message);
 		int messageLength = message.length();
 		
 		// In ACK mode (SimulationInputs.ack = true)

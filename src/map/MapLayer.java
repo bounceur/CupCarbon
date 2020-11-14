@@ -42,6 +42,8 @@ import org.jdesktop.swingx.painter.Painter;
 import action.CupAction;
 import action.CupActionAddBuilding;
 import action.CupActionAddDevice;
+import action.CupActionAddIoTNode;
+import action.CupActionAddIoTRNode;
 import action.CupActionAddMarker;
 import action.CupActionAddSensor;
 import action.CupActionBlock;
@@ -51,8 +53,8 @@ import action.CupActionDeleteMarker;
 import action.CupActionDeleteSensor;
 import action.CupActionMapObjectMove;
 import action.CupActionModifDeviceRadius;
-import action.CupActionModifDirectionalSensorUnitDirection;
 import action.CupActionModifDirectionalSensorUnitCoverage;
+import action.CupActionModifDirectionalSensorUnitDirection;
 import action.CupActionModifRadioRadius;
 import action.CupActionModifSensorRadius;
 import action.CupActionModifSensorUnitRadius;
@@ -61,11 +63,12 @@ import buildings.Building;
 import buildings.BuildingList;
 import cupcarbon.CupCarbon;
 import device.BaseStation;
-import device.MessageEventList;
 import device.Device;
 import device.DeviceList;
-import device.MapObject;
 import device.DirectionalSensorNode;
+import device.IoTNode;
+import device.IoTRNode;
+import device.MessageEventList;
 import device.Mobile;
 import device.NetworkLoader;
 import device.SensorNode;
@@ -76,6 +79,7 @@ import markers.MarkerList;
 import markers.Routes;
 import natural_events.Gas;
 import natural_events.Weather;
+import simulation.Simulation;
 import simulation.SimulationInputs;
 import simulation.WisenSimulation;
 import utilities.MapCalc;
@@ -97,7 +101,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	public static int cadreY1 = 0;
 	public static int cadreX2 = 0;
 	public static int cadreY2 = 0;
-	public static int selectType = MapObject.SENSOR;
+	public static int selectType = Device.SENSOR;
 	public static boolean altDown = false;
 	public static boolean shiftDown = false;
 	public static boolean cmdDown = false;
@@ -110,13 +114,13 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	
 	private boolean startSelection = false;
 	
-	public static boolean magnetic = false;
+	public static boolean magnetic = true;
 	public static int magnetic_step = 16;
 	
 	public static boolean multipleSelection = false;
 	public static boolean button3Clicked = false;
 	
-	public static boolean showInfos = true;
+	public static boolean showInfos = false;
 	public static boolean showBakhground = true;
 	public static int bg_transparency = 255;
 	
@@ -210,6 +214,16 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			addThing = true;
 		}
 		
+		if (lastKey == '9') {
+			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			addThing = true;
+		}
+		
+		if (lastKey == '&') {
+			mapViewer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			addThing = true;
+		}
+		
 		if(magnetic && addThing) {			
 			g.drawLine(mX-6, mY, mX+6, mY);
 			g.drawLine(mX, mY-6, mX, mY+6);
@@ -234,7 +248,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		
 		nodeList.drawMarkedEdges(g);
 		
-		nodeList.draw(g);
+		nodeList.draw(g, 0, 0);
 		
 		nodeList.drawHulls(g);
 		
@@ -259,7 +273,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		g.setColor(Color.DARK_GRAY);
 		if(dark) g.setColor(new Color(198,232,106));
 
-		if(WisenSimulation.isSimulating) {
+		if(Simulation.simulating) {
 			g.setColor(Color.RED);
 			g.setStroke(new BasicStroke(1.0f));
 			g.drawRect((int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+5, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+5, mapViewer.getWidth()-10, mapViewer.getHeight()-10);
@@ -275,12 +289,13 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			g.drawString(BuildingList.locked?"[L]":"", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+76);
 		}
 		
+		
 		//int [] coord = MapCalc.geoToPixelMapA(48.391412753283895, -4.4883012771606445);
 		//g.drawOval(coord[0], coord[1], 20, 20);
 		
 		g.dispose();
 	}
-	
+			
 	public static DeviceList getDeviceList() {
 		return nodeList;
 	}
@@ -358,6 +373,18 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		}
 		if (lastKey == '8') {
 			CupAction action = new CupActionAddMarker(new Marker(gp.getLongitude(), gp.getLatitude(), 0, 4));
+			addAction(action);
+			CupActionStack.execute();
+			repaint();
+		}
+		if (lastKey == '9') {
+			CupAction action = new CupActionAddIoTNode(new IoTNode(gp.getLongitude(), gp.getLatitude(), 0, 0, 100, 20, -1));
+			addAction(action);
+			CupActionStack.execute();
+			repaint();
+		}
+		if (lastKey == '&') {
+			CupAction action = new CupActionAddIoTRNode(new IoTRNode(gp.getLongitude(), gp.getLatitude(), 0, 0, 100, 20, -1));
 			addAction(action);
 			CupActionStack.execute();
 			repaint();
@@ -573,7 +600,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 				for(SensorNode sensor : DeviceList.sensors) {
 					if (sensor.isSelected()) {
 						if(!dragging) {
-							DeviceList.initMarkedEdges();
+							//DeviceList.initMarkedEdges();
 							sensor.calculateDxDy(e.getX(), e.getY());
 							sensor.setPrevLongitude(sensor.getLongitude());
 							sensor.setPrevLatitude(sensor.getLatitude());
@@ -689,11 +716,13 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	}
 	
 	public void deleteIfSelected() {
+		boolean exist = false;
 		CupActionBlock block = new CupActionBlock();
 		SensorNode sensor;
 		for (Iterator<SensorNode> iterator = DeviceList.sensors.iterator(); iterator.hasNext();) {
 			sensor = iterator.next();
 			if (sensor.isSelected()) {
+				exist = true;
 				CupActionDeleteSensor action = new CupActionDeleteSensor(sensor);
 				block.addAction(action);				
 			}			
@@ -703,6 +732,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		for (Iterator<Device> iterator = DeviceList.devices.iterator(); iterator.hasNext();) {
 			device = iterator.next();
 			if (device.isSelected()) {
+				exist = true;
 				CupActionDeleteDevice action = new CupActionDeleteDevice(device);
 				block.addAction(action);
 			}
@@ -731,6 +761,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			CupActionStack.add(block);
 			CupActionStack.execute(); 
 		}
+		if(exist) DeviceList.initMarkedEdges();
 
 		
 	}
@@ -1219,22 +1250,22 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	}
 	
 	public static void selectNodesMarkers() {
-		if(selectType==MapObject.NONE) {
+		if(selectType==Device.NONE) {
 			MapLayer.numberOfInsideAndSelected = 0;
-			selectType = MapObject.SENSOR;
+			selectType = Device.SENSOR;
 			DeviceList.deselectAll();
 			MarkerList.deselectAll();
 		}
 		else {
-			if(selectType==MapObject.MARKER) {
-				selectType = MapObject.NONE;
+			if(selectType==Device.MARKER) {
+				selectType = Device.NONE;
 				DeviceList.deselectAll();
 				MarkerList.deselectAll();
 				WorldMap.setSelectionOfAllMarkers(true, false);
 				MapLayer.numberOfInsideAndSelected = MarkerList.markers.size();
 			}
-			if(selectType==MapObject.SENSOR) {
-				selectType = MapObject.MARKER;
+			if(selectType==Device.SENSOR) {
+				selectType = Device.MARKER;
 				WorldMap.setSelectionOfAllNodes(true, Device.SENSOR, false);
 				MapLayer.numberOfInsideAndSelected = DeviceList.sensors.size();
 			}
@@ -1283,7 +1314,8 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	}
 	
 	public static void repaint() {
-		mapViewer.repaint();
+		if(mapViewer != null)
+			mapViewer.repaint();
 	}
 	
 	public static void drawDistance(double longitude1, double latitude1, double elevation1, double longitude2, double latitude2, double elevation2, Graphics g) {

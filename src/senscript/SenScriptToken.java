@@ -96,6 +96,10 @@ public class SenScriptToken {
 					- Double.parseDouble(sensor.getScript().getVariableValue(arg2 + ""));
 			break;
 		case '*':
+			System.out.println(arg1);
+			System.out.println(arg2);
+			System.out.println(sensor.getScript().getVariableValue(arg1 + ""));
+			System.out.println(sensor.getScript().getVariableValue(arg2 + ""));
 			result = Double.parseDouble(sensor.getScript().getVariableValue(arg1 + ""))
 					* Double.parseDouble(sensor.getScript().getVariableValue(arg2 + ""));
 			break;
