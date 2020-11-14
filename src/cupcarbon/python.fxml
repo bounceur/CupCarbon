@@ -71,6 +71,16 @@
                         <MenuItem mnemonicParsing="false" onAction="#example3_2Com" text="Version 2" />
                      </items>
                   </MenuButton>
+                  <Button mnemonicParsing="false" onAction="#pubCB" text="Publisher">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#subCB" text="Subscriber">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
                </children>
                <BorderPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />

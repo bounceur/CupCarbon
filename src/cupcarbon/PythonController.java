@@ -46,6 +46,18 @@ public class PythonController implements Initializable{
 	}
 	
 	@FXML
+	private void pubCB() {
+		zone.clear();
+		zone.replaceSelection("#Publisher\n\nimport time\n\nwhile node.loop():\n\tnode.publish(\"cupcarbon/sensor\", \"1\")\n\ttime.sleep(2)\n\tnode.publish(\"cupcarbon/sensor\", \"0\")\n\ttime.sleep(2)");
+	}
+	
+	@FXML
+	private void subCB() {
+		zone.clear();
+		zone.replaceSelection("#Subscriber\n\nimport time\n\nnode.subscribe(\"cupcarbon/sensor\")\n\ndef callback(topic, message):\n\tnode.mark(message)\n\nwhile node.loop():\n\ttime.sleep(1)");
+	}
+	
+	@FXML
 	private void example1_1Com() {
 		zone.clear();
 		zone.replaceSelection("#Transmitter\nimport time\nwhile node.loop():\n\tnode.send(\"1\")\n\ttime.sleep(1)\n\tnode.send(\"0\")\n\ttime.sleep(1)");
