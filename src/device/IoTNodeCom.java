@@ -201,7 +201,6 @@ public abstract class IoTNodeCom extends StdSensorNode {
 	}
 	
 	public void print(Double v) {
-		System.out.println(v);
 		value = v+"";
 		MapLayer.repaint();
 	}
@@ -217,7 +216,7 @@ public abstract class IoTNodeCom extends StdSensorNode {
 				senders.add(node);
 				MapLayer.repaint();
 				try {
-					Thread.sleep(100);
+					Thread.sleep(150);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

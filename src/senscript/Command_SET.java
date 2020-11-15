@@ -53,19 +53,23 @@ public class Command_SET extends Command {
 		String arg = "";
 		WisenSimulation.simLog.add("S" + sensor.getId() + " SET " + arg1 + "=" + arg2);
 		String[] match={"(", ")", "+", "-", "*", "/", "%", "^"};
+		
 		int i = 0;
 		while (!contained && i<match.length) {
 			if (arg2.contains(match[i]))
 					contained = true;
 			i=i+1;
 		}
+		
 		if (contained) { 
 			SenScriptExpressionCalculate calculator = new SenScriptExpressionCalculate();
 			arg = calculator.processInput(arg2, sensor);
 		}
 		else 
 			arg = sensor.getScript().getVariableValue(arg2);
+		
 		sensor.getScript().addVariable(arg1, arg);
+		
 		return 0 ;
 	}
 

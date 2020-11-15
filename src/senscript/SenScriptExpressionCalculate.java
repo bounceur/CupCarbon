@@ -53,14 +53,19 @@ public class SenScriptExpressionCalculate {
 
 		while (st.hasMoreTokens()) {
 			currentToken = st.nextToken();
+			System.out.println(currentToken);
 			//if (currentToken.contains("$")) {
-			if (currentToken.startsWith("$") || currentToken.matches("\\p{Alnum}")) {
+			if (currentToken.startsWith("$") || currentToken.matches("[a-zA-Z0-9]*")) {
+				
+				
+				
 				if (!operandToken.isEmpty() && !operandToken.matches(".*\\d.*")) {
 					operandToken = operandToken + "1";
 					tokens.add(new SenScriptToken(operandToken));
 					tokens.add(new SenScriptToken("*"));
 					operandToken = "";
 				}
+				
 				if(sensor.getScript().getVariableValue(currentToken)==null) {
 					System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): SET function ("+currentToken+" does not exist)");
 					CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR");

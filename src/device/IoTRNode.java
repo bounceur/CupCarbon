@@ -150,6 +150,7 @@ public class IoTRNode extends IoTNode {
 		try {
 			connected = false;
 			mqttModule.publish(IoTMqttModule.com_real_node_topic+"/r/"+getId(), "HI");
+			System.out.println("pub");
 		} catch (MqttPersistenceException e) {
 			e.printStackTrace();
 		} catch (MqttException e) {

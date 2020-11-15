@@ -148,6 +148,22 @@ public class IoTNode extends IoTNodeCom {
 		}
 	}
 	
+	public void publish(String topic, double message) {
+		try {
+			mqttModule.publish(topic, message);
+		} catch (MqttException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void publish(String topic, int message) {
+		try {
+			mqttModule.publish(topic, message);
+		} catch (MqttException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public boolean loop() {
 		return Simulation.simulating;
 	}

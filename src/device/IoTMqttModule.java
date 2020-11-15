@@ -115,6 +115,28 @@ public class IoTMqttModule  implements MqttCallback {
 	    client.publish(topic, mqttMessage);
 	}
 	
+	public void publish(String topic, int message, int ... args) throws MqttPersistenceException, MqttException {
+		int qos = 0;
+		if(args.length==1) qos = args[0];
+		MqttMessage mqttMessage = new MqttMessage();
+	    mqttMessage.setPayload((message+"").getBytes());
+	    
+	    mqttMessage.setQos(qos);
+	    
+	    client.publish(topic, mqttMessage);
+	}
+	
+	public void publish(String topic, double message, int ... args) throws MqttPersistenceException, MqttException {
+		int qos = 0;
+		if(args.length==1) qos = args[0];
+		MqttMessage mqttMessage = new MqttMessage();
+	    mqttMessage.setPayload((message+"").getBytes());
+	    
+	    mqttMessage.setQos(qos);
+	    
+	    client.publish(topic, mqttMessage);
+	}
+	
 	public void send(String message, int ... args) throws MqttPersistenceException, MqttException {
 		MqttMessage mqttMessage = new MqttMessage();
 	    mqttMessage.setPayload(message.getBytes());
@@ -150,8 +172,11 @@ public class IoTMqttModule  implements MqttCallback {
 			}
 			else {
 				if(rec_topic.startsWith(IoTMqttModule.com_real_node_topic+"/s/"+iotNode.getId())) {
+					
+					System.out.println(Thread.currentThread().getStackTrace()[2].getClassName());
 					System.out.println(message);
-					if(message.contentEquals("YES")) {
+					
+					if(message.contentEquals("YES") || message.contentEquals("YES1")) {
 						iotNode.setConnected(true);
 						MapLayer.repaint();
 					}

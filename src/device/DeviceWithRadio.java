@@ -383,7 +383,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 			
 			setColor(g, NetworkParameters.radioLinksColor);
 			
-			if(NetworkParameters.drawSensorArrows) {
+			if(NetworkParameters.drawSensorArrows || type>0) {
 				double dx = 0;
 				double dy = 0;
 				double alpha = 0;
