@@ -148,6 +148,7 @@ public class IoTRNode extends IoTNode {
 	@Override
 	public void runIoTScript() {
 		try {
+			setRadioParameters();
 			connected = false;
 			mqttModule.publish(IoTMqttModule.com_real_node_topic+"/r/"+getId(), "HI");
 			System.out.println("pub");

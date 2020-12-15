@@ -197,7 +197,7 @@ public class SenScript {
 	
 	public boolean isNumeric(String arg) {
 		try {
-			double d = Double.parseDouble(arg);
+			Double.parseDouble(arg);
 			return true;
 		}
 		catch(Exception e) {

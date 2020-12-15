@@ -35,7 +35,7 @@ import simulation.Simulation;
 
 public class IoTMqttModule  implements MqttCallback {
 
-	public static String broker = "mqtt.eclipse.org";
+	public static String broker = "tcp://test.mosquitto.org";
 	public static String port = "1883";
 	
 	public static String user = "";
@@ -60,7 +60,7 @@ public class IoTMqttModule  implements MqttCallback {
 	}
 	
 	public void initConnexion() throws MqttException {
-		String comp_broker = "tcp://"+broker+":"+port;		
+		String comp_broker = broker+":"+port;		
 		
 		client = new MqttClient(comp_broker, "cupcarbon_"+MqttClient.generateClientId());
 		
@@ -81,8 +81,50 @@ public class IoTMqttModule  implements MqttCallback {
 	public void setMy(int my) {
 		try {
 			client.unsubscribe(wsn_topic_multicast+"/"+iotNode.getCurrentRadioModule().getMy());
+			client.subscribe(wsn_topic_multicast+"/"+my);
 			iotNode.getCurrentRadioModule().setMy(my);
+		} catch (MqttException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void setId(int id) {
+		try {
+			client.unsubscribe(wsn_topic_unicast+"/"+iotNode.getId());
+			client.subscribe(wsn_topic_unicast+"/"+id);
+			iotNode.setId(id);
+		} catch (MqttException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void setMy() {
+		try {
 			client.subscribe(wsn_topic_multicast+"/"+iotNode.getCurrentRadioModule().getMy());
+		} catch (MqttException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void setId() {
+		try {
+			client.subscribe(wsn_topic_unicast+"/"+iotNode.getId());
+		} catch (MqttException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteMy() {
+		try {
+			client.unsubscribe(wsn_topic_multicast+"/"+iotNode.getCurrentRadioModule().getMy());
+		} catch (MqttException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteId() {
+		try {
+			client.unsubscribe(wsn_topic_unicast+"/"+iotNode.getId());
 		} catch (MqttException e) {
 			e.printStackTrace();
 		}

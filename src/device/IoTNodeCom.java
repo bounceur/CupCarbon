@@ -33,7 +33,7 @@ import utilities.MapCalc;
  * @version 1.0
  */
 
-public abstract class IoTNodeCom extends StdSensorNode {
+public abstract class IoTNodeCom extends StdSensorNode implements RadioParamsInterface {
 	
 	protected IoTMqttModule mqttModule; 
 	
@@ -230,8 +230,40 @@ public abstract class IoTNodeCom extends StdSensorNode {
 	//	Radio Parameters
 	//===============================================================
 	
-	public void setMy(int my) {
+	public void setRadioParameters() {
+		mqttModule.setId();
+		mqttModule.setMy();
+	}
+	
+	@Override
+	public int atget(String v) {
+		return 0;
+	}
+
+	@Override
+	public int[] atnd(int nd) {
+		return null;
+	}
+
+	@Override
+	public void atch(int ch) {
+		//mqttModule.setCh(ch);		
+	}
+
+	@Override
+	public void atid(int id) {
+		mqttModule.setId(id);
+		
+	}
+
+	@Override
+	public void atmy(int my) {
 		mqttModule.setMy(my);
+	}
+
+	@Override
+	public void atpl(int pl) {
+		//mqttModule.setPl(pl);
 	}
 	
 }

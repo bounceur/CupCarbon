@@ -25,8 +25,10 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -34,6 +36,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 import java.util.Iterator;
+
+import javax.swing.ImageIcon;
 
 import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
@@ -154,6 +158,8 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	}
 	
 	public static int numberOfInsideAndSelected = 0;
+	
+	public static Image image_logo = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/cupcarbon_logo3.png")).getImage();
 	
 	@Override
 	public void paint(Graphics2D g, Object arg1, int arg2, int arg3) {
@@ -289,6 +295,7 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 			g.drawString(BuildingList.locked?"[L]":"", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+76);
 		}
 		
+		g.drawImage(image_logo, (int)mapViewer.getCenter().getX()+(mapViewer.getWidth()/2)-70, (int)mapViewer.getCenter().getY()+(mapViewer.getHeight()/2)-70, null);
 		
 		//int [] coord = MapCalc.geoToPixelMapA(48.391412753283895, -4.4883012771606445);
 		//g.drawOval(coord[0], coord[1], 20, 20);
