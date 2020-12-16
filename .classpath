@@ -2,16 +2,16 @@
 <classpath>
 	<classpathentry excluding="paho/" kind="src" path="src"/>
 	<classpathentry excluding="src/" kind="src" path=""/>
-	<classpathentry kind="lib" path="/Users/bounceur/MESDOCUMENS/CupCarbon/libs/openstreetmap/swingx-ws-2007_10_14.jar"/>
-	<classpathentry kind="lib" path="/Users/bounceur/MESDOCUMENS/CupCarbon/libs/openstreetmap/swingx.jar"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/bounceur/MESDOCUMENS/CupCarbon/libs/java3d/vecmath.jar"/>
 	<classpathentry kind="lib" path="libs/jython/jython-standalone-2.7.0.jar"/>
 	<classpathentry kind="lib" path="libs/paho/paho.jar"/>
+	<classpathentry kind="lib" path="libs/java3d/vecmath.jar"/>
+	<classpathentry kind="lib" path="libs/openstreetmap/swingx-ws-2007_10_14.jar"/>
+	<classpathentry kind="lib" path="libs/openstreetmap/swingx.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
