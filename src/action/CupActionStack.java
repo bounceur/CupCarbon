@@ -48,6 +48,7 @@ public class CupActionStack {
 			actions.get(idx).antiExecute();
 			idx--;
 		}
+		System.out.println(actions.size());
 		
 	}
 }

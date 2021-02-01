@@ -2,6 +2,7 @@ package device;
 
 public interface RadioParamsInterface {
 	
+	/*
 	public int atget(String v) ;
 	public int [] atnd(int nd) ;
 	
@@ -13,5 +14,6 @@ public interface RadioParamsInterface {
 	public double distance(int id) ;
 	
 	public int bufferSize() ;
+	*/
 
 }

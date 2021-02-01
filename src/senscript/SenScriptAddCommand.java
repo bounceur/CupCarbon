@@ -46,6 +46,7 @@ public final class SenScriptAddCommand {
 	}
 	
 	public static void addCommand(String instStr, SensorNode sensorNode, SenScript script) {
+		if(instStr.trim().equals("")) return;
 		instStr = detectKeyWord(instStr);
 		//String[] inst = instStr.split(" ");
 		String[] inst = argSplit(instStr);

@@ -18,6 +18,8 @@ public class SenScriptExpressionCalculate {
 	}
 
 	private void processOperator(SensorNode sensor, SenScriptToken token) {
+		
+		
 		SenScriptToken arg1 = null, arg2 = null;
 		if (argumentStack.isEmpty()) {
 			System.out.println("Expression error 1");
@@ -53,7 +55,7 @@ public class SenScriptExpressionCalculate {
 
 		while (st.hasMoreTokens()) {
 			currentToken = st.nextToken();
-			System.out.println(currentToken);
+			//System.out.println(currentToken);
 			//if (currentToken.contains("$")) {
 			if (currentToken.startsWith("$") || currentToken.matches("[a-zA-Z0-9]*")) {
 				
