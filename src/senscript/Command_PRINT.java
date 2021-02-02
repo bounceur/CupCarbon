@@ -23,7 +23,7 @@ public class Command_PRINT extends Command {
 		message = "";
 		for (int i=1; i<arg.length; i++) {
 			part = sensor.getScript().getVariableValue(arg[i]);
-			message += part + " ";
+			message += part;
 		}
 		sensor.setMessage(message);
 		MapLayer.repaint();
