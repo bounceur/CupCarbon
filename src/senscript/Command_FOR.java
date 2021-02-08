@@ -1,6 +1,7 @@
 package senscript;
 
 import device.SensorNode;
+import simulation.WisenSimulation;
 
 public class Command_FOR extends Command {
 	
@@ -72,7 +73,7 @@ public class Command_FOR extends Command {
 	private boolean firstVerif = true ;
 	@Override
 	public double execute() {
-		//WisenSimulation.simLog.add("S" + sensor.getId() + " FOR ");
+		WisenSimulation.simLog.add("S" + sensor.getId() + " FOR ");
 		if (first) {
 			step = Double.valueOf(sensor.getScript().getVariableValue(sStep));
 			first = false ;
@@ -88,8 +89,6 @@ public class Command_FOR extends Command {
 		String n = getRight();
 		String variable = getLeft();
 		
-		//Command_FOR commandFor =  this.getCurrentFor();
-		
 		String v1 = sensor.getScript().getVariableValue(variable);		
 		String v2 = sensor.getScript().getVariableValue(""+getStep());		
 		
@@ -99,11 +98,10 @@ public class Command_FOR extends Command {
 			z = Double.valueOf(v1);
 		}
 		else {
-			System.out.println("-------> "+v1+" "+v2);
 			z = Double.valueOf(v1) + Double.valueOf(v2);
 		}
 		
-		sensor.getScript().addVariable(variable.substring(1, variable.length()), ""+z);
+		sensor.getScript().addVariable(variable, ""+z);
 		
 		SenScriptCondition condition = null;
 		
@@ -115,16 +113,9 @@ public class Command_FOR extends Command {
 		trueCondition = condition.evaluate();		
 		
 		if (!trueCondition) {
-		//	script.setIndex(commandFor.getIndex()-1);
-		//}
-		//else {
 			script.setIndex(endForIndex);
 			init();
 		}
-		
-		//index = sensor.getScript().getIndex();
-		
-		
 		return 0 ;
 	}
 	

@@ -78,7 +78,7 @@ public class SenScriptController implements Initializable{
 	
 	@FXML
 	private void ifthenelseCom() {
-		zone.replaceSelection("if()\n\nthen\n\nelse\n\nend\n");
+		zone.replaceSelection("if()\n\nelse\n\nend\n");
 	}
 		
 	@FXML
