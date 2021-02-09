@@ -234,7 +234,7 @@ public abstract class IoTNodeCom extends StdSensorNode {
 		mqttModule.setId();
 		mqttModule.setMy();
 	}
-	
+		
 	/*
 	@Override
 	public int atget(String v) {

@@ -39,8 +39,8 @@ public class SimulationInputs {
 	public static double simulationTime = 86400.0;
 	public static double resultsWritingPeriod = 0.1;  // The period in seconds, of writing the battery level in the results csv file
 	
-	public static int visualDelay = 10;
-	public static int arrowsDelay = 50;
+	public static int visualDelay = 1000;
+	public static int arrowsDelay = 500;
 	public static boolean showInConsole = false;
 	public static boolean displayLog = false;
 	public static boolean displayResults = false;

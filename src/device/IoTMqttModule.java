@@ -98,6 +98,10 @@ public class IoTMqttModule  implements MqttCallback {
 		}
 	}
 	
+	public boolean isSensorDetecting() {
+		return iotNode.isSensorDetecting(); 
+	}
+	
 	public void setMy() {
 		try {
 			client.subscribe(wsn_topic_multicast+"/"+iotNode.getCurrentRadioModule().getMy());

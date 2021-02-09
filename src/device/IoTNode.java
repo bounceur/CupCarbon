@@ -27,6 +27,7 @@ import cupcarbon.CupCarbon;
 import map.MapLayer;
 import project.Project;
 import simulation.Simulation;
+import simulation.SimulationInputs;
 
 /**
  * @author Ahcene Bounceur
@@ -178,7 +179,7 @@ public class IoTNode extends IoTNodeCom {
 			public void run() {
 				IoTNode.this.fixori();
 				while(Simulation.simulating) {
-					IoTNode.this.moveToNext(true, 500);
+					IoTNode.this.moveToNext(true, SimulationInputs.visualDelay);
 				}
 				IoTNode.this.toOri();
 			}
