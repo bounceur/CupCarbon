@@ -193,7 +193,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 	
 	public void calculateRadioSpace() {
 		if(geoZoneList.isEmpty()) {
-			nPoint = 60;	
+			//nPoint = 60;	
 			deg = 2.*Math.PI/nPoint;
 			polyX = new int [nPoint];
 			polyY = new int [nPoint];
@@ -488,7 +488,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 		}		
 	}
 	
-	public int readMessage(String var) {
+	public String readMessage(String var) {
 		int i=0;
 		String s ="";
 		while(buffer[i]!='\r') {
@@ -510,7 +510,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 			bufferIndex = 0;
 			bufferReady = false ;
 		}
-		return i;
+		return s;
 	}
 	
 	public int pickMessage(String var) {

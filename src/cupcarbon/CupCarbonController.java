@@ -809,7 +809,7 @@ public class CupCarbonController implements Initializable {
 					//runSimulationButton.setDisable(true);
 					//public void runIoTScript() {
 					if(iotSimulation==null) iotSimulation = new IoTSimulation();
-					iotSimulation.init();
+					//iotSimulation.init();
 					if (iotSimulation.ready()) {
 						qRunIoTSimulationButton.setDisable(true);
 						new Thread(iotSimulation).start();

@@ -35,7 +35,7 @@ public class SimulationInputs {
 	
 	public static boolean clockDrift = false;
 	
-	public static boolean mobilityAndEvents = false;
+	public static boolean mobilityAndEvents = true;
 	public static double simulationTime = 86400.0;
 	public static double resultsWritingPeriod = 0.1;  // The period in seconds, of writing the battery level in the results csv file
 	
@@ -53,7 +53,7 @@ public class SimulationInputs {
 	public static boolean macLayer = false ;
 	public static double macProba = 1.0 ;
 	
-	public static boolean symmetricalLinks = false;
+	public static boolean symmetricalLinks = true;
 	public static int radioDetectionType = RadioDetection.SIMPLE_DETECTION;
 	public static boolean visibility = false; 
 }

@@ -336,8 +336,8 @@ public class Command_SEND extends Command {
 		// ---------------------------------------------------------------------------------------------------------------------
 		public void sendOperation(String message) {
 			//String packet = RadioPacketGenerator.generate(sensor.getStandard());
-			MessageEventList.numberOfSentMessages += sensor.getPl()/100.;
-			MessageEventList.numberOfSentMessages_b += message.length() * (sensor.getPl()/100.);
+			MessageEventList.numberOfSentMessages += 1;
+			MessageEventList.numberOfSentMessages_b += message.length();
 			
 			sensor.consumeTx(RadioPacketGenerator.packetLengthInBits(message, 0, sensor.getStandard()));
 			

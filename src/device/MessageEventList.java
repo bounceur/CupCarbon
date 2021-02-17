@@ -35,8 +35,21 @@ public class MessageEventList {
 		init(std);
 	}
 	
+	public static void reset() {
+		numberOfSentMessages = 0;
+		numberOfReceivedMessages = 0;
+		numberOfAckMessages = 0;
+		numberOfLostMessages = 0;
+		numberOfSentMessages_b = 0;
+		numberOfReceivedMessages_b = 0;
+		numberOfAckMessages_b = 0;
+		numberOfLostMessages_b = 0;
+	}
+	
 	public void init(int std) {	
-		messageEventLists = new LinkedList<List<MessageEvent>>();
+		//messageEventLists = new LinkedList<List<MessageEvent>>();
+		//messageEventLists = Collections.synchronizedList(new LinkedList<List<MessageEvent>>());
+		messageEventLists.removeAll(messageEventLists);
 		int channelNumber = 0;
 		if(std == RadioModule.ZIGBEE_802_15_4) channelNumber = 16;
 		if(std == RadioModule.LORA) channelNumber = 1;

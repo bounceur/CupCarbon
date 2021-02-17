@@ -59,7 +59,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 	
 	protected Vector<SensorNode> neighbors = new Vector<SensorNode> () ;
 	
-	protected int nPoint = 30;	
+	protected int nPoint = 20;	
 	protected double deg = 2.*Math.PI/nPoint;
 	
 	protected int [] polyX = new int [nPoint];

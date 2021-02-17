@@ -79,7 +79,6 @@ public class CupCarbon extends Application {
 			URL iconURL = CupCarbon.class.getResource("cupcarbon_logo.png");
 			java.awt.Image image = new ImageIcon(iconURL).getImage();
 			com.apple.eawt.Application.getApplication().setDockIconImage(image);
-			
 		}
 		
 		CupActionStack.init();

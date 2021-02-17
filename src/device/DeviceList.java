@@ -1233,9 +1233,15 @@ public class DeviceList {
 			sensor.init();
 			sensor.initGeoZoneList(); 
 		}
-		for (Device device : devices) {			
+		for (Device device : devices) {	
 			device.init(); 
 		}		
+	}
+	
+	public static void initForSimulation() {
+		for (SensorNode sensor : DeviceList.sensors) {
+			sensor.initForSimulation();
+		}
 	}
 	
 	public static void initAllGeoZones() {

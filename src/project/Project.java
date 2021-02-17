@@ -38,6 +38,7 @@ import cupcarbon.CupCarbon;
 import cupcarbon.CupCarbonVersion;
 import device.DeviceList;
 import device.IoTMqttModule;
+import device.MessageEventList;
 import device.MultiChannels;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -188,6 +189,7 @@ public final class Project {
 		MapLayer.repaint();
 		CupCarbon.cupCarbonController.saveButton.setDisable(false);
 		Routes.reset();
+		MessageEventList.reset();
 	}
 	
 	public static void openProject(String path, String name) {

@@ -118,13 +118,13 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 	
 	private boolean startSelection = false;
 	
-	public static boolean magnetic = true;
+	public static boolean magnetic = false;
 	public static int magnetic_step = 16;
 	
 	public static boolean multipleSelection = false;
 	public static boolean button3Clicked = false;
 	
-	public static boolean showInfos = false;
+	public static boolean showInfos = true;
 	public static boolean showBakhground = true;
 	public static int bg_transparency = 255;
 	
@@ -286,10 +286,11 @@ public class MapLayer implements Painter<Object>, MouseListener, MouseMotionList
 		}
 		if(showInfos) {
 			g.drawString(String.format("Time: %4.4f s", WisenSimulation.sTime) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+16);
-			g.drawString("Number of SENT messages:"+MessageEventList.numberOfSentMessages + " ["+ MessageEventList.numberOfSentMessages_b +"]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+26);
-			g.drawString("Number of RECEIVED messages:"+MessageEventList.numberOfReceivedMessages + " ["+ MessageEventList.numberOfReceivedMessages_b +"]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+36);
-			g.drawString("Number of ACK messages:"+MessageEventList.numberOfAckMessages + " ["+ MessageEventList.numberOfAckMessages_b +"]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+46);
-			g.drawString("Number of LOST messages:"+MessageEventList.numberOfLostMessages + " ["+ MessageEventList.numberOfLostMessages_b +"]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+56);
+			g.drawString("Number of SENT messages:"+MessageEventList.numberOfSentMessages + " ["+ MessageEventList.numberOfSentMessages_b +"  Bytes]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+26);
+			g.drawString("Number of RECEIVED messages:"+MessageEventList.numberOfReceivedMessages + " ["+ MessageEventList.numberOfReceivedMessages_b +"  Bytes]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+36);
+			g.drawString("Number of SENT & RECEIVED messages:"+(MessageEventList.numberOfSentMessages+MessageEventList.numberOfReceivedMessages) + " ["+ (MessageEventList.numberOfReceivedMessages_b+MessageEventList.numberOfSentMessages_b) +"  Bytes]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+46);
+			g.drawString("Number of ACK messages:"+MessageEventList.numberOfAckMessages + " ["+ MessageEventList.numberOfAckMessages_b +"  Bytes]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+56);
+			g.drawString("Number of LOST messages:"+MessageEventList.numberOfLostMessages + " ["+ MessageEventList.numberOfLostMessages_b +"  Bytes]", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+66);
 			if(DeviceList.weather != null)
 				g.drawString("Temperature: "+ String.format("%2.2f", DeviceList.weather.getValue()) , (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+66);
 			g.drawString(BuildingList.locked?"[L]":"", (int)mapViewer.getCenter().getX()-(mapViewer.getWidth()/2)+8, (int)mapViewer.getCenter().getY()-(mapViewer.getHeight()/2)+76);

@@ -75,7 +75,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	// ------------------------------------------------------------------------
 	// Load Route from the gpsFileName to Lists
 	// ------------------------------------------------------------------------
-	public void loadRouteFromFile() {		
+	public void loadRouteFromFile() {	
 		loadRouteFromFile(gpsFileName);
 	}
 
@@ -90,7 +90,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	// ------------------------------------------------------------------------
 	public void loadRouteFromFile(String fileName) {		
 		try {
-			if (!fileName.equals("")) {
+			if (!fileName.isEmpty()) {
 				//routeIndex = 0;
 				routeTime = new LinkedList<Integer>();
 				routeX = new LinkedList<Double>();
@@ -220,47 +220,49 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	// Simulate
 	// ------------------------------------------------------------------------
 	public void runSimulation() {
-		loadRouteFromFile();
-		fixori();
-		//if (readyForMobility) {
-			underSimulation = true;
-			routeIndex = 0;
-			long tmpTime = 0;
-			long cTime = 0;
-			long toWait = 0;			
-			do {
-				cTime = routeTime.get(routeIndex);
-				toWait = cTime - tmpTime;
-				tmpTime = cTime;
-				if (toWait < 0) {
-					toWait = cTime;
-				}
-				longitude = routeX.get(routeIndex);
-				latitude = routeY.get(routeIndex);
-				elevation = routeZ.get(routeIndex);
-				
-				if (DeviceList.propagationsCalculated)
-					DeviceList.calculatePropagations();
-				
-				MapLayer.repaint();
+		if(!gpsFileName.isEmpty()) {
+			loadRouteFromFile();
+			fixori();
+			//if (readyForMobility) {
+				underSimulation = true;
+				routeIndex = 0;
+				long tmpTime = 0;
+				long cTime = 0;
+				long toWait = 0;			
+				do {
+					cTime = routeTime.get(routeIndex);
+					toWait = cTime - tmpTime;
+					tmpTime = cTime;
+					if (toWait < 0) {
+						toWait = cTime;
+					}
+					longitude = routeX.get(routeIndex);
+					latitude = routeY.get(routeIndex);
+					elevation = routeZ.get(routeIndex);
+					
+					if (DeviceList.propagationsCalculated)
+						DeviceList.calculatePropagations();
+					
+					MapLayer.repaint();
+					try {
+						Thread.sleep(toWait * Device.moveSpeed);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					goToNext();
+				} while (hasNext());			
 				try {
 					Thread.sleep(toWait * Device.moveSpeed);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				goToNext();
-			} while (hasNext());			
-			try {
-				Thread.sleep(toWait * Device.moveSpeed);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			routeIndex = 0;
-			toOri();
-			thread = null;
-			underSimulation = false;
-			MapLayer.repaint();
-		//}
+				routeIndex = 0;
+				toOri();
+				thread = null;
+				underSimulation = false;
+				MapLayer.repaint();
+			//}
+		}
 	}
 	
 	// ------------------------------------------------------------------------
@@ -287,35 +289,37 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	// ------------------------------------------------------------------------
 	@Override
 	public void moveToNext(boolean visual, int visualDelay) {
-		if (routeTime != null && nLoop > 0) {			
-			angle += 0.1;			
-			longitude = routeX.get(routeIndex);
-			latitude = routeY.get(routeIndex);
-			elevation = routeZ.get(routeIndex);		
-			if (SimulationInputs.visibility) {
-				if(getType()==Device.SENSOR || getType()==Device.DIRECTIONAL_SENSOR || getType()==Device.BASE_STATION) {
-					VisibilityZones vz = new VisibilityZones((SensorNode) this);
-					vz.run();
+		if(!gpsFileName.isEmpty()) {
+			if (routeTime != null && nLoop > 0) {			
+				angle += 0.1;			
+				longitude = routeX.get(routeIndex);
+				latitude = routeY.get(routeIndex);
+				elevation = routeZ.get(routeIndex);		
+				if (SimulationInputs.visibility) {
+					if(getType()==Device.SENSOR || getType()==Device.DIRECTIONAL_SENSOR || getType()==Device.BASE_STATION) {
+						VisibilityZones vz = new VisibilityZones((SensorNode) this);
+						vz.run();
+					}
 				}
-			}
-			routeIndex++;
-			if ((routeIndex >= (routeTime.size()))) {
-				nLoop--;
-				if (!loop || nLoop == 0) {
-					routeIndex--;
-				} else {
-					routeIndex = 1;
+				routeIndex++;
+				if ((routeIndex >= (routeTime.size()))) {
+					nLoop--;
+					if (!loop || nLoop == 0) {
+						routeIndex--;
+					} else {
+						routeIndex = 1;
+					}
 				}
+				if (DeviceList.propagationsCalculated)
+					DeviceList.calculatePropagations();
 			}
-			if (DeviceList.propagationsCalculated)
-				DeviceList.calculatePropagations();
-		}
-		if (visual) {
-			try {				
-				MapLayer.repaint();
-				Thread.sleep(visualDelay);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			if (visual) {
+				try {				
+					MapLayer.repaint();
+					Thread.sleep(visualDelay);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -325,14 +329,16 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	// ------------------------------------------------------------------------
 	// @Override
 	public void goToNext() {
-		if (routeTime != null) {
-			routeIndex++;
-			if (routeIndex == routeTime.size()) {
-				if (loop) {
-					nLoop--;
-					routeIndex = 0;
-				}
-			}			
+		if(!gpsFileName.isEmpty()) {
+			if (routeTime != null) {
+				routeIndex++;
+				if (routeIndex == routeTime.size()) {
+					if (loop) {
+						nLoop--;
+						routeIndex = 0;
+					}
+				}			
+			}
 		}
 	}
 

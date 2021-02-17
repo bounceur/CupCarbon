@@ -88,8 +88,8 @@ public class WisenSimulation implements Runnable {
 	}
 
 	public void start_simulation() {
-		MapLayer.showInfos = false;
-		MapLayer.repaint();
+		//MapLayer.showInfos = false;
+		//MapLayer.repaint();
 		DeviceList.initAll();
 		//Routes.loadRoutes();
 		resultsWritingTime = 0.0;
@@ -461,11 +461,11 @@ public class WisenSimulation implements Runnable {
 			DeviceList.calculatePropagations();		
 		
 		System.out.println(String.format("Time: %4.4f s", WisenSimulation.sTime));
-		System.out.println("Number of SENT messages: "+MessageEventList.numberOfSentMessages + " ["+ MessageEventList.numberOfSentMessages_b +"]" );
-		System.out.println("Number of RECEIVED messages: "+MessageEventList.numberOfReceivedMessages + " ["+ MessageEventList.numberOfReceivedMessages_b +"]");
-		System.out.println("Number of SENT & RECEIVED messages: "+(MessageEventList.numberOfReceivedMessages+MessageEventList.numberOfSentMessages) + " ["+ (MessageEventList.numberOfReceivedMessages_b+MessageEventList.numberOfSentMessages_b) +"]");
-		System.out.println("Number of ACK messages: "+MessageEventList.numberOfAckMessages + " ["+ MessageEventList.numberOfAckMessages_b +"]");
-		System.out.println("Number of LOST messages: "+MessageEventList.numberOfLostMessages + " ["+ MessageEventList.numberOfLostMessages_b +"]");
+		System.out.println("Number of SENT messages: "+MessageEventList.numberOfSentMessages + " ["+ MessageEventList.numberOfSentMessages_b +" Bytes]" );
+		System.out.println("Number of RECEIVED messages: "+MessageEventList.numberOfReceivedMessages + " ["+ MessageEventList.numberOfReceivedMessages_b +"  Bytes]");
+		System.out.println("Number of SENT & RECEIVED messages: "+(MessageEventList.numberOfReceivedMessages+MessageEventList.numberOfSentMessages) + " ["+ (MessageEventList.numberOfReceivedMessages_b+MessageEventList.numberOfSentMessages_b) +"  Bytes]");
+		System.out.println("Number of ACK messages: "+MessageEventList.numberOfAckMessages + " ["+ MessageEventList.numberOfAckMessages_b +"  Bytes]");
+		System.out.println("Number of LOST messages: "+MessageEventList.numberOfLostMessages + " ["+ MessageEventList.numberOfLostMessages_b +"  Bytes]");
 		System.out.println("Number of Marked Sensors: "+DeviceList.getNumberOfMarkedSensors());
 		
 		CupCarbon.cupCarbonController.displayShortGoodMessage("End of Simulation");

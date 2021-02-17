@@ -6,7 +6,6 @@ import device.IoTNode;
 import device.IoTRNode;
 import device.IoTThreadMonitor;
 import device.SensorNode;
-import map.MapLayer;
 
 public class IoTSimulation implements Runnable {
 
@@ -15,19 +14,14 @@ public class IoTSimulation implements Runnable {
 		
 	}
 	
-	public void init() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				DeviceList.initAll();
-				for (SensorNode sensor : DeviceList.sensors) {
-					if(sensor.getType()==Device.IOT) {
-						sensor.initForSimulation();
-					}
-				}
+	/*public void init() {
+		DeviceList.initAll();
+		for (SensorNode sensor : DeviceList.sensors) {
+			if(sensor.getType()==Device.IOT) {
+				sensor.initForSimulation();
 			}
-		}).start();
-	}
+		}
+	}*/
 	
 	public boolean ready() {
 		for(SensorNode iotNode : DeviceList.sensors) {
@@ -42,9 +36,19 @@ public class IoTSimulation implements Runnable {
 	
 	@Override
 	public void run() {
-		MapLayer.showInfos = false;
-		MapLayer.repaint();
+		//MapLayer.showInfos = false;
+		//MapLayer.repaint();
 		System.out.println("Starting IoT Simulation");
+		
+		DeviceList.initAll();
+		System.out.println("Starting IoT Simulation 2");
+		for (SensorNode sensor : DeviceList.sensors) {
+			if(sensor.getType()==Device.IOT) {
+				System.out.println(sensor.getRoute());
+				sensor.initForSimulation();
+			}
+		}
+		
 		IoTThreadMonitor thMonitor = new IoTThreadMonitor(DeviceList.getIoTNodeSize());
 		Simulation.setSimulating(true);
 		for(SensorNode iotNode : DeviceList.sensors) {

@@ -14,7 +14,8 @@ public class MultiChannels {
 	}
 	
 	public static void init() {		
-		channelList = new LinkedList<MessageEventList>();		
+		channelList.removeAll(channelList);
+		//channelList = new LinkedList<MessageEventList>();		
 		// Index 0 : 802.15.4
 		// Index 1 : WiFi
 		// Index 2 : Lora

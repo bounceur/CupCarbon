@@ -174,16 +174,18 @@ public class IoTNode extends IoTNodeCom {
 	}
 	
 	public void runGPS() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				IoTNode.this.fixori();
-				while(Simulation.simulating) {
-					IoTNode.this.moveToNext(true, SimulationInputs.visualDelay);
+		if(!IoTNode.this.getRoute().isEmpty()) {
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					IoTNode.this.fixori();
+					while(Simulation.simulating) {
+						IoTNode.this.moveToNext(true, SimulationInputs.visualDelay);
+					}
+					IoTNode.this.toOri();
 				}
-				IoTNode.this.toOri();
-			}
-		}).start();
+			}).start();
+		}
 	}
 	
 	public void initBroker() throws MqttException {

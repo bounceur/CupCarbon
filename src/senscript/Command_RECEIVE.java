@@ -1,20 +1,28 @@
 package senscript;
 
 import arduino.Bracket;
+import cupcarbon.CupCarbon;
 import device.SensorNode;
 import simulation.WisenSimulation;
 
 public class Command_RECEIVE extends Command {
 	
-	protected String arg = "";
+	protected String arg1 = "";
+	protected String arg2 = "";
 	
 	public Command_RECEIVE(SensorNode sensor) {
 		this.sensor = sensor ;
 	}
 	
-	public Command_RECEIVE(SensorNode sensor, String arg) {
+	public Command_RECEIVE(SensorNode sensor, String arg1) {
 		this.sensor = sensor ;
-		this.arg = arg;
+		this.arg1 = arg1;
+	}
+	
+	public Command_RECEIVE(SensorNode sensor, String arg1, String arg2) {
+		this.sensor = sensor ;
+		this.arg1 = arg1;
+		this.arg2 = arg2;
 	}
 
 	@Override
@@ -22,15 +30,29 @@ public class Command_RECEIVE extends Command {
 		double event = 0 ;
 
 		if (sensor.dataAvailable()) {			
-			WisenSimulation.simLog.add("S" + sensor.getId() + " Buffer available, exit waiting.");
 			sensor.getScript().setWaiting(false);
-			sensor.readMessage(arg);
+			String rep = sensor.readMessage(arg1);
+			WisenSimulation.simLog.add("S" + sensor.getId() + " Buffer available, exit waiting.");
+			WisenSimulation.simLog.add("S" + sensor.getId() + " READ : "+arg1 + " = "+rep);
 			return 0 ;
 		} 
 		else {
 			WisenSimulation.simLog.add("S" + sensor.getId() + " is waiting for data ...");			
 			sensor.getScript().setWaiting(true);			
-			event = Double.MAX_VALUE;
+			
+			if (arg2.equals(""))
+				event = Double.MAX_VALUE;
+			else {
+				if(sensor.getScript().getVariableValue(arg2)==null) {
+					System.err.println("[CupCarbon ERROR] (File: "+ sensor.getScriptFileName()+") (S"+sensor.getId()+"): WAIT function ("+arg2+" is null)");
+					CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR");
+				}
+				String rep = sensor.readMessage(arg1);
+				WisenSimulation.simLog.add("S" + sensor.getId() + " Buffer empty, exit waiting.");
+				WisenSimulation.simLog.add("S" + sensor.getId() + " READ : "+arg1 + " = \"\"");
+				event = (Double.parseDouble(sensor.getScript().getVariableValue(arg2))/1000.);
+			}
+			
 		}		
 		return event;
 	}
@@ -46,7 +68,7 @@ public class Command_RECEIVE extends Command {
 		Bracket.n++;
 		
 		String s = "";
-		s += "\t" + "xbee.readPacket("+arg+");\n";
+		s += "\t" + "xbee.readPacket("+arg1+");\n";
 		s += "\tif (xbee.getResponse().isAvailable()) {\n";
 		s += "\tif (xbee.getResponse().getApiId() == RX_64_RESPONSE) {\n";
 		return s ;

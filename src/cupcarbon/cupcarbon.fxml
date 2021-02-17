@@ -1259,7 +1259,7 @@
                      </tooltip>
                   </Button>
                   <Separator prefWidth="10.0" />
-                  <ToggleButton mnemonicParsing="false" selected="true" onAction="#magnetic">
+                  <ToggleButton mnemonicParsing="false" selected="false" onAction="#magnetic">
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -2890,7 +2890,7 @@
                                                 <Separator prefWidth="200.0" />
                                                 <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="219.0" spacing="20.0">
                                                    <children>
-                                                      <CheckBox fx:id="symmetricalLinkCheckBox" mnemonicParsing="false" onAction="#simulationParametersApply" onMouseReleased="#mapFocus" prefWidth="120.0" text="Symmetrical links">
+                                                      <CheckBox fx:id="symmetricalLinkCheckBox" mnemonicParsing="true" selected="true" onAction="#simulationParametersApply" onMouseReleased="#mapFocus" prefWidth="120.0" text="Symmetrical links">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>
@@ -2933,7 +2933,7 @@
                                                 <Separator prefWidth="200.0" />
                                                 <HBox alignment="BOTTOM_LEFT" prefHeight="0.0" prefWidth="219.0" spacing="20.0">
                                                    <children>
-                                                      <CheckBox fx:id="mobilityCheckBox" mnemonicParsing="false" onAction="#simulationParametersApply" onMouseReleased="#mapFocus" prefWidth="120.0" text="Mobility / Events">
+                                                      <CheckBox fx:id="mobilityCheckBox" mnemonicParsing="false" selected="true" onAction="#simulationParametersApply" onMouseReleased="#mapFocus" prefWidth="120.0" text="Mobility / Events">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>
