@@ -30,7 +30,5 @@ public class SenScriptCondition_LESS extends SenScriptCondition {
 		}
 		
 		return  (v1 < v2);
-	}
-
-	
+	}	
 }
