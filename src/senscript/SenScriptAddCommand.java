@@ -451,6 +451,10 @@ public final class SenScriptAddCommand {
 			command = new Command_CPRINT(sensorNode, inst);
 		}
 		
+		if (inst[0].toLowerCase().startsWith("#")) {
+			//SKIP comment
+		}
+		
 		//-------
 		// This part must be here (at the end). All new commands must be added before (above)
 		
