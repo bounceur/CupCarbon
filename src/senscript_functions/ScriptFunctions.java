@@ -76,7 +76,11 @@ public class ScriptFunctions {
 				e.printStackTrace();
 			}
 		}
-				
+		
+		if(function.equals("cloud")) {
+			return new String [] {Functions.cloud(args), "0.0", "0.0"};
+		}
+		
 		return new String [] {"[SCRIPT] FUNCTION ERROR: Unknown function!","0.0", "0.0"};
 	}
 	

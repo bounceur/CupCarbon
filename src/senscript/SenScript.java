@@ -205,11 +205,18 @@ public class SenScript {
 		}
 	}
 	
+	/* BUG FIXED ISSUE ON GITHUB #20
 	public void variablesToValues(String [] args) {
 		for(int i=0; i<args.length; i++)
 			if(args[i].charAt(0)=='$')
 				args[i] = variables.get(args[i].substring(1));
-	}	
+	}
+	*/
+	
+	public void variablesToValues(String [] args) {
+		for(int i=0; i<args.length; i++)
+			args[i] = getVariableValue(args[i]);
+		}
 
 	public void setIndex(int index) {
 		this.index = index;
