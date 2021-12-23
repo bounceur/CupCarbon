@@ -204,4 +204,35 @@ public class Functions {
 		return valToReturn;
 	}
 	
+	
+	/**
+	 * Demo function to integrate Thingsboard sensor
+	 * @param args
+	 * @return
+	 */
+	public static String cloud(String [] args) 
+	{
+		String valToReturn = "";
+		
+		System.out.println("cloud() ARGS lenght: "+args.length);
+		
+		try
+		{
+			float f = Float.parseFloat(args[0]); //DATA VALUE SENT TO THINGSBOARD
+			
+			System.out.println((new java.util.Date()) +" - Called cloud() function params "+f);
+			
+			System.out.println("Sending data in cloud...");		
+			
+			iotlab.Client.sendInCloud(f);	
+			
+		}
+		catch (Exception e)
+		{
+			System.out.println("cloud() - Wrong parameters passed. err="+e.getMessage());
+			System.out.println("args[0]="+args[0]);
+		}
+					
+		return valToReturn;
+	}
 }

@@ -26,11 +26,9 @@ public class SenScriptCondition_LESS extends SenScriptCondition {
 			v2 = Double.valueOf(sensor.getScript().getVariableValue(arg2));
 		} 
 		catch(Exception e) {
-			System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): Condition < ("+arg1+" is not a number)");
+			System.err.println("[CupCarbon ERROR] (S"+sensor.getId()+"): Condition < ("+arg2+" is not a number)");
 		}
 		
 		return  (v1 < v2);
-	}
-
-	
+	}	
 }
