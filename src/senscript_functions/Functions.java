@@ -195,8 +195,10 @@ public class Functions {
 	public static String myf(String [] args) {
 		String valToReturn = "";
 		
-		// String s = args[0] ; // -> is the name of the first argument of the function myf
+		String s = args[0] ; // -> is the name of the first argument of the function myf
 		// double x =  Double.valueOf(args[5]); // -> is the (double) value of the first argument of the function myf 
+		
+		System.out.println(s);
 		
 		//TODO
 		// Your program here

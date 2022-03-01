@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------------------------------------------
- * CupCarbon: IoT Simulator
+q * CupCarbon: IoT Simulator
  * www.cupcarbon.com
  * ----------------------------------------------------------------------------------------------------------------
  * Copyright (C) 2013-2021 CupCarbon
@@ -16,6 +16,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
@@ -87,8 +90,8 @@ public class IoTNode extends IoTNodeCom {
 	}
 	
 	public void initImages() {
-		image_marked = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/iot_node_marked.png")).getImage();
-		image_non_marked = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/iot_node.png")).getImage();
+		image_marked = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/car_marked.png")).getImage();
+		image_non_marked = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/car.png")).getImage();
 	}
 	
 	public void initNode() {
@@ -96,6 +99,10 @@ public class IoTNode extends IoTNodeCom {
 		
 		initImages();
 		
+		initMqttModule();
+	}
+	
+	public void initMqttModule() {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -169,6 +176,45 @@ public class IoTNode extends IoTNodeCom {
 		return Simulation.simulating;
 	}
 	
+	public void location(double longitude, double latitude) {
+		this.longitude = longitude;
+		this.latitude = latitude;
+		MapLayer.repaint();
+	}
+	
+	public void location(String location) {
+		longitude = Double.parseDouble(location.split(",")[0]);
+		latitude = Double.parseDouble(location.split(",")[1]);
+		MapLayer.repaint();
+	}
+	
+	
+	private PrintStream ps = null;
+	
+	public void cgps(String fileName) {
+		try {
+			if(!fileName.endsWith(".gps")) fileName += ".gps";
+			ps = new PrintStream(new FileOutputStream(Project.getGpsFileFromName(fileName)));
+			ps.println("Route of Node "+getId());
+			ps.println("From place 1");
+			ps.println("To place 2");
+			ps.println(false);
+			ps.println("0");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void location(String location, String fileName) {
+		if(!fileName.endsWith(".gps")) fileName += ".gps";
+		longitude = Double.parseDouble(location.split(",")[0]);
+		latitude = Double.parseDouble(location.split(",")[1]);
+		MapLayer.repaint();
+		
+		ps.println(1 + " " + longitude + " " + latitude + " 0 4.0");
+		ps.flush();
+	}
+	
 	public PythonInterpreter getInterpreter() {
 		return interpreter;
 	}
@@ -188,9 +234,9 @@ public class IoTNode extends IoTNodeCom {
 		}
 	}
 	
-	public void initBroker() throws MqttException {
+	/*public void initBroker() throws MqttException {
 		mqttModule.initConnexion();
-	}
+	}*/
 	
 	@Override
 	public void runIoTScript() {

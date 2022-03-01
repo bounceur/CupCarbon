@@ -318,7 +318,7 @@ public final class SenScriptAddCommand {
 			command = new Command_ATID(sensorNode, inst[1]);
 		}
 		if (inst[0].toLowerCase().equals("atid")) {
-			command = new Command_ATNID(sensorNode, inst[1]);
+			command = new Command_ATID(sensorNode, inst[1]);
 		}
 		if (inst[0].toLowerCase().equals("atch")) {
 			command = new Command_ATCH(sensorNode, inst[1]);
@@ -329,6 +329,20 @@ public final class SenScriptAddCommand {
 		if (inst[0].toLowerCase().equals("atpl")) {
 			command = new Command_ATPL(sensorNode, inst[1]);
 		}
+		
+		if (inst[0].toLowerCase().equals("getid")) {
+			command = new Command_ATGET(sensorNode, "id", inst[1]);
+		}
+		
+		if (inst[0].toLowerCase().equals("getmy")) {
+			command = new Command_ATGET(sensorNode, "my", inst[1]);
+		}
+		
+		if (inst[0].toLowerCase().equals("getch")) {
+			command = new Command_ATGET(sensorNode, "ch", inst[1]);
+		}
+		
+		
 		if (inst[0].toLowerCase().equals("while")) {
 			endof.push("endwhile");
 			Command_WHILE commandWhile = new Command_WHILE(sensorNode, instStr);
@@ -337,7 +351,8 @@ public final class SenScriptAddCommand {
 			}
 			script.add(commandWhile);
 			script.setCurrentWhile(commandWhile);
-		}		
+			int x= 0;
+		}		 
 		if (inst[0].toLowerCase().equals("endwhile")) {
 			Command_ENDWHILE commandWEndhile = new Command_ENDWHILE(sensorNode);
 			commandWEndhile.setCurrentWhile(script.getCurrentWhile());

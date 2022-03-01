@@ -51,6 +51,7 @@ public class IoTSimulation implements Runnable {
 		
 		IoTThreadMonitor thMonitor = new IoTThreadMonitor(DeviceList.getIoTNodeSize());
 		Simulation.setSimulating(true);
+		
 		for(SensorNode iotNode : DeviceList.sensors) {
 			if(iotNode.getType()==Device.RIOT) {
 				((IoTRNode)iotNode).runIoTScript();

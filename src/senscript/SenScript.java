@@ -207,8 +207,7 @@ public class SenScript {
 	
 	public void variablesToValues(String [] args) {
 		for(int i=0; i<args.length; i++)
-			if(args[i].charAt(0)=='$')
-				args[i] = variables.get(args[i].substring(1));
+			args[i] = getVariableValue(args[i]);
 	}	
 
 	public void setIndex(int index) {

@@ -47,7 +47,7 @@ public class Command_RECEIVE extends Command {
 					System.err.println("[CupCarbon ERROR] (File: "+ sensor.getScriptFileName()+") (S"+sensor.getId()+"): WAIT function ("+arg2+" is null)");
 					CupCarbon.cupCarbonController.displayShortErrMessageTh("ERROR");
 				}
-				String rep = sensor.readMessage(arg1);
+				sensor.readMessage(arg1);
 				WisenSimulation.simLog.add("S" + sensor.getId() + " Buffer empty, exit waiting.");
 				WisenSimulation.simLog.add("S" + sensor.getId() + " READ : "+arg1 + " = \"\"");
 				event = (Double.parseDouble(sensor.getScript().getVariableValue(arg2))/1000.);

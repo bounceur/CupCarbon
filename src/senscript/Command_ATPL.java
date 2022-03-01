@@ -10,6 +10,8 @@ import simulation.WisenSimulation;
 
 public class Command_ATPL extends Command {
 
+	// atpl 50 for 50%
+	
 	protected String arg = "" ;
 	
 	public Command_ATPL(SensorNode sensor, String arg) {

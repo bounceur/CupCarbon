@@ -140,6 +140,10 @@ public class CupCarbonController implements Initializable {
 	public WisenSimulation wisenSimulation;
 	public IoTSimulation iotSimulation;
 	
+	
+	@FXML
+	private TextField wbsNumber ;
+	
 	@FXML
 	private TextField suCoverage ;
 	
@@ -1077,7 +1081,7 @@ public class CupCarbonController implements Initializable {
 					txtFileName.setText(Project.getGpsFileExtension(txtFileName.getText()));
 					MarkerList.saveGpsCoords(txtFileName.getText(), txtTitle.getText(), txtFrom.getText(),
 							txtTo.getText(), loopCheckBox.isSelected(), Integer.parseInt(loopAfter.getText()),
-							Integer.parseInt(loopNumber.getText()));
+							Integer.parseInt(loopNumber.getText()), Integer.parseInt(wbsNumber.getText()));
 					getListOfRoutes();
 					initScriptGpsEventComboBoxes();
 					mapFocus();

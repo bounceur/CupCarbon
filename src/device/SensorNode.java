@@ -22,7 +22,9 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,6 +37,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Vector;
+
+import javax.swing.ImageIcon;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 
@@ -334,7 +338,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 			int y = coord[1];
 			int rayon = MapCalc.radiusInPixels(currentRadioModule.getRadioRangeRadius()) ; 
 			int rayon2 = MapCalc.radiusInPixels(this.radius);
-
+			
 			drawOvalSelection(x, y, rayon, g);
 
 			drawRadius(x, y, rayon2, g);
@@ -353,10 +357,23 @@ public abstract class SensorNode extends DeviceWithRadio {
 				g.drawRect(x-20, y-25, 6, 50);
 				g.drawString("Buffer"+id+": " + bufferIndex+"/"+bufferSize, x-30, y+45);
 			}
-			
+			if(getType()!=Device.IOT && hide==1) {
+				g.drawImage(iotnodeImage[0], x-25, y-15, null);
+				if(marked)
+					g.drawImage(ledRedImage, x-10, y-10, null);
+				else
+					g.drawImage(ledWhiteImage, x-10, y-10, null);
+			}
 			drawId(x, y, g);
 		}
 	}
+	private Image [] iotnodeImage = {
+			new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/iot_node2.png")).getImage(),
+			new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/navire.png")).getImage()};
+	
+	private Image ledWhiteImage = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/led_blanche.png")).getImage();
+	
+	private Image ledRedImage = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/led_rouge.png")).getImage();
 	
 	public void drawTheCenter(Graphics g, int x, int y) {
 		Graphics2D g2 = (Graphics2D) g;
@@ -616,7 +633,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 		setLedColor(0);
 		initBattery();
 		
-		this.getCurrentRadioModule().setPl(100);
+		//this.getCurrentRadioModule().setPl(100);
 		
 		radioLinkColor = new Color(221,0,0,190);
 		
@@ -640,7 +657,7 @@ public abstract class SensorNode extends DeviceWithRadio {
 		setSending(false);
 		setReceiving(false);
 		if(getScript()!=null) getScript().setWaiting(false);
-		getCurrentRadioModule().setPl(100);
+		//getCurrentRadioModule().setPl(100);
 	}
 
 	public int getBufferIndex() {

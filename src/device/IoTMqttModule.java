@@ -35,7 +35,8 @@ import simulation.Simulation;
 
 public class IoTMqttModule  implements MqttCallback {
 
-	public static String broker = "tcp://test.mosquitto.org";
+	public static String broker = "tcp://mqtt.eclipseprojects.io";
+	//public static String broker = "tcp://broker.hivemq.com";
 	public static String port = "1883";
 	
 	public static String user = "";
@@ -60,6 +61,7 @@ public class IoTMqttModule  implements MqttCallback {
 	}
 	
 	public void initConnexion() throws MqttException {
+		System.out.println(broker+":"+port);
 		String comp_broker = broker+":"+port;		
 		
 		client = new MqttClient(comp_broker, "cupcarbon_"+MqttClient.generateClientId());

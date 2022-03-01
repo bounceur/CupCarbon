@@ -84,6 +84,19 @@ public abstract class IoTNodeCom extends StdSensorNode {
 		super(id, x, y, z, radius, radioRadius, suRadius, gpsFileName, scriptFileName);
 	}
 	
+	/*public void initConnexion() {
+		snew Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					mqttModule.initConnexion();
+				} catch (MqttException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}*/
+	
 	public abstract void initImages();
 	
 	@Override
@@ -152,7 +165,7 @@ public abstract class IoTNodeCom extends StdSensorNode {
 				g.drawImage(image_marked, x-16, y-16, null);
 			}
 			else
-				g.drawImage(image_non_marked, x-16, y-16, null);
+				g.drawImage(image_non_marked, x, y+10, null);
 		}
 	}
 	

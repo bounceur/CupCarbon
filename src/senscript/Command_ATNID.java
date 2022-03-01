@@ -17,7 +17,7 @@ public class Command_ATNID extends Command {
 
 	@Override
 	public double execute() {
-		WisenSimulation.simLog.add("S" + sensor.getId() + " ATID "+arg);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " ATNID "+arg);
 		String args = sensor.getScript().getVariableValue(arg);
 		sensor.getCurrentRadioModule().setNId(Integer.valueOf(args));
 

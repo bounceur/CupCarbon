@@ -254,7 +254,7 @@ public class MarkerList {
 		markers.remove(idx);
 	}
 
-	public static void saveGpsCoords(String fileName, String title, String from, String to, boolean loop, int delay, int nLoop) {
+	public static void saveGpsCoords(String fileName, String title, String from, String to, boolean loop, int delay, int nLoop, int attente) {
 		try {
 			PrintStream ps;
 			ps = new PrintStream(new FileOutputStream(Project.getGpsFileFromName(fileName)));
@@ -278,8 +278,10 @@ public class MarkerList {
 					la = marker.getLatitude() ;
 					el = marker.getElevation() ;
 					ra = marker.getRadius();
+					ps.println(attente + " " + marker.getLongitude() + " " + marker.getLatitude() + " " + marker.getElevation() + " " + marker.getRadius());
 				}
-				ps.println(1 + " " + marker.getLongitude() + " " + marker.getLatitude() + " " + marker.getElevation() + " " + marker.getRadius());				
+				else 
+					ps.println(1 + " " + marker.getLongitude() + " " + marker.getLatitude() + " " + marker.getElevation() + " " + marker.getRadius());				
 			}
 			if(loop) {
 				ps.println(delay + " " + lo + " " + la + " " + el + " " + ra);

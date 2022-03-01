@@ -18,13 +18,13 @@ public class Command_ATID extends Command {
 
 	@Override
 	public double execute() {
-		WisenSimulation.simLog.add("S" + sensor.getId() + " ATNI "+arg);
+		WisenSimulation.simLog.add("S" + sensor.getId() + " ATID "+arg);
 		String args = sensor.getScript().getVariableValue(arg);
 		sensor.setId(Integer.valueOf(args));
 		if (DeviceList.propagationsCalculated)
 			DeviceList.calculatePropagations();
 		
-		String message = "NI" + Integer.toHexString(Integer.parseInt(args)).toUpperCase();
+		String message = "ID" + Integer.toHexString(Integer.parseInt(args)).toUpperCase();
 		
 		String frame = message;
 		if(sensor.getStandard() == RadioModule.ZIGBEE_802_15_4)

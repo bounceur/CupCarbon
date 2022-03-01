@@ -2,7 +2,7 @@
  * CupCarbon: A Smart City & IoT Wireless Sensor Network Simulator
  * www.cupcarbon.com
  * ----------------------------------------------------------------------------------------------------------------
- * Copyright (C) 2013-2021 CupCarbon
+ * Copyright (C) 2013-2022 CupCarbon
  * ----------------------------------------------------------------------------------------------------------------
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

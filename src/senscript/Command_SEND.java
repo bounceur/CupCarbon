@@ -115,13 +115,18 @@ public class Command_SEND extends Command {
 	// ---------------------------------------------------------------------------------------------------------------------
 	@Override
 	public double execute() {
+		boolean couleur = false;
+		if(arg1.equals("!color")) couleur = true;
+		
 		if(sensor.getScript().getVariableValue(arg1)==null || (sensor.getScript().getVariableValue(arg2)==null && !arg2.equals("*"))) {
 			return 0;
 		}
+
+	
 		//System.out.println("===================================");
 		//System.out.println("           CALL  " + sensor.getId()+" "+sensor.ackOk());
 		//System.out.println("===================================");
-		if (arg1.equals("!color")) {
+		if (couleur) {
 			Double v = Double.parseDouble(sensor.getScript().getVariableValue(arg2));
 			int iv = v.intValue()%13;
 			sensor.setRadioLinkColor(UColor.colorTab2[iv]);

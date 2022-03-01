@@ -47,7 +47,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	protected int nLoop = 0;
 	protected int routeIndex = 0;	
 	
-	protected double angle = 0.0;
+	//protected double angle = 0.0;
 	
 	protected ArrayList<LocationEvent> locEvents ;
 	
@@ -211,7 +211,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	public void initForSimulation() {
 		loadRouteFromFile();
 		fixori();
-		angle = 0;
+		//angle = 0;
 		routeIndex=0;
 		locEvents = new ArrayList<LocationEvent>();
 	}
@@ -291,7 +291,7 @@ public abstract class DeviceWithWithoutRadio extends Device {
 	public void moveToNext(boolean visual, int visualDelay) {
 		if(!gpsFileName.isEmpty()) {
 			if (routeTime != null && nLoop > 0) {			
-				angle += 0.1;			
+				//angle += 0.1;			
 				longitude = routeX.get(routeIndex);
 				latitude = routeY.get(routeIndex);
 				elevation = routeZ.get(routeIndex);		

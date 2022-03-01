@@ -49,7 +49,7 @@ public class SenScriptController implements Initializable{
 	@FXML
 	private void example1_2Com() {
 		zone.clear();
-		zone.replaceSelection("//Transmitter\natget id id\nloop\ndata p id A\nsend p\ndelay 1000\ndata p id B\nsend p\ndelay 1000");
+		zone.replaceSelection("//Transmitter\natget id id\nloop\ndata p id \"A\"\nsend p\ndelay 1000\ndata p id \"B\"\nsend p\ndelay 1000");
 	}
 	
 	@FXML
@@ -73,7 +73,7 @@ public class SenScriptController implements Initializable{
 	@FXML
 	private void example3_2Com() {
 		zone.clear();
-		zone.replaceSelection("//Receiver\nloop\nwait\nread rp\nrdata rp rid v\nif(v==A)\n  mark 1\nelse\n  mark 0\nend");
+		zone.replaceSelection("//Receiver\nloop\nwait\nread rp\nrdata rp rid v\nif(v==\"A\")\n	  mark 1\nelse\n  mark 0\nend");
 	}
 	
 	@FXML

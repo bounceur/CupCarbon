@@ -23,11 +23,15 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Polygon;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+
+import javax.swing.ImageIcon;
 
 import map.MapLayer;
 import utilities.MapCalc;
@@ -81,12 +85,13 @@ public class Mobile extends MobileG {
 			case 0 :				
 				g.setColor(Color.LIGHT_GRAY);
 				g.fillOval(x - radius, y - radius, radius * 2, radius * 2);				
-			case 1 : 				
-				g.setColor(Color.GRAY);
+			case 1 : 		
+				g.drawImage(drone, x-20, y-30, null);
+				/*g.setColor(Color.GRAY);
 				if(MapLayer.dark)
 					g.setColor(Color.LIGHT_GRAY);
 				g.setStroke(new BasicStroke(2f));
-				g.rotate(angle, x, y);
+				//g.rotate(angle, x, y);
 				g.drawLine(x-radius, y-radius, x+radius, y+radius);
 				g.drawLine(x-radius, y+radius, x+radius, y-radius);
 				g.fillOval(x-radius-6, y-radius-6, 6, 6);
@@ -94,9 +99,9 @@ public class Mobile extends MobileG {
 				g.fillOval(x+radius, y-radius-6, 6, 6);
 				g.fillOval(x+radius, y+radius, 6, 6);
 				g.setStroke(new BasicStroke(0.5f));
-				g.rotate(-angle, x, y);
+				//g.rotate(-angle, x, y);
 				g.setColor(UColor.WHITE_LTRANSPARENT);			
-				g.drawOval(x - radius, y - radius, radius * 2, radius * 2);
+				g.drawOval(x - radius, y - radius, radius * 2, radius * 2);*/
 			}
 			
 			if (selected) {
@@ -124,9 +129,13 @@ public class Mobile extends MobileG {
 				}
 			}
 			
+			
+			
 			drawId(x,y,g);
 		}
 	}
+	
+	Image drone = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/drone.png")).getImage();
 	
 	@Override
 	public int getType() {

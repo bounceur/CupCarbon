@@ -147,7 +147,7 @@ public abstract class MobileWithRadio extends MobileGWR {
 	
 	public void init() {
 		super.init();
-		getCurrentRadioModule().setPl(100);
+		//getCurrentRadioModule().setPl(100);
 	}
 
 }

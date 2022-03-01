@@ -2034,7 +2034,7 @@ public class DeviceList {
 	public static void initBrokers() throws MqttException {
 		for(SensorNode sensor : sensors) {
 			if(sensor instanceof IoTNode)
-				((IoTNode) sensor).initBroker();
+				((IoTNode) sensor).initMqttModule();
 		}
 	}
 		

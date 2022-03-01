@@ -6,6 +6,9 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
+
+import device.DeviceList;
 import device.IoTMqttModule;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -44,6 +47,12 @@ public class MqttController implements Initializable{
 		IoTMqttModule.port = txtPort.getText();
 		IoTMqttModule.user = txtUser.getText().isEmpty()?"-":txtUser.getText();
 		IoTMqttModule.password = txtPassword.getText().isEmpty()?"-":txtPassword.getText();
+		
+		try {
+			DeviceList.initBrokers();
+		} catch (MqttException e1) {
+			e1.printStackTrace();
+		}
 		
 		try {
 			FileOutputStream fos = new FileOutputStream("mqtt_code.par");

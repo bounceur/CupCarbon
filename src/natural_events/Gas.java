@@ -82,6 +82,11 @@ public class Gas extends MobileG {
 			int y = coord[1];
 			int radius = MapCalc.radiusInPixels(this.radius);
 
+			if (hide == 0) {			
+				Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/fire.png")).getImage();
+				g.drawImage(image, x-15, y-45, null);
+			}
+			
 			if (inside || selected) {
 				g.setColor(UColor.ORANGE);
 				g.drawLine(x - radius - 3, y - radius - 3, x - radius + 2, y - radius - 3);
@@ -132,10 +137,7 @@ public class Gas extends MobileG {
 				g.drawString(getName(), (int) (x + 12), (int) (y-6));
 			}
 			
-			if (hide == 0) {			
-				Image image = new ImageIcon(Toolkit.getDefaultToolkit().getImage("res/images/fire.png")).getImage();
-				g.drawImage(image, x-15, y-25, null);
-			}
+			
 		}
 	}
 

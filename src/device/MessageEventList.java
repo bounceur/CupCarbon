@@ -50,7 +50,7 @@ public class MessageEventList {
 		//messageEventLists = new LinkedList<List<MessageEvent>>();
 		//messageEventLists = Collections.synchronizedList(new LinkedList<List<MessageEvent>>());
 		messageEventLists.removeAll(messageEventLists);
-		int channelNumber = 0;
+		int channelNumber = 0;	
 		if(std == RadioModule.ZIGBEE_802_15_4) channelNumber = 16;
 		if(std == RadioModule.LORA) channelNumber = 1;
 		if(std == RadioModule.WIFI_802_11) channelNumber = 14;

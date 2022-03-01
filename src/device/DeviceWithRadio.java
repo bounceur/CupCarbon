@@ -145,7 +145,7 @@ public abstract class DeviceWithRadio extends DeviceWithWithoutRadio {
 		
 	@Override
 	public void drawMarked(Graphics g2) {
-		if (!isDead()) {
+		if (!isDead() && hide!=1) {
 			Graphics2D g = (Graphics2D) g2;
 			g.setStroke(new BasicStroke(0.4f));
 			if (ledColor==1) {	
