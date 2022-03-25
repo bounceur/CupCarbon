@@ -192,13 +192,38 @@ public class CupCarbon extends Application {
 	        URL url = new URL("http://a.basemaps.cartocdn.com/light_all/0/0/0.png");
 	        InputStream is = url.openStream();
 	        System.out.println("Internet: OK");
-	        int x1 = is.read();
-	        int x2 = is.read();
-	        int x3 = is.read();
-	        int x4 = is.read();
-	        int x5 = is.read();
+	        
+	      //Original code
+	        
+//	        int x1 = is.read();
+//	        int x2 = is.read();
+//	        int x3 = is.read();
+//	        int x4 = is.read();
+//	        int x5 = is.read();
+	        
+	        //Refactoring technique Set 1 -- Rename variable
+			
+		    //Renaming a variable with specifying the variable name as co-ordinates of the above png image
+		    //to make it more meaningful 
+
+	        int cordinate1 = is.read();
+	        int cordinate2 = is.read();
+	        int cordinate3 = is.read();
+	        int cordinate4 = is.read();
+	        int cordinate5 = is.read();
+	        
+	    
 	        is.close();
-	        if(x1==137 && x2==80 && x3==78 && x4==71 && x5==13) {
+	        
+	        //Original code
+	        //if(x1==137 && x2==80 && x3==78 && x4==71 && x5==13) {
+	        	
+	        
+	        //Using the variable names here after refactoring
+
+	        
+	        if(cordinate1==137 && cordinate2==80 && cordinate3==78 && cordinate4==71 && cordinate5==13) 
+	        {
 	        	URL url2 = new URL("http://www.cupcarbon.com/download/cupcarbon_update.txt");
 	        	InputStream is2 = url2.openStream();
 	        	BufferedReader br = new BufferedReader(new InputStreamReader(is2));

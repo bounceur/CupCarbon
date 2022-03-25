@@ -320,17 +320,31 @@ public class Weather extends MobileG {
 	// ------------------------------------------------------------------------
 	// Duration to the Next Time
 	// ------------------------------------------------------------------------
-	@Override
-	public double getNextValueTime() {
-		if (valueTime.size() > 0) {
-			return valueTime.get(valueIndex);
-		}
-		return 0;
-	}
+	
+	
+	
+	//Commented as part of Pull up Refactoring 
+	// These method are already pulled up to MobileG class
+	// The methods are not removed and just commented to highlight the changes
+	//Note -- you can remove below method and still the program will run	
+		
+//	@Override
+//	public double getNextValueTime() {
+//		if (valueTime.size() > 0) {
+//			return valueTime.get(valueIndex);
+//		}
+//		return 0;
+//	}
+	
+	
+	
+	
 	
 	// ------------------------------------------------------------------------
 	// Generate the next value (event)
 	// ------------------------------------------------------------------------
+	
+
 	@Override
 	public void generateNextValue() {
 		if (valueTime != null) {			

@@ -18,13 +18,27 @@
  *----------------------------------------------------------------------------------------------------------------*/
 
 package device;
+import java.util.LinkedList;
 
 public abstract class MobileG extends DeviceWithoutRadio { 
 		
+	protected LinkedList<Double> valueTime;
+	protected int valueIndex = 0;
+
+	
 	public MobileG(double x, double y, double z, double rayon, String gpsFileName, int id) {
 		super(x, y, z, rayon, id);
 		mobile = true ;		
 		this.gpsFileName = gpsFileName ;
 	}
 
+	//Refactoring - Pull up method
+	//Below method is pulled up from Child Class 
+	
+		public double getNextValueTime() {
+			if (valueTime.size() > 0) {				
+				return valueTime.get(valueIndex);
+			}
+			return 0;
+		}
 }

@@ -2,12 +2,20 @@ package senscript_functions;
 
 import java.util.Arrays;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
 import security.Blowfish;
 import security.Operator;
 import security.SuperFastHash;
 
 public class Functions {
 
+	//Added Static variables
+	public static String key;
+	public static String message;
+	final public static char[] hexArray = "0123456789ABCDEF".toCharArray();
+	
 	public static String min(String [] args) {
 		double min = Integer.MAX_VALUE;
 		for(int i=0; i<args.length; i++) {
@@ -161,14 +169,44 @@ public class Functions {
 		double f = mu - sigma * Math.sin(Math.PI*(mu/eng));
 		return ""+f;
 	}
+
+
+	//Refactoring - move method
 	
-	public static String encrypt(String [] args)throws Exception {
+	//From Blowfish class perform move method here because the actual implementation is required here
+	
+	//Method 1
+	// Converts byte array to hex string
+	public static String bytesToHex(byte[] bytes) {
+		char[] hexChars = new char[bytes.length * 2];
+		for ( int j = 0; j < bytes.length; j++ ) {
+			int v = bytes[j] & 0xFF;
+			hexChars[j * 2] = hexArray[v >>> 4];
+			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+		}
+		return new String(hexChars);
+	}
+
+
+	//Method 2
+		public static String encrypt(String [] args)throws Exception {
 		  String valToReturn = "";
-		  Blowfish b = new Blowfish(args[0],args[1]);
-		  valToReturn = b.encrypt();
-		  return valToReturn;
+		  
+			byte[] byteKey	= key.getBytes();
+			String IV  	= "12345678";
+
+	     // Create new Blowfish cipher
+	 		SecretKeySpec keySpec = new SecretKeySpec(byteKey, "Blowfish"); 
+			Cipher cipher = Cipher.getInstance("Blowfish/CBC/PKCS5Padding"); 
+		
+			cipher.init(Cipher.ENCRYPT_MODE, keySpec, new javax.crypto.spec.IvParameterSpec(IV.getBytes())); 
+			byte [] encoding = cipher.doFinal(message.getBytes());
+			return bytesToHex(encoding);
+		
 		}
 		
+		
+
 		public static String decrypt(String [] args) throws Exception {
 			String valToReturn = "";
 			
