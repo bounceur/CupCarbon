@@ -21,16 +21,8 @@ public class Blowfish
 		this.message = message;
 	}
 	
-// Converts byte array to hex string
-	public static String bytesToHex(byte[] bytes) {
-		char[] hexChars = new char[bytes.length * 2];
-		for ( int j = 0; j < bytes.length; j++ ) {
-			int v = bytes[j] & 0xFF;
-			hexChars[j * 2] = hexArray[v >>> 4];
-			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-		}
-		return new String(hexChars);
-	}
+
+	
 // Converts hex string to byte array  
 	public static byte[] hexStringToByteArray(String s) {
 	    int len = s.length();
@@ -42,18 +34,44 @@ public class Blowfish
 	    return data;
 	}
 
-	public String encrypt() throws Exception{
-		byte[] byteKey	= key.getBytes();
-		String IV  	= "12345678";
-		
-// Create new Blowfish cipher
-		SecretKeySpec keySpec = new SecretKeySpec(byteKey, "Blowfish"); 
-		Cipher cipher = Cipher.getInstance("Blowfish/CBC/PKCS5Padding"); 
 	
-		cipher.init(Cipher.ENCRYPT_MODE, keySpec, new javax.crypto.spec.IvParameterSpec(IV.getBytes())); 
-		byte [] encoding = cipher.doFinal(message.getBytes());
-		return bytesToHex(encoding);
-	}
+	
+	//Refactoring - move method
+	//Below  methods were used more in Functions class rather than here.
+	
+	// Commented as part of Move method Refactoring
+	// The methods are not removed and just commented to show the changes in files
+	// Note -- you can remove below method and still the program will run	
+			
+	
+//	public String encrypt() throws Exception{
+//		byte[] byteKey	= key.getBytes();
+//		String IV  	= "12345678";
+//
+//// Create new Blowfish cipher
+//		SecretKeySpec keySpec = new SecretKeySpec(byteKey, "Blowfish"); 
+//		Cipher cipher = Cipher.getInstance("Blowfish/CBC/PKCS5Padding"); 
+//	
+//		cipher.init(Cipher.ENCRYPT_MODE, keySpec, new javax.crypto.spec.IvParameterSpec(IV.getBytes())); 
+//		byte [] encoding = cipher.doFinal(message.getBytes());
+//		return bytesToHex(encoding);
+//	}
+	
+	
+////Converts byte array to hex string
+//	public static String bytesToHex(byte[] bytes) {
+//		char[] hexChars = new char[bytes.length * 2];
+//		for ( int j = 0; j < bytes.length; j++ ) {
+//			int v = bytes[j] & 0xFF;
+//			hexChars[j * 2] = hexArray[v >>> 4];
+//			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+//		}
+//		return new String(hexChars);
+//	}
+
+	
+
+	
 	public String decrypt() throws Exception{
 		byte[] byteKey	= key.getBytes();
 		String IV  	= "12345678";

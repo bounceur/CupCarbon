@@ -49,15 +49,14 @@ public abstract class RadioModule {
 	protected double transmitPower = 0 ; // dBm
 	
 	protected SensorNode sensorNode;
-	
-	
-	
-	
+
 	public static final int NONE = 0;
 	public static final int ZIGBEE_802_15_4 = 1;
 	public static final int WIFI_802_11 = 2;
 	public static final int LORA = 3;
-		
+
+
+
 	public static int getSubChannel(int std) {
 		if (std == NONE)
 			return 128;
@@ -69,7 +68,7 @@ public abstract class RadioModule {
 			return 1;
 		return -1;
 	}
-	
+
 	public static int getDataRate(int std) {
 		if (std == NONE)
 			return 250000;
@@ -81,8 +80,8 @@ public abstract class RadioModule {
 			return 30000;
 		return 128;
 	}
-	
-	public static String getDataRate(String str) {		
+
+	public static String getDataRate(String str) {
 		if (str.equals("NONE"))
 			return "250000";
 		if (str.equals("802.15.4"))
@@ -93,9 +92,7 @@ public abstract class RadioModule {
 			return "30000";
 		return "128";
 	}
-	
-	
-	
+
 	
 	public RadioModule(SensorNode sensorNode, String name) {
 		this.sensorNode = sensorNode;
@@ -180,7 +177,7 @@ public abstract class RadioModule {
 	/**
 	 * consumeRx
 	 * 
-	 * @param v
+	 * @param
 	 */
 	public void consumeRx(int numberOfBits) {
 		if(radioConsoRxModel.equals(CLASSICAL_RX)) {

@@ -35,6 +35,13 @@ import map.MapLayer;
  */
 public class NetworkBorder {
 
+	Device n1, n2 ;
+	int rank = 0;
+	
+	//Declare the variables in local scope of the code block.
+	double min;
+	double rmin;
+
 	public void execute() {
 //		System.out.println("---------------------------");
 //		System.out.println("---------------------------");
@@ -52,107 +59,21 @@ public class NetworkBorder {
 		Device n1, n2 ;
 		int rank = 0;
 		
-		for (int i = 0; i < graphe.size(); i++) {
-			n1 = nodes.get(i);
-			rank = 0;
-			for (int j = 0; j < graphe.size(); j++) {
-				n2 = nodes.get(j);
-				if((n1.getLongitude() < n2.getLongitude()) && (n1.getLatitude() < n2.getLatitude())) {
-					rank++;
-				}
-			}
-			n1.setValue(rank);
-			//System.out.println(n1.getNodeIdName()+" : "+rank);
-		}
 		
-		double min = 10000000;
-		double rmin = 0;
-		for (int i = 0; i < graphe.size(); i++) {
-			rmin = nodes.get(i).getValue();
-			if(rmin<min) {
-				min = rmin; 
-			}
-		}
-		for (int i = 0; i < graphe.size(); i++) {
-			if(nodes.get(i).getValue()<=min)
-				nodes.get(i).setMarked(true);
-		}
-		//System.out.println(min);
-		//System.out.println("---------------------------");
-		//------------------------------------------------------------
-		//------------------------------------------------------------		
+		//Refactoring technique -- Extract method
+		//Extract the code block and create a new method with name suiting to its intent.
 		
-		for (int i = 0; i < graphe.size(); i++) {
-			n1 = nodes.get(i);
-			rank = 0;
-			for (int j = 0; j < graphe.size(); j++) {
-				n2 = nodes.get(j);
-				if((n1.getLongitude() > n2.getLongitude()) && (n1.getLatitude() < n2.getLatitude())) {
-					rank++;
-				}
-			}
-			n1.setValue(rank);
-			//System.out.println(n1.getNodeIdName()+" : "+rank);
-		}
 		
-		min = 10000000;
-		rmin = 0;
-		for (int i = 0; i < graphe.size(); i++) {
-			rmin = nodes.get(i).getValue();
-			if(rmin<min) {
-				min = rmin; 
-			}
-		}
-		for (int i = 0; i < graphe.size(); i++) {
-			if(nodes.get(i).getValue()<=min)
-				nodes.get(i).setMarked(true);
-		}
-		//System.out.println(min);
-		//System.out.println("---------------------------");
-		//------------------------------------------------------------
-		//------------------------------------------------------------				
-		for (int i = 0; i < graphe.size(); i++) {
-			n1 = nodes.get(i);
-			rank = 0;
-			for (int j = 0; j < graphe.size(); j++) {
-				n2 = nodes.get(j);
-				if((n1.getLongitude() > n2.getLongitude()) && (n1.getLatitude() > n2.getLatitude())) {
-					rank++;
-				}
-			}
-			n1.setValue(rank);
-			System.out.println(n1.getName()+" : "+rank);
-		}
+		dvc2latlongmax(graphe, nodes);
 		
-		min = 10000000;
-		rmin = 0;
-		for (int i = 0; i < graphe.size(); i++) {
-			rmin = nodes.get(i).getValue();
-			if(rmin<min) {
-				min = rmin; 
-			}
-		}
-		for (int i = 0; i < graphe.size(); i++) {
-			if(nodes.get(i).getValue()<=min)
-				nodes.get(i).setMarked(true);
-		}
-		//System.out.println(min);
-		//System.out.println("---------------------------");
-		//------------------------------------------------------------
-		//------------------------------------------------------------		
-		for (int i = 0; i < graphe.size(); i++) {
-			n1 = nodes.get(i);
-			rank = 0;
-			for (int j = 0; j < graphe.size(); j++) {
-				n2 = nodes.get(j);
-				if((n1.getLongitude() < n2.getLongitude()) && (n1.getLatitude() > n2.getLatitude())) {
-					rank++;
-				}
-			}
-			n1.setValue(rank);
-			//System.out.println(n1.getNodeIdName()+" : "+rank);
-		}
+		dvc1longdvc2latmax(graphe, nodes);
 		
+		dvc1latlongmax(graphe, nodes);
+		
+		dvc1latdvc2longmax(graphe, nodes);
+		
+		
+	
 		min = 10000000;
 		rmin = 0;
 		for (int i = 0; i < graphe.size(); i++) {
@@ -187,5 +108,138 @@ public class NetworkBorder {
 		// Update sensors (coloring)
 		MapLayer.repaint();
 	}
+
+
+	//Created new methods  for device1 and device2 to find the latitude and longitiude max values 
+	//which  suited the purpose of the task performed as part of extract method refactoring technique
+	
+		//Device2 consisting of max latitude and longitude
+	private void dvc2latlongmax(GraphStd graphe, List<SensorNode> nodes) {
+		Device n1;
+		Device n2;
+		int rank;
+		for (int i = 0; i < graphe.size(); i++) {
+			n1 = nodes.get(i);
+			rank = 0;
+			for (int j = 0; j < graphe.size(); j++) {
+				n2 = nodes.get(j);
+				if((n1.getLongitude() < n2.getLongitude()) && (n1.getLatitude() < n2.getLatitude())) {
+					rank++;
+				}
+			}
+			n1.setValue(rank);
+			//System.out.println(n1.getNodeIdName()+" : "+rank);
+		}
+	}
+	
+	//Device1 consisting of max longitude  and device2  having max latitude
+	private void dvc1longdvc2latmax(GraphStd graphe, List<SensorNode> nodes) {
+		Device n1;
+		Device n2;
+		int rank;
+		double min = 10000000;
+		double rmin = 0;
+		for (int i = 0; i < graphe.size(); i++) {
+			rmin = nodes.get(i).getValue();
+			if(rmin<min) {
+				min = rmin; 
+			}
+		}
+		for (int i = 0; i < graphe.size(); i++) {
+			if(nodes.get(i).getValue()<=min)
+				nodes.get(i).setMarked(true);
+		}
+		//System.out.println(min);
+		//System.out.println("---------------------------");
+		//------------------------------------------------------------
+		//------------------------------------------------------------		
+		
+		for (int i = 0; i < graphe.size(); i++) {
+			n1 = nodes.get(i);
+			rank = 0;
+			for (int j = 0; j < graphe.size(); j++) {
+				n2 = nodes.get(j);
+				if((n1.getLongitude() > n2.getLongitude()) && (n1.getLatitude() < n2.getLatitude())) {
+					rank++;
+				}
+			}
+			n1.setValue(rank);
+			//System.out.println(n1.getNodeIdName()+" : "+rank);
+		}
+	}
+	
+	//Device1 consisting of max longitude and latitude
+	
+	private void dvc1latlongmax(GraphStd graphe, List<SensorNode> nodes) {
+		Device n1;
+		Device n2;
+		int rank;
+		min = 10000000;
+		rmin = 0;
+		for (int i = 0; i < graphe.size(); i++) {
+			rmin = nodes.get(i).getValue();
+			if(rmin<min) {
+				min = rmin; 
+			}
+		}
+		for (int i = 0; i < graphe.size(); i++) {
+			if(nodes.get(i).getValue()<=min)
+				nodes.get(i).setMarked(true);
+		}
+		//System.out.println(min);
+		//System.out.println("---------------------------");
+		//------------------------------------------------------------
+		//------------------------------------------------------------				
+		for (int i = 0; i < graphe.size(); i++) {
+			n1 = nodes.get(i);
+			rank = 0;
+			for (int j = 0; j < graphe.size(); j++) {
+				n2 = nodes.get(j);
+				if((n1.getLongitude() > n2.getLongitude()) && (n1.getLatitude() > n2.getLatitude())) {
+					rank++;
+				}
+			}
+			n1.setValue(rank);
+			System.out.println(n1.getName()+" : "+rank);
+		}
+	}
+
+	//Device1 consisting of max latitude  and device2  having max longitude
+	
+	private void dvc1latdvc2longmax(GraphStd graphe, List<SensorNode> nodes) {
+		Device n1;
+		Device n2;
+		int rank;
+		min = 10000000;
+		rmin = 0;
+		for (int i = 0; i < graphe.size(); i++) {
+			rmin = nodes.get(i).getValue();
+			if(rmin<min) {
+				min = rmin; 
+			}
+		}
+		for (int i = 0; i < graphe.size(); i++) {
+			if(nodes.get(i).getValue()<=min)
+				nodes.get(i).setMarked(true);
+		}
+		//System.out.println(min);
+		//System.out.println("---------------------------");
+		//------------------------------------------------------------
+		//------------------------------------------------------------		
+		for (int i = 0; i < graphe.size(); i++) {
+			n1 = nodes.get(i);
+			rank = 0;
+			for (int j = 0; j < graphe.size(); j++) {
+				n2 = nodes.get(j);
+				if((n1.getLongitude() < n2.getLongitude()) && (n1.getLatitude() > n2.getLatitude())) {
+					rank++;
+				}
+			}
+			n1.setValue(rank);
+			//System.out.println(n1.getNodeIdName()+" : "+rank);
+		}
+	}
+
+
 	
 }
