@@ -22,9 +22,9 @@ public class Command_CONC extends Command {
 	public double execute() {
 		String v1 = sensor.getScript().getVariableValue(arg2);
 		String v2 = sensor.getScript().getVariableValue(arg3);
-		symbol = sensor.getScript().getVariableValue(symbol);
-		if(symbol.equals("\\")) symbol = "";
-		String z = v1+symbol+v2;
+		String delim = sensor.getScript().getVariableValue(symbol);
+		if(delim.equals("\\")) delim = "";
+		String z = v1+delim+v2;
 		WisenSimulation.simLog.add("S" + sensor.getId() + " " + arg1 + " = (" + v1 + ") + (" + v2 + ") -> " + z);
 		sensor.getScript().addVariable(arg1, z);
 		return 0 ;
